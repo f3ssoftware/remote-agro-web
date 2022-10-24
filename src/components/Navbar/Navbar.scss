@@ -4,3 +4,13 @@ $navbar-background: #44433f;
   background-color: $navbar-background;
   color: #fff;
 }
+
+.season-selection {
+  background-color: #4f9d24;
+  color: #fff;
+  font-weight: bold;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: relative;
+  right: 26px;
+}

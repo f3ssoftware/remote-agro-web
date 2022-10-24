@@ -12,16 +12,38 @@ $sidebar-selected-item: #44433f;
 
 .sidebar-items {
   margin-top: 20%;
+  cursor: pointer;
 }
 
 .sidebar-row {
   height: 50px;
   color: #fff;
-  border-top-left-radius: 30%;
-  border-bottom-left-radius: 30%;
+  // border-top-left-radius: 30%;
+  // border-bottom-left-radius: 30%;
 }
 
 .sidebar-row:hover {
   height: 50px;
   background-color: $sidebar-selected-item;
+}
+
+.sidebar-nav-item {
+  height: 50px;
+  color: #fff;
+}
+
+.sidebar-nav-item:hover {
+  height: 50px;
+  color: #fff;
+  background-color: $sidebar-selected-item;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+}
+
+.active {
+  height: 50px;
+  color: #fff;
+  background-color: $sidebar-selected-item;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
 }
