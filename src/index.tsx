@@ -9,12 +9,14 @@ import userStore from './stores/user.store';
 import loadingStore from './stores/loading.store';
 import seasonsStore from './stores/seasons.store';
 import thunkMiddleware from 'redux-thunk';
+import inputStore from './stores/input.store';
 
 const store = configureStore({
   reducer: {
     user: userStore,
     loading: loadingStore,
     seasons: seasonsStore,
+    input: inputStore,
   },
   middleware: [thunkMiddleware]
 });
