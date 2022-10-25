@@ -6,7 +6,7 @@ import "./FarmInput.scss";
 export function FarmInput() {
     return (
         <div className="app-container">
-            <Card className="ra-card">
+            <Card className="ra-card" style={{ height: '80vh' }}>
                 <Card.Title>
                     <Row>
                         <Col md={2}>

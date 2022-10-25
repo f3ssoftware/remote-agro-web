@@ -7,14 +7,17 @@ import { Provider, useDispatch, } from 'react-redux'
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import userStore from './stores/user.store';
 import loadingStore from './stores/loading.store';
-
+import seasonsStore from './stores/seasons.store';
+import thunkMiddleware from 'redux-thunk';
 
 const store = configureStore({
   reducer: {
     user: userStore,
     loading: loadingStore,
+    seasons: seasonsStore,
   },
-})
+  middleware: [thunkMiddleware]
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

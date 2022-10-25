@@ -23,6 +23,7 @@ export function AppWrapper() {
 
     switch (location.pathname) {
         case "/login": return <Login></Login>;
+        case "/": return <Navigate to={'/home'}></Navigate>
         case "/home": return <AppStructure loading={loading.requests.length > 0}>
             <Home></Home>
         </AppStructure>;
