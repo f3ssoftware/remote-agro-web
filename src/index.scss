@@ -1,11 +1,14 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~react-bootstrap-sidebar-menu/dist/sidebar-menu.scss";
 $background-color: #44433f;
+
+@font-face{
+  font-family: 'Poppins';
+  src: url('./assets/fonts/Poppins-Regular.otf')
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Poppins';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: $background-color;
