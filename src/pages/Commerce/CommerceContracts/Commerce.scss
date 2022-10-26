@@ -55,7 +55,23 @@
     color: #FFFFFF;
     text-align: center;
     font-size: xx-large;
+    position: relative;
+    left: 345px;
+    bottom: 60px;
 
+}
+
+.second-card-button:hover{
+    background: #4C9626;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: xx-large;
+    position: relative;
+    left: 345px;
+    bottom: 60px;
 }
 
 .second-card-text{
