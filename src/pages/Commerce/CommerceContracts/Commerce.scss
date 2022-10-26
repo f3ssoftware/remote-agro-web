@@ -1,0 +1,70 @@
+.frist-card{
+    background-color: #ECE4B4;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: 286px;
+    height: 149px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 50px;
+}
+
+.frist-card-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#dropdown-basic{
+    background: #7C542B;
+    width: 200px;
+    height: 65px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.second-card{
+    background-color: #ECE4B4;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: 389px;
+    height: 640px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.second-card-button{
+    background: #4C9626;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: xx-large;
+
+}
+
+.second-card-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 10px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    }
