@@ -1,0 +1,163 @@
+.frist-card{
+    background-color: #ECE4B4;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: 286px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 50px;
+    padding-bottom: 10px;
+}
+
+.frist-card-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#dropdown-basic{
+    background: #7C542B;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    border: none;
+}
+
+.second-card{
+    background-color: #ECE4B4;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width: 389px;
+    height: 66vh;
+    margin-top: 44px;
+    margin-bottom: 30px;
+}
+
+.second-card-button{
+    background: #4C9626;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: xx-large;
+    position: relative;
+    left: 345px;
+    bottom: 60px;
+
+}
+
+.second-card-button:hover{
+    background: #4C9626;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: xx-large;
+    position: relative;
+    left: 345px;
+    bottom: 60px;
+}
+
+.second-card-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 10px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+}
+
+.second-col-card{
+    background: #ECE4B4;
+    border-radius: 20px;
+    height: 96%;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.second-col-text{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    color: #000000;
+}
+
+.second-col-dropdown{
+    position: relative;
+    left: 569px;
+    bottom: 61px;
+    border-radius: 0px 10px;
+}
+
+.card-footer{
+    display: flex;
+    flex-direction: row;
+}
+
+.frist-box{
+    background-color: #168E8E;
+    width: 204px;
+    height: 125px;
+    border-radius: 11.4838px;
+    display: flex;
+}
+.frist-box span{
+    margin-top: 6px;
+    margin-left: 7px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+    color: #FFFFFF;
+}
+
+.second-box{
+    background-color: #848419;
+    width: 204px;
+    height: 125px;
+    border-radius: 11.4838px;
+    display: flex;
+    margin-left: 30px;
+}
+
+.second-box span{
+    margin-top: 6px;
+    margin-left: 7px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+    color: #FFFFFF;
+}
+
+.second-col-date{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+    margin-left: 35px;
+}
+
+.second-col-value{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+    margin-left: 35px;
+    display:flex;
+    margin-left: 150px;
+}

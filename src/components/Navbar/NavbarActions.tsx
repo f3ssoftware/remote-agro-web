@@ -27,4 +27,25 @@ export const NavbarActions = [
             console.log('Balanço');
         }
     },
+    {
+        pathname: "/commerce",
+        title: "Contratos",
+        action: () => {
+            console.log('Balanço');
+        }
+    },
+    {
+        pathname: "/commerce",
+        title: "Silos",
+        action: () => {
+            console.log('Balanço');
+        }
+    },
+    {
+        pathname: "/commerce",
+        title: "Pesagem",
+        action: () => {
+            console.log('Balanço');
+        }
+    },
 ]

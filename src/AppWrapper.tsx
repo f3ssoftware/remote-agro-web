@@ -5,7 +5,7 @@ import { Navigate, useLocation } from "react-router-dom"
 import { RootState } from ".";
 import { TopNav } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
-import { Commerce } from "./pages/Commerce/Commerce";
+import { Commerce } from "./pages/Commerce/CommerceContracts/Commerce";
 import { Financial } from "./pages/Financial/Financial";
 import { Home } from "./pages/Home/Home"
 import { FarmInput } from "./pages/Input/FarmInput";
