@@ -6,13 +6,15 @@ import { AppDispatch } from "..";
 const userStore = createSlice({
     name: 'user',
     initialState: {
-        name: 'Zerola',
-        role: 'Owner'
+        name: '',
+        role: ''
     },
     reducers: {
-        fetchUser(state: any) {
-            console.log(state);
-            // state += 1;
+        fetchUser(state: any, action) {
+            console.log(action);
+            state.name = action.payload.user.name;
+            state.role = action.payload.user.role
+
         }
     }
 });
@@ -27,5 +29,6 @@ export function asyncFetchUser(username: string, password: string) {
             username, password
         });
         sessionStorage.setItem("token", results.data.token);
+        dispatch(fetchUser(results.data))
     }
 }

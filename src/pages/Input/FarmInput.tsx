@@ -1,9 +1,42 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Row, Form, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../..";
+import { Product } from "../../models/Product";
+import { asyncFetchInput } from "../../stores/input.store";
+import { currencyFormat } from "../../utils/currencyFormat";
 import "./FarmInput.scss";
+import { HistoryModal } from "./modals/HistoryModal";
 
 export function FarmInput() {
+    const { input } = useSelector((state: RootState) => state);
+    const dispatch = useDispatch<any>();
+    const [findTerm, setFindTerm] = useState('');
+    const [products, setProducts] = useState([new Product()]);
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const [historySelectedProduct, setHistorySelectedProduct] = useState(new Product());
+
+    const find = () => {
+        setProducts(input.inputs.filter((product: Product) => {
+            if (product!.product!.name?.toUpperCase().includes(findTerm.toUpperCase()) || product!.product!.class?.includes(findTerm.toUpperCase())) {
+                return product;
+            }
+        }));
+    }
+    useEffect(() => {
+        dispatch(asyncFetchInput());
+    }, [])
+
+    useEffect(() => {
+        find();
+    }, [findTerm]);
+
+    useEffect(() => {
+        setProducts(input.inputs);
+    }, [input]);
+
     return (
         <div className="app-container">
             <Card className="ra-card" style={{ height: '80vh' }}>
@@ -23,39 +56,55 @@ export function FarmInput() {
                         </Col>
                         <Col md={6}>
                             <Form>
-                                <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar"></Form.Control>
+                                <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar" onChange={(e) => setFindTerm(e.target.value)}></Form.Control>
                             </Form>
                         </Col>
                     </Row>
-                    <Table style={{ marginTop: '5%' }}>
-                        <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
-                            <tr>
-                                <th>Produto</th>
-                                <th>Classe</th>
-                                <th>Estoque Atual</th>
-                                <th>Custo Unitário</th>
-                                <th>Custo Total</th>
-                            </tr>
-                        </thead>
-                        <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                            <tr>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                            </tr>
-                            <tr>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                                <td>xxxxx</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                    <div style={{ maxHeight: '60vh', overflowY: 'scroll', marginTop: '5%' }}>
+                        <Table striped bordered hover>
+                            <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Classe</th>
+                                    <th>Estoque Atual</th>
+                                    <th>Custo Unitário</th>
+                                    <th>Custo Total</th>
+                                </tr>
+                            </thead>
+                            <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
+                                {products.map((input: Product, index) => {
+                                    return <tr key={index}>
+                                        <td>{input?.product?.name}</td>
+                                        <td>{input?.product?.class}</td>
+                                        <td>
+                                            <Row>
+                                                <Col md={10}>
+                                                    {input?.quantityInDecimal} {input.measure_unit}
+                                                </Col>
+                                                <Col md={2}>
+                                                    <FontAwesomeIcon icon={faEye} style={{ color: '#000AFF', cursor: 'pointer' }} onClick={() => {
+                                                        console.log(`Clicked: ${input.product?.name}`)
+                                                        setShowHistoryModal(true);
+                                                        setHistorySelectedProduct(input);
+                                                    }}></FontAwesomeIcon>
+                                                </Col>
+                                            </Row>
+                                        </td>
+                                        <td>{`${currencyFormat((input.total_price! / input.quantityInDecimal!) / 100)}`}</td>
+                                        <td>{currencyFormat(input.total_price! / 100)}</td>
+                                    </tr>
+                                })}
+
+                            </tbody>
+                        </Table>
+                    </div>
+
                 </Card.Title>
             </Card>
-        </div>
+            <HistoryModal show={showHistoryModal} product={historySelectedProduct} handleClose={() => {
+                setShowHistoryModal(false);
+                setHistorySelectedProduct(new Product());
+            }}></HistoryModal>
+        </div >
     )
 }
