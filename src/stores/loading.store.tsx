@@ -1,17 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const stringArr: string[] = []
 const loadingStore = createSlice({
     name: 'loading',
     initialState: {
-        requests: ['']
+        requests: stringArr,
     },
     reducers: {
-        push(state) {
-            state.requests.push('new loading');
+        pushLoading(state, action) {
+            console.log(state.requests);
+            state.requests.push(action.payload);
+        },
+        popLoading(state, action) {
+            console.log(action.payload);
+            state.requests.pop();
         }
     }
 });
 
 
-export const { push } = loadingStore.actions;
+export const { pushLoading, popLoading } = loadingStore.actions;
 export default loadingStore.reducer;

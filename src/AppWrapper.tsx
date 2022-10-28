@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { Row, Col, Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router-dom"
+import { Navigate, redirect, useLocation, useNavigate } from "react-router-dom"
 import { RootState } from ".";
 import { TopNav } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
-import { Commerce } from "./pages/Commerce/CommerceContracts/Commerce";
+import { Commerce } from "./pages/Commerce/Commerce";
+
 import { Financial } from "./pages/Financial/Financial";
 import { Home } from "./pages/Home/Home"
 import { FarmInput } from "./pages/Input/FarmInput";
@@ -14,30 +15,36 @@ import { Plot } from "./pages/Plot/Plot";
 
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
-
+    const navigate = useNavigate();
     const loading = useSelector((state: RootState) => state.loading);
     const location = useLocation();
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        if (location.pathname !== "/login" && sessionStorage.getItem('token') === null) {
+            navigate("/login");
+        }
     }, [location]);
 
-    switch (location.pathname) {
-        case "/login": return <Login></Login>;
-        case "/": return <Navigate to={'/home'}></Navigate>
-        case "/home": return <AppStructure loading={loading.requests.length > 0}>
+    useEffect(() => {
+        console.log(loading);
+    }, [loading]);
+
+    switch (location.pathname.split("/")[1]) {
+        case "login": return <Login></Login>;
+        case "": return <Navigate to={'/home'}></Navigate>
+        case "home": return <AppStructure loading={loading.requests.length > 0}>
             <Home></Home>
         </AppStructure>;
-        case "/plot": return <AppStructure loading={loading.requests.length > 0}>
+        case "plot": return <AppStructure loading={loading.requests.length > 0}>
             <Plot></Plot>
         </AppStructure>;
-        case "/financial": return <AppStructure loading={loading.requests.length > 0}>
+        case "financial": return <AppStructure loading={loading.requests.length > 0}>
             <Financial></Financial>
         </AppStructure>;
-        case "/input": return <AppStructure loading={loading.requests.length > 0}>
+        case "input": return <AppStructure loading={false}>
             <FarmInput></FarmInput>
         </AppStructure>;
-        case "/commerce": return <AppStructure loading={loading.requests.length > 0}>
+        case "commerce": return <AppStructure loading={loading.requests.length > 0}>
             <Commerce></Commerce>
         </AppStructure>;
         default: return <div>403 not found</div>
@@ -56,7 +63,7 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
                 </Col>
             </Row>
             <Row>
-                {loading ? <Col lg={12} md={12}>
+                {!loading ? <Col lg={12} md={12}>
                     {children}
                 </Col> : <Loading></Loading>}
 

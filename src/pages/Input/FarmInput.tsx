@@ -8,34 +8,38 @@ import { Product } from "../../models/Product";
 import { asyncFetchInput } from "../../stores/input.store";
 import { currencyFormat } from "../../utils/currencyFormat";
 import "./FarmInput.scss";
+import { EntranceModal } from "./modals/EntranceModal";
 import { HistoryModal } from "./modals/HistoryModal";
 
+const initialProducts: Product[] = [];
 export function FarmInput() {
-    const { input } = useSelector((state: RootState) => state);
+    const input = useSelector((state: RootState) => state.input);
     const dispatch = useDispatch<any>();
     const [findTerm, setFindTerm] = useState('');
-    const [products, setProducts] = useState([new Product()]);
+    const [products, setProducts] = useState(initialProducts);
     const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const [showEntranceModal, setShowEntranceModal] = useState(false);
     const [historySelectedProduct, setHistorySelectedProduct] = useState(new Product());
 
     const find = () => {
-        setProducts(input.inputs.filter((product: Product) => {
+        setProducts(input?.inputs?.filter((product: Product) => {
             if (product!.product!.name?.toUpperCase().includes(findTerm.toUpperCase()) || product!.product!.class?.includes(findTerm.toUpperCase())) {
                 return product;
             }
         }));
     }
-    useEffect(() => {
-        dispatch(asyncFetchInput());
-    }, [])
 
     useEffect(() => {
         find();
     }, [findTerm]);
 
     useEffect(() => {
+        dispatch(asyncFetchInput());
+    }, []);
+
+    useEffect(() => {
         setProducts(input.inputs);
-    }, [input]);
+    }, [input])
 
     return (
         <div className="app-container">
@@ -46,7 +50,7 @@ export function FarmInput() {
                             <h4>Estoque</h4>
                         </Col>
                         <Col md={1}>
-                            <Button className="inputs-btn">Entrada</Button>
+                            <Button className="inputs-btn" onClick={() => setShowEntranceModal(true)}>Entrada</Button>
                         </Col>
                         <Col md={1}>
                             <Button className="inputs-btn">Saída</Button>
@@ -105,6 +109,7 @@ export function FarmInput() {
                 setShowHistoryModal(false);
                 setHistorySelectedProduct(new Product());
             }}></HistoryModal>
+            <EntranceModal show={showEntranceModal} handleClose={() => setShowEntranceModal(false)}></EntranceModal>
         </div >
     )
 }

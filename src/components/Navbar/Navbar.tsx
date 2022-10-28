@@ -19,7 +19,7 @@ export function TopNav() {
 
     useEffect(() => {
         dispatch(asyncFetchSeasons());
-    }, []);
+    }, [dispatch]);
 
     let location = useLocation();
     return (
@@ -39,8 +39,8 @@ export function TopNav() {
                 </Col>
                 <Col md={6}>
                     <Row>
-                        {NavbarActions.filter((b) => b.pathname === location.pathname).map(button => {
-                            return (<Col md={3}>
+                        {NavbarActions.filter((b) => b.pathname === location?.pathname?.split("/")[1]).map((button, index) => {
+                            return (<Col md={3} key={index}>
                                 <Button onClick={() => button.action()} style={{ backgroundColor: '#243C74', color: '#fff', textTransform: 'uppercase', fontWeight: 'bold', border: 'none' }}>{button.title}</Button>
                             </Col>)
                         })}

@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import  logo from  "../../assets/images/logoLogin.png";
+import logo from "../../assets/images/logoLogin.png";
 import Form from 'react-bootstrap/Form';
 import "./Login.scss"
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ export function Login() {
     let navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const [username, setUsername] = useState('');
-    const [password,setPassword] = useState('');
+    const [password, setPassword] = useState('');
 
     const login = () => {
         // console.log(`Usuário: ${username} / Senha: ${password}`);
@@ -26,7 +26,7 @@ export function Login() {
                 <Form>
                     <Form.Group className="mb-2 user-box" controlId="formBasicEmail">
                         <Form.Label>Usuário</Form.Label>
-                        <Form.Control type="text" onChange={e => setUsername(e.target.value)}/>
+                        <Form.Control type="text" onChange={e => setUsername(e.target.value)} />
                     </Form.Group>
 
                     <Form.Group className="mb-2 password-box" controlId="formBasicPassword">
@@ -41,5 +41,5 @@ export function Login() {
             </div>
         </div>
 
-    ) 
+    )
 }

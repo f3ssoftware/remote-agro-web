@@ -18,7 +18,6 @@ const store = configureStore({
     seasons: seasonsStore,
     input: inputStore,
   },
-  middleware: [thunkMiddleware]
 });
 
 const root = ReactDOM.createRoot(
@@ -26,11 +25,9 @@ const root = ReactDOM.createRoot(
 );
 document.title = 'Remote Agro';
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -12,7 +12,7 @@ export function SeasonSelection({ show, handleClose }: any) {
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
             {seasons.seasons.map((season: any, index) => {
-                return <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '1%', }}>
+                return <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '1%', }} key={index}>
                     <Button style={{ backgroundColor: '#243C74', border: 'none' }} onClick={() => { dispatch(selectSeason(season)); handleClose(); }}>{`${season.type} - ${season.year}`}</Button>
                 </div>
             })}

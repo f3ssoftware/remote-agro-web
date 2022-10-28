@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 export const NavbarActions = [
     {
         pathname: "/financial",
@@ -28,21 +30,21 @@ export const NavbarActions = [
         }
     },
     {
-        pathname: "/commerce",
+        pathname: "commerce",
         title: "Contratos",
         action: () => {
             console.log('Balanço');
         }
     },
     {
-        pathname: "/commerce",
+        pathname: "commerce",
         title: "Silos",
         action: () => {
-            console.log('Balanço');
+
         }
     },
     {
-        pathname: "/commerce",
+        pathname: "commerce",
         title: "Pesagem",
         action: () => {
             console.log('Balanço');

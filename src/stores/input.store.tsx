@@ -1,26 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
+import { popLoading, pushLoading } from "./loading.store";
+import { History } from '../models/History';
+import { Product } from "../models/Product";
 
+
+const initialHistory: History[] = [];
+const initialInputs: Product[] = [];
 const inputStore = createSlice({
     name: 'input',
     initialState: {
-        inputs: [
-            {
-                "quantityInDecimal": 0,
-                "id": 0,
-                "quantity": 0,
-                "measure_unit": "None",
-                "total_price": 0,
-                "treatment": null,
-                "product": {
-                    "name": "None",
-                    "specifications": "None",
-                    "class": "None"
-                }
-            },
-        ],
-        productHistory: [{ "id": 0, "flow_type": "None", "createdAt": new Date(), "accountable": "None", "quantity": 0, "observations": "None", "price": 0 }]
+        inputs: initialInputs,
+        productHistory: initialHistory
     },
     reducers: {
         getInputs(state, action) {
@@ -37,24 +29,26 @@ export default inputStore.reducer;
 
 export function asyncFetchInput() {
     return async function (dispatch: AppDispatch) {
+        dispatch(pushLoading('products'));
         const results = await axios.get('https://remoteapi.murilobotelho.com.br/products', {
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
-
+        dispatch(popLoading('products'));
         dispatch(getInputs(results.data.productsListByUser));
     }
 }
 
 export function asyncFetchProductHistory(id: number) {
     return async function (dispatch: AppDispatch) {
+        dispatch(pushLoading('product-flows-by-user-product'));
         const result = await axios.get(`https://remoteapi.murilobotelho.com.br/product-flows-by-user-product/${id}`, {
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
-
+        dispatch(popLoading('product-flows-by-user-product'));
         dispatch(getProductHistory(result.data));
     }
 }
