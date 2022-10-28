@@ -27,7 +27,7 @@ export function Sidebar() {
                     {SidebarItems.map((item, index) => (
                         <Row key={index} onClick={(e) => navigate(item.url, e)}>
                             <Col md={2} lg={2}></Col>
-                            <Col md={10} lg={10} className={item.url === location.pathname ? 'sidebar-nav-item active' : "sidebar-nav-item"}>
+                            <Col md={10} lg={10} className={item.url === location.pathname.split("/")[1] ? 'sidebar-nav-item active' : "sidebar-nav-item"}>
                                 <Nav style={{ marginTop: '10px' }}>
                                     <Row>
                                         <Col>
@@ -53,43 +53,43 @@ const SidebarItems = [
     {
         icon: faHome,
         title: 'Início',
-        url: "/home"
+        url: "home"
     },
     {
         icon: faMapLocationDot,
         title: 'Talhões',
-        url: "/plot"
+        url: "plot"
     },
     {
         icon: faLeaf,
         title: 'Insumos',
-        url: "/input"
+        url: "input"
     },
     {
         icon: faMoneyBills,
         title: 'Financeiro',
-        url: "/financial"
+        url: "financial"
     },
     {
         icon: faBuilding,
         title: 'Comércio',
-        url: "/commerce"
+        url: "commerce"
     },
     {
         icon: faTractor,
         title: 'Manutenção',
-        url: "/maintenance"
+        url: "maintenance"
 
     },
     {
         icon: faClock,
         title: 'Planejamento',
-        url: "/planning"
+        url: "planning"
     },
     {
         icon: faSeedling,
         title: 'Solo',
-        url: "/soil"
+        url: "soil"
     }
 
 ]
