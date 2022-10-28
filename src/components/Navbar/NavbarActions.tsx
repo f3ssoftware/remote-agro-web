@@ -1,53 +1,37 @@
-import { useNavigate } from "react-router-dom";
-
 export const NavbarActions = [
     {
-        pathname: "/financial",
+        pathname: "financial",
         title: "Balanço",
-        action: () => {
-            console.log('Balanço');
-        }
+        navigation: "/financial/balance"
     },
     {
-        pathname: "/financial",
+        pathname: "financial",
         title: "Emitir Nota",
-        action: () => {
-            console.log('Balanço');
-        }
+        navigation: "/financial/invoice"
     },
     {
-        pathname: "/financial",
+        pathname: "financial",
         title: "Notas Sefaz",
-        action: () => {
-            console.log('Balanço');
-        }
+        navigation: "/financial/sefaz"
     },
     {
-        pathname: "/financial",
+        pathname: "financial",
         title: "Cadastro Manual",
-        action: () => {
-            console.log('Balanço');
-        }
+        navigation: "/financial/manual-registration"
     },
     {
         pathname: "commerce",
         title: "Contratos",
-        action: () => {
-            console.log('Balanço');
-        }
+        navigation: "/commerce/contract"
     },
     {
         pathname: "commerce",
         title: "Silos",
-        action: () => {
-
-        }
+        navigation: "/commerce/plot"
     },
     {
         pathname: "commerce",
         title: "Pesagem",
-        action: () => {
-            console.log('Balanço');
-        }
+        navigation: "/commerce/weighing"
     },
 ]

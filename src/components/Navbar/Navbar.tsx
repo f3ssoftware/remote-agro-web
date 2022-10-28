@@ -2,7 +2,7 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Dropdown, DropdownButton, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 import { NavbarActions } from "./NavbarActions";
 import Avatar from 'react-avatar';
@@ -16,6 +16,7 @@ export function TopNav() {
     const [showModalSeasons, setShowModalSeasons] = useState(false);
     const handleClose = () => setShowModalSeasons(false);
     const dispatch = useDispatch<any>();
+    const navigator = useNavigate();
 
     useEffect(() => {
         dispatch(asyncFetchSeasons());
@@ -41,7 +42,7 @@ export function TopNav() {
                     <Row>
                         {NavbarActions.filter((b) => b.pathname === location?.pathname?.split("/")[1]).map((button, index) => {
                             return (<Col md={3} key={index}>
-                                <Button onClick={() => button.action()} style={{ backgroundColor: '#243C74', color: '#fff', textTransform: 'uppercase', fontWeight: 'bold', border: 'none' }}>{button.title}</Button>
+                                <Button onClick={() => navigator(button.navigation)} style={{ backgroundColor: '#243C74', color: '#fff', textTransform: 'uppercase', fontWeight: 'bold', border: 'none' }}>{button.title}</Button>
                             </Col>)
                         })}
                     </Row>
