@@ -45,8 +45,7 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
                         {history.map((history: History, index) => {
                             return <tr key={index}>
                                 <td>{history?.flow_type}</td>
-                                {/* <td>{`${history?.createdAt?.getDay()!}/${history?.createdAt?.getMonth()! + 1}${history?.createdAt?.getFullYear()!}`}</td> */}
-                                <td>{history?.createdAt!}</td>
+                                <td>{`${history?.createdAt?.getDay()!}/${history?.createdAt?.getMonth()! + 1}${history?.createdAt?.getFullYear()!}`}</td>
                                 <td>{history?.accountable}</td>
                                 <td>{history?.quantity}</td>
                                 <td>{history?.observations}</td>

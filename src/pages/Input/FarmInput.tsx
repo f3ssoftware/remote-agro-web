@@ -8,7 +8,8 @@ import { Product } from "../../models/Product";
 import { asyncFetchInput } from "../../stores/input.store";
 import { currencyFormat } from "../../utils/currencyFormat";
 import "./FarmInput.scss";
-import { EntranceModal } from "./modals/EntranceModal";
+import { EntranceModal } from "./modals/EntranceModal/EntranceModal";
+
 import { HistoryModal } from "./modals/HistoryModal";
 
 const initialProducts: Product[] = [];
