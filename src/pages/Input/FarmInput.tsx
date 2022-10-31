@@ -1,4 +1,4 @@
-import { faEye, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Row, Form, Table } from "react-bootstrap";
@@ -31,6 +31,7 @@ export function FarmInput() {
             if (product!.product!.name?.toUpperCase().includes(findTerm.toUpperCase()) || product!.product!.class?.includes(findTerm.toUpperCase())) {
                 return product;
             }
+            return null;
         }));
     }
 

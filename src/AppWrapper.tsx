@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react"
 import { Row, Col, Spinner, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, redirect, useLocation, useNavigate } from "react-router-dom"
+import { Navigate, useLocation, useNavigate } from "react-router-dom"
 import { RootState } from ".";
 import { TopNav } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
@@ -19,7 +19,7 @@ import { popMessages } from "./stores/messaging.store";
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
     const navigate = useNavigate();
-    const { loading, messages } = useSelector((state: RootState) => state);
+    const { loading } = useSelector((state: RootState) => state);
     const location = useLocation();
 
     useEffect(() => {

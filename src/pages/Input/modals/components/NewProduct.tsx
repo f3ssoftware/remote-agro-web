@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import "./NewProduct.scss";
 import DatePicker from "react-datepicker";
 import pt from 'date-fns/locale/pt-BR';
@@ -49,6 +49,7 @@ export function NewProduct({ modal }: { modal: string }) {
 
     useEffect(() => {
         dispatch(asyncFetchInvoices());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
