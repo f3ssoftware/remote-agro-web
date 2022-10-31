@@ -1,6 +1,8 @@
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react"
-import { Row, Col, Spinner } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Row, Col, Spinner, Button, Modal } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, redirect, useLocation, useNavigate } from "react-router-dom"
 import { RootState } from ".";
 import { TopNav } from "./components/Navbar/Navbar";
@@ -12,11 +14,12 @@ import { Home } from "./pages/Home/Home"
 import { FarmInput } from "./pages/Input/FarmInput";
 import { Login } from "./pages/Login/Login";
 import { Plot } from "./pages/Plot/Plot";
+import { popMessages } from "./stores/messaging.store";
 
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
     const navigate = useNavigate();
-    const loading = useSelector((state: RootState) => state.loading);
+    const { loading, messages } = useSelector((state: RootState) => state);
     const location = useLocation();
 
     useEffect(() => {
@@ -52,6 +55,13 @@ export function AppWrapper() {
 }
 
 function AppStructure({ children, loading }: { children: JSX.Element, loading: boolean }) {
+    const { messages } = useSelector((state: RootState) => state);
+    const dispatch = useDispatch<any>();
+    const [showMessages, setShowMessages] = useState(false);
+    useEffect(() => {
+        messages.messages.length > 0 ? setShowMessages(true) : setShowMessages(false);
+    }, [messages]);
+
     return <Row>
         <Col lg={2} md={2}>
             <Sidebar></Sidebar>
@@ -69,7 +79,33 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
 
             </Row>
         </Col>
-    </Row>
+        {messages.messages.map((m, index) => {
+            return <Modal show={showMessages} onHide={() => { setShowMessages(false); dispatch(popMessages('')) }} key={index}>
+                <Modal.Header closeButton style={{ backgroundColor: '#ECE4B4' }}>
+                    <Modal.Title>{m.type === 'success' ? 'Sucesso' : 'Erro'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{ backgroundColor: '#ECE4B4' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                        <FontAwesomeIcon icon={m.type === 'success' ? faCircleCheck : faCircleXmark} style={{
+                            fontSize: 100,
+                            color: (m.type === 'success' ? '#A5CD33' : '#bb5252')
+                        }}></FontAwesomeIcon>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ color: (m.type === 'success' ? '#A5CD33' : '#bb5252'), fontSize: 20, marginBottom: '50%' }}>{m.message}</span>
+                            <Button variant="primary" style={{ backgroundColor: (m.type === 'success' ? '#A5CD33' : '#bb5252'), border: 'none' }} onClick={() => { setShowMessages(false); dispatch(popMessages('')) }}>
+                                Ok
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer style={{ backgroundColor: '#ECE4B4' }}>
+
+                </Modal.Footer>
+            </Modal>
+        })}
+    </Row >
 }
 
 function Loading() {

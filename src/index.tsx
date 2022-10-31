@@ -10,6 +10,7 @@ import loadingStore from './stores/loading.store';
 import seasonsStore from './stores/seasons.store';
 import thunkMiddleware from 'redux-thunk';
 import inputStore from './stores/input.store';
+import messagingStore from './stores/messaging.store';
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     loading: loadingStore,
     seasons: seasonsStore,
     input: inputStore,
+    messages: messagingStore,
   },
 });
 

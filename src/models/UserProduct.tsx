@@ -6,4 +6,5 @@ export class UserProduct {
     total_price?: number;
     observations?: string;
     treatment?: any;
+    accountable?: string;
 }

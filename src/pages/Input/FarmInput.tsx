@@ -11,6 +11,8 @@ import "./FarmInput.scss";
 import { EntranceModal } from "./modals/EntranceModal/EntranceModal";
 
 import { HistoryModal } from "./modals/HistoryModal";
+import { SeedsTreatment } from "./modals/SeedsTreatment/SeedsTreatment";
+import { WithdrawalModal } from "./modals/WithdrawalModal.tsx/WithdrawalModal";
 
 const initialProducts: Product[] = [];
 export function FarmInput() {
@@ -21,6 +23,8 @@ export function FarmInput() {
     const [showHistoryModal, setShowHistoryModal] = useState(false);
     const [showEntranceModal, setShowEntranceModal] = useState(false);
     const [historySelectedProduct, setHistorySelectedProduct] = useState(new Product());
+    const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
+    const [showSeedsTreatment, setShowSeedsTreatment] = useState(false);
 
     const find = () => {
         setProducts(input?.inputs?.filter((product: Product) => {
@@ -54,10 +58,10 @@ export function FarmInput() {
                             <Button className="inputs-btn" onClick={() => setShowEntranceModal(true)}>Entrada</Button>
                         </Col>
                         <Col md={1}>
-                            <Button className="inputs-btn">Saída</Button>
+                            <Button className="inputs-btn" onClick={() => setShowWithdrawalModal(true)}>Saída</Button>
                         </Col >
                         <Col md={2}>
-                            <Button className="inputs-btn">Tratar Sementes</Button>
+                            <Button className="inputs-btn" onClick={() => setShowSeedsTreatment(true)}>Tratar Sementes</Button>
                         </Col>
                         <Col md={6}>
                             <Form>
@@ -111,6 +115,8 @@ export function FarmInput() {
                 setHistorySelectedProduct(new Product());
             }}></HistoryModal>
             <EntranceModal show={showEntranceModal} handleClose={() => setShowEntranceModal(false)}></EntranceModal>
+            <WithdrawalModal show={showWithdrawalModal} handleClose={() => setShowWithdrawalModal(false)}></WithdrawalModal>
+            <SeedsTreatment show={showSeedsTreatment} handleClose={() => setShowSeedsTreatment(false)}></SeedsTreatment>
         </div >
     )
 }

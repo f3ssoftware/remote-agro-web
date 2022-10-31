@@ -1,21 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { AppDispatch } from "..";
 import { popLoading, pushLoading } from "./loading.store";
 import { History } from '../models/History';
 import { Product } from "../models/Product";
 import { Invoice } from "../models/Invoice";
+import { UserProduct } from "../models/UserProduct";
+import { ProductListItem } from "../models/ProductListItem";
+import { getMessages } from "./messaging.store";
 
 
 const initialHistory: History[] = [];
 const initialInputs: Product[] = [];
 const initialInvoices: Invoice[] = [];
+const initialGeneralProducts: ProductListItem[] = [];
 const inputStore = createSlice({
     name: 'input',
     initialState: {
         inputs: initialInputs,
         productHistory: initialHistory,
         invoices: initialInvoices,
+        generalProductsList: initialGeneralProducts,
     },
     reducers: {
         getInputs(state, action) {
@@ -26,12 +31,15 @@ const inputStore = createSlice({
         },
         getInvoices(state, action) {
             state.invoices = action.payload;
+        },
+        getProductsList(state, action) {
+            state.generalProductsList = action.payload;
         }
 
     }
 });
 
-export const { getInputs, getProductHistory, getInvoices } = inputStore.actions;
+export const { getInputs, getProductHistory, getInvoices, getProductsList } = inputStore.actions;
 export default inputStore.reducer;
 
 export function asyncFetchInput() {
@@ -44,6 +52,7 @@ export function asyncFetchInput() {
         });
         dispatch(popLoading('products'));
         dispatch(getInputs(results.data.productsListByUser));
+        dispatch(getProductsList(results.data.productsList));
     }
 }
 
@@ -70,6 +79,28 @@ export function asyncFetchInvoices() {
         });
         dispatch(popLoading(`expense-invoices`));
         dispatch(getInvoices(result.data));
+    }
+}
+
+export function asyncAddUserProductToStorage(userProducts: UserProduct[], invoiceId: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/user-products-array`, {
+                userProducts,
+                expenses_invoice_id: invoiceId
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+                }
+            });
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: "Erro na requisição",
+                type: "error"
+            }));
+        }
+
+
 
     }
 }
