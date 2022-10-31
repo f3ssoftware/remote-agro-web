@@ -17,7 +17,6 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
     useEffect(() => {
         if (show) {
             dispatch(asyncFetchProductHistory(product.id!))
-            console.log(history);
         }
     }, [show]);
 
@@ -45,7 +44,8 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
                         {history.map((history: History, index) => {
                             return <tr key={index}>
                                 <td>{history?.flow_type}</td>
-                                <td>{`${history?.createdAt?.getDay()!}/${history?.createdAt?.getMonth()! + 1}${history?.createdAt?.getFullYear()!}`}</td>
+                                {/* <td></td> */}
+                                <td>{`${new Date(history.createdAt!)?.getDay()!}/${new Date(history?.createdAt!).getMonth()! + 1}/${new Date(history?.createdAt!).getFullYear()!}`}</td>
                                 <td>{history?.accountable}</td>
                                 <td>{history?.quantity}</td>
                                 <td>{history?.observations}</td>
