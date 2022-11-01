@@ -3,20 +3,15 @@ import "./Sidebar.scss";
 import logo from "../../assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faMapLocationDot, faLeaf, faMoneyBills, faBuilding, faTractor, faClock, faSeedling } from '@fortawesome/free-solid-svg-icons';
-import { redirect, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function Sidebar() {
-    const [active, setActive] = useState({});
     let location = useLocation();
     let navigation = useNavigate();
     const navigate = (url: string, e: any) => {
         navigation(url);
     }
 
-    // useEffect(() => {
-
-    // }, [active])
     return (
         <div className="sidebar">
             <Container>

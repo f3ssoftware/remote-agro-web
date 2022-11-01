@@ -85,7 +85,7 @@ export function asyncFetchInvoices() {
 export function asyncAddUserProductToStorage(userProducts: UserProduct[], invoiceId: number) {
     return async function (dispatch: AppDispatch) {
         try {
-            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/user-products-array`, {
+            const result = await axios.put(`https://remoteapi.murilobotelho.com.br/user-products-array`, {
                 userProducts,
                 expenses_invoice_id: invoiceId
             }, {

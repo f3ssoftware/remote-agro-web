@@ -22,7 +22,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             measure_unit: measureUnit,
             product_id: productId,
             minimum_quantity: minimumQuantity,
-            observations: observation,
+            // observations: observation,
             quantity: initialQuantity,
             total_price: initialCost,
             treatment: (modalWithdrawal ? 'RETIRADA' : null)

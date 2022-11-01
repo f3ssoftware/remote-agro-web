@@ -1,6 +1,6 @@
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Dropdown, DropdownButton, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.scss";
@@ -8,7 +8,7 @@ import { NavbarActions } from "./NavbarActions";
 import Avatar from 'react-avatar';
 import { useEffect, useState } from "react";
 import { SeasonSelection } from "./SeasonsSelection";
-import { asyncFetchSeasons, getSeasons, selectSeason } from "../../stores/seasons.store";
+import { asyncFetchSeasons } from "../../stores/seasons.store";
 import { RootState } from "../..";
 
 export function TopNav() {

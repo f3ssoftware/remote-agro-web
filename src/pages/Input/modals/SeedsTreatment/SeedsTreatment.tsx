@@ -1,13 +1,10 @@
-import { Modal, Button, Row, Col, Form } from "react-bootstrap"
+import { Modal, Row, Col, Form } from "react-bootstrap"
 import { Typeahead } from "react-bootstrap-typeahead";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { UserProduct } from "../../../../models/UserProduct"
-import { WithdrawalProduct } from "../components/WithdrawalProduct"
 
 export function SeedsTreatment({ show, handleClose }: { show: boolean, handleClose: any }) {
     const { input } = useSelector((state: RootState) => state);
-    // const [product, setProduct] = useState()
     return <Modal show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529" }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Retirada de estoque</span></Modal.Title>
@@ -52,10 +49,6 @@ export function SeedsTreatment({ show, handleClose }: { show: boolean, handleClo
                     </Form.Group>
                 </Col>
             </Row>
-            {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="primary">Adicionar Linha</Button>
-                <Button variant="success">Registrar</Button>
-            </div> */}
         </Modal.Body>
     </Modal >
 }
