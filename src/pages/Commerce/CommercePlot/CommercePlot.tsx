@@ -19,38 +19,40 @@ export function CommercePlot() {
 
         <Row className="plot-cards">
           <Col md={2}>
-            <Card>
+            <Card className="cardBody">
               <Card.Img variant="top" src={logoCard} className="logoCard" />
               <Card.Body>
                 <Card.Title className="cardTitle">Silo Metal 1</Card.Title>
                 <Card.Text className="cardText">
-                    <span>Soja</span> <span>258 sacas</span>
-                    <span>Milho</span> <span>18,25 sacas</span>
-                    <span>Trigo</span> <span>400 sacas</span>
+                    Soja 258 sacas
+                    Milho 18,25 sacas
+                    Trigo 400 sacas
                 </Card.Text>
               </Card.Body>
             </Card>
           </Col>
           <Col md={2}>
-            <Card>
+            <Card className="cardBody">
               <Card.Img variant="top" src={logoCard} className="logoCard" />
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
+              <Card.Title className="cardTitle">Barracão</Card.Title>
+                <Card.Text className="cardText">
+                    Soja 258 sacas
+                    Milho 18,25 sacas
+                    Trigo 400 sacas
                 </Card.Text>
               </Card.Body>
             </Card>
           </Col>
           <Col md={2}>
-            <Card>
+            <Card className="cardBody">
               <Card.Img variant="top" src={logoCard} className="logoCard" />
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
+              <Card.Title className="cardTitle">Silo Metal 1</Card.Title>
+                <Card.Text className="cardText">
+                    Soja 258 sacas
+                    Milho 18,25 sacas
+                    Trigo 400 sacas
                 </Card.Text>
               </Card.Body>
             </Card>
