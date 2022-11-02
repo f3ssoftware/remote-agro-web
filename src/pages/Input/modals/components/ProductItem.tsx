@@ -6,6 +6,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { Product } from "../../../../models/Product";
+import { ProductListItem } from "../../../../models/ProductListItem";
 import { UserProduct } from "../../../../models/UserProduct";
 
 export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdrawal }: { index: number, onHandleRemove: any, onHandleUpdate: any, modalWithdrawal: boolean }) {
@@ -16,28 +17,33 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
     const [initialQuantity, setInitialQuantity] = useState(0);
     const [initialCost, setInitialCost] = useState(0);
     const [observation, setObservation] = useState("");
+    const [userHasProduct, setUserHasProduct] = useState(false);
 
     useEffect(() => {
         const p: UserProduct = {
             measure_unit: measureUnit,
             product_id: productId,
             minimum_quantity: minimumQuantity,
-            // observations: observation,
+            observations: observation,
             quantity: initialQuantity,
             total_price: initialCost,
             treatment: (modalWithdrawal ? 'RETIRADA' : null)
         };
-        onHandleUpdate(p, index);
+        onHandleUpdate(p, index, userHasProduct);
     }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation]);
     return <Row style={{ marginTop: '2%' }}>
         <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
                 <Typeahead
-                    onChange={(selected) => {
+                    onChange={(selected: any) => {
                         if (selected.length > 0) {
-                            const p = selected[0] as Product;
+                            const p = selected[0];
                             setProductId(p.id!);
+                            console.log(p);
+                            if (input.inputs.filter(i => i.product?.name === p.label).length > 0) {
+                                setUserHasProduct(true);
+                            }
                         }
                     }}
                     options={input.generalProductsList.map(input => { return { id: input.id, label: input?.name } })}
@@ -45,22 +51,22 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             </Form.Group>
 
         </Col>
-        <Col>
+        {!userHasProduct ? <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Unidade Medida</Form.Label>
                 <Form.Control type="text" onChange={(e) => {
                     setMeasureUnit(e.target.value);
                 }} />
             </Form.Group>
-        </Col>
-        <Col>
+        </Col> : <></>}
+        {!userHasProduct ? <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Estoque Mínimo</Form.Label>
                 <Form.Control type="number" onChange={(e) => {
                     setMinimumQuantity(Number(e.target.value));
                 }} />
             </Form.Group>
-        </Col>
+        </Col> : <></>}
         <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Quantidade Inicial</Form.Label>

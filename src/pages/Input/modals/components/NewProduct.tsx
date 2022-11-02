@@ -4,7 +4,7 @@ import "./NewProduct.scss";
 import DatePicker from "react-datepicker";
 import pt from 'date-fns/locale/pt-BR';
 import { useDispatch, useSelector } from "react-redux";
-import { asyncAddUserProductToStorage, asyncFetchInvoices } from "../../../../stores/input.store";
+import { asyncAddUserProductToStorage, asyncFetchInvoices, asyncUpdateUserProductOnStorage } from "../../../../stores/input.store";
 import { RootState } from "../../../..";
 import { Invoice } from "../../../../models/Invoice";
 import { Typeahead } from "react-bootstrap-typeahead";
@@ -12,6 +12,7 @@ import { UserProduct } from "../../../../models/UserProduct";
 import { ProductItem } from "./ProductItem";
 
 let emptyDate: Date;
+const emptyProductList: UserProduct[] = [];
 export function NewProduct({ modal }: { modal: string }) {
     const { input } = useSelector((state: RootState) => state);
     const [linkInvoice, setLinkInvoice] = useState(false);
@@ -21,13 +22,27 @@ export function NewProduct({ modal }: { modal: string }) {
     const dispatch = useDispatch<any>();
     const [invoices, setInvoices] = useState(input.invoices);
     const [selectedInvoice, setSelectedInvoice] = useState(new Invoice());
-    const [products, setProducts] = useState([new UserProduct()])
+    const [products, setProducts] = useState([new UserProduct()]);
+    const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
+    const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
 
-    const onUpdateItem = (product: UserProduct, index: number) => {
+    const onUpdateItem = (product: UserProduct, index: number, userHasProduct: boolean) => {
         const productsArr = [...products];
         productsArr.splice(index, 1);
         productsArr.push(product);
         setProducts(productsArr);
+
+        if (userHasProduct) {
+            const toUpdtArr = [...productsToUpdate];
+            toUpdtArr.splice(index, 1);
+            setProductsToUpdate(toUpdtArr.concat(product))
+        } else {
+            const toAddArr = [...productsToAdd];
+            toAddArr.splice(index, 1);
+            setProductsToAdd(toAddArr.concat(product));
+        }
+
+
     }
 
     const onRemoveItem = (index: number) => {
@@ -44,7 +59,15 @@ export function NewProduct({ modal }: { modal: string }) {
     }
 
     const register = () => {
-        dispatch(asyncAddUserProductToStorage(products, selectedInvoice.id!));
+        if (productsToAdd.length > 0) {
+            dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
+        }
+
+        if (productsToUpdate.length > 0) {
+            dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
+        }
+
+
     }
 
     useEffect(() => {
