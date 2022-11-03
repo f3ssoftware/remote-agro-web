@@ -1,5 +1,6 @@
-import { Container, Row, Col, Dropdown, Button, Card } from 'react-bootstrap'
-import './Contracts.scss'
+import { Container, Row, Col, Dropdown, Button, Card } from 'react-bootstrap';
+import './Contracts.scss';
+
 export function Contracts() {
     return (
         <Container>

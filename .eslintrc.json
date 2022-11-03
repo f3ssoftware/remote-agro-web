@@ -15,5 +15,11 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint"],
-  "rules": {}
+  "rules": {
+    // suppress errors for missing 'import React' in files
+    "react/react-in-jsx-scope": "off"
+  }
 }
+
+DISABLE_ESLINT_PLUGIN=true
+ESLINT_NO_DEV_ERRORS=true
