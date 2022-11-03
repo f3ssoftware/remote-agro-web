@@ -1,4 +1,4 @@
-import { Col, Container, Nav, Row } from "react-bootstrap";
+import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 import "./Sidebar.scss";
 import logo from "../../assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,6 +36,12 @@ export function Sidebar() {
                             </Col>
                         </Row>
                     ))}
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '50%' }}>
+                        <Button variant="warning" onClick={() => {
+                            sessionStorage.removeItem('token');
+                            navigation('/');
+                        }}>Logout</Button>
+                    </div>
                 </div>
 
             </Container >

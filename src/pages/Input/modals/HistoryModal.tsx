@@ -25,12 +25,12 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
     }, [input])
 
     return <Modal show={show} onHide={handleClose} size={'xl'}>
-        <Modal.Header closeButton style={{ backgroundColor: "#7C5529" }}>
+        <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Histórico - {product.product?.name}</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
             <div style={{ maxHeight: '60vh', overflowY: 'scroll' }}>
-                {loading.requests.length === 0 ? <Table striped hover>
+                {loading.requests.filter(r => r === 'product-flows-by-user-product').length === 0 ? <Table striped hover>
                     <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
                         <tr>
                             <th>Tipo</th>

@@ -55,7 +55,7 @@ export function SeedsTreatment({
     };
     return (
         <Modal show={show} onHide={handleClose} size={"xl"}>
-            <Modal.Header closeButton style={{ backgroundColor: "#7C5529" }}>
+            <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
                 <Modal.Title>
                     {" "}
                     <span style={{ color: "#fff" }}>Tratamento de Sementes</span>

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
+import { popLoading, pushLoading } from "./loading.store";
 
 const userStore = createSlice({
   name: "user",
@@ -22,14 +23,21 @@ export default userStore.reducer;
 
 export function asyncFetchUser(username: string, password: string) {
   return async function (dispatch: AppDispatch) {
-    const results = await axios.post(
-      "https://remoteapi.murilobotelho.com.br/sessions",
-      {
-        username,
-        password,
-      }
-    );
-    sessionStorage.setItem("token", results.data.token);
-    dispatch(fetchUser(results.data));
+    dispatch(pushLoading('sessions'));
+    try {
+      const results = await axios.post(
+        "https://remoteapi.murilobotelho.com.br/sessions",
+        {
+          username,
+          password,
+        }
+      );
+      sessionStorage.setItem("token", results.data.token);
+      dispatch(fetchUser(results.data));
+      dispatch(popLoading('sessions'));
+    } catch(err) {
+      console.error(err);
+    }
+    
   };
 }

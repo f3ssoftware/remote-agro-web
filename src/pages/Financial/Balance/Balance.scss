@@ -1,0 +1,44 @@
+$ra-card-billing-bg: #168E8E;
+$ra-card-payments-bg: #848419;
+$ra-card-duedated-bg: #911414;
+$total-balance-btn-bg: #7C542B;
+
+.balance-content {
+    // padding-left: 5%;
+    padding-right: 2%;
+}
+.ra-card-billing {
+    background-color: $ra-card-billing-bg;
+    border: none;
+    color: #fff;
+    height: 100%;
+}
+
+.ra-card-payments {
+    background-color: $ra-card-payments-bg;
+    border: none;
+    color: #fff;
+    height: 100%;
+}
+
+.ra-card-duedated {
+    background-color: $ra-card-duedated-bg;
+    border: none;
+    color: #fff;
+    height: 100%;
+}
+
+
+.total-balance-btn {
+    background-color: $total-balance-btn-bg;
+    border: none;
+    font-weight: bold;
+    line-height: 40px;
+}
+
+.total-balance-btn:hover {
+    background-color: $total-balance-btn-bg;
+    border: none;
+    font-weight: bold;
+    line-height: 40px;
+}

@@ -37,6 +37,12 @@
   padding: 2%;
 }
 
+.flex-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

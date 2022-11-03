@@ -4,18 +4,20 @@ import Form from 'react-bootstrap/Form';
 import "./Login.scss"
 import { useEffect, useState } from "react";
 import { asyncFetchUser } from "../../stores/user.store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../..";
 
 export function Login() {
     let navigate = useNavigate();
     const dispatch = useDispatch<any>();
+    const { loading } = useSelector((state: RootState) => state);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const login = () => {
+    const login = async () => {
         // console.log(`Usuário: ${username} / Senha: ${password}`);
-        dispatch(asyncFetchUser(username, password));
+        await dispatch(asyncFetchUser(username, password));
         navigate("/");
     }
 
@@ -23,10 +25,14 @@ export function Login() {
         <div className="background-img">
             <div className="login-square">
                 <img className="login-logo" src={logo} alt="" />
-                <Form>
+                <Form onKeyUp={e => {
+                    if (e.key === 'Enter') {
+                        login();
+                    }
+                }}>
                     <Form.Group className="mb-2 user-box" controlId="formBasicEmail">
                         <Form.Label>Usuário</Form.Label>
-                        <Form.Control type="text" onChange={e => setUsername(e.target.value)} />
+                        <Form.Control type="text" onChange={e => setUsername(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} />
                     </Form.Group>
 
                     <Form.Group className="mb-2 password-box" controlId="formBasicPassword">

@@ -10,6 +10,7 @@ import loadingStore from './stores/loading.store';
 import seasonsStore from './stores/seasons.store';
 import inputStore from './stores/input.store';
 import messagingStore from './stores/messaging.store';
+import financialStore from './stores/financial.store';
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     seasons: seasonsStore,
     input: inputStore,
     messages: messagingStore,
+    financial: financialStore,
   },
 });
 

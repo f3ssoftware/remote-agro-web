@@ -128,6 +128,44 @@ export function asyncAddUserProductToStorage(
     };
 }
 
+export function asyncWithdrawUserProductToStorage(
+    userProducts: UserProduct[],
+    invoiceId: number
+) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.put(
+                `https://remoteapi.murilobotelho.com.br/user-products-array`,
+                {
+                    user_products: userProducts,
+                    expenses_invoice_id: invoiceId,
+                    flow_type: "RETIRADA"
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            if (result.status === 200) {
+                dispatch(
+                    getMessages({
+                        message: "Produto Registrado com sucesso!",
+                        type: "success",
+                    })
+                );
+            }
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: err.error,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
 export function asyncTreatSeeds(body: TreatSeedsDTO) {
     return async function (dispatch: AppDispatch) {
         try {

@@ -32,7 +32,7 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
             observations: observation,
             quantity: initialQuantity,
             total_price: initialCost,
-            treatment: "RETIRADA",
+            treatment: null,
             accountable: accountable
         };
         onHandleUpdate(p, index);
@@ -58,16 +58,6 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
                 <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
                 <Form.Control type="number" onChange={(e) => {
                     setInitialQuantity(Number(e.target.value));
-                }} />
-            </Form.Group>
-        </Col>
-        <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Custo Inicial</Form.Label>
-                <Form.Control type="text" onBlur={(e) => {
-                    e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
-                    console.log(e.currentTarget.value);
-                    setInitialCost(Number(e.currentTarget.value.split("R$")[1]));
                 }} />
             </Form.Group>
         </Col>

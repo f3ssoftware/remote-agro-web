@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { Invoice } from "../../../../models/Invoice";
 import { UserProduct } from "../../../../models/UserProduct";
-import { asyncAddUserProductToStorage } from "../../../../stores/input.store";
+import { asyncAddUserProductToStorage, asyncWithdrawUserProductToStorage } from "../../../../stores/input.store";
 import { NewProduct } from "../components/NewProduct";
 import { WithdrawalProduct } from "../components/WithdrawalProduct";
 
@@ -42,11 +42,11 @@ export function WithdrawalModal({ show, handleClose }: { show: boolean, handleCl
     }
 
     const register = () => {
-        dispatch(asyncAddUserProductToStorage(products, selectedInvoice.id!));
+        dispatch(asyncWithdrawUserProductToStorage(products, selectedInvoice.id!));
     }
 
     return <Modal show={show} onHide={handleClose} size={'xl'}>
-        <Modal.Header closeButton style={{ backgroundColor: "#7C5529" }}>
+        <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Retirada de estoque</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
