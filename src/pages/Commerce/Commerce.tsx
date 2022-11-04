@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { Contracts } from "./Contracts/Contracts";
 import { CommercePlot } from "./CommercePlot/CommercePlot";
 import React from "react";
+import { CommerceWeighing } from "./CommerceWeighing/CommerceWeighing";
 
 export function Commerce() {
   const location = useLocation();
@@ -17,6 +18,9 @@ export function Commerce() {
     }
     case "plot": {
       return <CommercePlot></CommercePlot>;
+    }
+    case "weighing": {
+      return <CommerceWeighing></CommerceWeighing>
     }
     default: {
       console.log(location.pathname.split("/"));
