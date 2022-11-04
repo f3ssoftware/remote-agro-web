@@ -19,6 +19,22 @@
 .plot-btn{
     background: #4C9626;
     border-radius: 50%;
+    border: none;
+    width: 75px;
+    height: 75px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bold;
+    margin-left: 950px;
+    position: relative;
+    bottom:20px;
+}
+
+.plot-btn:hover{
+    background: #4C9626;
+    border-radius: 50%;
+    border: none;
     width: 75px;
     height: 75px;
     color: #FFFFFF;

@@ -7,10 +7,10 @@ export function CommercePlot() {
         <Container>
             <div className="main-box">
                 <Row>
-                    <Col className="title-box">
+                    <Col md={2}className="title-box">
                         <span>Silos</span>
                     </Col>
-                    <Col>
+                    <Col md={1}>
                         <Button variant="success" className="plot-btn">
                             +
                         </Button>{" "}
