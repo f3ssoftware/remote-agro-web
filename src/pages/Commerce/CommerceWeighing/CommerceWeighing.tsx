@@ -1,13 +1,13 @@
 import { Container, Button, Row, Col } from "react-bootstrap";
-import "../CommercePlot/CommerceWeight.scss";
+import "../CommerceWeighing/CommerceWeighing.scss";
 
-export function CommercePlot() {
+export function CommerceWeighing() {
     return (
         <Container>
             <div className="main-box">
                 <Row>
                     <Col className="title-box">
-                        <span>Silos</span>
+                        <span>Pesagens</span>
                     </Col>
                     <Col>
                         <Button variant="success" className="plot-btn">
