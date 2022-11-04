@@ -8,6 +8,7 @@ import { RootState } from "../../../..";
 import { Product } from "../../../../models/Product";
 import { ProductListItem } from "../../../../models/ProductListItem";
 import { UserProduct } from "../../../../models/UserProduct";
+import { unformatCurrency } from "../../../../utils/currencyFormat";
 
 export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdrawal }: { index: number, onHandleRemove: any, onHandleUpdate: any, modalWithdrawal: boolean }) {
     const { input } = useSelector((state: RootState) => state);
@@ -23,7 +24,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
         const p: UserProduct = {
             measure_unit: measureUnit,
             product_id: productId,
-            minimum_quantity: minimumQuantity,
+            // minimum_quantity: minimumQuantity,
             observations: observation,
             quantity: initialQuantity,
             total_price: initialCost,
@@ -43,7 +44,11 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
                             console.log(p);
                             if (input.inputs.filter(i => i.product?.name === p.label).length > 0) {
                                 setUserHasProduct(true);
+                            } else {
+                                setUserHasProduct(false);
                             }
+                        } else {
+                            setUserHasProduct(false);
                         }
                     }}
                     options={input.generalProductsList.map(input => { return { id: input.id, label: input?.name } })}
@@ -59,17 +64,17 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
                 }} />
             </Form.Group>
         </Col> : <></>}
-        {!userHasProduct ? <Col>
+        {/* {!userHasProduct ? <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Estoque Mínimo</Form.Label>
                 <Form.Control type="number" onChange={(e) => {
                     setMinimumQuantity(Number(e.target.value));
                 }} />
             </Form.Group>
-        </Col> : <></>}
+        </Col> : <></>} */}
         <Col>
             <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Quantidade Inicial</Form.Label>
+                <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
                 <Form.Control type="number" onChange={(e) => {
                     setInitialQuantity(Number(e.target.value));
                 }} />
@@ -77,12 +82,23 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
         </Col>
         <Col>
             <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Custo Inicial</Form.Label>
+                <Form.Label style={{ color: '#fff' }}>Custo</Form.Label>
                 <Form.Control type="text" onBlur={(e) => {
-                    e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
-                    console.log(e.currentTarget.value);
-                    setInitialCost(Number(e.currentTarget.value.split("R$")[1]));
-                }} />
+                    if (isNaN(Number(e.currentTarget.value))) {
+                        e.currentTarget.value = '';
+                        // const numeric = unformatCurrency(e.currentTarget.value);
+                        // setInitialCost(unformatCurrency(e.currentTarget.value));
+                        // e.currentTarget.value = numeric.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true });
+                    } else {
+                        setInitialCost(Number(e.currentTarget.value));
+                        e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                    }
+
+                }} onKeyUp={(e) => {
+                    if (e.key === 'Backspace') {
+                        e.currentTarget.value = '';
+                    }
+                }}/>
             </Form.Group>
         </Col>
         <Col>

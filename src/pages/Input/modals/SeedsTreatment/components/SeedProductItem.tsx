@@ -19,7 +19,7 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
         <Row>
             <Col>
                 <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>Semente</Form.Label>
+                    <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
                     <Typeahead
                         onChange={(selected: any) => {
                             if (selected.length > 0) {
