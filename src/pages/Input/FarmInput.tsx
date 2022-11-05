@@ -84,7 +84,7 @@ export function FarmInput() {
                             <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
                                 {products.map((input: Product, index) => {
                                     return <tr key={index}>
-                                        <td>{input?.product?.name}</td>
+                                        <td>{ input.product?.class === 'SEMENTE' ? input?.product?.name + ' ' +  input?.treatment : input?.product?.name }</td>
                                         <td>{input?.product?.class}</td>
                                         <td>
                                             <Row>
