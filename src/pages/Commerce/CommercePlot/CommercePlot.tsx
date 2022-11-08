@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { Container, Button, Card, Row, Col } from "react-bootstrap";
 import logoCard from "../../../assets/images/logoCard.png";
 import "../CommercePlot/Commerceplot.scss";
+import { NewCommercePlotModal } from '../modals/NewCommercePlotModal/NewCommercePlotModal';
 
 export function CommercePlot() {
+    
+    const [showNewCommercePlotModal, setShowNewCommercePlotModal] = useState(false);
+
     return (
         <Container>
             <div className="main-box">
@@ -10,8 +15,8 @@ export function CommercePlot() {
                     <Col md={2}className="title-box">
                         <span>Silos</span>
                     </Col>
-                    <Col md={1}>
-                        <Button variant="success" className="plot-btn">
+                    <Col md={2}>
+                        <Button variant="success" className="plot-btn" onClick={() => setShowNewCommercePlotModal(true)}>
                             +
                         </Button>{" "}
                     </Col>
@@ -53,6 +58,7 @@ export function CommercePlot() {
                     </Col>
                 </Row>
             </div>
+            <NewCommercePlotModal show={showNewCommercePlotModal} handleClose={() => setShowNewCommercePlotModal(false)}></NewCommercePlotModal>
         </Container>
     );
 }
