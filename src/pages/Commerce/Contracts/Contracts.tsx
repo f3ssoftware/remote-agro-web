@@ -1,7 +1,13 @@
 import { Container, Row, Col, Dropdown, Button, Card } from 'react-bootstrap';
 import './Contracts.scss';
+import { NewContractModal } from '../modals/NewContractModal/NewContractModal';
+import {useState } from 'react';
+
 
 export function Contracts() {
+
+    const [showNewContractModal, setShowNewContractModal] = useState(false);
+    
     return (
         <Container>
             <Row>
@@ -24,9 +30,9 @@ export function Contracts() {
                         <div className="second-card">
                             <span className="second-card-text">Contratos</span>
                             <div>
-                                <Button variant="success" className="second-card-button">
+                                <Button variant="success" className="second-card-button" onClick={() => setShowNewContractModal(true)}>
                                     +
-                                </Button>{' '}
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -71,6 +77,7 @@ export function Contracts() {
                     </Card>
                 </Col>
             </Row>
+            <NewContractModal show={showNewContractModal} handleClose={() => setShowNewContractModal(false)}></NewContractModal>
         </Container>
     )
 }
