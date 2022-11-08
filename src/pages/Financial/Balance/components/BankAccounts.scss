@@ -1,0 +1,15 @@
+$ra-green: #4C9626;
+
+.bank-account-card {
+    border: solid;
+    border-color: $ra-green;
+    border-width: 3px;
+    border-radius: 10px;
+    height: 10%;
+    margin-top: 5%;
+}
+
+.bank-accounts-content {
+    overflow-y: scroll;
+    max-height: 10%;
+}

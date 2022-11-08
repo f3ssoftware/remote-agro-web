@@ -38,6 +38,7 @@ $sidebar-selected-item: #44433f;
   background-color: $sidebar-selected-item;
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
+  border-top-right-radius: -100px;
 }
 
 .active {
