@@ -12,9 +12,9 @@ export function NewContractModal({show, handleClose}: {show: boolean, handleClos
             <Modal.Title> <span style={{ color: '#fff' }}>Editar contrato</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-    
+            <NewContract></NewContract>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => register()}>Registrar</Button>
+                <Button variant="success" onClick={() => {register(); handleClose();}}>Registrar</Button>
             </div>
         </Modal.Body>
     </Modal >
