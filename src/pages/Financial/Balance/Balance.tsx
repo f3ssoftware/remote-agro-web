@@ -25,7 +25,7 @@ export function Balance() {
                     <BankAccounts></BankAccounts>
                 </Col>
             </Row>
-            <Row style={{ marginTop: '5%' }}>
+            <Row style={{ marginTop: '2%' }}>
                 <Col md={8}>
                     <Cashflow></Cashflow>
                 </Col>

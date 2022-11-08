@@ -23,15 +23,15 @@ export function BankAccounts() {
     useEffect(() => {
         paginate(page);
         setTotalResults(financial.bankAccounts.length);
-        setPageSize(3);
+        setPageSize(2);
     }, [financial]);
 
 
     const paginate = (page: number) => {
-        const pageSize = 3;
+        const pageSize = 2;
         setBankAccounts([...financial.bankAccounts].slice((page - 1) * pageSize, page * pageSize));
     }
-    return <div style={{ marginTop: '5%' }}>
+    return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
             <Card.Body>
                 <Card.Title>Contas bancárias</Card.Title>
@@ -48,28 +48,30 @@ export function BankAccounts() {
                             </Col>
                         </Row>
                         <div className="flex-right">
-                            <h5 style={{color: (Number(account.balance)) > 0 ? '#4C9626' : '#911414' }}>{Number(account.balance).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                            <h5 style={{ color: (Number(account.balance)) > 0 ? '#4C9626' : '#911414' }}>{Number(account.balance).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
                         </div>
                     </div>)}
                 </div>
-                {page}
-                <Pagination size="sm" >
-                    <Pagination.Prev onClick={() => {
-                        if (page > 1) {
-                            paginate(page - 1);
-                            setPage(page - 1);
-                        }
-                    }} />
-                    <Pagination.Next onClick={() => {
-                        if (page < (totalResults / pageSize)) {
-                            console.log((totalResults / pageSize));
-                            paginate(page + 1);
-                            setPage(page + 1);
-                        } else {
-                            console.log('else: ', totalResults / pageSize);
-                        }
-                    }} />
-                </Pagination>
+                <div className="flex-center" style={{marginTop: '10%'}}>
+                    <Pagination size="sm" >
+                        <Pagination.Prev onClick={() => {
+                            if (page > 1) {
+                                paginate(page - 1);
+                                setPage(page - 1);
+                            }
+                        }} />
+                        <Pagination.Next onClick={() => {
+                            if (page < (totalResults / pageSize)) {
+                                console.log((totalResults / pageSize));
+                                paginate(page + 1);
+                                setPage(page + 1);
+                            } else {
+                                console.log('else: ', totalResults / pageSize);
+                            }
+                        }} />
+                    </Pagination>
+                </div>
+
             </Card.Body>
         </Card>
     </div>
