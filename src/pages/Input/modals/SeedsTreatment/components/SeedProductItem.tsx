@@ -21,12 +21,13 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
                 <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
                     <Typeahead
+                    id="product_input"
                         onChange={(selected: any) => {
                             if (selected.length > 0) {
                                 setSelectedProduct({ id: selected[0].id });
                             }
                         }}
-                        options={input.inputs.map(input => { return { id: input.id, label: `${input?.product?.name} - ${input.treatment}` } })}
+                        options={input.inputs.map((input) => { return { id: input.id, label: `${input?.product?.name} - ${input.treatment}` } })}
                     />
                 </Form.Group>
             </Col>

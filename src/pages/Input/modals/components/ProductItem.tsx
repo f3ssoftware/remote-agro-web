@@ -37,6 +37,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
                 <Typeahead
+                id="product"
                     onChange={(selected: any) => {
                         if (selected.length > 0) {
                             const p = selected[0];
@@ -49,9 +50,10 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
                             }
                         } else {
                             setUserHasProduct(false);
+                            onHandleRemove(index);
                         }
                     }}
-                    options={input.generalProductsList.map(input => { return { id: input.id, label: input?.name } })}
+                    options={input.generalProductsList.map((input) => { return { id: input.id, label: input?.name } })}
                 />
             </Form.Group>
 

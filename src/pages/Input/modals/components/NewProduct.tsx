@@ -36,12 +36,13 @@ export function NewProduct({ modal }: { modal: string }) {
             const toUpdtArr = [...productsToUpdate];
             toUpdtArr.splice(index, 1);
             setProductsToUpdate(toUpdtArr.concat(product))
-        } else {
+        } else if(product.product_id){
             const toAddArr = [...productsToAdd];
             toAddArr.splice(index, 1);
             setProductsToAdd(toAddArr.concat(product));
         }
-
+        console.log('add', productsToAdd);
+        console.log('update', productsToUpdate);
 
     }
 
@@ -124,6 +125,7 @@ export function NewProduct({ modal }: { modal: string }) {
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label>Vinculação de Nota</Form.Label>
                         <Typeahead
+                            id="invoice"
                             onChange={selected => {
                                 const invoiceSelected = selected[0] as Invoice;
                                 setSelectedInvoice(invoiceSelected);

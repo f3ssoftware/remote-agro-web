@@ -34,8 +34,8 @@ export function Transactions() {
                             </tr>
                         </thead>
                         <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                            {financial?.expensesRevenue?.map(er => {
-                                return <tr>
+                            {financial?.expensesRevenue?.map((er, index) => {
+                                return <tr key={index}>
                                     <td>{`${new Date(er.payment_date!)?.getDay()!}/${new Date(er.payment_date!).getMonth()! + 1}/${new Date(er.payment_date!).getFullYear()!}`}</td>
                                     <td>{er.reference}</td>
                                     <td>{er.amount}</td>

@@ -209,6 +209,7 @@ export function asyncUpdateUserProductOnStorage(
                 {
                     user_products: userProducts,
                     expenses_invoice_id: invoiceId,
+                    flow_type: "ENTRADA"
                 },
                 {
                     headers: {

@@ -42,6 +42,7 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
                 <Typeahead
+                id="product"
                     onChange={(selected) => {
                         if (selected.length > 0) {
                             const p = selected[0] as Product;

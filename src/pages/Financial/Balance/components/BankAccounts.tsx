@@ -36,7 +36,7 @@ export function BankAccounts() {
             <Card.Body>
                 <Card.Title>Contas bancárias</Card.Title>
                 <div className="bank-accounts-content">
-                    {bankAccounts.map(account => <div className="bank-account-card">
+                    {bankAccounts.map((account, index) => <div className="bank-account-card" key={index}>
                         <Row>
                             <Col>
                                 <b>{account.nickname}</b>

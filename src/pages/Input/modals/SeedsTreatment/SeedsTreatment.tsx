@@ -67,6 +67,7 @@ export function SeedsTreatment({
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: "#fff" }}>Semente</Form.Label>
                             <Typeahead
+                            id="seed"
                                 onChange={(selected: any) => {
                                     if (selected.length > 0) {
                                         setSeed({ id: selected[0].id });
