@@ -17,6 +17,9 @@ export function NewContract({}){
     useEffect(()=>{
         console.log(contractName)
     });
+    useEffect(()=>{
+        console.log(contractId)
+    });
 
     useEffect(()=>{
         console.log(type)
