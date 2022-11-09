@@ -15,6 +15,9 @@ export function Financial() {
         case "invoice": {
             return <Invoice></Invoice>
         }
+        case "manual-registration": {
+          return <></>;
+        }
         default: {
           console.log(location.pathname.split("/"));
           return <div>Not found</div>;
