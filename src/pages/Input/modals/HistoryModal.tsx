@@ -38,6 +38,7 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
                             <th>Responsável</th>
                             <th>Quantidade</th>
                             <th>Observações</th>
+                            <th>Custo Total</th>
                         </tr>
                     </thead>
                     <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
@@ -49,6 +50,7 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
                                 <td>{history?.accountable}</td>
                                 <td>{history?.quantity}</td>
                                 <td>{history?.observations}</td>
+                                <td>{history?.price?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             </tr>
                         })}
                     </tbody>

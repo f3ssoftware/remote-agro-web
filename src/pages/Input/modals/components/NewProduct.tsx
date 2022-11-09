@@ -35,15 +35,12 @@ export function NewProduct({ modal }: { modal: string }) {
         if (userHasProduct) {
             const toUpdtArr = [...productsToUpdate];
             toUpdtArr.splice(index, 1);
-            setProductsToUpdate(toUpdtArr.concat(product))
-        } else if(product.product_id){
+            setProductsToUpdate(toUpdtArr.concat(product));
+        } else {
             const toAddArr = [...productsToAdd];
             toAddArr.splice(index, 1);
             setProductsToAdd(toAddArr.concat(product));
         }
-        console.log('add', productsToAdd);
-        console.log('update', productsToUpdate);
-
     }
 
     const onRemoveItem = (index: number) => {

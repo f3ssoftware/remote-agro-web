@@ -27,7 +27,7 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
     useEffect(() => {
         const p: UserProduct = {
             measure_unit: measureUnit,
-            product_id: productId,
+            user_product_id: productId,
             minimum_quantity: minimumQuantity,
             observations: observation,
             quantity: initialQuantity,

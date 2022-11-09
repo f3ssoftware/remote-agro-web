@@ -13,6 +13,7 @@ import { unformatCurrency } from "../../../../utils/currencyFormat";
 export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdrawal }: { index: number, onHandleRemove: any, onHandleUpdate: any, modalWithdrawal: boolean }) {
     const { input } = useSelector((state: RootState) => state);
     const [productId, setProductId] = useState(0);
+    const [userProductId, setUserProductId] = useState(0);
     const [measureUnit, setMeasureUnit] = useState('');
     const [minimumQuantity, setMinimumQuantity] = useState(0);
     const [initialQuantity, setInitialQuantity] = useState(0);
@@ -23,13 +24,18 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
     useEffect(() => {
         const p: UserProduct = {
             measure_unit: measureUnit,
-            product_id: productId,
+            // user_product_id: userProductId,
             // minimum_quantity: minimumQuantity,
             observations: observation,
             quantity: initialQuantity,
             total_price: initialCost,
             treatment: (modalWithdrawal ? 'RETIRADA' : null)
         };
+        if(userHasProduct) {
+            p.user_product_id = userProductId;
+        } else {
+            p.product_id = productId;
+        }
         onHandleUpdate(p, index, userHasProduct);
     }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation]);
     return <Row style={{ marginTop: '2%' }}>
@@ -41,12 +47,15 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
                     onChange={(selected: any) => {
                         if (selected.length > 0) {
                             const p = selected[0];
-                            setProductId(p.id!);
                             console.log(p);
-                            if (input.inputs.filter(i => i.product?.name === p.label).length > 0) {
+                            const userProducts = input.inputs.filter(i => i.product?.name === p.label)
+                            if (userProducts.length > 0) {
                                 setUserHasProduct(true);
+                                setUserProductId(userProducts[0].id!);
+                                setMeasureUnit(userProducts[0].measure_unit!);
                             } else {
                                 setUserHasProduct(false);
+                                setProductId(p.id);
                             }
                         } else {
                             setUserHasProduct(false);

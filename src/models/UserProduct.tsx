@@ -1,5 +1,6 @@
 export class UserProduct {
     product_id?: number;
+    user_product_id?: number;
     quantity?: number;
     minimum_quantity?: number;
     measure_unit?: string;

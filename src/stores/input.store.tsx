@@ -217,6 +217,14 @@ export function asyncUpdateUserProductOnStorage(
                     },
                 }
             );
+            if (result.status === 200) {
+                dispatch(
+                    getMessages({
+                        message: "Produto Atualizado com sucesso!",
+                        type: "success",
+                    })
+                );
+            }
         } catch (err: any) {
             dispatch(
                 getMessages({
