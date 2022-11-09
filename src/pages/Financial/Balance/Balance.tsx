@@ -18,7 +18,7 @@ export function Balance() {
                 </Col>
             </Row>
             <Row>
-                <Col>
+                <Col md={8}>
                     <Transactions></Transactions>
                 </Col>
                 <Col md={4}>

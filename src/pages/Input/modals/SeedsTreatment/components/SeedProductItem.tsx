@@ -27,7 +27,7 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
                                 setSelectedProduct({ id: selected[0].id });
                             }
                         }}
-                        options={input.inputs.map((input) => { return { id: input.id, label: `${input?.product?.name} - ${input.treatment}` } })}
+                        options={input.inputs.filter(i => i.product?.class !== 'SEMENTE').map((input) => { return { id: input.id, label: `${input?.product?.name}` } })}
                     />
                 </Form.Group>
             </Col>

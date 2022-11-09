@@ -26,21 +26,47 @@ export function NewProduct({ modal }: { modal: string }) {
     const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
     const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
 
+    const validateUserProduct = (userProduct: UserProduct, method: string) => {
+        let isValid = true;
+        switch (method) {
+            case 'PUT': {
+                if (userProduct.user_product_id === null) {
+                    isValid = false;
+                }
+
+                if(userProduct.quantity === null) {
+                    isValid = false;
+                }
+
+                if(userProduct.total_price === null) {
+                    isValid = false;
+                }
+
+                if(userProduct.measure_unit === null) {
+                    isValid = false;
+                }
+                return isValid;
+            }
+        }
+    }
     const onUpdateItem = (product: UserProduct, index: number, userHasProduct: boolean) => {
         const productsArr = [...products];
         productsArr.splice(index, 1);
         productsArr.push(product);
         setProducts(productsArr);
 
-        if (userHasProduct) {
+        if (userHasProduct && validateUserProduct(product, 'PUT')) {
             const toUpdtArr = [...productsToUpdate];
             toUpdtArr.splice(index, 1);
-            setProductsToUpdate(toUpdtArr.concat(product));
-        } else {
+            setProductsToUpdate(toUpdtArr.concat(product))
+        } else if(validateUserProduct(product, 'POST')){ 
             const toAddArr = [...productsToAdd];
             toAddArr.splice(index, 1);
             setProductsToAdd(toAddArr.concat(product));
         }
+        console.log('add', productsToAdd);
+        console.log('update', productsToUpdate);
+
     }
 
     const onRemoveItem = (index: number) => {
