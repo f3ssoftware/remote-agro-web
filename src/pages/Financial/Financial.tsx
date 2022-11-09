@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Balance } from './Balance/Balance';
 import { Invoice } from './Invoice/Invoice';
+import { ManualRegistration } from './ManualRegistration/ManualRegistration';
 
 export function Financial() {
     const location  = useLocation();
@@ -16,7 +17,7 @@ export function Financial() {
             return <Invoice></Invoice>
         }
         case "manual-registration": {
-          return <></>;
+          return <ManualRegistration></ManualRegistration>;
         }
         default: {
           console.log(location.pathname.split("/"));
