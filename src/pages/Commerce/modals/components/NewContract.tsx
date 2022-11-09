@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ptBR from "date-fns/locale/pt-BR";
+import pt from "date-fns/locale/pt-BR";
 
 export function NewContract({}){
     const [contractName,setContractName] = useState('');
@@ -81,19 +81,19 @@ export function NewContract({}){
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Inicio do contrato</Form.Label>
-                        <DatePicker locale="ptBR" selected={startDate} onChange={(date:Date)=> setStartDate(date)} />
+                        <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={startDate} onChange={(date:Date)=> setStartDate(date)} />
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Fim do contrato</Form.Label>
-                        <DatePicker locale="ptBR" selected={endDate} onChange={(date:Date)=> setEndDate(date)} />
+                        <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={endDate} onChange={(date:Date)=> setEndDate(date)} />
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
-                        <DatePicker locale="ptBR" selected={payDate} onChange={(date:Date)=> setPayDate(date)} />
+                        <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={payDate} onChange={(date:Date)=> setPayDate(date)} />
                     </Form.Group>
                 </Col>
             </Row>

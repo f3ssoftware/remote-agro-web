@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Card, Row, Col, Pagination } from "react-bootstrap";
+import { Card, Row, Col, Pagination, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { BankAccount } from "../../../../models/BankAccount";
 import { asyncFetchBankAccountsData } from "../../../../stores/financial.store";
+import { CreateBankAccountModal } from "../modals/CreateBankAccountModal";
 import "./BankAccounts.scss";
 
 const initialBankAccountsList: BankAccount[] = [];
@@ -15,6 +16,7 @@ export function BankAccounts() {
     const [active, setActive] = useState(1);
     const [pageSize, setPageSize] = useState(0);
     const [totalResults, setTotalResults] = useState(0);
+    const [showBalanceModal, setShowBalanceModal] = useState(false);
 
     useEffect(() => {
         dispatch(asyncFetchBankAccountsData());
@@ -34,7 +36,8 @@ export function BankAccounts() {
     return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
             <Card.Body>
-                <Card.Title>Contas bancárias</Card.Title>
+                <Card.Title>Contas bancárias</Card.Title>|
+                <Button variant="success" onClick={() => setShowBalanceModal(true)}>+</Button>
                 <div className="bank-accounts-content">
                     {bankAccounts.map((account, index) => <div className="bank-account-card" key={index}>
                         <Row>
@@ -74,5 +77,6 @@ export function BankAccounts() {
 
             </Card.Body>
         </Card>
+        <CreateBankAccountModal show={showBalanceModal} handleClose={() => setShowBalanceModal(false)}></CreateBankAccountModal>
     </div>
 }
