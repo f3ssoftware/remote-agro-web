@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap"
-import { NewContract } from "../components/NewContract"
+/*import { NewCommercePlot } from "../components/NewCommercePlot"*/
 
-export function NewContractModal({show, handleClose}: {show: boolean, handleClose: any}){
+export function NewCommercePlotModal({show, handleClose}: {show: boolean, handleClose: any}){
 
     const register = () => {
         console.log('teste botão')
@@ -9,12 +9,11 @@ export function NewContractModal({show, handleClose}: {show: boolean, handleClos
 
     return <Modal show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
-            <Modal.Title> <span style={{ color: '#fff' }}>Editar contrato</span></Modal.Title>
+            <Modal.Title> <span style={{ color: '#fff' }}>Editar Silo</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            <NewContract></NewContract>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => {register(); handleClose();}}>Registrar</Button>
+                <Button variant="success" onClick={() => {register(); handleClose();}}>Enviar</Button>
             </div>
         </Modal.Body>
     </Modal >
