@@ -1,24 +1,79 @@
-import { Modal, Button, Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../..";
-import { selectSeason } from "../../stores/seasons.store";
+import { useState } from 'react'
+import { Modal, Button, Row, Col, Form, Container } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../..'
+import { selectSeason } from '../../stores/seasons.store'
+import { SeasonsSelectionModal } from './Modals/SeasonsSelectionModal'
 
 export function SeasonSelection({ show, handleClose }: any) {
-    const { seasons } = useSelector((state: RootState) => state);
-    const dispatch = useDispatch<any>();
-    return <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton style={{ backgroundColor: "#7C5529" }}>
-            <Modal.Title>Escolha da safra</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            {seasons.seasons.map((season: any, index) => {
-                return <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '1%', }} key={index}>
-                    <Button style={{ backgroundColor: '#243C74', border: 'none' }} onClick={() => { dispatch(selectSeason(season)); handleClose(); }}>{`${season.type} - ${season.year}`}</Button>
-                </div>
-            })}
-        </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: "#7C5529" }}>
+  const { seasons } = useSelector((state: RootState) => state)
+  const dispatch = useDispatch<any>()
+  const confirm = () => {
+    console.log('teste botão')
+  }
+  const [showSeasonsSelectionModal, setShowSeasonsSelectionModal] = useState(false)
 
+  return (
+    <Container>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: '#7C5529', border: 'none' }}
+        >
+          <Modal.Title>Temporada</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: '#7C5529', border: 'none' }}>
+          <Row>
+            <Col>
+              <Form.Group className="mb-3" controlId="">
+                <Form.Label style={{ color: '#fff' }}>
+                  Selecione a temporada
+                </Form.Label>
+                <Form.Select
+                  aria-label=""
+                  onChange={(e) => {
+                    dispatch(selectSeason(e.target.value))
+                    handleClose()
+                  }}
+                >
+                  {seasons.seasons.map((season, index) => {
+                    return (
+                      <option
+                        value={0}
+                      >{`${season.type} - ${season.year}`}</option>
+                    )
+                  })}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+        </Modal.Body>
+        <Modal.Footer style={{ backgroundColor: '#7C5529', border: 'none' }}>
+          <Row>
+            <Col>
+              <Button
+                style={{ border: 'none', backgroundColor: '#243C74' }}
+                variant="success"
+                onClick={() => setShowSeasonsSelectionModal(true)}
+              >
+                Adicionar
+              </Button>
+            </Col>
+            <Col>
+              <Button style={{color: '#000'}}
+                variant="success"
+                onClick={() => {
+                  confirm()
+                  handleClose()
+                }}
+              >
+                Confirmar
+              </Button>
+            </Col>
+          </Row>
         </Modal.Footer>
-    </Modal>
+      </Modal>
+      <SeasonsSelectionModal show={showSeasonsSelectionModal} handleClose={() => setShowSeasonsSelectionModal(false)}></SeasonsSelectionModal>
+    </Container>
+  )
 }

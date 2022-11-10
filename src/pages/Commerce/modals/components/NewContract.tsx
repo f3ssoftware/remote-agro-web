@@ -15,33 +15,9 @@ export function NewContract({}){
     const [payDate,setPayDate] = useState(new Date());
 
     useEffect(()=>{
-        console.log(contractName)
-    });
-    useEffect(()=>{
-        console.log(contractId)
-    });
-
-    useEffect(()=>{
-        console.log(type)
-    });
-
-    useEffect(()=>{
-        console.log(bags)
-    });
-
-    useEffect(()=>{
-        console.log(contractPrice)
-    });
-
-    useEffect(()=>{
-        console.log(startDate)
-    });
-    useEffect(()=>{
-        console.log(endDate)
-    });
-    useEffect(()=>{
         console.log(payDate)
-    });
+    },[contractName,contractId,type,bags,contractPrice,startDate,endDate,payDate]);
+
 
 
     return <Row style={{marginTop: '2%'}}>

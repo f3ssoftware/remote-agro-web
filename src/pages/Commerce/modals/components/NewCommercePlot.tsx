@@ -6,18 +6,9 @@ export function NewCommercePlot({}){
     const [plotName,setPlotName] = useState('');
     const [description,setDescription] = useState('');
 
-
-    useEffect(()=>{
-        console.log(plotName)
-    });
-
     useEffect(()=>{
         console.log(description)
-    });
-
-
-
-
+    },[plotName,description]);
 
     return <Row style={{marginTop: '2%'}}>
             <Col md={12}>

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
 
+const initalSeasons:any = []
 const seasonStore = createSlice({
     name: 'season',
     initialState: {
@@ -14,7 +15,7 @@ const seasonStore = createSlice({
             "createdAt": "2021-02-28T21:07:54.000Z",
             "updatedAt": "2021-02-28T21:07:54.000Z"
         },
-        seasons: [{}],
+        seasons: [initalSeasons],
     },
     reducers: {
         getSeasons(state, action) {
