@@ -13,7 +13,7 @@ import { ProductItem } from "./ProductItem";
 
 let emptyDate: Date;
 const emptyProductList: UserProduct[] = [];
-export function NewProduct({ modal }: { modal: string }) {
+export function NewProduct({ modal, handleClose }: { modal: string, handleClose: any }) {
     const { input } = useSelector((state: RootState) => state);
     const [linkInvoice, setLinkInvoice] = useState(false);
     const [showFormLinkInvoice, setShowFormLinkInvoice] = useState(false);
@@ -90,7 +90,8 @@ export function NewProduct({ modal }: { modal: string }) {
         if (productsToUpdate.length > 0) {
             dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
         }
-
+        console.log('bateu no handle close');
+        handleClose();
 
     }
 

@@ -11,7 +11,7 @@ export function EntranceModal({ show, handleClose }: { show: boolean, handleClos
                 <Modal.Title> <span style={{ color: '#fff' }}>Entrada de estoque</span></Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-                <NewProduct modal={'ENTRANCE'}></NewProduct>
+                <NewProduct modal={'ENTRANCE'} handleClose={() => handleClose()}></NewProduct>
             </Modal.Body>
         </Modal >
     );

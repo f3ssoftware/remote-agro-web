@@ -14,6 +14,7 @@ const initialHistory: History[] = [];
 const initialInputs: Product[] = [];
 const initialInvoices: Invoice[] = [];
 const initialGeneralProducts: ProductListItem[] = [];
+const initialOrderedPair: any[] = [];
 const inputStore = createSlice({
     name: "input",
     initialState: {
@@ -21,6 +22,7 @@ const inputStore = createSlice({
         productHistory: initialHistory,
         invoices: initialInvoices,
         generalProductsList: initialGeneralProducts,
+        chartOrderedPairs: initialOrderedPair,
     },
     reducers: {
         getInputs(state, action) {
@@ -35,10 +37,14 @@ const inputStore = createSlice({
         getProductsList(state, action) {
             state.generalProductsList = action.payload;
         },
+        setCashFlowChart(state, action) {
+            console.log(action);
+            state.chartOrderedPairs = action.payload;
+        }
     },
 });
 
-export const { getInputs, getProductHistory, getInvoices, getProductsList } =
+export const { getInputs, getProductHistory, getInvoices, getProductsList, setCashFlowChart } =
     inputStore.actions;
 export default inputStore.reducer;
 
@@ -225,6 +231,30 @@ export function asyncUpdateUserProductOnStorage(
                     })
                 );
             }
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: "Erro na requisição",
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncFetchChart() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/cash-flows/graph`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log('resultados: ', result.data);
+            dispatch(setCashFlowChart(result.data));
         } catch (err: any) {
             dispatch(
                 getMessages({
