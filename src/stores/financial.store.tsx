@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
 import { BankAccount } from "../models/BankAccount";
+import { BankAccountDTO } from "../models/dtos/BankAccountsDTO";
 import { ExpensesInvoiceData } from "../models/ExpensesInvoiceData";
 import { ExpensesRevenue } from "../models/ExpensesRevenue";
 import { popLoading, pushLoading } from "./loading.store";
@@ -91,7 +92,26 @@ export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fr
                 }
             });
             dispatch(setExpensesRevenue(result.data.content));
-        } catch(err) {
+        } catch (err) {
+            console.log(err);
+        }
+    }
+}
+
+export function asyncCreateBankAccount(bankAccountDTO: BankAccountDTO) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/bank-accounts`, bankAccountDTO, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(getMessages({
+                message: "Conta cadastrada com sucesso",
+                type: "success",
+            }));
+            dispatch(asyncFetchBankAccountsData());
+        } catch (err) {
             console.log(err);
         }
     }

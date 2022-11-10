@@ -34,15 +34,15 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                     isValid = false;
                 }
 
-                if(userProduct.quantity === null) {
+                if (userProduct.quantity === null) {
                     isValid = false;
                 }
 
-                if(userProduct.total_price === null) {
+                if (userProduct.total_price === null) {
                     isValid = false;
                 }
 
-                if(userProduct.measure_unit === null) {
+                if (userProduct.measure_unit === null) {
                     isValid = false;
                 }
                 return isValid;
@@ -59,7 +59,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
             const toUpdtArr = [...productsToUpdate];
             toUpdtArr.splice(index, 1);
             setProductsToUpdate(toUpdtArr.concat(product))
-        } else if(validateUserProduct(product, 'POST')){ 
+        } else if (validateUserProduct(product, 'POST')) {
             const toAddArr = [...productsToAdd];
             toAddArr.splice(index, 1);
             setProductsToAdd(toAddArr.concat(product));
@@ -151,8 +151,10 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                         <Typeahead
                             id="invoice"
                             onChange={selected => {
-                                const invoiceSelected = selected[0] as Invoice;
-                                setSelectedInvoice(invoiceSelected);
+                                if (selected.length > 0) {
+                                    const invoiceSelected = selected[0] as Invoice;
+                                    setSelectedInvoice(invoiceSelected);
+                                }
                             }}
                             options={invoices.map(invoice => { return { ...invoice, label: invoice.reference }; })}
                         />

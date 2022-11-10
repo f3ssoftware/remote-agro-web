@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import { Button, Card, Col, ProgressBar, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { RootState } from "../../..";
 import "./Balance.scss"
 import { BankAccounts } from "./components/BankAccounts";
 import { Cashflow } from "./components/Cashflow";
@@ -7,6 +10,16 @@ import { Transactions } from "./components/Transactions";
 import { WalletBalance } from "./components/WalletBalance";
 
 export function Balance() {
+    const [inputsPercentual, setInputsPercentual] = useState(0);
+    const [maintenancePercentual, setMaintenancePercentual] = useState(0);
+    const [administrativePercentual, setAdministrativePercentual] = useState(0);
+    const { financial } = useSelector((state: RootState) => state);
+
+    useEffect(() => {
+        setInputsPercentual((financial.expensesRevenue.filter(exp => exp.cost_type === 'Insumos').length / financial.expensesRevenue.length) * 100)
+        setMaintenancePercentual((financial.expensesRevenue.filter(exp => exp.cost_type === 'Manutenção').length / financial.expensesRevenue.length) * 100);
+        setAdministrativePercentual((financial.expensesRevenue.filter(exp => exp.cost_type === 'Administrativo').length / financial.expensesRevenue.length) * 100)
+    }, [financial])
     return (
         <div className="balance-content">
             <Row>
@@ -36,8 +49,11 @@ export function Balance() {
                         </Col>
                         <Col>
                             <Row>
-                                <Col>
-                                    <ProgressBar variant="success" now={60} />
+                                <Col md={10}>
+                                    <ProgressBar variant="success" now={inputsPercentual} />
+                                </Col>
+                                <Col md={2}>
+                                    <span className="percentage-span">{`${inputsPercentual.toFixed(1)}%`}</span>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: '2%' }}>
@@ -53,8 +69,11 @@ export function Balance() {
                         </Col>
                         <Col>
                             <Row>
-                                <Col>
-                                    <ProgressBar variant="success" now={60} />
+                                <Col md={10}>
+                                    <ProgressBar variant="success" now={maintenancePercentual} />
+                                </Col>
+                                <Col md={2}>
+                                    <span className="percentage-span">{`${maintenancePercentual.toFixed(1)}%`}</span>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: '2%' }}>
@@ -70,8 +89,11 @@ export function Balance() {
                         </Col>
                         <Col>
                             <Row>
-                                <Col>
-                                    <ProgressBar variant="success" now={60} />
+                                <Col md={10}>
+                                    <ProgressBar variant="success" now={administrativePercentual} />
+                                </Col>
+                                <Col md={2}>
+                                    <span className="percentage-span">{`${administrativePercentual.toFixed(1)}%`}</span>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: '2%' }}>

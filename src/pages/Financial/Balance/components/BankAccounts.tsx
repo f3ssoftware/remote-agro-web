@@ -36,7 +36,7 @@ export function BankAccounts() {
     return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
             <Card.Body>
-                <Card.Title>Contas bancárias</Card.Title>|
+                <Card.Title>Contas bancárias</Card.Title>
                 <Button className="bankBtn" variant="success" onClick={() => setShowBalanceModal(true)}>+</Button>
                 <div className="bank-accounts-content">
                     {bankAccounts.map((account, index) => <div className="bank-account-card" key={index}>
