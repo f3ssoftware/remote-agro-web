@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { Income } from "./components/Income";
+import { Outcome } from "./components/Outcome";
 
 export function ManualRegistration(){
     const [registrationType, setRegistrationType] = useState(1);
@@ -19,7 +20,7 @@ export function ManualRegistration(){
     </Row>
     <Row>
         <Col>
-        { registrationType === 1 ? <div></div> : <Income></Income>}
+        { registrationType === 1 ? <Outcome></Outcome> : <Income></Income>}
         </Col>
     </Row>
     </div>
