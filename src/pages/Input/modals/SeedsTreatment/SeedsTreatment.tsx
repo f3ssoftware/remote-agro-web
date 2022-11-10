@@ -52,6 +52,7 @@ export function SeedsTreatment({
             user_seed_quantity: seedQuantity,
         };
         dispatch(asyncTreatSeeds(request));
+        handleClose();
     };
     return (
         <Modal show={show} onHide={handleClose} size={"xl"}>

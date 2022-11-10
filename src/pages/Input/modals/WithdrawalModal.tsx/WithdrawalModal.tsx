@@ -43,6 +43,7 @@ export function WithdrawalModal({ show, handleClose }: { show: boolean, handleCl
 
     const register = () => {
         dispatch(asyncWithdrawUserProductToStorage(products, selectedInvoice.id!));
+        handleClose();
     }
 
     return <Modal show={show} onHide={handleClose} size={'xl'}>
