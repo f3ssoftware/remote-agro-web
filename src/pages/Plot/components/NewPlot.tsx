@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 
-export function NewFarm() {
+export function NewPlot() {
     const [propName,setPropName] = useState('')
     const [totalArea,setTotalArea] = useState(0)
-    const [quantity,setQuantity] = useState(0)
-
-    useEffect(()=>{
-      console.log(quantity)
-  },[propName,totalArea,quantity]);
+    const [productivity,setProductivity] = useState(0)
+    const [value,setValue] = useState(0)
     
+    useEffect(()=>{
+      console.log(value)
+  },[propName,totalArea,productivity,value]);
+
   return (
     <Row style={{ marginTop: '2%' }}>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
-              Nome da proriedade
+              Nome para o talhão
             </Form.Label>
             <Form.Control
               type="text"
@@ -26,8 +27,6 @@ export function NewFarm() {
             />
           </Form.Group>
         </Col>
-      </Row>
-      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
@@ -41,15 +40,30 @@ export function NewFarm() {
             />
           </Form.Group>
         </Col>
+      </Row>
+      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
-              Quantidade de talhões
+              Produtividade esperada (saca/ha)
             </Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {
-                setQuantity(Number(e.target.value))
+                setProductivity(Number(e.target.value))
+              }}
+            />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>
+              Preço de venda esperada da saca (R$/saca)
+            </Form.Label>
+            <Form.Control
+              type="number"
+              onChange={(e) => {
+                setValue(Number(e.target.value))
               }}
             />
           </Form.Group>

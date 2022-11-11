@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap'
-import { NewFarmModal } from './Modals/NewFarmModal'
+import { NewPlotModal } from './Modals/NewPlotModal'
 import './Plot.scss'
 
 export function Plot() {
-    const [showNewFarmModal,setShowNewFarmModal] = useState(false)
+    const [showNewPlotModal,setShowNewPlotModal] = useState(false)
   return (
     <Container>
       <Row>
@@ -14,7 +14,7 @@ export function Plot() {
               <Dropdown className="frist-card-dropdown-plot">
                 <span className="frist-card-text-plot">Fazenda</span>
                 <div>
-                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
+                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
                   +
                 </Button>
                 </div>
@@ -32,7 +32,7 @@ export function Plot() {
             <div className="second-card-plot">
               <span className="second-card-text-plot">Talhões </span>
               <div>
-                <Button variant="success" className="second-card-button-plot">
+                <Button variant="success" className="second-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
                   +
                 </Button>
               </div>
@@ -73,7 +73,7 @@ export function Plot() {
           </Card>
         </Col>
       </Row>
-      <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
+      <NewPlotModal show={showNewPlotModal} handleClose={() => setShowNewPlotModal(false)}></NewPlotModal>
     </Container>
   )
 }
