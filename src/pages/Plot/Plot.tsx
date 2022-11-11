@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap'
+import { NewFarmModal } from './Modals/NewFarmModal'
 import './Plot.scss'
 
 export function Plot() {
+    const [showNewFarmModal,setShowNewFarmModal] = useState(false)
   return (
     <Container>
       <Row>
@@ -11,7 +14,7 @@ export function Plot() {
               <Dropdown className="frist-card-dropdown-plot">
                 <span className="frist-card-text-plot">Fazenda</span>
                 <div>
-                <Button variant="success" className="frist-card-button-plot">
+                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
                   +
                 </Button>
                 </div>
@@ -70,6 +73,7 @@ export function Plot() {
           </Card>
         </Col>
       </Row>
+      <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
     </Container>
   )
 }
