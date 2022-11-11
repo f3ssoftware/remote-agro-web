@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap'
+import { NewFarmModal } from './Modals/NewFarmModal'
 import { NewPlotModal } from './Modals/NewPlotModal'
+import { PrescriptionModal } from './Modals/PrescriptionModal'
 import './Plot.scss'
 
 export function Plot() {
     const [showNewPlotModal,setShowNewPlotModal] = useState(false)
+    const [showPrescriptionModal,setShowPrescriptionModal] = useState(false)
+    const [showNewFarmModal,setShowNewFarmModal] = useState(false)
   return (
     <Container>
       <Row>
@@ -14,7 +18,7 @@ export function Plot() {
               <Dropdown className="frist-card-dropdown-plot">
                 <span className="frist-card-text-plot">Fazenda</span>
                 <div>
-                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
+                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
                   +
                 </Button>
                 </div>
@@ -45,7 +49,7 @@ export function Plot() {
             <Card.Body>
               <Card.Title className="second-col-text-plot">
                 Aplicações
-                <Button className="inputs-btn-plot">Gerar Receituário</Button>
+                <Button className="inputs-btn-plot" onClick={() => setShowPrescriptionModal(true)}>Gerar Receituário</Button>
               </Card.Title>
               <Card.Text>
                 <Dropdown>
@@ -73,6 +77,8 @@ export function Plot() {
           </Card>
         </Col>
       </Row>
+      <PrescriptionModal show={showPrescriptionModal} handleClose={() => setShowPrescriptionModal(false)}></PrescriptionModal>
+      <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
       <NewPlotModal show={showNewPlotModal} handleClose={() => setShowNewPlotModal(false)}></NewPlotModal>
     </Container>
   )
