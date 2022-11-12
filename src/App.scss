@@ -49,6 +49,12 @@
   justify-content: flex-end;
 }
 
+.flex-space-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

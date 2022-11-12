@@ -180,3 +180,66 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
         }
     };
 }
+
+export function asyncConciliateExpense(id: number, seasonId: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.put(
+                `https://remoteapi.murilobotelho.com.br/expenses-and-revenues/${id}`,
+                {
+                    is_conciliated: true,
+                    season_id: seasonId
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+            dispatch(
+                getMessages({
+                    message: "Transação conciliada com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: "Erro na requisição",
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncDeleteExpense(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.delete(
+                `https://remoteapi.murilobotelho.com.br//expenses-invoices/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+            dispatch(
+                getMessages({
+                    message: "Conta excluída com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}

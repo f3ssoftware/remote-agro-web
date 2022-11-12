@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncPayExpense } from "../../../../stores/financial.store";
 
 export function PayExpenseModal({ show, handleClose, expenseId }: { show: boolean, handleClose: any, expenseId: number }) {
     const [bankAccountId, setBankAccountId] = useState(0);
@@ -12,6 +12,7 @@ export function PayExpenseModal({ show, handleClose, expenseId }: { show: boolea
     const payExpense = () => {
         dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id))
     }
+
     return <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title>Modal heading</Modal.Title>

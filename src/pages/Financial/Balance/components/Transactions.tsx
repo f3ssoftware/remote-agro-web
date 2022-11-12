@@ -1,26 +1,52 @@
-import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Card, Col, Form, InputGroup, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Form, InputGroup, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { start } from "repl";
 import { RootState } from "../../../..";
-import { asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
+import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
+import { TransactionDates } from "../modals/TransactionDates";
 
 export function Transactions() {
-    const { financial } = useSelector((state: RootState) => state);
+    const { financial, seasons } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
     const [showModalPayExpense, setShowModalPayExpense] = useState(false);
     const [expenseId, setExpenseId] = useState(0);
+    const [startDate, setStartDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));
+    const [endDate, setEndDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0));
+    const [showModalDates, setShowModalDates] = useState(false);
 
     useEffect(() => {
-        dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+        dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
     }, []);
+
+    
+    useEffect(() => {
+        dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
+    }, [startDate, endDate]);
+
+    useEffect(() => {  
+        console.log(startDate, endDate);
+    }, [startDate, endDate])
+
+    const conciliateExpense = () => {
+        dispatch(asyncConciliateExpense(expenseId, seasons.selectedSeason.id));
+    }
+
+    const deleteExpense = () => {
+        dispatch(asyncDeleteExpense(expenseId));
+    }
 
     return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
             <Card.Body>
                 <Card.Title>Transações</Card.Title>
+                <div className="flex-right" style={{ marginTop: '2%', marginBottom: '2%' }}>
+                    <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
+                </div>
                 <div>
                     <Table striped bordered hover>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
@@ -41,24 +67,36 @@ export function Transactions() {
                                 return <tr key={index}>
                                     <td>{`${new Date(er.payment_date!)?.getDay()!}/${new Date(er.payment_date!).getMonth()! + 1}/${new Date(er.payment_date!).getFullYear()!}`}</td>
                                     <td>{er.reference}</td>
-                                    <td>{er.amount}</td>
+                                    <td>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                                     <td>{er.number}</td>
                                     <td>{er.cost_type}</td>
                                     <td>{er.observations}</td>
                                     <td>
-                                        <InputGroup.Checkbox aria-label="Pago" onChange={(e: any) => {
+                                        <Form.Check aria-label="Pago" onChange={(e: any) => {
                                             if (e.target.checked) {
                                                 setShowModalPayExpense(true);
                                                 setExpenseId(er.id!);
                                             }
+                                        }} checked={er.is_paid} />
+                                    </td>
+                                    <td>
+                                        <Form.Check aria-label="Conciliado" checked={er.is_concilliated} onChange={(e: any) => {
+                                            if (e.target.checked && er.is_paid) {
+                                                setExpenseId(er.id!);
+                                                conciliateExpense();
+                                            } else if (!er.is_paid && e.target.checked) {
+                                                e.target.checked = false;
+                                                dispatch(getMessages({
+                                                    message: "Sua conta precisa estar paga antes de conciliar",
+                                                    type: "error",
+                                                }))
+                                            }
                                         }} />
                                     </td>
                                     <td>
-                                        <InputGroup.Checkbox aria-label="Conciliado" />
-                                    </td>
-                                    <td>
-                                        <FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>
-                                        <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+                                        <div className="flex-space-between">
+                                            <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => { setExpenseId(er.id!); deleteExpense() }}></FontAwesomeIcon>
+                                        </div>
                                     </td>
                                 </tr>
                             })}
@@ -68,5 +106,10 @@ export function Transactions() {
             </Card.Body>
         </Card>
         <PayExpenseModal show={showModalPayExpense} handleClose={() => setShowModalPayExpense(false)} expenseId={expenseId}></PayExpenseModal>
-    </div>
+        <TransactionDates show={showModalDates} handleClose={() => setShowModalDates(false)} onUpdate={(startDate: any, endDate: any) => {
+            setStartDate(startDate);
+            setEndDate(endDate);
+            setShowModalDates(false);
+        }}></TransactionDates>
+    </div >
 }
