@@ -11,12 +11,14 @@ import { getMessages } from "./messaging.store";
 const initialExpensesInvoiceData: ExpensesInvoiceData = {};
 const initialBankAccounts: BankAccount[] = [];
 const initialExpensesRevenue: ExpensesRevenue[] = [];
+const initialOrderedPair: any[] = [];
 const financialStore = createSlice({
     name: "financial",
     initialState: {
         expensesInvoiceData: initialExpensesInvoiceData,
         bankAccounts: initialBankAccounts,
-        expensesRevenue: initialExpensesRevenue
+        expensesRevenue: initialExpensesRevenue,
+        chartOrderedPairs: initialOrderedPair,
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -27,11 +29,15 @@ const financialStore = createSlice({
         },
         setExpensesRevenue(state, action) {
             state.expensesRevenue = action.payload;
+        },
+        setCashFlowChart(state, action) {
+            console.log(action);
+            state.chartOrderedPairs = action.payload;
         }
     },
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -115,4 +121,62 @@ export function asyncCreateBankAccount(bankAccountDTO: BankAccountDTO) {
             console.log(err);
         }
     }
+}
+
+export function asyncFetchChart() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/cash-flows/graph`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log('resultados: ', result.data);
+            dispatch(setCashFlowChart(result.data));
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: "Erro na requisição",
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncPayExpense(id: number, bankAccountId: number, seasonId: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.put(
+                `https://remoteapi.murilobotelho.com.br/expenses-and-revenues/${id}`,
+                {
+                    bank_account_id: bankAccountId,
+                    is_paid: true,
+                    season_id: seasonId
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+            dispatch(
+                getMessages({
+                    message: "Pagamento realizado com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: "Erro na requisição",
+                    type: "error",
+                })
+            );
+        }
+    };
 }

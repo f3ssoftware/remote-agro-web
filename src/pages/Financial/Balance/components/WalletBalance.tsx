@@ -13,7 +13,7 @@ export function WalletBalance() {
                 <Col md={4}>
                     <Card className="ra-card-billing">
                         <Card.Body>
-                            <Card.Title>Contas a Receber ({financial?.expensesInvoiceData?.unpaidContractsQuantity})</Card.Title>
+                            <h6>Contas a Receber ({financial?.expensesInvoiceData?.unpaidContractsQuantity})</h6>
                             <Row>
                                 <Col>
                                     <h4>{`${financial?.expensesInvoiceData?.unpaidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h4>
@@ -25,7 +25,7 @@ export function WalletBalance() {
                 <Col md={4}>
                     <Card className="ra-card-payments">
                         <Card.Body>
-                            <Card.Title>Contas a Pagar ({financial?.expensesInvoiceData?.unpaidExpensesInvoicesQuantity})</Card.Title>
+                            <h6>Contas a Pagar ({financial?.expensesInvoiceData?.unpaidExpensesInvoicesQuantity})</h6>
                             <Row>
                                 <Col>
                                     <h4>{financial?.expensesInvoiceData?.unpaidExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h4>
@@ -37,7 +37,7 @@ export function WalletBalance() {
                 <Col md={4}>
                     <Card className="ra-card-duedated">
                         <Card.Body>
-                            <Card.Title>Contas Vencidas ({financial?.expensesInvoiceData?.expiredExpensesInvoicesQuantity! + financial.expensesInvoiceData.expiredContractsQuantity!})</Card.Title>
+                            <h6>Contas Vencidas ({financial?.expensesInvoiceData?.expiredExpensesInvoicesQuantity! + financial.expensesInvoiceData.expiredContractsQuantity!})</h6>
                             <Row>
                                 <Col>
                                     <h4>{financial?.expensesInvoiceData?.expiredExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h4>

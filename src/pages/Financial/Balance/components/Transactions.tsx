@@ -1,19 +1,22 @@
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Card, Col, Row, Table } from "react-bootstrap";
+import { Card, Col, Form, InputGroup, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { Product } from "../../../../models/Product";
-import { asyncFetchExpensesAndRevenues } from "../../../../stores/financial.store";
-import { currencyFormat } from "../../../../utils/currencyFormat";
+import { asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
+import { PayExpenseModal } from "../modals/PayExpenseModal";
 
 export function Transactions() {
     const { financial } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
+    const [showModalPayExpense, setShowModalPayExpense] = useState(false);
+    const [expenseId, setExpenseId] = useState(0);
+
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
     }, []);
+
     return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
             <Card.Body>
@@ -42,9 +45,21 @@ export function Transactions() {
                                     <td>{er.number}</td>
                                     <td>{er.cost_type}</td>
                                     <td>{er.observations}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        <InputGroup.Checkbox aria-label="Pago" onChange={(e: any) => {
+                                            if (e.target.checked) {
+                                                setShowModalPayExpense(true);
+                                                setExpenseId(er.id!);
+                                            }
+                                        }} />
+                                    </td>
+                                    <td>
+                                        <InputGroup.Checkbox aria-label="Conciliado" />
+                                    </td>
+                                    <td>
+                                        <FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>
+                                        <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+                                    </td>
                                 </tr>
                             })}
                         </tbody>
@@ -52,5 +67,6 @@ export function Transactions() {
                 </div>
             </Card.Body>
         </Card>
+        <PayExpenseModal show={showModalPayExpense} handleClose={() => setShowModalPayExpense(false)} expenseId={expenseId}></PayExpenseModal>
     </div>
 }
