@@ -49,7 +49,7 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
                             setProductId(p.id!);
                         }
                     }}
-                    options={input.generalProductsList.map(input => { return { id: input.id, label: input?.name } })}
+                    options={input.inputs.map(input => { return { id: input.id, label: input?.product?.name } })}
                 />
             </Form.Group>
 

@@ -5,11 +5,13 @@ import { Button, Card, Col, Form, InputGroup, Row, Table } from "react-bootstrap
 import { useDispatch, useSelector } from "react-redux";
 import { start } from "repl";
 import { RootState } from "../../../..";
+import { ExpensesRevenue } from "../../../../models/ExpensesRevenue";
 import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
 import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
 
+const initialTransactions: ExpensesRevenue[] = []
 export function Transactions() {
     const { financial, seasons } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
@@ -18,32 +20,56 @@ export function Transactions() {
     const [startDate, setStartDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));
     const [endDate, setEndDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0));
     const [showModalDates, setShowModalDates] = useState(false);
+    const [findTransaction, setFindTransaction] = useState('');
+    const [transactions, setTransactions] = useState(initialTransactions);
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
     }, []);
 
-    
+
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
     }, [startDate, endDate]);
 
-    useEffect(() => {  
-        console.log(startDate, endDate);
-    }, [startDate, endDate])
+    useEffect(() => {
+        setTransactions(financial.expensesRevenue);
+    }, [financial])
 
     const conciliateExpense = () => {
         dispatch(asyncConciliateExpense(expenseId, seasons.selectedSeason.id));
     }
 
-    const deleteExpense = () => {
-        dispatch(asyncDeleteExpense(expenseId));
+    const deleteExpense = (id: number) => {
+        dispatch(asyncDeleteExpense(id));
+    }
+
+    const find = () => {
+        console.log(findTransaction);
+        setTransactions(financial.expensesRevenue?.filter((transaction: ExpensesRevenue) => {
+            if (transaction?.reference?.toUpperCase().includes(findTransaction.toUpperCase())) {
+                return transaction;
+            }
+            return null;
+        }))
     }
 
     return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
             <Card.Body>
-                <Card.Title>Transações</Card.Title>
+                <Row>
+                    <Col>
+                        <h4>Transações</h4>
+                    </Col>
+                    <Col>
+                        <Form>
+                            <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar" onChange={(e) => {
+                                setFindTransaction(e.target.value);
+                                find();
+                            }}></Form.Control>
+                        </Form>
+                    </Col>
+                </Row>
                 <div className="flex-right" style={{ marginTop: '2%', marginBottom: '2%' }}>
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
                 </div>
@@ -63,7 +89,7 @@ export function Transactions() {
                             </tr>
                         </thead>
                         <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                            {financial?.expensesRevenue?.map((er, index) => {
+                            {transactions.map((er, index) => {
                                 return <tr key={index}>
                                     <td>{`${new Date(er.payment_date!)?.getDay()!}/${new Date(er.payment_date!).getMonth()! + 1}/${new Date(er.payment_date!).getFullYear()!}`}</td>
                                     <td>{er.reference}</td>
@@ -95,7 +121,11 @@ export function Transactions() {
                                     </td>
                                     <td>
                                         <div className="flex-space-between">
-                                            <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => { setExpenseId(er.id!); deleteExpense() }}></FontAwesomeIcon>
+                                            <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => {
+                                                console.log(er.id);
+                                                setExpenseId(er.id!); 
+                                                deleteExpense(er.id!);
+                                            }}></FontAwesomeIcon>
                                         </div>
                                     </td>
                                 </tr>

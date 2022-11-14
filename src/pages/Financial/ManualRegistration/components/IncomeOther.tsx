@@ -18,7 +18,7 @@ export function IncomeOthers() {
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Referência</Form.Label>
+            <Form.Label >Referência</Form.Label>
             <Form.Control
               type="text"
               onChange={(e) => {
@@ -31,7 +31,7 @@ export function IncomeOthers() {
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Valor Total</Form.Label>
+            <Form.Label >Valor Total</Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {
@@ -44,7 +44,7 @@ export function IncomeOthers() {
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Valor Total</Form.Label>
+            <Form.Label >Valor Total</Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {
@@ -57,7 +57,7 @@ export function IncomeOthers() {
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
+            <Form.Label >
               Inicio do contrato
             </Form.Label>
             <DatePicker
@@ -71,7 +71,7 @@ export function IncomeOthers() {
         <Row style={{ marginTop: '2%' }}>
           <Col>
             <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>
+              <Form.Label >
                 Descrição adicional
               </Form.Label>
               <Form.Control

@@ -1,36 +1,118 @@
 import { useEffect, useState } from 'react'
-import { Col, Form, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import DatePicker from "react-datepicker";
 import pt from "date-fns/locale/pt-BR";
+import { ExpenseInvoice } from '../../../../models/ExpenseInvoice';
+import { useDispatch, useSelector } from 'react-redux';
+import { asyncFetchPlannings, asyncManualRegisterExpense } from '../../../../stores/financial.store';
+import { RootState } from '../../../..';
+import { Installments } from './Installments';
+import { MensalExpense } from './MensalExpense';
+import { useNavigate } from 'react-router-dom'
 
-export function OutcomeForm() {
-  const [outcomeYear, setOutcomeYear] = useState(0)
+export function OutcomeForm({ costType, costAction }: { costType: string, costAction: string }) {
+  const navigate = useNavigate();
+  const [outcomeYear, setOutcomeYear] = useState(0);
   const [reference, setReference] = useState('')
-  const [value, setValue] = useState(0)
+  const [amount, setAmount] = useState(0)
   const [observation, setObservation] = useState('')
   const [number, setNumber] = useState(0)
   const [plan, setPlan] = useState(0)
-  const [paymentMethod, setPaymentMethod] = useState(0)
-  const [expirationDate,setExpirationDate] = useState(new Date())
+  const [paymentMethod, setPaymentMethod] = useState('')
+  const [expirationDate, setExpirationDate] = useState(new Date())
+  const dispatch = useDispatch<any>();
+  const { financial, seasons } = useSelector((state: RootState) => state);
+  const [installmentsQuantity, setInstallmentsQuantity] = useState(0);
+  const [installments, setInstallments]: any = useState({});
 
-  useEffect(()=>{
+  useEffect(() => {
+    dispatch(asyncFetchPlannings());
+  }, []);
+
+  useEffect(() => {
     console.log(expirationDate)
-},[outcomeYear,reference,value,observation,number,plan,paymentMethod,expirationDate]);
+  }, [outcomeYear, reference, amount, observation, number, plan, paymentMethod, expirationDate]);
+
+  const updateInstallments = (installmentsFromChildren: any[]) => {
+    console.log(installmentsFromChildren);
+    setInstallments(installmentsFromChildren);
+    
+  }
+  const register = () => {
+    const exp: ExpenseInvoice = {
+      amount,
+      number: number.toString(),
+      reference,
+      cost_type: costType,
+      due_date: expirationDate.toISOString(),
+      cost_action: costAction,
+      payment_method: paymentMethod,
+      year: outcomeYear.toString(),
+    }
+
+    switch(paymentMethod) {
+      case 'installments': {
+        exp.installments = installments
+      }
+    }
+    dispatch(asyncManualRegisterExpense(exp));
+    navigate('financial/balance');
+  }
+
+  const renderPaymentConditionForm = () => {
+    switch (paymentMethod) {
+      case 'SEM_PAGAMENTO':
+      case 'one_time': {
+        return <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label >Data de pagamento</Form.Label>
+            <DatePicker
+              locale={pt}
+              dateFormat="dd/MM/yyyy"
+              selected={expirationDate}
+              onChange={(date: Date) => setExpirationDate(date)}
+            />
+          </Form.Group>
+        </Col>
+      }
+      case 'installments': {
+        return <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label >Quantidade de Parcelas</Form.Label>
+            <Form.Control
+              type="number"
+              min={2}
+              onChange={(e) => {
+                setInstallmentsQuantity(Number(e.target.value));
+              }}
+            />
+          </Form.Group>
+          <Installments installmentsQuantity={installmentsQuantity} onUpdateInstallments={updateInstallments}></Installments>
+        </Col>
+      }
+      case 'GASTO_MENSAL': {
+        return <Col>
+          <MensalExpense></MensalExpense>
+        </Col>
+      }
+    }
+  }
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Ano agrícola</Form.Label>
+            <Form.Label>Ano agrícola</Form.Label>
             <Form.Select
               aria-label=""
               onChange={(e) => {
                 return setOutcomeYear(Number(e.target.value))
               }}
-            >
-              <option value={0}>2020/2021</option>
-              <option value={1}>2021/2022</option>
+            > {seasons.seasons.map((season, index) => {
+              return <option value={season.year} key={index}>{season.year}</option>
+            })}
+
             </Form.Select>
           </Form.Group>
         </Col>
@@ -38,7 +120,7 @@ export function OutcomeForm() {
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Referência</Form.Label>
+            <Form.Label>Referência</Form.Label>
             <Form.Control
               type="text"
               onChange={(e) => {
@@ -49,20 +131,33 @@ export function OutcomeForm() {
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Valor</Form.Label>
-            <Form.Control
+            <Form.Label>Valor</Form.Label>
+            <Form.Control type="text" onBlur={(e) => {
+              if (isNaN(Number(e.currentTarget.value))) {
+                e.currentTarget.value = '';
+              } else {
+                setAmount(Number(e.currentTarget.value));
+                e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+              }
+
+            }} onKeyUp={(e) => {
+              if (e.key === 'Backspace') {
+                e.currentTarget.value = '';
+              }
+            }} />
+            {/* <Form.Control
               type="number"
               onChange={(e) => {
                 return setValue(Number(e.target.value))
               }}
-            />
+            /> */}
           </Form.Group>
         </Col>
       </Row>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
+            <Form.Label >Observações</Form.Label>
             <Form.Control
               type="text"
               onChange={(e) => {
@@ -75,18 +170,18 @@ export function OutcomeForm() {
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Number</Form.Label>
+            <Form.Label >Número</Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {
-                return setValue(Number(e.target.value))
+                return setNumber(Number(e.target.value))
               }}
             />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
+            <Form.Label >
               Vincular Planejamento
             </Form.Label>
             <Form.Select
@@ -95,8 +190,11 @@ export function OutcomeForm() {
                 return setPlan(Number(e.target.value))
               }}
             >
-              <option value={0}>select</option>
-              <option value={1}>teste1</option>
+              <option>Não Vincular</option>
+              {financial.plannings.map(p => {
+                return <option value={p.id}>{p.name}</option>;
+              })}
+
             </Form.Select>
           </Form.Group>
         </Col>
@@ -104,35 +202,29 @@ export function OutcomeForm() {
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
+            <Form.Label >
               Método de pagamento
             </Form.Label>
             <Form.Select
               aria-label=""
               onChange={(e) => {
-                return setPaymentMethod(Number(e.target.value))
+                return setPaymentMethod(e.target.value);
               }}
             >
-              <option value={0}>select</option>
-              <option value={1}>Á vista</option>
-              <option value={2}>A prazo</option>
-              <option value={3}>Gasto mensal</option>
-              <option value={4}>Sem necessidade de pagamento</option>
+              <option value={"one_time"}>Á vista</option>
+              <option value={"installments"}>A prazo</option>
+              <option value={"GASTO_MENSAL"}>Gasto mensal</option>
+              <option value={"SEM_PAGAMENTO"}>Sem necessidade de pagamento</option>
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
-            <DatePicker
-              locale={pt}
-              dateFormat="dd/MM/yyyy"
-              selected={expirationDate}
-              onChange={(date: Date) => setExpirationDate(date)}
-            />
-          </Form.Group>
-        </Col>
+        {renderPaymentConditionForm()}
       </Row>
+      <div className="flex-right">
+        <Button variant="success" onClick={() => {
+          register();
+        }}>Registrar</Button>
+      </div>
     </div>
   )
 }

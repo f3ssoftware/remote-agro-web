@@ -3,8 +3,10 @@ import axios from "axios";
 import { AppDispatch } from "..";
 import { BankAccount } from "../models/BankAccount";
 import { BankAccountDTO } from "../models/dtos/BankAccountsDTO";
+import { ExpenseInvoice } from "../models/ExpenseInvoice";
 import { ExpensesInvoiceData } from "../models/ExpensesInvoiceData";
 import { ExpensesRevenue } from "../models/ExpensesRevenue";
+import { Planning } from "../models/Planning";
 import { popLoading, pushLoading } from "./loading.store";
 import { getMessages } from "./messaging.store";
 
@@ -12,6 +14,8 @@ const initialExpensesInvoiceData: ExpensesInvoiceData = {};
 const initialBankAccounts: BankAccount[] = [];
 const initialExpensesRevenue: ExpensesRevenue[] = [];
 const initialOrderedPair: any[] = [];
+const initialPlannings: Planning[]= [];
+
 const financialStore = createSlice({
     name: "financial",
     initialState: {
@@ -19,6 +23,7 @@ const financialStore = createSlice({
         bankAccounts: initialBankAccounts,
         expensesRevenue: initialExpensesRevenue,
         chartOrderedPairs: initialOrderedPair,
+        plannings: initialPlannings
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -33,11 +38,14 @@ const financialStore = createSlice({
         setCashFlowChart(state, action) {
             console.log(action);
             state.chartOrderedPairs = action.payload;
+        },
+        setPlannings(state, action) {
+            state.plannings = action.payload;
         }
     },
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -218,7 +226,7 @@ export function asyncDeleteExpense(id: number) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.delete(
-                `https://remoteapi.murilobotelho.com.br//expenses-invoices/${id}`,
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -232,6 +240,60 @@ export function asyncDeleteExpense(id: number) {
                     type: "success",
                 })
             );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices`,
+                expense,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: "Despesa cadastrada com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncFetchPlannings() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/plannings/?type=Custos%20Indiretos&`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setPlannings(result.data));
         } catch (err: any) {
             console.log(err);
             dispatch(

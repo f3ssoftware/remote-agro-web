@@ -22,20 +22,20 @@ export function IncomeContracts(){
         <Row style={{marginTop: '2%'}}>
             <Col>
                 <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
+                    <Form.Label>Nome</Form.Label>
                     <Form.Control type="text" onChange={(e)=>{ return setContractName(e.target.value);}}/>
                 </Form.Group>
             </Col>
             <Col>
                 <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>Código</Form.Label>
+                    <Form.Label >Código</Form.Label>
                     <Form.Control type="number" onChange={(e)=>{ return setContractId(Number(e.target.value));}}/>
                 </Form.Group>
             </Col>
             <Row style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
+                        <Form.Label >Cultivo</Form.Label>
                         <Form.Select aria-label="">
                         <option value={1}>Milho</option>
                         <option value={2}>Soja</option>
@@ -56,13 +56,13 @@ export function IncomeContracts(){
             <Row style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Sacas totais</Form.Label>
+                        <Form.Label >Sacas totais</Form.Label>
                         <Form.Control type="number" onChange={(e)=>{ return setTotalBags(Number(e.target.value));}}/>
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Sacas totais</Form.Label>
+                        <Form.Label >Sacas totais</Form.Label>
                         <Form.Control type="number" onChange={(e)=>{ return setContractValue(Number(e.target.value));}}/>
                     </Form.Group>
                 </Col>
@@ -70,13 +70,13 @@ export function IncomeContracts(){
             <Row style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Inicio do contrato</Form.Label>
+                        <Form.Label >Inicio do contrato</Form.Label>
                         <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={startDate} onChange={(date:Date)=> setStartDate(date)} />
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
+                        <Form.Label >Data de pagamento</Form.Label>
                         <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={payDate} onChange={(date:Date)=> setPayDate(date)} />
                     </Form.Group>
                 </Col>
@@ -84,7 +84,7 @@ export function IncomeContracts(){
             <Row style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Descrição adicional</Form.Label>
+                        <Form.Label >Descrição adicional</Form.Label>
                         <Form.Control type="text" onChange={(e)=>{ return setDescription(e.target.value);}}/>
                     </Form.Group>
                 </Col>

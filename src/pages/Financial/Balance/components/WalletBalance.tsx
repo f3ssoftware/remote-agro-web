@@ -1,14 +1,20 @@
+import { useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../..";
+import { asyncFetchExpensesInvoicesData } from "../../../../stores/financial.store";
 import "../Balance.scss";
 
 export function WalletBalance() {
     const financial = useSelector((state: RootState) => state.financial);
     const dispatch = useDispatch<any>();
+    useEffect(() => {
+        dispatch(asyncFetchExpensesInvoicesData());
+    }, [])
     return <Card className="ra-card">
         <Card.Body>
-            <Card.Title>Carteira</Card.Title>
+            <h4>Carteira</h4>
+            {/* <Card.Title>Carteira</Card.Title> */}
             <Row>
                 <Col md={4}>
                     <Card className="ra-card-billing">
