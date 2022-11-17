@@ -1,6 +1,6 @@
 export const results = [
     {
-        name: 'Alvorada 2',
+        name: 'Dom Pedro I',
         season: 'Verão',
         year: '2020/2021',
         totalRevenue: 'R$ 4.939.219,09',
@@ -9,7 +9,7 @@ export const results = [
         resultsPerHa: 'R$ 14.551,8'
     },
     {
-        name: 'Taboca Pc 02 irrigado',
+        name: 'Brejo 01 irrigado',
         season: 'Safrinha/irrigado',
         year: '2020/2021',
         totalRevenue: 'R$ 1.662.557,67',
@@ -18,7 +18,7 @@ export const results = [
         resultsPerHa: 'R$ 13.843,06'
     },
     {
-        name: 'Taboca Pc 05 irrigado',
+        name: 'Céu Azul irrigado',
         season: 'Safrinha/irrigado',
         year: '2020/2021',
         totalRevenue: 'R$ 1.082.177,64',
@@ -27,7 +27,7 @@ export const results = [
         resultsPerHa: 'R$ 13.707,46'
     },
     {
-        name: 'Taboca Quadra 02',
+        name: 'Vale do Norte Pc 10',
         season: 'Verão',
         year: '2020/2021',
         totalRevenue: 'R$ 1.795.923,27',
@@ -36,7 +36,7 @@ export const results = [
         resultsPerHa: 'R$ 11.742,13'
     },
     {
-        name: 'Taboca Pc 13 irrigado',
+        name: 'Vale do Norte Pc 13 irrigado',
         season: 'Safrinha/irrigado',
         year: '2020/2021',
         totalRevenue: 'R$ 1.548.022,5',
