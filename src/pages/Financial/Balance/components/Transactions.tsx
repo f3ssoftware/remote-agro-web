@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { start } from "repl";
 import { RootState } from "../../../..";
 import { ExpensesRevenue } from "../../../../models/ExpensesRevenue";
-import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
 import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
@@ -22,9 +22,13 @@ export function Transactions() {
     const [showModalDates, setShowModalDates] = useState(false);
     const [findTransaction, setFindTransaction] = useState('');
     const [transactions, setTransactions] = useState(initialTransactions);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(0);
+    const [totalResults, setTotalResults] = useState(0);
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
+        paginate(page);
     }, []);
 
 
@@ -36,12 +40,20 @@ export function Transactions() {
         setTransactions(financial.expensesRevenue);
     }, [financial])
 
+
+    const paginate = (page: number) => {
+        const pageSize = 5;
+        setTransactions([...financial.expensesRevenue].slice((page - 1) * pageSize, page * pageSize));
+    }
+
     const conciliateExpense = () => {
         dispatch(asyncConciliateExpense(expenseId, seasons.selectedSeason.id));
     }
 
     const deleteExpense = (id: number) => {
         dispatch(asyncDeleteExpense(id));
+        dispatch(asyncFetchBankAccountsData);
+        dispatch(asyncFetchExpensesAndRevenues);
     }
 
     const find = () => {
@@ -73,7 +85,7 @@ export function Transactions() {
                 <div className="flex-right" style={{ marginTop: '2%', marginBottom: '2%' }}>
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
                 </div>
-                <div>
+                <div style={{ overflowX: 'scroll', overflowY: 'scroll', maxHeight: '300px'}}>
                     <Table striped bordered hover>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
                             <tr>
@@ -101,14 +113,14 @@ export function Transactions() {
                                         <Form.Check aria-label="Pago" onChange={(e: any) => {
                                             if (e.target.checked) {
                                                 setShowModalPayExpense(true);
-                                                setExpenseId(er.id!);
+                                                setExpenseId(er.expenses_invoice_id!);
                                             }
                                         }} checked={er.is_paid} />
                                     </td>
                                     <td>
                                         <Form.Check aria-label="Conciliado" checked={er.is_concilliated} onChange={(e: any) => {
                                             if (e.target.checked && er.is_paid) {
-                                                setExpenseId(er.id!);
+                                                setExpenseId(er.expenses_invoice_id!);
                                                 conciliateExpense();
                                             } else if (!er.is_paid && e.target.checked) {
                                                 e.target.checked = false;
@@ -123,8 +135,8 @@ export function Transactions() {
                                         <div className="flex-space-between">
                                             <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => {
                                                 console.log(er.id);
-                                                setExpenseId(er.id!); 
-                                                deleteExpense(er.id!);
+                                                setExpenseId(er.expenses_invoice_id!);
+                                                deleteExpense(er.expenses_invoice_id!);
                                             }}></FontAwesomeIcon>
                                         </div>
                                     </td>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { asyncConciliateExpense, asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncPayExpense } from "../../../../stores/financial.store";
 
 export function PayExpenseModal({ show, handleClose, expenseId }: { show: boolean, handleClose: any, expenseId: number }) {
     const [bankAccountId, setBankAccountId] = useState(0);
@@ -11,6 +11,7 @@ export function PayExpenseModal({ show, handleClose, expenseId }: { show: boolea
 
     const payExpense = () => {
         dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id))
+        dispatch(asyncFetchBankAccountsData);
     }
 
     return <Modal show={show} onHide={handleClose}>

@@ -11,6 +11,8 @@ import seasonsStore from './stores/seasons.store';
 import inputStore from './stores/input.store';
 import messagingStore from './stores/messaging.store';
 import financialStore from './stores/financial.store';
+import homeStore from './stores/home.store';
+import farmStore from './stores/farm.store';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +22,8 @@ const store = configureStore({
     input: inputStore,
     messages: messagingStore,
     financial: financialStore,
+    home: homeStore,
+    farm: farmStore,
   },
 });
 
@@ -44,3 +48,4 @@ export default store;
 export type AppDispatch = typeof store.dispatch
 export type AppThunk = ThunkAction<void, RootState, null, Action<string>>
 export const useAppDispatch = () => useDispatch<AppDispatch>()
+
