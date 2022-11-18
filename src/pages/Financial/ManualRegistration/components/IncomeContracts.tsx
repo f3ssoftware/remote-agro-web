@@ -32,6 +32,7 @@ export function IncomeContracts(){
                     <Form.Control type="number" onChange={(e)=>{ return setContractId(Number(e.target.value));}}/>
                 </Form.Group>
             </Col>
+        </Row>
             <Row style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
@@ -89,6 +90,5 @@ export function IncomeContracts(){
                     </Form.Group>
                 </Col>
             </Row>
-        </Row>
     </div>
 }
