@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
 import { BankAccount } from "../models/BankAccount";
+import { Contract } from "../models/Contract";
+import { Cultivation } from "../models/Cultivation";
 import { BankAccountDTO } from "../models/dtos/BankAccountsDTO";
 import { ExpenseInvoice } from "../models/ExpenseInvoice";
 import { ExpensesInvoiceData } from "../models/ExpensesInvoiceData";
@@ -15,6 +17,7 @@ const initialBankAccounts: BankAccount[] = [];
 const initialExpensesRevenue: ExpensesRevenue[] = [];
 const initialOrderedPair: any[] = [];
 const initialPlannings: Planning[]= [];
+const initialCultivations: Cultivation[] = [];
 
 const financialStore = createSlice({
     name: "financial",
@@ -23,7 +26,8 @@ const financialStore = createSlice({
         bankAccounts: initialBankAccounts,
         expensesRevenue: initialExpensesRevenue,
         chartOrderedPairs: initialOrderedPair,
-        plannings: initialPlannings
+        plannings: initialPlannings,
+        cultivations: initialCultivations
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -41,11 +45,14 @@ const financialStore = createSlice({
         },
         setPlannings(state, action) {
             state.plannings = action.payload;
+        },
+        setCultivations(state, action) {
+            state.cultivations = action.payload;
         }
     },
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -282,6 +289,36 @@ export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
     };
 }
 
+export function asyncRegisterContract(contract: Contract) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(
+                `https://remoteapi.murilobotelho.com.br/contracts`,
+                contract,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: "Contrato cadastrado com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
 export function asyncFetchPlannings() {
     return async function (dispatch: AppDispatch) {
         try {
@@ -294,6 +331,30 @@ export function asyncFetchPlannings() {
                 }
             );
             dispatch(setPlannings(result.data));
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncFetchCultivations() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/cultivations`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setCultivations(result.data));
         } catch (err: any) {
             console.log(err);
             dispatch(

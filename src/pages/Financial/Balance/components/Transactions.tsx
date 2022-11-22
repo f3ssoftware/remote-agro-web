@@ -37,6 +37,10 @@ export function Transactions() {
     }, [startDate, endDate]);
 
     useEffect(() => {
+        find();
+    }, [findTransaction])
+
+    useEffect(() => {
         setTransactions(financial.expensesRevenue);
     }, [financial])
 
@@ -57,7 +61,6 @@ export function Transactions() {
     }
 
     const find = () => {
-        console.log(findTransaction);
         setTransactions(financial.expensesRevenue?.filter((transaction: ExpensesRevenue) => {
             if (transaction?.reference?.toUpperCase().includes(findTransaction.toUpperCase())) {
                 return transaction;
@@ -77,7 +80,6 @@ export function Transactions() {
                         <Form>
                             <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar" onChange={(e) => {
                                 setFindTransaction(e.target.value);
-                                find();
                             }}></Form.Control>
                         </Form>
                     </Col>
@@ -85,9 +87,9 @@ export function Transactions() {
                 <div className="flex-right" style={{ marginTop: '2%', marginBottom: '2%' }}>
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
                 </div>
-                <div style={{ overflowX: 'scroll', overflowY: 'scroll', maxHeight: '300px'}}>
+                <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px'}}>
                     <Table striped bordered hover>
-                        <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
+                        <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
                             <tr>
                                 <th>Data</th>
                                 <th>Fornecedor/Cliente</th>
@@ -100,7 +102,7 @@ export function Transactions() {
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
+                        <tbody style={{ backgroundColor: '#fff', color: '#000', fontSize: '12px' }}>
                             {transactions.map((er, index) => {
                                 return <tr key={index}>
                                     <td>{`${new Date(er.payment_date!)?.getDay()!}/${new Date(er.payment_date!).getMonth()! + 1}/${new Date(er.payment_date!).getFullYear()!}`}</td>

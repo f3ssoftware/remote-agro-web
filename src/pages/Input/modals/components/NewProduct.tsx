@@ -46,6 +46,8 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                     isValid = false;
                 }
                 return isValid;
+            } case 'POST': {
+                return true;
             }
         }
     }

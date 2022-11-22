@@ -9,6 +9,7 @@ export function Income(){
         <Row style={{marginTop: '2%'}}>
             <Col>
                 <Form.Group className="mb-3" controlId="">
+                    <Form.Label>Tipo de Receita</Form.Label>
                     <Form.Select aria-label="" onChange={(e) => {
                         return setIncomeType(Number(e.target.value));
                     }}>

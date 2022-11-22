@@ -6,6 +6,7 @@ import { RootState } from "../../../..";
 import { TreatSeedsDTO } from "../../../../models/dtos/TreatSeeds.dto";
 import { Product } from "../../../../models/Product";
 import { asyncTreatSeeds } from "../../../../stores/input.store";
+import { getMessages } from "../../../../stores/messaging.store";
 import { SeedProductItem } from "./components/SeedProductItem";
 
 export function SeedsTreatment({
@@ -21,7 +22,7 @@ export function SeedsTreatment({
     const [seedQuantity, setSeedQuantity] = useState(0);
     const [accountable, setAccountable] = useState("");
     const [observations, setObservations] = useState("");
-    const [products, setProducts]: any[] = useState([]);
+    const [products, setProducts]: any[] = useState([{ id: 0, quantity: 0 }]);
 
     const onHandleRemove = (index: number) => {
         const newProducts = [...products];
@@ -38,21 +39,38 @@ export function SeedsTreatment({
 
     const addLine = () => {
         const newProducts = [...products];
-        newProducts.push({ product_id: 0, quantity: 0 });
+        newProducts.push({ id: 0, quantity: 0 });
         setProducts(newProducts);
     };
 
+    const validateForm = () => {
+        let isValid = true;
+        if (products.length === 0) {
+            dispatch(getMessages({
+                message: 'Obrigatório adicionar produto',
+                type: "error",
+            }))
+            isValid = false
+        }
+
+        return isValid;
+    }
+
     const register = () => {
         const request: TreatSeedsDTO = {
-            user_products: products.map((p: any) => p.id),
+            user_products: products,
             accountable,
             user_seed_id: seed.id,
             observations,
             correct_decimals: true,
             user_seed_quantity: seedQuantity,
         };
-        dispatch(asyncTreatSeeds(request));
-        handleClose();
+
+        if (validateForm()) {
+            dispatch(asyncTreatSeeds(request));
+            handleClose();
+        }
+
     };
     return (
         <Modal show={show} onHide={handleClose} size={"xl"}>
@@ -68,7 +86,7 @@ export function SeedsTreatment({
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: "#fff" }}>Semente</Form.Label>
                             <Typeahead
-                            id="seed"
+                                id="seed"
                                 onChange={(selected: any) => {
                                     if (selected.length > 0) {
                                         setSeed({ id: selected[0].id });
