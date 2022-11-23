@@ -8,6 +8,7 @@ import { BankAccountDTO } from "../models/dtos/BankAccountsDTO";
 import { ExpenseInvoice } from "../models/ExpenseInvoice";
 import { ExpensesInvoiceData } from "../models/ExpensesInvoiceData";
 import { ExpensesRevenue } from "../models/ExpensesRevenue";
+import { ExternalInvoice } from "../models/ExternalInvoice";
 import { Planning } from "../models/Planning";
 import { popLoading, pushLoading } from "./loading.store";
 import { getMessages } from "./messaging.store";
@@ -16,8 +17,9 @@ const initialExpensesInvoiceData: ExpensesInvoiceData = {};
 const initialBankAccounts: BankAccount[] = [];
 const initialExpensesRevenue: ExpensesRevenue[] = [];
 const initialOrderedPair: any[] = [];
-const initialPlannings: Planning[]= [];
+const initialPlannings: Planning[] = [];
 const initialCultivations: Cultivation[] = [];
+const initialExternalInvoices: ExternalInvoice[] = [];
 
 const financialStore = createSlice({
     name: "financial",
@@ -27,7 +29,8 @@ const financialStore = createSlice({
         expensesRevenue: initialExpensesRevenue,
         chartOrderedPairs: initialOrderedPair,
         plannings: initialPlannings,
-        cultivations: initialCultivations
+        cultivations: initialCultivations,
+        externalInvoices: initialExternalInvoices,
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -48,11 +51,14 @@ const financialStore = createSlice({
         },
         setCultivations(state, action) {
             state.cultivations = action.payload;
+        },
+        setExternalInvoices(state, action) {
+            state.externalInvoices = action.payload;
         }
     },
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -355,6 +361,30 @@ export function asyncFetchCultivations() {
                 }
             );
             dispatch(setCultivations(result.data));
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncFetchSefaz() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices-external`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setExternalInvoices(result.data));
         } catch (err: any) {
             console.log(err);
             dispatch(

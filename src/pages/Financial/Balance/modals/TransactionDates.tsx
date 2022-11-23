@@ -38,7 +38,7 @@ export function TransactionDates({ show, handleClose, onUpdate }: { show: boolea
                 Cancelar
             </Button>
             <Button variant="success" onClick={() => onUpdate(startDate, endDate)}>
-                Registrar
+                Filtrar
             </Button>
         </Modal.Footer>
     </Modal>

@@ -87,7 +87,7 @@ export function Transactions() {
                 <div className="flex-right" style={{ marginTop: '2%', marginBottom: '2%' }}>
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
                 </div>
-                <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px'}}>
+                <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px' }}>
                     <Table striped bordered hover>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
                             <tr>
@@ -105,7 +105,7 @@ export function Transactions() {
                         <tbody style={{ backgroundColor: '#fff', color: '#000', fontSize: '12px' }}>
                             {transactions.map((er, index) => {
                                 return <tr key={index}>
-                                    <td>{`${new Date(er.payment_date!)?.getDay()!}/${new Date(er.payment_date!).getMonth()! + 1}/${new Date(er.payment_date!).getFullYear()!}`}</td>
+                                    <td>{new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                                     <td>{er.reference}</td>
                                     <td>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                                     <td>{er.number}</td>

@@ -58,7 +58,7 @@ export function Balance() {
                             </Row>
                             <Row style={{ marginTop: '2%' }}>
                                 <Col>
-                                    Insumos
+                                    <span style={{color: '#fff'}}>Insumos</span>
                                 </Col>
                             </Row>
                         </Col>
@@ -78,7 +78,7 @@ export function Balance() {
                             </Row>
                             <Row style={{ marginTop: '2%' }}>
                                 <Col>
-                                    Manutenção
+                                    <span style={{color: '#fff'}}>Manutenção</span>
                                 </Col>
                             </Row>
                         </Col>
@@ -98,7 +98,7 @@ export function Balance() {
                             </Row>
                             <Row style={{ marginTop: '2%' }}>
                                 <Col>
-                                    Administrativo
+                                <span style={{color: '#fff'}}>Administrativo</span>
                                 </Col>
                             </Row>
                         </Col>

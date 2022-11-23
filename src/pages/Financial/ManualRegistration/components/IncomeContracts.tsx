@@ -12,10 +12,10 @@ import { Typeahead } from "react-bootstrap-typeahead";
 
 
 export function IncomeContracts() {
-    const { financial } = useSelector((state: RootState) => state);
+    const { financial, seasons } = useSelector((state: RootState) => state);
     const [contractName, setContractName] = useState('');
     const [contractId, setContractId] = useState(0);
-    const [totalBags, setTotalBags] = useState(0);
+    const [sacks, setSacks] = useState(0);
     const [contractValue, setContractValue] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
     const [payDate, setPayDate] = useState(new Date());
@@ -34,6 +34,8 @@ export function IncomeContracts() {
             start_date: startDate.toISOString(),
             name: contractName,
             payment_date: payDate.toISOString(),
+            sacks: sacks.toString(),
+            season_id: seasons.selectedSeason.id
         }
 
         dispatch(asyncRegisterContract(contract));
@@ -44,7 +46,7 @@ export function IncomeContracts() {
 
     useEffect(() => {
         console.log(cultivation);
-    }, [contractName, contractId, totalBags, contractValue, startDate, payDate, description, cultivation]);
+    }, [contractName, contractId, sacks, contractValue, startDate, payDate, description, cultivation]);
 
 
 
@@ -86,7 +88,7 @@ export function IncomeContracts() {
             <Col>
                 <Form.Group className="mb-3" controlId="">
                     <Form.Label >Sacas totais</Form.Label>
-                    <Form.Control type="number" onChange={(e) => { return setTotalBags(Number(e.target.value)); }} />
+                    <Form.Control type="number" onChange={(e) => { return setSacks(Number(e.target.value)); }} />
                 </Form.Group>
             </Col>
             <Col>

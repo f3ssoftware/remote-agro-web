@@ -3,6 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { Balance } from './Balance/Balance';
 import { Invoice } from './Invoice/Invoice';
 import { ManualRegistration } from './ManualRegistration/ManualRegistration';
+import { SefazInvoice } from './Sefaz/SefazInvoice';
 
 export function Financial() {
     const location  = useLocation();
@@ -18,6 +19,9 @@ export function Financial() {
         }
         case "manual-registration": {
           return <ManualRegistration></ManualRegistration>;
+        }
+        case "sefaz": {
+          return <SefazInvoice></SefazInvoice>
         }
         default: {
           console.log(location.pathname.split("/"));

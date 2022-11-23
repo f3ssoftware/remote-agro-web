@@ -28,26 +28,54 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
 
     const validateUserProduct = (userProduct: UserProduct, method: string) => {
         let isValid = true;
+        let invalidFields = [];
         switch (method) {
             case 'PUT': {
-                if (userProduct.user_product_id === null) {
+                if (!userProduct?.user_product_id) {
                     isValid = false;
+                    invalidFields.push('user_product_id');
                 }
 
-                if (userProduct.quantity === null) {
+                if (!userProduct.quantity === null) {
                     isValid = false;
+                    invalidFields.push('quantity');
                 }
 
-                if (userProduct.total_price === null) {
+                if (!userProduct.total_price) {
                     isValid = false;
+                    invalidFields.push('total_price');
                 }
 
-                if (userProduct.measure_unit === null) {
+                if (!userProduct.measure_unit) {
                     isValid = false;
+                    invalidFields.push('measure_unit');
                 }
                 return isValid;
             } case 'POST': {
-                return true;
+                if (!userProduct.product_id) {
+                    isValid = false;
+                    invalidFields.push('product_id');
+                }
+
+                if (!userProduct.quantity) {
+                    isValid = false;
+                    invalidFields.push('quantity');
+                }
+
+                if (!userProduct.total_price) {
+                    isValid = false;
+                    invalidFields.push('total_price');
+                }
+
+                if (!userProduct.measure_unit) {
+                    isValid = false;
+                    invalidFields.push('measure_unit');
+                }
+                if(!userProduct.measure_unit) {
+                    isValid = false;
+                    invalidFields.push('measure_unit');
+                }
+                return isValid;
             }
         }
     }
@@ -61,7 +89,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
             const toUpdtArr = [...productsToUpdate];
             toUpdtArr.splice(index, 1);
             setProductsToUpdate(toUpdtArr.concat(product))
-        } else if (validateUserProduct(product, 'POST')) {
+        } else if (!userHasProduct && validateUserProduct(product, 'POST')) {
             const toAddArr = [...productsToAdd];
             toAddArr.splice(index, 1);
             setProductsToAdd(toAddArr.concat(product));

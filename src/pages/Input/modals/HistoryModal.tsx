@@ -21,7 +21,19 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
     }, [show]);
 
     useEffect(() => {
-        setHistory(input.productHistory);
+        const newHistory = [...input.productHistory];
+        newHistory.sort((h1: History, h2: History) => {
+            if (h1.createdAt! > h2.createdAt!) {
+                return -1;
+            }
+
+            if (h1.createdAt! < h2.createdAt!) {
+                return 1;
+            }
+
+            return 0;
+        });
+        setHistory(newHistory);
     }, [input])
 
     return <Modal show={show} onHide={handleClose} size={'xl'}>
@@ -42,11 +54,11 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
                         </tr>
                     </thead>
                     <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                        {history.map((history: History, index) => {
+                        {history?.map((history: History, index) => {
                             return <tr key={index}>
                                 <td>{history?.flow_type}</td>
                                 {/* <td></td> */}
-                                <td>{`${new Date(history.createdAt!)?.getDay()!}/${new Date(history?.createdAt!).getMonth()! + 1}/${new Date(history?.createdAt!).getFullYear()!}`}</td>
+                                <td>{new Date(history?.createdAt!).toLocaleDateString('pt-BR')}</td>
                                 <td>{history?.accountable}</td>
                                 <td>{history?.quantity}</td>
                                 <td>{history?.observations}</td>
