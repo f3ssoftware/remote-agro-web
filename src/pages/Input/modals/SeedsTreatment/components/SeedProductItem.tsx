@@ -12,7 +12,7 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
     const [quantity, setQuantity] = useState(0);
 
     useEffect(() => {
-        onHandleUpdate(index, { id: selectedProduct.id })
+        onHandleUpdate(index, { id: selectedProduct.id, quantity })
     }, [selectedProduct, quantity]);
     const { input } = useSelector((state: RootState) => state);
     return <div>

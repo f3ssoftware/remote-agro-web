@@ -73,12 +73,12 @@ export function Transactions() {
         <Card className="ra-card">
             <Card.Body>
                 <Row>
-                    <Col>
-                        <h4>Transações</h4>
+                    <Col md={6}>
+                        <h5>Transações</h5>
                     </Col>
                     <Col>
                         <Form>
-                            <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar" onChange={(e) => {
+                            <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px', height: '30px' }} placeholder="Pesquisar" onChange={(e) => {
                                 setFindTransaction(e.target.value);
                             }}></Form.Control>
                         </Form>

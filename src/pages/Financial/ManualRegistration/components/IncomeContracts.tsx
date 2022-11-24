@@ -35,7 +35,8 @@ export function IncomeContracts() {
             name: contractName,
             payment_date: payDate.toISOString(),
             sacks: sacks.toString(),
-            season_id: seasons.selectedSeason.id
+            season_id: seasons.selectedSeason.id,
+            type: "CONTRACT"
         }
 
         dispatch(asyncRegisterContract(contract));

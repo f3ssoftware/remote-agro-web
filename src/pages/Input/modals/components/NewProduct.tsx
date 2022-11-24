@@ -120,7 +120,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
         if (productsToUpdate.length > 0) {
             dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
         }
-        console.log('bateu no handle close');
+        
         handleClose();
 
     }

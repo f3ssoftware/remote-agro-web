@@ -21,7 +21,7 @@ export function WithdrawalModal({ show, handleClose }: { show: boolean, handleCl
     const [products, setProducts] = useState([new UserProduct()])
 
     const onUpdateItem = (product: UserProduct, index: number) => {
-        console.log('batendo aqui');
+        console.log('batendo aqui', product);
         const productsArr = [...products];
         productsArr.splice(index, 1);
         productsArr.push(product);

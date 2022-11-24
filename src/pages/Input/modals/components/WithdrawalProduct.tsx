@@ -35,8 +35,9 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
             treatment: null,
             accountable: accountable
         };
+        console.log('p do lado do component:', p);
         onHandleUpdate(p, index);
-    }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation]);
+    }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation, accountable]);
     return <Row style={{ marginTop: '2%' }}>
         <Col>
             <Form.Group className="mb-3" controlId="">

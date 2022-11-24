@@ -309,7 +309,7 @@ export function asyncRegisterContract(contract: Contract) {
             );
             dispatch(
                 getMessages({
-                    message: "Contrato cadastrado com sucesso",
+                    message: contract.type === 'CONTRACT' ? "Contrato cadastrado com sucesso" : "Receita cadastrada com sucesso",
                     type: "success",
                 })
             );
