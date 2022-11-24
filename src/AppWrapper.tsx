@@ -8,7 +8,7 @@ import { RootState } from ".";
 import { TopNav } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Commerce } from "./pages/Commerce/Commerce";
-
+import {Soil} from "./pages/Soil/Soil";
 import { Financial } from "./pages/Financial/Financial";
 import { Home } from "./pages/Home/Home"
 import { FarmInput } from "./pages/Input/FarmInput";
@@ -50,6 +50,9 @@ export function AppWrapper() {
         case "commerce": return <AppStructure loading={loading.requests.length > 0}>
             <Commerce></Commerce>
         </AppStructure>;
+        case "soil": return <AppStructure loading={loading.requests.length > 0}>
+            <Soil></Soil>
+        </AppStructure>
         default: return <div>403 not found</div>
     }
 }
