@@ -2,7 +2,7 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Card, Col, Form, Row, Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../..";
 import { asyncFetchSoil } from "../../stores/soil.store";
 import { TransactionDates } from "../Financial/Balance/modals/TransactionDates";
@@ -16,23 +16,27 @@ export function Soil(){
     const { soil } = useSelector((state: RootState) => state);
     const initialSoilAnalysis: any[] = []
     const [soilAnalysis, setSoilAnalysis] = useState(initialSoilAnalysis);
-
+    const dispatch = useDispatch<any> ();
     // useEffect(() => {
-        // dispatch(asyncFetchSoil());
+    //     dispatch(asyncFetchSoil());
     // }, [startDate, endDate]);
 
-    // useEffect(() => {
-    //     find();
-    // }, [findSoil])
+    useEffect(()=>{
+        dispatch (asyncFetchSoil())
+    },[])
 
-    // const find = () => {
-    //     setSoilAnalysis(soil.?.filter((transaction: ExpensesRevenue) => {
-    //         if (transaction?.reference?.toUpperCase().includes(findTransaction.toUpperCase())) {
-    //             return transaction;
-    //         }
-    //         return null;
-    //     }))
-    // }
+    useEffect(() => {
+        find();
+    }, [findSoil])
+
+    const find = () => {
+        setSoilAnalysis(soil.soilAnalysis?.filter((soilAnalysis: any) => {
+            if (soilAnalysis?.reference?.toUpperCase().includes(findSoil.toUpperCase())) {
+                return soilAnalysis;
+            }
+            return null;
+        }))
+    }
     
     return <div style={{ marginTop: '2%' }}>
         <Card className="ra-card">
@@ -65,7 +69,16 @@ export function Soil(){
                             </tr>
                         </thead>
                         <tbody style={{ backgroundColor: '#fff', color: '#000', fontSize: '12px' }}>
- 
+                            {soilAnalysis.map((er, index) => {
+                                    return <tr key={index}>
+                                        <td>{new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
+                                        <td>{er.reference}</td>
+                                        <td>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                                        <td>{er.number}</td>
+                                        <td>{er.cost_type}</td>
+                                        <td>{er.observations}</td>
+                                    </tr>
+                                })}
                         </tbody>
                     </Table>
                 </div>
