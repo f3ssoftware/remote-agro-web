@@ -23,6 +23,11 @@ export function asyncFetchSoil() {
       try {
         const results = await axios.get(
           "https://remoteapi.murilobotelho.com.br/service-orders",
+          {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+        }
         );
         dispatch(setSoilAnalysis(results.data))
       } catch(err) {
