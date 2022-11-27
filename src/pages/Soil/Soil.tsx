@@ -38,9 +38,6 @@ export function Soil() {
   }, [startDate, endDate])
 
   const find = () => {
-    // setSoilAnalysis(
-      
-    // )
     const found = soil.soilAnalysis?.filter((soilAnalysis: any) => {
         const a = soilAnalysis.service_order_farms.filter((sf: any, index: number) => {
           if (sf.farm_name.toUpperCase().includes(findSoil.toUpperCase())) {
@@ -53,6 +50,7 @@ export function Soil() {
             return null;
         }
     })
+    setSoilAnalysis(found);
     // console.log(found);
   }
 

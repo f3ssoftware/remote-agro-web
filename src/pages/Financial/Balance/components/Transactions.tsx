@@ -108,7 +108,7 @@ export function Transactions() {
                                     <td>{new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                                     <td>{er.reference}</td>
                                     <td>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
-                                    <td>{er.number}</td>
+                                    <td>{er.number?.length! < 10 ? er.number : `${er.number?.slice(0,10)}...`}</td>
                                     <td>{er.cost_type}</td>
                                     <td>{er.observations}</td>
                                     <td>
