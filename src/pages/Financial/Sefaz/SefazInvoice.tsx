@@ -72,7 +72,7 @@ export function SefazInvoice() {
                             <td>{Number(extInv.total_value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             <td>{extInv.nfe_key!.slice(28,33)}</td>
                             <td>{extInv.total_value}</td>
-                            <td><Button className="launch-btn" disabled={extInv.status === 'cancelada'} variant="success" onClick={() => {
+                            <td><Button className="launch-btn" disabled={extInv.expenses_invoice_id !== null} variant="success" onClick={() => {
                                 setShowModalLaunch(true);
                                 fillSefaz(extInv);
                             }}>{extInv.status === 'autorizada' ? 'Lançar' : 'Lançada'}</Button></td>

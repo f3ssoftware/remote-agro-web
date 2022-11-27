@@ -27,8 +27,8 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             // user_product_id: userProductId,
             // minimum_quantity: minimumQuantity,
             observations: observation,
-            quantity: initialQuantity,
-            total_price: initialCost,
+            quantity: initialQuantity*1000,
+            total_price: initialCost*100,
             treatment: (modalWithdrawal ? 'RETIRADA' : null)
         };
         if(userHasProduct) {

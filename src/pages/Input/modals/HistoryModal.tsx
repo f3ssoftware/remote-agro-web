@@ -60,9 +60,9 @@ export function HistoryModal({ show, product, handleClose }: { show: boolean, pr
                                 {/* <td></td> */}
                                 <td>{new Date(history?.createdAt!).toLocaleDateString('pt-BR')}</td>
                                 <td>{history?.accountable}</td>
-                                <td>{history?.quantity}</td>
+                                <td>{history?.quantity!*1000}</td>
                                 <td>{history?.observations}</td>
-                                <td>{history?.price?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                                <td>{(history?.price!*100).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             </tr>
                         })}
                     </tbody>

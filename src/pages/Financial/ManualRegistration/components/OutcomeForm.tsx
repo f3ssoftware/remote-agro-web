@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 export function OutcomeForm({ costType, costAction, sefaz }: { costType: string, costAction: string, sefaz?: any }) {
   const navigate = useNavigate();
-  const [outcomeYear, setOutcomeYear] = useState(0);
+  const [outcomeYear, setOutcomeYear] = useState('');
   const [reference, setReference] = useState('')
   const [amount, setAmount] = useState('')
   const [observation, setObservation] = useState('')
@@ -112,7 +112,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
             <Form.Select
               aria-label=""
               onChange={(e) => {
-                return setOutcomeYear(Number(e.target.value))
+                return setOutcomeYear(e.target.value)
               }}
             > {seasons.seasons.map((season, index) => {
               return <option value={season.year} key={index}>{season.year}</option>
