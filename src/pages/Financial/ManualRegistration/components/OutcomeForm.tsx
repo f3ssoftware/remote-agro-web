@@ -10,7 +10,7 @@ import { Installments } from './Installments';
 import { MensalExpense } from './MensalExpense';
 import { useNavigate } from 'react-router-dom'
 
-export function OutcomeForm({ costType, costAction }: { costType: string, costAction: string }) {
+export function OutcomeForm({ costType, costAction, sefaz }: { costType: string, costAction: string, sefaz?: any }) {
   const navigate = useNavigate();
   const [outcomeYear, setOutcomeYear] = useState(0);
   const [reference, setReference] = useState('')
@@ -27,6 +27,11 @@ export function OutcomeForm({ costType, costAction }: { costType: string, costAc
 
   useEffect(() => {
     dispatch(asyncFetchPlannings());
+    if (sefaz) {
+      setReference(sefaz.reference);
+      setAmount(sefaz.amount);
+      setNumber(sefaz.number);
+    }
   }, []);
 
   useEffect(() => {
@@ -36,7 +41,7 @@ export function OutcomeForm({ costType, costAction }: { costType: string, costAc
   const updateInstallments = (installmentsFromChildren: any[]) => {
     console.log(installmentsFromChildren);
     setInstallments(installmentsFromChildren);
-    
+
   }
   const register = () => {
     const exp: ExpenseInvoice = {
@@ -50,7 +55,7 @@ export function OutcomeForm({ costType, costAction }: { costType: string, costAc
       year: outcomeYear.toString(),
     }
 
-    switch(paymentMethod) {
+    switch (paymentMethod) {
       case 'installments': {
         exp.installments = installments
       }
@@ -123,6 +128,7 @@ export function OutcomeForm({ costType, costAction }: { costType: string, costAc
             <Form.Label>Referência</Form.Label>
             <Form.Control
               type="text"
+              value={reference}
               onChange={(e) => {
                 return setReference(e.target.value)
               }}
@@ -132,25 +138,21 @@ export function OutcomeForm({ costType, costAction }: { costType: string, costAc
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Valor</Form.Label>
-            <Form.Control type="text" onBlur={(e) => {
-              if (isNaN(Number(e.currentTarget.value))) {
-                e.currentTarget.value = '';
-              } else {
-                setAmount(Number(e.currentTarget.value));
-                e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
-              }
+            <Form.Control
+              value={amount}
+              type="text" onBlur={(e) => {
+                if (isNaN(Number(e.currentTarget.value))) {
+                  e.currentTarget.value = '';
+                } else {
+                  setAmount(Number(e.currentTarget.value));
+                  e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                }
 
-            }} onKeyUp={(e) => {
-              if (e.key === 'Backspace') {
-                e.currentTarget.value = '';
-              }
-            }} />
-            {/* <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setValue(Number(e.target.value))
-              }}
-            /> */}
+              }} onKeyUp={(e) => {
+                if (e.key === 'Backspace') {
+                  e.currentTarget.value = '';
+                }
+              }} />
           </Form.Group>
         </Col>
       </Row>
@@ -173,6 +175,7 @@ export function OutcomeForm({ costType, costAction }: { costType: string, costAc
             <Form.Label >Número</Form.Label>
             <Form.Control
               type="number"
+              value={number}
               onChange={(e) => {
                 return setNumber(Number(e.target.value))
               }}

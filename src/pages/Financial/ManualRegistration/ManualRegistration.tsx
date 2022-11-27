@@ -3,7 +3,7 @@ import { Card, Col, Form, Row } from "react-bootstrap";
 import { Income } from "./components/Income";
 import { Outcome } from "./components/Outcome";
 
-export function ManualRegistration() {
+export function ManualRegistration({ sefaz }: { sefaz?: any }) {
     const [registrationType, setRegistrationType] = useState(1);
     const [expenseType, setExpenseType] = useState();
     return <div>
@@ -23,7 +23,7 @@ export function ManualRegistration() {
             </Row>
             <Row>
                 <Col>
-                    {registrationType === 1 ? <Outcome></Outcome> : <Income></Income>}
+                    {registrationType === 1 ? <Outcome sefaz={sefaz}></Outcome> : <Income></Income>}
                 </Col>
             </Row>
         </Card>

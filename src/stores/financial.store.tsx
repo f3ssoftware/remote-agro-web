@@ -396,3 +396,34 @@ export function asyncFetchSefaz() {
         }
     };
 }
+
+
+export function asyncLinkCertificate(data: any) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(
+                `https://remoteapi.murilobotelho.com.br/entities`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: "Certificado vinculado com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}

@@ -7,9 +7,12 @@ import { SeasonsSelectionModal } from './Modals/SeasonsSelectionModal'
 
 export function SeasonSelection({ show, handleClose }: any) {
   const { seasons } = useSelector((state: RootState) => state)
+  const [selectedSeason, setSelectedSeason]: any = useState({});
   const dispatch = useDispatch<any>()
   const confirm = () => {
-    console.log('teste botão')
+    console.log(selectedSeason);
+    dispatch(selectSeason(selectedSeason));
+    handleClose()
   }
   const [showSeasonsSelectionModal, setShowSeasonsSelectionModal] = useState(false)
 
@@ -32,14 +35,17 @@ export function SeasonSelection({ show, handleClose }: any) {
                 <Form.Select
                   aria-label=""
                   onChange={(e) => {
-                    dispatch(selectSeason(e.target.value))
-                    handleClose()
+                    // dispatch(selectSeason(e.target.value))
+                    // handleClose()
+                    console.log(e.target.value);
+                    setSelectedSeason(JSON.parse(e.target.value));
                   }}
                 >
                   {seasons.seasons.map((season, index) => {
                     return (
                       <option
-                        value={0}
+                        key={index}
+                        value={JSON.stringify(season)}
                       >{`${season.type} - ${season.year}`}</option>
                     )
                   })}
@@ -60,7 +66,7 @@ export function SeasonSelection({ show, handleClose }: any) {
               </Button>
             </Col>
             <Col>
-              <Button style={{color: '#000'}}
+              <Button style={{ color: '#000' }}
                 variant="success"
                 onClick={() => {
                   confirm()

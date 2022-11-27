@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
 import { ExternalInvoice } from "../../../models/ExternalInvoice";
 import financialStore, { asyncFetchSefaz } from "../../../stores/financial.store";
+import { CertificateModal } from "./modals/CertificateModal/CertificateModal";
+import { LaunchModal } from "./modals/LauchModal";
 import "./SefazInvoice.scss";
 
 const initialExternalInvoices: ExternalInvoice[] = [];
@@ -11,6 +13,11 @@ export function SefazInvoice() {
     const { financial } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
     const [externalInvoices, setExternalInvoices] = useState(initialExternalInvoices);
+    const [showModalLaunch, setShowModalLaunch] = useState(false);
+    const [reference, setReference] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [number, setNumber] = useState('');
+    const [showModalCertificates, setShowModalCertificates] = useState(false);
 
     useEffect(() => {
         dispatch(asyncFetchSefaz());
@@ -31,6 +38,11 @@ export function SefazInvoice() {
     }, [financial]);
 
 
+    const fillSefaz = (ext: ExternalInvoice) => {
+        setReference(ext.issuer_name!);
+        setAmount(Number(ext.total_value)!);
+        setNumber(ext.nfe_key!);
+    }
     return <div>
         <Card className="ra-card">
             <Row>
@@ -38,7 +50,7 @@ export function SefazInvoice() {
                     <h4>Notas Sefaz</h4>
                 </Col>
                 <Col>
-                    <Button variant="success">Certificados</Button>
+                    <Button variant="success" onClick={() => setShowModalCertificates(true)}>Certificados</Button>
                 </Col>
             </Row>
             <Table striped bordered hover>
@@ -60,11 +72,17 @@ export function SefazInvoice() {
                             <td>{Number(extInv.total_value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             <td>{extInv.nfe_key}</td>
                             <td>{extInv.total_value}</td>
-                            <td><Button className="launch-btn" disabled={extInv.status === 'cancelada'} variant="success">{extInv.status === 'autorizada' ? 'Lançar' : 'Lançada'}</Button></td>
+                            <td><Button className="launch-btn" disabled={extInv.status === 'cancelada'} variant="success" onClick={() => {
+                                setShowModalLaunch(true);
+                                fillSefaz(extInv);
+                            }}>{extInv.status === 'autorizada' ? 'Lançar' : 'Lançada'}</Button></td>
                         </tr>
                     })}
                 </tbody>
             </Table>
         </Card>
+
+        {showModalLaunch ? <LaunchModal show={showModalLaunch} handleClose={() => setShowModalLaunch(false)} sefaz={{ reference, amount, number }}></LaunchModal> : <></>}
+        {showModalCertificates ? <CertificateModal show={showModalCertificates} handleClose={() => setShowModalCertificates(false)}></CertificateModal> : <></>}
     </div>
 }

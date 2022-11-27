@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import { OutcomeForm } from './OutcomeForm'
 import { costTypesList } from '../../../../utils/costTypes'
 
-export function Outcome() {
+export function Outcome({ sefaz }: { sefaz?: any}) {
   const [outcomeType, setOutcomeType] = useState('')
   const [costAction, setCostAction] = useState('');
 
@@ -78,7 +78,7 @@ export function Outcome() {
         </Col>
       </Row>
       <Row style={{ marginTop: '2%' }}>
-        <OutcomeForm costType={outcomeType.toString()} costAction={costAction}></OutcomeForm>
+        <OutcomeForm costType={outcomeType.toString()} costAction={costAction} sefaz={sefaz}></OutcomeForm>
       </Row>
 
 
