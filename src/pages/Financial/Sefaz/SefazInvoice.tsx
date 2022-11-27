@@ -70,7 +70,7 @@ export function SefazInvoice() {
                             <td>{new Date(extInv?.issued_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                             <td>{extInv.issuer_name}</td>
                             <td>{Number(extInv.total_value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
-                            <td>{extInv.nfe_key}</td>
+                            <td>{extInv.nfe_key!.slice(28,33)}</td>
                             <td>{extInv.total_value}</td>
                             <td><Button className="launch-btn" disabled={extInv.status === 'cancelada'} variant="success" onClick={() => {
                                 setShowModalLaunch(true);

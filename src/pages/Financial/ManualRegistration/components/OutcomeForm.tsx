@@ -14,7 +14,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
   const navigate = useNavigate();
   const [outcomeYear, setOutcomeYear] = useState(0);
   const [reference, setReference] = useState('')
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState('')
   const [observation, setObservation] = useState('')
   const [number, setNumber] = useState(0)
   const [plan, setPlan] = useState(0)
@@ -45,7 +45,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
   }
   const register = () => {
     const exp: ExpenseInvoice = {
-      amount,
+      amount: Number(amount),
       number: number.toString(),
       reference,
       cost_type: costType,
@@ -139,12 +139,13 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Valor</Form.Label>
             <Form.Control
-              value={amount}
+              value={amount.toString()}
+              onChange={(e) => setAmount(e.currentTarget.value)}
               type="text" onBlur={(e) => {
                 if (isNaN(Number(e.currentTarget.value))) {
                   e.currentTarget.value = '';
                 } else {
-                  setAmount(Number(e.currentTarget.value));
+                  setAmount(e.currentTarget.value);
                   e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
                 }
 

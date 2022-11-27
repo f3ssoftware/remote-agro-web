@@ -172,10 +172,10 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.put(
-                `https://remoteapi.murilobotelho.com.br/expenses-and-revenues/${id}`,
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices/${id}`,
                 {
                     bank_account_id: bankAccountId,
-                    is_paid: true,
+                    was_paid: true,
                     season_id: seasonId
                 },
                 {
@@ -184,7 +184,49 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
                     },
                 }
             );
+            const actualYear = new Date().getFullYear();
+            const actualMonth = new Date().getMonth();
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            dispatch(asyncFetchBankAccountsData());
+            dispatch(asyncFetchChart());
+            dispatch(
+                getMessages({
+                    message: "Pagamento realizado com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: "Erro na requisição",
+                    type: "error",
+                })
+            );
             dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+        }
+    };
+}
+
+export function asyncPayContract(id: number, bankAccountId: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.put(
+                `https://remoteapi.murilobotelho.com.br/contracts/${id}`,
+                {
+                    bank_account_id: bankAccountId,
+                    was_paid: true
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            const actualYear = new Date().getFullYear();
+            const actualMonth = new Date().getMonth();
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            dispatch(asyncFetchBankAccountsData());
+            dispatch(asyncFetchChart());
             dispatch(
                 getMessages({
                     message: "Pagamento realizado com sucesso",

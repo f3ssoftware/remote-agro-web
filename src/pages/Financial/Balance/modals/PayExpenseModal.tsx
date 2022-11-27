@@ -2,16 +2,24 @@ import { useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncPayContract, asyncPayExpense } from "../../../../stores/financial.store";
 
-export function PayExpenseModal({ show, handleClose, expenseId }: { show: boolean, handleClose: any, expenseId: number }) {
+export function PayExpenseModal({ show, handleClose, expenseId, contractId }: { show: boolean, handleClose: any, expenseId: number, contractId: number }) {
     const [bankAccountId, setBankAccountId] = useState(0);
     const { financial, seasons } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
 
-    const payExpense = () => {
-        dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id))
-        dispatch(asyncFetchBankAccountsData);
+    const payExpense = async () => {
+        if(expenseId && expenseId !== 0) {
+            dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id))
+        }
+
+        if(contractId && contractId !== 0) {
+            dispatch(asyncPayContract(contractId, bankAccountId));
+        }
+        
+        await dispatch(asyncFetchBankAccountsData);
+        handleClose();
     }
 
     return <Modal show={show} onHide={handleClose}>

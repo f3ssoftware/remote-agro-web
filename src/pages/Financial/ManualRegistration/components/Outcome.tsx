@@ -4,7 +4,7 @@ import { OutcomeForm } from './OutcomeForm'
 import { costTypesList } from '../../../../utils/costTypes'
 
 export function Outcome({ sefaz }: { sefaz?: any}) {
-  const [outcomeType, setOutcomeType] = useState('')
+  const [outcomeType, setOutcomeType] = useState('Insumos')
   const [costAction, setCostAction] = useState('');
 
   const returnSubCosts = () => {

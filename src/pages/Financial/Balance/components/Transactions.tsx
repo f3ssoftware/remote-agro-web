@@ -25,6 +25,7 @@ export function Transactions() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(0);
     const [totalResults, setTotalResults] = useState(0);
+    const [contractId, setContractId] = useState(0);
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
@@ -88,7 +89,7 @@ export function Transactions() {
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
                 </div>
                 <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px' }}>
-                    <Table striped bordered hover>
+                    <Table striped bordered hover style={{tableLayout: 'fixed'}}>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
                             <tr>
                                 <th>Data</th>
@@ -107,8 +108,8 @@ export function Transactions() {
                                 return <tr key={index}>
                                     <td>{new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                                     <td>{er.reference}</td>
-                                    <td>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
-                                    <td>{er.number?.length! < 10 ? er.number : `${er.number?.slice(0,10)}...`}</td>
+                                    <td style={{color: (er.expenses_invoice_id === null ? 'green' : 'red')}}>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                                    <td>{er.number}</td>
                                     <td>{er.cost_type}</td>
                                     <td>{er.observations}</td>
                                     <td>
@@ -116,6 +117,7 @@ export function Transactions() {
                                             if (e.target.checked) {
                                                 setShowModalPayExpense(true);
                                                 setExpenseId(er.expenses_invoice_id!);
+                                                setContractId(er.contract_id!);
                                             }
                                         }} checked={er.is_paid} />
                                     </td>
@@ -149,7 +151,7 @@ export function Transactions() {
                 </div>
             </Card.Body>
         </Card>
-        <PayExpenseModal show={showModalPayExpense} handleClose={() => setShowModalPayExpense(false)} expenseId={expenseId}></PayExpenseModal>
+        <PayExpenseModal show={showModalPayExpense} handleClose={() => setShowModalPayExpense(false)} expenseId={expenseId} contractId={contractId}></PayExpenseModal>
         <TransactionDates show={showModalDates} handleClose={() => setShowModalDates(false)} onUpdate={(startDate: any, endDate: any) => {
             setStartDate(startDate);
             setEndDate(endDate);

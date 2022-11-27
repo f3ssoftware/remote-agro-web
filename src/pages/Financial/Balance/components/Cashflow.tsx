@@ -86,7 +86,7 @@ export function Cashflow() {
         <Card className="ra-card">
             <Card.Body>
                 <Card.Title>Fluxo de Caixa</Card.Title>
-                <Line options={options} data={data} />
+                <Line options={options} data={data} height="80"/>
             </Card.Body>
         </Card>
     </div>
