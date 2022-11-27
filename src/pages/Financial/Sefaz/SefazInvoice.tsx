@@ -82,7 +82,7 @@ export function SefazInvoice() {
             </Table>
         </Card>
 
-        {showModalLaunch ? <LaunchModal show={showModalLaunch} handleClose={() => setShowModalLaunch(false)} sefaz={{ reference, amount, number }}></LaunchModal> : <></>}
+        {showModalLaunch ? <LaunchModal show={showModalLaunch} handleClose={() => setShowModalLaunch(false)} sefaz={{ reference, amount, number: number.slice(28,34) }}></LaunchModal> : <></>}
         {showModalCertificates ? <CertificateModal show={showModalCertificates} handleClose={() => setShowModalCertificates(false)}></CertificateModal> : <></>}
     </div>
 }
