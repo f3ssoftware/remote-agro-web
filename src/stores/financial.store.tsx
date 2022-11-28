@@ -189,6 +189,7 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
+            dispatch(asyncFetchExpensesInvoicesData());
             dispatch(
                 getMessages({
                     message: "Pagamento realizado com sucesso",
@@ -202,7 +203,12 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
                     type: "error",
                 })
             );
-            dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+            const actualYear = new Date().getFullYear();
+            const actualMonth = new Date().getMonth();
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            dispatch(asyncFetchBankAccountsData());
+            dispatch(asyncFetchChart());
+            dispatch(asyncFetchExpensesInvoicesData());
         }
     };
 }
@@ -227,6 +233,7 @@ export function asyncPayContract(id: number, bankAccountId: number) {
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
+            dispatch(asyncFetchExpensesInvoicesData());
             dispatch(
                 getMessages({
                     message: "Pagamento realizado com sucesso",
@@ -259,7 +266,12 @@ export function asyncConciliateExpense(id: number, seasonId: number) {
                     },
                 }
             );
-            dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+            const actualYear = new Date().getFullYear();
+            const actualMonth = new Date().getMonth();
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            dispatch(asyncFetchBankAccountsData());
+            dispatch(asyncFetchChart());
+            dispatch(asyncFetchExpensesInvoicesData());
             dispatch(
                 getMessages({
                     message: "Transação conciliada com sucesso",
@@ -288,7 +300,12 @@ export function asyncDeleteExpense(id: number) {
                     },
                 }
             );
-            dispatch(asyncFetchExpensesAndRevenues(1, 300, '01/11/2022', '30/11/2022'));
+            const actualYear = new Date().getFullYear();
+            const actualMonth = new Date().getMonth();
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            dispatch(asyncFetchBankAccountsData());
+            dispatch(asyncFetchChart());
+            dispatch(asyncFetchExpensesInvoicesData());
             dispatch(
                 getMessages({
                     message: "Conta excluída com sucesso",
@@ -325,6 +342,12 @@ export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
                     type: "success",
                 })
             );
+            const actualYear = new Date().getFullYear();
+            const actualMonth = new Date().getMonth();
+            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            dispatch(asyncFetchBankAccountsData());
+            dispatch(asyncFetchChart());
+            dispatch(asyncFetchExpensesInvoicesData());
         } catch (err: any) {
             console.log(err);
             dispatch(

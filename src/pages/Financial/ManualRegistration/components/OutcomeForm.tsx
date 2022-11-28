@@ -18,7 +18,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
   const [observation, setObservation] = useState('')
   const [number, setNumber] = useState(0)
   const [plan, setPlan] = useState(0)
-  const [paymentMethod, setPaymentMethod] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('one_time')
   const [expirationDate, setExpirationDate] = useState(new Date())
   const dispatch = useDispatch<any>();
   const { financial, seasons } = useSelector((state: RootState) => state);

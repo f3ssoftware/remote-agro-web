@@ -93,15 +93,14 @@ export function FarmInput() {
                                                 </Col>
                                                 <Col md={2}>
                                                     <FontAwesomeIcon icon={faEye} style={{ color: '#000AFF', cursor: 'pointer' }} onClick={() => {
-                                                        console.log(`Clicked: ${input.product?.name}`)
                                                         setShowHistoryModal(true);
                                                         setHistorySelectedProduct(input);
                                                     }}></FontAwesomeIcon>
                                                 </Col>
                                             </Row>
                                         </td>
-                                        <td>{`${currencyFormat(((input.total_price!/100) / input.quantityInDecimal!))}`}</td>
-                                        <td>{currencyFormat(input.total_price!/100)}</td>
+                                        <td>{((input.total_price!/100) / input.quantityInDecimal!).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                                        <td>{(input.total_price!/100).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                                     </tr>
                                 })}
 
