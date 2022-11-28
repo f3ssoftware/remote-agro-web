@@ -89,7 +89,7 @@ export function FarmInput() {
                                         <td>
                                             <Row>
                                                 <Col md={10}>
-                                                    {input?.quantityInDecimal} {input.measure_unit}
+                                                    {input?.quantityInDecimal!*100} {input.measure_unit}
                                                 </Col>
                                                 <Col md={2}>
                                                     <FontAwesomeIcon icon={faEye} style={{ color: '#000AFF', cursor: 'pointer' }} onClick={() => {
@@ -100,8 +100,8 @@ export function FarmInput() {
                                                 </Col>
                                             </Row>
                                         </td>
-                                        <td>{`${currencyFormat((input.total_price! / input.quantityInDecimal!) / 100)}`}</td>
-                                        <td>{currencyFormat(input.total_price! / 100)}</td>
+                                        <td>{`${currencyFormat((input.total_price! / input.quantityInDecimal!))}`}</td>
+                                        <td>{currencyFormat(input.total_price!)}</td>
                                     </tr>
                                 })}
 
