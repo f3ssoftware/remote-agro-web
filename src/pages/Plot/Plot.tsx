@@ -44,7 +44,7 @@ export function Plot() {
   return (
     <Container>
       <Row>
-        <Col>
+        <Col md={4}>
           <div className="frist-column-plot">
             <div className="frist-card-plot">
               <Dropdown className="frist-card-dropdown-plot">
@@ -65,19 +65,19 @@ export function Plot() {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <div className="second-card-plot">
+          </div>
+          <div className="second-card-plot">
               <span className="second-card-text-plot">Talhões </span>
               <div>
                 <Button variant="success" className="second-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
                   +
                 </Button>
               </div>
-              <iframe src={selectedFarm?.map_link} width={380} height={400}></iframe>
+              <iframe src={selectedFarm?.map_link} width={'92%'} height={'75%'}></iframe>
             </div>
-          </div>
         </Col>
 
-        <Col xs={8}>
+        <Col md={8} sm={8}>
           <Card className="second-col-card-plot">
             <Card.Body>
               <Card.Title className="second-col-text-plot">

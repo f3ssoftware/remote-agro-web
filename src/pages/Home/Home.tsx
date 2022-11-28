@@ -18,7 +18,7 @@ export function Home() {
             <Col md={8}>
                 <WalletBalance></WalletBalance>
             </Col>
-            <Col>
+            <Col md={4}>
                 <img src={phoneImg} alt="" />
             </Col>
         </Row>

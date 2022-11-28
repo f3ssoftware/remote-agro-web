@@ -52,19 +52,19 @@ export function FarmInput() {
             <Card className="ra-card" style={{ height: '80vh' }}>
                 <Card.Title>
                     <Row>
-                        <Col md={2}>
+                        <Col md={2} sm={1}>
                             <h4>Estoque</h4>
                         </Col>
-                        <Col md={1}>
+                        <Col md={1} sm={2}>
                             <Button className="inputs-btn" onClick={() => setShowEntranceModal(true)}>Entrada</Button>
                         </Col>
-                        <Col md={1}>
+                        <Col md={1} sm={1}>
                             <Button className="inputs-btn" onClick={() => setShowWithdrawalModal(true)}>Saída</Button>
                         </Col >
-                        <Col md={2}>
+                        <Col md={2} sm={2}>
                             <Button className="inputs-btn" onClick={() => setShowSeedsTreatment(true)}>Tratar Sementes</Button>
                         </Col>
-                        <Col md={6}>
+                        <Col md={6} sm={5}>
                             <Form>
                                 <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar" onChange={(e) => setFindTerm(e.target.value)}></Form.Control>
                             </Form>

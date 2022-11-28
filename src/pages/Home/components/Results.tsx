@@ -10,7 +10,7 @@ export function Results() {
     return <Card className="ra-card">
         <Card.Body>
             <h4>Resultados</h4>
-            <Table striped bordered hover>
+            <Table striped bordered hover style={{tableLayout: 'fixed'}}>
                 <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
                     <tr>
                         <th>Nome</th>

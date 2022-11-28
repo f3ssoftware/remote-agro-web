@@ -75,7 +75,7 @@ export function SefazInvoice() {
                             <td><Button className="launch-btn" disabled={extInv.expenses_invoice_id !== null} variant="success" onClick={() => {
                                 setShowModalLaunch(true);
                                 fillSefaz(extInv);
-                            }}>{extInv.status === 'autorizada' ? 'Lançar' : 'Lançada'}</Button></td>
+                            }}>{extInv.expenses_invoice_id === null ? 'Lançar' : 'Lançada' }</Button></td>
                         </tr>
                     })}
                 </tbody>
