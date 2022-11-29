@@ -41,7 +41,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                     invalidFields.push('quantity');
                 }
 
-                if (!userProduct.total_price) {
+                if (userProduct.total_price === null) {
                     isValid = false;
                     invalidFields.push('total_price');
                 }

@@ -24,10 +24,10 @@ export function Home() {
         </Row>
         <Row style={{ marginTop: '2%' }}>
             <Col md={8}>
-                <Results></Results>
+                {/* <Results></Results> */}
             </Col>
             <Col>
-                <Productivity></Productivity>
+                {/* <Productivity></Productivity> */}
             </Col>
         </Row>
     </div>

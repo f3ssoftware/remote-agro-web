@@ -30,8 +30,8 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
             user_product_id: productId,
             minimum_quantity: minimumQuantity,
             observations: observation,
-            quantity: initialQuantity,
-            total_price: initialCost,
+            quantity: initialQuantity*1000,
+            total_price: initialCost*100,
             treatment: null,
             accountable: accountable
         };
