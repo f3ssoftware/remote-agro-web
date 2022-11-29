@@ -19,6 +19,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
     const [initialQuantity, setInitialQuantity] = useState(0);
     const [initialCost, setInitialCost] = useState(0);
     const [observation, setObservation] = useState("");
+    const [accountable, setAccountable] = useState('');
     const [userHasProduct, setUserHasProduct] = useState(false);
 
     useEffect(() => {
@@ -26,12 +27,13 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             measure_unit: measureUnit,
             // user_product_id: userProductId,
             // minimum_quantity: minimumQuantity,
+            accountable: accountable,
             observations: observation,
-            quantity: initialQuantity*1000,
-            total_price: initialCost*100,
+            quantity: initialQuantity * 1000,
+            total_price: initialCost * 100,
             treatment: (modalWithdrawal ? 'RETIRADA' : null)
         };
-        if(userHasProduct) {
+        if (userHasProduct) {
             p.user_product_id = userProductId;
         } else {
             p.product_id = productId;
@@ -43,7 +45,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
                 <Typeahead
-                id="product"
+                    id="product"
                     onChange={(selected: any) => {
                         if (selected.length > 0) {
                             const p = selected[0];
@@ -75,14 +77,14 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
                 }} />
             </Form.Group>
         </Col> : <></>}
-        {/* {!userHasProduct ? <Col>
+        <Col>
             <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Estoque Mínimo</Form.Label>
-                <Form.Control type="number" onChange={(e) => {
-                    setMinimumQuantity(Number(e.target.value));
+                <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
+                <Form.Control type="text" onChange={(e) => {
+                    setAccountable(e.target.value);
                 }} />
             </Form.Group>
-        </Col> : <></>} */}
+        </Col>
         <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
@@ -109,7 +111,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
                     if (e.key === 'Backspace') {
                         e.currentTarget.value = '';
                     }
-                }}/>
+                }} />
             </Form.Group>
         </Col>
         <Col>
