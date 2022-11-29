@@ -3,7 +3,7 @@ import { NewSeasonsSelection } from "../NewSeasonsSelection";
 
 
 export function SeasonsSelectionModal({show, handleClose}: {show: boolean, handleClose: any}){
-    return <Modal show={show} onHide={handleClose} size={'xl'}>
+    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
     <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
         <Modal.Title> <span style={{ color: '#fff' }}>Nova Temporada</span></Modal.Title>
     </Modal.Header>

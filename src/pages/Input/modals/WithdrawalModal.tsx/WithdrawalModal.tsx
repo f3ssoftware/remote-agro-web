@@ -46,7 +46,7 @@ export function WithdrawalModal({ show, handleClose }: { show: boolean, handleCl
         handleClose();
     }
 
-    return <Modal show={show} onHide={handleClose} size={'xl'}>
+    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Retirada de estoque</span></Modal.Title>
         </Modal.Header>

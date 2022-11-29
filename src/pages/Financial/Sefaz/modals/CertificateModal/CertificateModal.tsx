@@ -10,7 +10,7 @@ export function CertificateModal({ show, handleClose }: { show: boolean, handleC
     useEffect(() => {
         console.log(personType);
     }, [personType])
-    return <Modal show={show} onHide={handleClose} size={'lg'}>
+    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'lg'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Vincular Certificado</span></Modal.Title>
         </Modal.Header>

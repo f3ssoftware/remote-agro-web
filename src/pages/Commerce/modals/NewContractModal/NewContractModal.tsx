@@ -7,7 +7,7 @@ export function NewContractModal({show, handleClose}: {show: boolean, handleClos
         console.log('teste botão')
     }
 
-    return <Modal show={show} onHide={handleClose} size={'xl'}>
+    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Editar contrato</span></Modal.Title>
         </Modal.Header>

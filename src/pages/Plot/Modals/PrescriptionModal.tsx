@@ -14,7 +14,7 @@ export function PrescriptionModal({
     useState(false)
   return (
     <Container>
-      <Modal show={show} onHide={handleClose} size={'xl'}>
+      <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header
           closeButton
           style={{ backgroundColor: '#7C5529', border: 'none' }}

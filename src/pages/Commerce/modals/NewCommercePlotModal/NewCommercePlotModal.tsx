@@ -7,7 +7,7 @@ export function NewCommercePlotModal({show, handleClose}: {show: boolean, handle
         console.log('teste botão')
     }
 
-    return <Modal show={show} onHide={handleClose} size={'sm'}>
+    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'sm'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Editar Silo</span></Modal.Title>
         </Modal.Header>

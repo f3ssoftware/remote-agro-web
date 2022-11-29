@@ -22,7 +22,7 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId }: { 
         handleClose();
     }
 
-    return <Modal show={show} onHide={handleClose}>
+    return <Modal backdrop = {'static'} show={show} onHide={handleClose}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
