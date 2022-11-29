@@ -18,7 +18,7 @@ export function SeasonSelection({ show, handleClose }: any) {
 
   return (
     <Container>
-      <Modal show={show} onHide={handleClose}>
+      <Modal backdrop = {'static'} show={show} onHide={handleClose}>
         <Modal.Header
           closeButton
           style={{ backgroundColor: '#7C5529', border: 'none' }}
