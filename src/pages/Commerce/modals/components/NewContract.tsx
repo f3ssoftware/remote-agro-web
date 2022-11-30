@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Button, Form } from "react-bootstrap";
+import { Row, Col, Button, Form, Dropdown } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import pt from "date-fns/locale/pt-BR";
+import { asyncFetchCultivations } from '../../../../stores/financial.store'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../../../index'
 
 export function NewContract({}){
     const [contractName,setContractName] = useState('');
@@ -13,10 +16,18 @@ export function NewContract({}){
     const [startDate,setStartDate] = useState(new Date());
     const [endDate,setEndDate] = useState(new Date());
     const [payDate,setPayDate] = useState(new Date());
+    const [selectedCultivations, setSelectedCultivations]: any = useState({})
+    const { financial } = useSelector((state: RootState) => state)
+    const dispatch = useDispatch<any>()
 
     useEffect(()=>{
         console.log(payDate)
     },[contractName,contractId,type,bags,contractPrice,startDate,endDate,payDate]);
+
+    useEffect(() => {
+        dispatch(asyncFetchCultivations())
+        setSelectedCultivations(financial?.cultivations[0])
+      }, [])
 
 
 
@@ -35,10 +46,22 @@ export function NewContract({}){
             </Col>
             <Row style={{marginTop: '2%'}}>
             <Col>
-                <Form.Group className="mb-3" controlId=""> {/*Apenas pra visualizar, ver se vai ser typeahead*/}
-                    <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
-                    <Form.Control type="text" onChange={(e) => {setType(e.target.value);}} />
-                </Form.Group>
+            <Form.Group as={Col} controlId="formGridState">
+                <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
+                <Form.Select defaultValue="Selecione">
+                    {financial?.cultivations?.map((cultivations: any, index) => {
+                        return (
+                        <option
+                            key={index}
+                            onClick={() => setSelectedCultivations(financial)}
+                        >
+                            {cultivations.name}
+                        </option>
+                        )
+                    })}
+
+                </Form.Select>
+            </Form.Group>
             </Col>
             <Col>
                 <Form.Group className="mb-3" controlId="">
