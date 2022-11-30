@@ -24,6 +24,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
   const { financial, seasons } = useSelector((state: RootState) => state);
   const [installmentsQuantity, setInstallmentsQuantity] = useState(0);
   const [installments, setInstallments]: any = useState({});
+  const [externalInvoiceId, setExternalInvoiceId] = useState(0);
 
   useEffect(() => {
     dispatch(asyncFetchPlannings());
@@ -31,7 +32,10 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
       setReference(sefaz.reference);
       setAmount(sefaz.amount);
       setNumber(sefaz.number);
+      setExternalInvoiceId(sefaz.externalInvoiceId);
     }
+    setOutcomeYear(seasons.selectedSeason.year);
+
   }, []);
 
   useEffect(() => {
@@ -53,6 +57,8 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
       cost_action: costAction,
       payment_method: paymentMethod,
       year: outcomeYear.toString(),
+      external_expenses_invoice_id: externalInvoiceId,
+      observation,
     }
 
     switch (paymentMethod) {
@@ -110,6 +116,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Ano agrícola</Form.Label>
             <Form.Select
+              value={outcomeYear}
               aria-label=""
               onChange={(e) => {
                 return setOutcomeYear(e.target.value)

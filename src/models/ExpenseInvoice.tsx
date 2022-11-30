@@ -9,5 +9,7 @@ export class ExpenseInvoice {
         public amount?: number,
         public installments?: any[],
         public payment_method?: string,
+        public external_expenses_invoice_id?: number,
+        public observation?: string,
     ) { }
 }
