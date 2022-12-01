@@ -1,21 +1,55 @@
-import { Container, Row, Col, Dropdown, Button, Card } from 'react-bootstrap'
+import {
+  Container,
+  Row,
+  Col,
+  Dropdown,
+  Button,
+  Card,
+  Pagination,
+} from 'react-bootstrap'
 import './Contracts.scss'
 import { NewContractModal } from '../modals/NewContractModal/NewContractModal'
 import { useEffect, useState } from 'react'
-import { asyncFetchCultivations } from '../../../stores/financial.store'
+import {
+  asyncFetchContractsData,
+  asyncFetchCultivations,
+} from '../../../stores/financial.store'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../index'
+import { Contract } from '../../../models/Contract'
 
+const initialContractList: Contract[] = []
 export function Contracts() {
   const [showNewContractModal, setShowNewContractModal] = useState(false)
   const [selectedCultivations, setSelectedCultivations]: any = useState({})
   const { financial } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
+  const [contracts, setContracts] = useState(initialContractList)
+  const [pageSize, setPageSize] = useState(0)
+  const [totalResults, setTotalResults] = useState(0)
+  const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    dispatch(asyncFetchContractsData())
+  }, [])
 
   useEffect(() => {
     dispatch(asyncFetchCultivations())
     setSelectedCultivations(financial?.cultivations[0])
   }, [])
+
+  useEffect(() => {
+    paginate(page)
+    setTotalResults(financial.contracts.length)
+    setPageSize(2)
+  }, [financial])
+
+  const paginate = (page: number) => {
+    const pageSize = 2
+    setContracts(
+      [...financial.contracts].slice((page - 1) * pageSize, page * pageSize),
+    )
+  }
 
   return (
     <Container>
@@ -26,7 +60,7 @@ export function Contracts() {
               <Dropdown className="frist-card-dropdown">
                 <span className="frist-card-text">Cultura</span>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                {selectedCultivations?.name}
+                  {selectedCultivations?.name}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
@@ -53,6 +87,49 @@ export function Contracts() {
                 >
                   +
                 </Button>
+              </div>
+              <div style={{ marginTop: '10%', marginLeft: '5%', marginRight:'5%' }}>
+                    <div className="contracts-content">
+                      {contracts.map((contract, index) => (
+                        <div className="contracts-card" key={index}>
+                          <Row>
+                            <Col>
+                              <b>{contract.name}</b>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>Cultivo: {contract.cultivation_name}</Col>
+                          </Row>
+                          <div className="flex-right">
+                            <h5 style={{ color: (Number(contract.amount)) > 0 ? '#4C9626' : '#911414' }}>{Number(contract.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                        </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex-center" style={{ marginTop: '10%' }}>
+                      <Pagination size="sm">
+                        <Pagination.Prev
+                          onClick={() => {
+                            if (page > 1) {
+                              paginate(page - 1)
+                              setPage(page - 1)
+                            }
+                          }}
+                        />
+                        <Pagination.Next
+                          onClick={() => {
+                            if (page < totalResults / pageSize) {
+                              console.log(totalResults / pageSize)
+                              paginate(page + 1)
+                              setPage(page + 1)
+                            } else {
+                              console.log('else: ', totalResults / pageSize)
+                            }
+                          }}
+                        />
+                      </Pagination>
+                    </div>
+
               </div>
             </div>
           </div>

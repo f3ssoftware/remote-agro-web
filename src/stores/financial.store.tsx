@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { startOfDecade } from "date-fns";
 import { AppDispatch } from "..";
 import { BankAccount } from "../models/BankAccount";
 import { Contract } from "../models/Contract";
@@ -20,6 +21,7 @@ const initialOrderedPair: any[] = [];
 const initialPlannings: Planning[] = [];
 const initialCultivations: Cultivation[] = [];
 const initialExternalInvoices: ExternalInvoice[] = [];
+const initialContracts: Contract[] = []
 
 const financialStore = createSlice({
     name: "financial",
@@ -31,6 +33,8 @@ const financialStore = createSlice({
         plannings: initialPlannings,
         cultivations: initialCultivations,
         externalInvoices: initialExternalInvoices,
+        contracts: initialContracts
+        
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -54,11 +58,14 @@ const financialStore = createSlice({
         },
         setExternalInvoices(state, action) {
             state.externalInvoices = action.payload;
+        },
+        setContracts(state, action){
+            state.contracts = action.payload
         }
     },
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -99,6 +106,29 @@ export function asyncFetchBankAccountsData() {
                 }
             );
             dispatch(setBankAccounts(result.data));
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: err.result.data.error,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncFetchContractsData() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/contracts`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setContracts(result.data));
         } catch (err: any) {
             dispatch(
                 getMessages({

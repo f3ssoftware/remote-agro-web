@@ -159,3 +159,19 @@
   display: flex;
   margin-left: 150px;
 }
+
+.contracts-card {
+  border: solid;
+  border-color: green;
+  border-width: 3px;
+  border-radius: 10px;
+  height: 10%;
+  margin-top: 5%;
+}
+
+.contracts-content {
+  overflow: hidden  ;
+  max-height: 10%;
+  margin-top: -16%;
+}
+

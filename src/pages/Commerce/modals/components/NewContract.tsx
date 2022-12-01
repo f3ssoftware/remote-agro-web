@@ -3,36 +3,43 @@ import { Row, Col, Button, Form, Dropdown } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import pt from "date-fns/locale/pt-BR";
-import { asyncFetchCultivations } from '../../../../stores/financial.store'
+import { asyncFetchCultivations, asyncRegisterContract } from '../../../../stores/financial.store'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../../index'
 import { Contract } from "../../../../models/Contract";
+import { Cultivation } from "../../../../models/Cultivation"
+import { Typeahead } from "react-bootstrap-typeahead";
 
 export function NewContract({show, handleClose}: {show: boolean, handleClose: any}){
     const [contractName,setContractName] = useState('');
-    const [contractId,setContractId] = useState('');
+    const [contractId,setContractId] = useState(0);
     const [description,setDescription] = useState('');
-    const [bags,setBags] = useState('');
+    const [bags,setBags] = useState(0);
     const [contractPrice,setContractPrice] = useState(0);
     const [startDate,setStartDate] = useState(new Date());
     const [endDate,setEndDate] = useState(new Date());
     const [payDate,setPayDate] = useState(new Date());
     const [selectedCultivations, setSelectedCultivations]: any = useState({})
-    const { financial } = useSelector((state: RootState) => state)
+    const { financial,seasons } = useSelector((state: RootState) => state)
     const dispatch = useDispatch<any>()
 
     const register = () => {
         const contract: Contract = {
             name: contractName,
-            code: contractId,
+            code: contractId.toString(),
             description: description,
-            sacks: bags,
+            sacks: bags.toString(),
             amount: contractPrice,
-            cultivation_name: selectedCultivations,
+            cultivation_name: selectedCultivations.name,
+            cultivation_id: selectedCultivations.id,
+            payment_date: payDate.toISOString(),
+            start_date: startDate.toISOString(),
+            end_date: endDate.toISOString(),
+            type: "CONTRACT",
+            season_id: seasons.selectedSeason.id
             
         }
-        // dispatch(asyncNewContract(contract));
-        handleClose();
+        dispatch(asyncRegisterContract(contract));
     }
 
     useEffect(()=>{
@@ -58,32 +65,26 @@ export function NewContract({show, handleClose}: {show: boolean, handleClose: an
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Codigo do contrato</Form.Label>
-                        <Form.Control type="number" onChange={(e) => {setContractId((e.target.value));}} />
+                        <Form.Control type="number" onChange={(e) => {setContractId(Number(e.target.value));}} />
                     </Form.Group>
                 </Col>
                 <Row style={{marginTop: '2%'}}>
                 <Col>
                 <Form.Group as={Col} controlId="formGridState">
                     <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
-                    <Form.Select defaultValue="Selecione">
-                        {financial?.cultivations?.map((cultivations: any, index) => {
-                            return (
-                            <option
-                                key={index}
-                                onClick={() => setSelectedCultivations(financial)}
-                            >
-                                {cultivations.name}
-                            </option>
-                            )
-                        })}
-
-                    </Form.Select>
+                    <Typeahead
+                        id="cultivation"
+                        onChange={(selected: any) => {
+                            setSelectedCultivations(selected[0]);
+                        }}
+                        options={financial.cultivations.map((cultivation: Cultivation, index) => { return { id: cultivation.id, label: cultivation?.name } })}
+                    />
                 </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Sacas Totais</Form.Label>
-                        <Form.Control type="number" onChange={(e) => {setBags((e.target.value));}} />
+                        <Form.Control type="number" onChange={(e) => {setBags(Number(e.target.value));}} />
                     </Form.Group>
                 </Col>
                 <Col>
