@@ -3,19 +3,13 @@ import { NewContract } from "../components/NewContract"
 
 export function NewContractModal({show, handleClose}: {show: boolean, handleClose: any}){
 
-    const register = () => {
-        console.log('teste botão')
-    }
 
-    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
+    return <Modal show={show} onHide={handleClose} backdrop = {'static'}  size={'xl'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title> <span style={{ color: '#fff' }}>Editar contrato</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            <NewContract></NewContract>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => {register(); handleClose();}}>Registrar</Button>
-            </div>
+            <NewContract show={false} handleClose={undefined}></NewContract>
         </Modal.Body>
     </Modal >
 }
