@@ -18,6 +18,7 @@ export function SefazInvoice() {
     const [amount, setAmount] = useState(0);
     const [number, setNumber] = useState('');
     const [showModalCertificates, setShowModalCertificates] = useState(false);
+    const [externalInvoiceId, setExternalInvoiceId] = useState(0);
 
     useEffect(() => {
         dispatch(asyncFetchSefaz());
@@ -42,6 +43,7 @@ export function SefazInvoice() {
         setReference(ext.issuer_name!);
         setAmount(Number(ext.total_value)!);
         setNumber(ext.nfe_key!);
+        setExternalInvoiceId(ext.id!);
     }
     return <div>
         <Card className="ra-card">
@@ -70,19 +72,19 @@ export function SefazInvoice() {
                             <td>{new Date(extInv?.issued_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                             <td>{extInv.issuer_name}</td>
                             <td>{Number(extInv.total_value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
-                            <td>{extInv.nfe_key!.slice(28,33)}</td>
+                            <td>{extInv.nfe_key!.slice(28, 33)}</td>
                             <td>{Number(extInv.total_value)!.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             <td><Button className="launch-btn" disabled={extInv.expenses_invoice_id !== null} variant="success" onClick={() => {
                                 setShowModalLaunch(true);
                                 fillSefaz(extInv);
-                            }}>{extInv.expenses_invoice_id === null ? 'Lançar' : 'Lançada' }</Button></td>
+                            }}>{extInv.expenses_invoice_id === null ? 'Lançar' : 'Lançada'}</Button></td>
                         </tr>
                     })}
                 </tbody>
             </Table>
         </Card>
 
-        {showModalLaunch ? <LaunchModal show={showModalLaunch} handleClose={() => setShowModalLaunch(false)} sefaz={{ reference, amount, number: number.slice(28,34) }}></LaunchModal> : <></>}
+        {showModalLaunch ? <LaunchModal show={showModalLaunch} handleClose={() => setShowModalLaunch(false)} sefaz={{ reference, amount, number: number.slice(28, 34), externalInvoiceId: externalInvoiceId }}></LaunchModal> : <></>}
         {showModalCertificates ? <CertificateModal show={showModalCertificates} handleClose={() => setShowModalCertificates(false)}></CertificateModal> : <></>}
     </div>
 }
