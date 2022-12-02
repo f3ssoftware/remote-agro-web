@@ -107,7 +107,7 @@ export function Contracts() {
                           </Row>
 
                           <div style={{marginTop: '2%', marginRight: '2%'}} className="flex-right">
-                            <h5 style={{ color: (Number(contract.amount)) > 0 ? '#4C9626' : '#911414' }}>{Number(contract.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                            <h5 style={{ color: (Number(contract.amount)) > 0 ? '#4C9626' : '#911414' }}>{Number(contract.amount!/100).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
                         </div>
                         </div>
                       ))}

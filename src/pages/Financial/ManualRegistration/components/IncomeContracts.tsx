@@ -25,7 +25,7 @@ export function IncomeContracts() {
 
     const register = () => {
         const contract: Contract = {
-            amount: contractValue,
+            amount: contractValue*100,
             code: contractId.toString(),
             cultivation_id: cultivation.id,
             cultivation_name: cultivation.name,
