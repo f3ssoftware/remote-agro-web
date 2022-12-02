@@ -88,25 +88,31 @@ export function Contracts() {
                   +
                 </Button>
               </div>
-              <div style={{ marginTop: '10%', marginLeft: '5%', marginRight:'5%' }}>
+              <div style={{ marginTop: '2%', marginLeft: '5%', marginRight:'5%' }}>
                     <div className="contracts-content">
                       {contracts.map((contract, index) => (
-                        <div className="contracts-card" key={index}>
-                          <Row>
+                        <div  className="contracts-card" key={index}>
+                          <Row style={{marginLeft: '1%'}}>
                             <Col>
                               <b>{contract.name}</b>
                             </Col>
-                          </Row>
-                          <Row>
+                          </Row >
+                          <Row style={{marginLeft: '1%'}}>
                             <Col>Cultivo: {contract.cultivation_name}</Col>
                           </Row>
-                          <div className="flex-right">
+                          <Row style={{marginLeft: '1%' ,marginRight: '1%'}}>
+                            <Col>Inicio: {new Date(contract.start_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</Col>
+                            <Col>Final: {new Date(contract.end_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</Col>
+                            <Col>Pagamento: {new Date(contract.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</Col>
+                          </Row>
+
+                          <div style={{marginTop: '2%', marginRight: '2%'}} className="flex-right">
                             <h5 style={{ color: (Number(contract.amount)) > 0 ? '#4C9626' : '#911414' }}>{Number(contract.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
                         </div>
                         </div>
                       ))}
                     </div>
-                    <div className="flex-center" style={{ marginTop: '10%' }}>
+                    <div className="flex-center" style={{ marginTop: '5%' }}>
                       <Pagination size="sm">
                         <Pagination.Prev
                           onClick={() => {
