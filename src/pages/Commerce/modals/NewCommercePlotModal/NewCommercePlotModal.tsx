@@ -13,9 +13,6 @@ export function NewCommercePlotModal({show, handleClose}: {show: boolean, handle
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
             <NewCommercePlot></NewCommercePlot>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => {register(); handleClose();}}>Enviar</Button>
-            </div>
         </Modal.Body>
     </Modal >
 }

@@ -1,3 +1,5 @@
+import { SiloCultivar } from "./SiloCultivar";
+
 export class Cultivation {
     id?: number;
     name?: string;
@@ -7,4 +9,5 @@ export class Cultivation {
     updatedAt?: string;
     cultivares?: any[];
     silos?: any[];
+    siloCultivar?: SiloCultivar[]
 }
