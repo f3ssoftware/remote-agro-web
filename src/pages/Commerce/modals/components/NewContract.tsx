@@ -29,7 +29,7 @@ export function NewContract({show, handleClose}: {show: boolean, handleClose: an
             code: contractId.toString(),
             description: description,
             sacks: bags.toString(),
-            amount: contractPrice,
+            amount: contractPrice*100,
             cultivation_name: selectedCultivations.name,
             cultivation_id: selectedCultivations.id,
             payment_date: payDate.toISOString(),
