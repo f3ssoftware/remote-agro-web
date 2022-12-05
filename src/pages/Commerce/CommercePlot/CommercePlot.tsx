@@ -64,14 +64,16 @@ export function CommercePlot() {
                 <Card.Body>
                   <Card.Title className="cardTitle">{silo.name}</Card.Title>
                   <Card.Text className="cardText">
-                    Soja 258 sacas Milho 18,25 sacas Trigo 400 sacas
+                     {silo?.cultivations?.map(
+                        (ss: any) => `${ss?.name} ${ss?.SiloCultivar?.quantity} `,
+                     )}
                   </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
-        <div className="flex-center" style={{ marginTop: '5%' }}>
+        <div className="flex-center" style={{ marginTop: '2%' }}>
           <Pagination size="sm">
             <Pagination.Prev
               onClick={() => {
