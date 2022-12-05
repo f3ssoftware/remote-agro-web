@@ -8,4 +8,6 @@ export class UserProduct {
     observations?: string;
     treatment?: any;
     accountable?: string;
+    pms?: string;
+    seed_quantity_type?: string;
 }

@@ -194,7 +194,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
             <hr />
         </div> : <></>}
         {products.map((newUserProduct, index) => {
-            return <ProductItem index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem} modalWithdrawal={modal === "WITHDRAWAL"}></ProductItem>
+            return <ProductItem index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></ProductItem>
         })}
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
             <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>

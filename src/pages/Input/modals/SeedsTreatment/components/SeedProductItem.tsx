@@ -10,11 +10,13 @@ import { Product } from "../../../../../models/Product";
 export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
     const [selectedProduct, setSelectedProduct] = useState({ id: 0 });
     const [quantity, setQuantity] = useState(0);
+    const [userHasProduct, setUserHasProduct] = useState(false);
 
     useEffect(() => {
         onHandleUpdate(index, { id: selectedProduct.id, quantity })
     }, [selectedProduct, quantity]);
     const { input } = useSelector((state: RootState) => state);
+
     return <div>
         <Row>
             <Col>
@@ -23,6 +25,11 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
                     <Typeahead
                     id="product_input"
                         onChange={(selected: any) => {
+                            const userProducts = input.inputs.filter(i => i.product?.name === selected[0].label)
+                            if (userProducts.length > 0) {
+                                setUserHasProduct(true);
+                            }
+
                             if (selected.length > 0) {
                                 setSelectedProduct({ id: selected[0].id });
                             }

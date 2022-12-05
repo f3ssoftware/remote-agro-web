@@ -10,7 +10,7 @@ import { ProductListItem } from "../../../../models/ProductListItem";
 import { UserProduct } from "../../../../models/UserProduct";
 import { unformatCurrency } from "../../../../utils/currencyFormat";
 
-export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdrawal }: { index: number, onHandleRemove: any, onHandleUpdate: any, modalWithdrawal: boolean }) {
+export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
     const { input } = useSelector((state: RootState) => state);
     const [productId, setProductId] = useState(0);
     const [userProductId, setUserProductId] = useState(0);
@@ -21,6 +21,10 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
     const [observation, setObservation] = useState("");
     const [accountable, setAccountable] = useState('');
     const [userHasProduct, setUserHasProduct] = useState(false);
+    const [isSeed, setIsSeed] = useState(false);
+    const [seedQuantityType, setSeedQuantityType] = useState('');
+    const [pms, setPms] = useState('');
+    const [treatment, setTreatment] = useState('NÃO TRATADA');
 
     useEffect(() => {
         const p: UserProduct = {
@@ -31,8 +35,14 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
             observations: observation,
             quantity: initialQuantity * 1000,
             total_price: initialCost * 100,
-            treatment: (modalWithdrawal ? 'RETIRADA' : null)
         };
+
+        if (isSeed) {
+            p.treatment = treatment;
+            p.pms = pms;
+            p.seed_quantity_type = seedQuantityType;
+        }
+
         if (userHasProduct) {
             p.user_product_id = userProductId;
         } else {
@@ -40,90 +50,136 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate, modalWithdr
         }
         onHandleUpdate(p, index, userHasProduct);
     }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation]);
-    return <Row style={{ marginTop: '2%' }}>
-        <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
-                <Typeahead
-                    id="product"
-                    onChange={(selected: any) => {
-                        if (selected.length > 0) {
-                            const p = selected[0];
-                            console.log(p);
-                            const userProducts = input.inputs.filter(i => i.product?.name === p.label)
-                            if (userProducts.length > 0) {
-                                setUserHasProduct(true);
-                                setUserProductId(userProducts[0].id!);
-                                setMeasureUnit(userProducts[0].measure_unit!);
+    return <div>
+        <Row style={{ marginTop: '2%' }}>
+            <Col>
+                <Form.Group className="mb-3" controlId="">
+                    <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
+                    <Typeahead
+                        id="product"
+                        onChange={(selected: any) => {
+                            if (selected.length > 0) {
+                                const p = selected[0];
+                                console.log(p);
+                                const userProducts = input.inputs.filter(i => i.product?.name === p.label)
+                                if (userProducts.length > 0) {
+                                    setUserHasProduct(true);
+                                    setUserProductId(userProducts[0].id!);
+                                    setMeasureUnit(userProducts[0].measure_unit!);
+                                } else {
+                                    if (p?.class === 'SEMENTE') {
+                                        setIsSeed(true);
+                                    }
+                                    setUserHasProduct(false);
+                                    setProductId(p.id);
+                                }
                             } else {
                                 setUserHasProduct(false);
-                                setProductId(p.id);
+                                onHandleRemove(index);
                             }
+                        }}
+                        options={input.generalProductsList.map((input) => { return { id: input.id, label: input?.name, class: input.class } })}
+                    />
+                </Form.Group>
+
+            </Col>
+            {!userHasProduct ? <Col>
+                <Form.Group className="mb-3" controlId="">
+                    <Form.Label style={{ color: '#fff' }}>Unidade Medida</Form.Label>
+                    <Form.Control type="text" onChange={(e) => {
+                        setMeasureUnit(e.target.value);
+                    }} />
+                </Form.Group>
+            </Col> : <></>}
+            <Col>
+                <Form.Group className="mb-3" controlId="">
+                    <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
+                    <Form.Control type="text" onChange={(e) => {
+                        setAccountable(e.target.value);
+                    }} />
+                </Form.Group>
+            </Col>
+            <Col>
+                <Form.Group className="mb-3" controlId="">
+                    <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
+                    <Form.Control type="number" onChange={(e) => {
+                        setInitialQuantity(Number(e.target.value));
+                    }} />
+                </Form.Group>
+            </Col>
+            <Col>
+                <Form.Group className="mb-3" controlId="">
+                    <Form.Label style={{ color: '#fff' }}>Custo</Form.Label>
+                    <Form.Control type="text" onBlur={(e) => {
+                        if (isNaN(Number(e.currentTarget.value))) {
+                            e.currentTarget.value = '';
                         } else {
-                            setUserHasProduct(false);
-                            onHandleRemove(index);
+                            setInitialCost(Number(e.currentTarget.value));
+                            e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
                         }
-                    }}
-                    options={input.generalProductsList.map((input) => { return { id: input.id, label: input?.name } })}
-                />
-            </Form.Group>
 
-        </Col>
-        {!userHasProduct ? <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Unidade Medida</Form.Label>
-                <Form.Control type="text" onChange={(e) => {
-                    setMeasureUnit(e.target.value);
-                }} />
-            </Form.Group>
-        </Col> : <></>}
-        <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
-                <Form.Control type="text" onChange={(e) => {
-                    setAccountable(e.target.value);
-                }} />
-            </Form.Group>
-        </Col>
-        <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
-                <Form.Control type="number" onChange={(e) => {
-                    setInitialQuantity(Number(e.target.value));
-                }} />
-            </Form.Group>
-        </Col>
-        <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Custo</Form.Label>
-                <Form.Control type="text" onBlur={(e) => {
-                    if (isNaN(Number(e.currentTarget.value))) {
-                        e.currentTarget.value = '';
-                        // const numeric = unformatCurrency(e.currentTarget.value);
-                        // setInitialCost(unformatCurrency(e.currentTarget.value));
-                        // e.currentTarget.value = numeric.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true });
-                    } else {
-                        setInitialCost(Number(e.currentTarget.value));
-                        e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
-                    }
+                    }} onKeyUp={(e) => {
+                        if (e.key === 'Backspace') {
+                            e.currentTarget.value = '';
+                        }
+                    }} />
+                </Form.Group>
+            </Col>
+            <Col>
+                <Form.Group className="mb-3" controlId="">
+                    <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
+                    <Form.Control type="text" onChange={(e) => setObservation(e.target.value)} />
+                </Form.Group>
+            </Col>
+            {index !== 0 ? <Col md={1}>
+                <Button variant="danger" onClick={() => {
+                    onHandleRemove(index);
+                }} style={{ marginTop: '45%' }}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></Button>
+            </Col> : <></>}
+        </Row>
+        <div style={{ paddingLeft: '4%', paddingRight: '4%'}}>
+            {!userHasProduct && isSeed ?
+                <Row>
+                    <Col>
+                        <Form.Group className="mb-3" controlId="">
+                            <Form.Label style={{ color: '#fff' }}>Kgs, sacos ou unidade</Form.Label>
+                            <Form.Select
+                                aria-label=""
+                                onChange={(e) => {
+                                    return setSeedQuantityType(e.target.value)
+                                }}
+                            >
+                                <option value="KG">KG</option>
+                                <option value="SACOS">SACOS</option>
+                                <option value="UNIDADE">UNIDADE</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group className="mb-3" controlId="">
+                            <Form.Label style={{ color: '#fff' }}>Tratamento</Form.Label>
+                            <Form.Select
+                                aria-label=""
+                                onChange={(e) => {
+                                    return setTreatment(e.target.value)
+                                }}
+                            >
+                                <option value="NÃO TRATADA">Não Tratada</option>
+                                <option value="EXTERNO">Externo</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group className="mb-3" controlId="">
+                            <Form.Label style={{ color: '#fff' }}>PMS (g)</Form.Label>
+                            <Form.Control type="text" onChange={(e) => {
+                                setPms(e.target.value);
+                            }} />
+                        </Form.Group>
+                    </Col>
+                </Row> :
+                <></>}
+        </div>
 
-                }} onKeyUp={(e) => {
-                    if (e.key === 'Backspace') {
-                        e.currentTarget.value = '';
-                    }
-                }} />
-            </Form.Group>
-        </Col>
-        <Col>
-            <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
-                <Form.Control type="text" onChange={(e) => setObservation(e.target.value)} />
-            </Form.Group>
-        </Col>
-        {index !== 0 ? <Col md={1}>
-            <Button variant="danger" onClick={() => {
-                onHandleRemove(index);
-            }} style={{ marginTop: '45%' }}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></Button>
-        </Col> : <></>}
-    </Row>
+    </div>
 }
