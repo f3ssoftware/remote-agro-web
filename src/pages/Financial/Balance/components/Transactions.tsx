@@ -85,11 +85,12 @@ export function Transactions() {
                         </Form>
                     </Col>
                 </Row>
-                <div className="flex-right" style={{ marginTop: '2%', marginBottom: '2%' }}>
+                <div className="flex-right" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '2%', marginBottom: '2%' }}>
+                    <h5>{`${startDate.toLocaleDateString('pt-BR')} até ${endDate.toLocaleDateString('pt-BR')}`}</h5>
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
                 </div>
                 <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px' }}>
-                    <Table striped bordered hover style={{tableLayout: 'fixed'}}>
+                    <Table striped bordered hover style={{ tableLayout: 'fixed' }}>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
                             <tr>
                                 <th>Data</th>
@@ -108,7 +109,7 @@ export function Transactions() {
                                 return <tr key={index}>
                                     <td>{new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                                     <td>{er.reference}</td>
-                                    <td style={{color: (er.expenses_invoice_id === null ? 'green' : 'red')}}>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                                    <td style={{ color: (er.expenses_invoice_id === null ? 'green' : 'red') }}>{Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                                     <td>{er.number}</td>
                                     <td>{er.cost_type}</td>
                                     <td>{er.observations}</td>
