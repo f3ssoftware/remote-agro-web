@@ -91,17 +91,28 @@ export function Transactions() {
                 </div>
                 <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px' }}>
                     <Table striped bordered hover style={{ tableLayout: 'fixed' }}>
+                    <colgroup>
+                            <col style={{width: '7%'}}></col>
+                            <col style={{width: '10%'}}></col>
+                            <col style={{width: '15%'}}></col>
+                            <col style={{width: '8%'}}></col>
+                            <col style={{width: '20%'}}></col>
+                            <col style={{width: '25%'}}></col>
+                            <col style={{width: '5%'}}></col>
+                            <col style={{width: '5%'}}></col>
+                            <col style={{width: '5%'}}></col>
+                    </colgroup>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
                             <tr>
-                                <th>Data</th>
-                                <th>Fornecedor/Cliente</th>
-                                <th>Valor</th>
-                                <th>NF</th>
-                                <th>Categoria</th>
-                                <th>Obs</th>
-                                <th>Pago</th>
-                                <th>Conciliado</th>
-                                <th>Ações</th>
+                                <th><small>Data</small></th>
+                                <th><small>Fornecedor/Cliente</small></th>
+                                <th><small>Valor</small></th>
+                                <th><small>NF</small></th>
+                                <th><small>Categoria</small></th>
+                                <th><small>Categoria</small></th>
+                                <th><small>Pago</small></th>
+                                <th><small>Conciliado</small></th>
+                                <th><small>Ações</small></th>
                             </tr>
                         </thead>
                         <tbody style={{ backgroundColor: '#fff', color: '#000', fontSize: '12px' }}>

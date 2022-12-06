@@ -13,9 +13,6 @@ export function NewPlotModal({show, handleClose}: {show: boolean, handleClose: a
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
             <NewPlot></NewPlot>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => {register(); handleClose();}}>Cadastrar</Button>
-            </div>
         </Modal.Body>
     </Modal >
 }

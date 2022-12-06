@@ -71,10 +71,6 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                     isValid = false;
                     invalidFields.push('measure_unit');
                 }
-                if(!userProduct.measure_unit) {
-                    isValid = false;
-                    invalidFields.push('measure_unit');
-                }
                 return isValid;
             }
         }

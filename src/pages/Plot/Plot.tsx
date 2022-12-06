@@ -3,7 +3,7 @@ import { Button, Card, Col, Container, Dropdown, Form, Row } from 'react-bootstr
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from '../..'
-import { asyncFetchFarms } from '../../stores/farm.store'
+import { asyncFetchFarms, selectAFarm } from '../../stores/farm.store'
 import { NewFarmModal } from './Modals/NewFarmModal'
 import { NewPlotModal } from './Modals/NewPlotModal'
 import { PrescriptionModal } from './Modals/PrescriptionModal'
@@ -35,9 +35,15 @@ export function Plot() {
   const [selectedFarm, setSelectedFarm]: any = useState({});
   const [selectedPlot, setSelectedPlot]: any = useState({});
 
+  const selectFarm = (farm: any) => {
+    setSelectedFarm(farm);
+    dispatch(selectAFarm(farm));
+  }
+
   useEffect(() => {
     dispatch(asyncFetchFarms());
     setSelectedFarm(farm?.farms[0]);
+    dispatch(selectAFarm(farm?.farms[0]));
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
@@ -60,21 +66,21 @@ export function Plot() {
 
                 <Dropdown.Menu>
                   {farm?.farms?.map((farm: any, index) => {
-                    return <Dropdown.Item key={index} onClick={() => setSelectedFarm(farm)}>{farm.name}</Dropdown.Item>
+                    return <Dropdown.Item key={index} onClick={() => selectFarm(farm)}>{farm.name}</Dropdown.Item>
                   })}
                 </Dropdown.Menu>
               </Dropdown>
             </div>
           </div>
           <div className="second-card-plot">
-              <span className="second-card-text-plot">Talhões </span>
-              <div>
-                <Button variant="success" className="second-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
-                  +
-                </Button>
-              </div>
-              <iframe src={selectedFarm?.map_link} width={'92%'} height={'75%'}></iframe>
+            <span className="second-card-text-plot">Talhões </span>
+            <div>
+              <Button variant="success" className="second-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
+                +
+              </Button>
             </div>
+            <iframe src={selectedFarm?.map_link} width={'92%'} height={'75%'}></iframe>
+          </div>
         </Col>
 
         <Col md={8} sm={8}>

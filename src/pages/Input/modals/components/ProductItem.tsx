@@ -35,6 +35,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
             observations: observation,
             quantity: initialQuantity * 1000,
             total_price: initialCost * 100,
+            treatment: null,
         };
 
         if (isSeed) {

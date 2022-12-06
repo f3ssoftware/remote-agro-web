@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, Col, ProgressBar, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { RootState } from "../../..";
+import { costTypesList } from "../../../utils/costTypes";
 import "./Balance.scss"
 import { BankAccounts } from "./components/BankAccounts";
 import { Cashflow } from "./components/Cashflow";
@@ -13,6 +14,7 @@ export function Balance() {
     const [inputsPercentual, setInputsPercentual] = useState(0);
     const [maintenancePercentual, setMaintenancePercentual] = useState(0);
     const [administrativePercentual, setAdministrativePercentual] = useState(0);
+
     const { financial } = useSelector((state: RootState) => state);
 
     useEffect(() => {
@@ -43,66 +45,31 @@ export function Balance() {
                     <Cashflow></Cashflow>
                 </Col>
                 <Col md={4}>
-                    <Row>
-                        <Col md={2}>
-
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Col md={10}>
-                                    <ProgressBar variant="success" now={inputsPercentual} />
-                                </Col>
+                    <div style={{ height: '300px', overflowY: 'scroll' }}>
+                        {costTypesList.map(costType => {
+                            return <Row>
                                 <Col md={2}>
-                                    <span className="percentage-span">{`${inputsPercentual.toFixed(1)}%`}</span>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: '2%' }}>
-                                <Col>
-                                    <span style={{color: '#fff'}}>Insumos</span>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={2}>
 
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Col md={10}>
-                                    <ProgressBar variant="success" now={maintenancePercentual} />
                                 </Col>
-                                <Col md={2}>
-                                    <span className="percentage-span">{`${maintenancePercentual.toFixed(1)}%`}</span>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: '2%' }}>
                                 <Col>
-                                    <span style={{color: '#fff'}}>Manutenção</span>
+                                    <Row>
+                                        <Col md={10}>
+                                            <ProgressBar variant="success" now={(financial.expensesRevenue.filter(exp => exp.cost_type === costType.value).length / financial.expensesRevenue.length) * 100} />
+                                        </Col>
+                                        <Col md={2}>
+                                            <span className="percentage-span">{`${((financial.expensesRevenue.filter(exp => exp.cost_type === costType.value).length / financial.expensesRevenue.length) * 100).toFixed(1)}%`}</span>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginTop: '2%' }}>
+                                        <Col>
+                                            <span style={{ color: '#fff' }}>{costType.label}</span>
+                                        </Col>
+                                    </Row>
                                 </Col>
                             </Row>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={2}>
+                        })}
+                    </div>
 
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Col md={10}>
-                                    <ProgressBar variant="success" now={administrativePercentual} />
-                                </Col>
-                                <Col md={2}>
-                                    <span className="percentage-span">{`${administrativePercentual.toFixed(1)}%`}</span>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: '2%' }}>
-                                <Col>
-                                <span style={{color: '#fff'}}>Administrativo</span>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
                 </Col>
             </Row>
         </div>
