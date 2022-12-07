@@ -19,6 +19,20 @@ export function SefazInvoice() {
     const [number, setNumber] = useState('');
     const [showModalCertificates, setShowModalCertificates] = useState(false);
     const [externalInvoiceId, setExternalInvoiceId] = useState(0);
+    const [findTerm, setFindTerm] = useState('');
+
+    const find = () =>{
+        setExternalInvoices(financial?.externalInvoices?.filter((ref: ExternalInvoice) =>{
+            if(ref!.issuer_name!.toUpperCase().includes(findTerm.toUpperCase())){
+                return ref;
+            }
+            return null;
+        }))
+    }
+
+    useEffect(() =>{
+        find();
+    }, [findTerm])
 
     useEffect(() => {
         dispatch(asyncFetchSefaz());
@@ -54,6 +68,11 @@ export function SefazInvoice() {
                 <Col>
                     <Button variant="success" onClick={() => setShowModalCertificates(true)}>Certificados</Button>
                 </Col>
+                <Col md={6} sm={5} style={{marginBottom: '2%'}}>
+                            <Form>
+                                <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px' }} placeholder="Pesquisar" onChange={(e) => setFindTerm(e.target.value)}></Form.Control>
+                            </Form>
+                </Col>
             </Row>
             <Table striped bordered hover>
                 <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
@@ -71,7 +90,7 @@ export function SefazInvoice() {
                         return <tr key={index}>
                             <td>{new Date(extInv?.issued_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                             <td>{extInv.issuer_name}</td>
-                            <td>{Number(extInv.total_value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                            <td>{extInv.issuer_document}</td>
                             <td>{extInv.nfe_key!.slice(28, 33)}</td>
                             <td>{Number(extInv.total_value)!.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             <td><Button className="launch-btn" disabled={extInv.expenses_invoice_id !== null} variant="success" onClick={() => {
