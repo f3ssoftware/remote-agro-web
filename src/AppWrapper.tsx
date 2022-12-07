@@ -15,7 +15,8 @@ import { FarmInput } from "./pages/Input/FarmInput";
 import { Login } from "./pages/Login/Login";
 import { Plot } from "./pages/Plot/Plot";
 import { popMessages } from "./stores/messaging.store";
-import { Planning } from "./pages/Planning/Panning";
+import { Planning } from "./pages/Planning/Planning";
+import { Maintenance } from "./pages/Maintenance/Maintenance";
 
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
@@ -56,6 +57,9 @@ export function AppWrapper() {
         </AppStructure>
         case "planning": return <AppStructure loading={loading.requests.length > 0}>
             <Planning></Planning>
+        </AppStructure>
+         case "maintenance": return <AppStructure loading={loading.requests.length > 0}>
+            <Maintenance></Maintenance>
         </AppStructure>
         default: return <div>403 not found</div>
     }
