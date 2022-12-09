@@ -118,10 +118,10 @@ export function Planning() {
             </Card.Body>
             <Card.Footer className="card-footer">
               <div className="frist-box">
-                <span>Valor recebido</span>
+                <span>Custos diretos</span>
               </div>
               <div className="second-box">
-                <span>Valor a receber</span>
+                <span>Custos indiretos</span>
               </div>
             </Card.Footer>
           </Card>

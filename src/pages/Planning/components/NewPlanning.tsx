@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Typeahead } from "react-bootstrap-typeahead";
 
 export function NewPlanning({show, handleClose}: {show: boolean, handleClose: any}){
-    const [contractName,setContractName] = useState('');
+    const [referenceName,setReferenceName] = useState('');
     const [contractId,setContractId] = useState(0);
     const [description,setDescription] = useState('');
     const [bags,setBags] = useState(0);
@@ -40,8 +40,8 @@ export function NewPlanning({show, handleClose}: {show: boolean, handleClose: an
         <Row  style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
-                        <Form.Label style={{ color: '#fff' }}>Nome para o contrato</Form.Label>
-                        <Form.Control type="text" onChange={(e) => {setContractName(e.target.value);}} />
+                        <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
+                        <Form.Control type="text" onChange={(e) => {setReferenceName(e.target.value);}} />
                     </Form.Group>
                 </Col>
                 <Col>
