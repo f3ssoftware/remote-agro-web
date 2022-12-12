@@ -34,7 +34,7 @@ const financialStore = createSlice({
         cultivations: initialCultivations,
         externalInvoices: initialExternalInvoices,
         contracts: initialContracts
-        
+
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -59,13 +59,41 @@ const financialStore = createSlice({
         setExternalInvoices(state, action) {
             state.externalInvoices = action.payload;
         },
-        setContracts(state, action){
+        setContracts(state, action) {
             state.contracts = action.payload
+        },
+        filterByButton(state, action) {
+            // const today = new Date()
+            // const nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+            // dispatch(asyncFetchExpensesAndRevenues(1, 300, `${today.getDate()}/${today.getMonth() + 1}/${today.getUTCFullYear()}`, `${nextMonth.getDate()}/${nextMonth.getMonth() + 1}/${nextMonth.getUTCFullYear()}`));
+            switch (action.payload) {
+                case 'billings': {
+                    state.expensesRevenue = state.expensesRevenue.filter(expense => {
+                        if (expense.contract_id) {
+                            return expense;
+                        }
+                    });
+                } break;
+                case 'payments': {
+                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
+                        if (exp.expenses_invoice_id) {
+                            return exp;
+                        }
+                    });
+                } break;
+                case 'due_dated': {
+                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
+                        if (new Date(exp.payment_date!) < new Date() && !exp.is_paid && exp.expenses_invoice_id) {
+                            return exp;
+                        }
+                    })
+                }
+            }
         }
     },
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, filterByButton } =
     financialStore.actions;
 export default financialStore.reducer;
 

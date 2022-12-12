@@ -1,49 +1,80 @@
-$ra-card-billing-bg: #168E8E;
+$ra-card-billing-bg: #168e8e;
+$ra-card-billing-bg-hover: #16e1e1;
 $ra-card-payments-bg: #848419;
+$ra-card-payments-bg-hover: #cfcf21;
 $ra-card-duedated-bg: #911414;
-$total-balance-btn-bg: #7C542B;
+$ra-card-duedated-bg-hover: #d81919;
+$total-balance-btn-bg: #7c542b;
 
 .balance-content {
-    // padding-left: 5%;
-    padding-right: 2%;
-    max-height: 70vh;
+  // padding-left: 5%;
+  padding-right: 2%;
+  max-height: 70vh;
 }
 .ra-card-billing {
-    background-color: $ra-card-billing-bg;
-    border: none;
-    color: #fff;
-    height: 100%;
+  background-color: $ra-card-billing-bg;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-billing:hover {
+  background-color: $ra-card-billing-bg-hover;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
 }
 
 .ra-card-payments {
-    background-color: $ra-card-payments-bg;
-    border: none;
-    color: #fff;
-    height: 100%;
+  background-color: $ra-card-payments-bg;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-payments:hover {
+  background-color: $ra-card-payments-bg-hover;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
 }
 
 .ra-card-duedated {
-    background-color: $ra-card-duedated-bg;
-    border: none;
-    color: #fff;
-    height: 100%;
+  background-color: $ra-card-duedated-bg;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
 }
 
+.ra-card-duedated:hover {
+  background-color: $ra-card-duedated-bg-hover;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
 
 .total-balance-btn {
-    background-color: $total-balance-btn-bg;
-    border: none;
-    font-weight: bold;
-    line-height: 40px;
+  background-color: $total-balance-btn-bg;
+  border: none;
+  font-weight: bold;
+  line-height: 40px;
+  cursor: pointer;
 }
 
 .total-balance-btn:hover {
-    background-color: $total-balance-btn-bg;
-    border: none;
-    font-weight: bold;
-    line-height: 40px;
+  background-color: $total-balance-btn-bg;
+  border: none;
+  font-weight: bold;
+  line-height: 40px;
+  cursor: pointer;
 }
 
 .percentage-span {
-    color: #fff;
+  color: #fff;
 }
