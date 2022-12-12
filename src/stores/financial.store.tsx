@@ -243,14 +243,15 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
     };
 }
 
-export function asyncPayContract(id: number, bankAccountId: number) {
+export function asyncPayContract(id: number, bankAccountId: number, amount: number) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.put(
                 `https://remoteapi.murilobotelho.com.br/contracts/${id}`,
                 {
                     bank_account_id: bankAccountId,
-                    was_paid: true
+                    was_paid: true,
+                    amount,
                 },
                 {
                     headers: {
@@ -408,6 +409,7 @@ export function asyncRegisterContract(contract: Contract) {
                     type: "success",
                 })
             );
+            return 0;
         } catch (err: any) {
             console.log(err);
             dispatch(

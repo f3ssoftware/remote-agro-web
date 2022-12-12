@@ -4,25 +4,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncPayContract, asyncPayExpense } from "../../../../stores/financial.store";
 
-export function PayExpenseModal({ show, handleClose, expenseId, contractId }: { show: boolean, handleClose: any, expenseId: number, contractId: number }) {
+export function PayExpenseModal({ show, handleClose, expenseId, contractId, amount }: { show: boolean, handleClose: any, expenseId: number, contractId: number, amount: number }) {
     const [bankAccountId, setBankAccountId] = useState(0);
     const { financial, seasons } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
 
     const payExpense = async () => {
-        if(expenseId && expenseId !== 0) {
+        if (expenseId && expenseId !== 0) {
             dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id))
         }
 
-        if(contractId && contractId !== 0) {
-            dispatch(asyncPayContract(contractId, bankAccountId));
+        if (contractId && contractId !== 0) {
+            dispatch(asyncPayContract(contractId, bankAccountId, amount));
         }
-        
+
         await dispatch(asyncFetchBankAccountsData);
         handleClose();
     }
 
-    return <Modal backdrop = {'static'} show={show} onHide={handleClose}>
+    return <Modal backdrop={'static'} show={show} onHide={handleClose}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
             <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
-export function InstallmentForm({ index, onUpdate }: { index: number, onUpdate: any }) {
-    const [amount, setAmount] = useState(0);
-    const [selectedDate, setSelectedDate] = useState(new Date());
+export function InstallmentForm({ index, onUpdate, initialAmount }: { index: number, onUpdate: any, initialAmount: number }) {
+    const [amount, setAmount] = useState(initialAmount);
+    const [selectedDate, setSelectedDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()));
 
     useEffect(() => {
         onUpdate({
@@ -18,6 +18,7 @@ export function InstallmentForm({ index, onUpdate }: { index: number, onUpdate: 
             <Form.Group className="mb-3" controlId="">
                 <Form.Label >Parcela {index + 1} </Form.Label>
                 <Form.Control
+                    value={amount}
                     type="text"
                     onBlur={(e) => {
                         console.log(e.currentTarget.value);
