@@ -21,10 +21,10 @@ export function CultivarItem({ cultivar, index, onHandleUpdate, onHandleRemove, 
         />
         {showArea ? <Form.Group className="mb-3" controlId="">
             <Form.Label> Área aplicada do cultivar {cultivar.name}</Form.Label>
-            <Form.Range defaultValue={area} onChange={(e) => {
+            <Form.Control type="number" defaultValue={area} min={0} max={maxArea} onChange={(e) => {
                 setArea(Number(e.target.value));
                 onHandleUpdate(cultivar.id, e.target.value);
-            }} min={0} max={maxArea} step={0.1} />
+            }}  />
             {`${area}/${maxArea}`}  {maxArea === 0 ? ` - Informe a área do talhão` : ``}
         </Form.Group> : <></>}
 

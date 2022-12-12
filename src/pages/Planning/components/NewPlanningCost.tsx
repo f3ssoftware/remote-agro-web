@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 // import { RootState } from '../../../../index'
 // import { Contract } from "../../../../models/Contract";
 // import { Cultivation } from "../../../../models/Cultivation"
-import { Typeahead } from 'react-bootstrap-typeahead'
 
 export function NewPlanningCost({
   show,
@@ -28,14 +27,12 @@ export function NewPlanningCost({
   const [labor, setLabor] = useState(0)
   const [storage, setStorage] = useState(0)
   const [restaurant, setRestaurant] = useState(0)
-  const [several, setSeveral] = useState(0)
+  const [diverse, setDiverse] = useState(0)
   const [rent, setRent] = useState(0)
   const [outsourced, setOutsourced] = useState(0)
   const [others, setOthers] = useState(0)
   const [key, setKey] = useState('home')
   const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const [selectedCultivations, setSelectedCultivations]: any = useState({})
   // const { financial,seasons } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
 
@@ -65,24 +62,13 @@ export function NewPlanningCost({
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
-              Inicio do contrato
+              Ano
             </Form.Label>
             <DatePicker
               locale={pt}
               dateFormat="dd/MM/yyyy"
               selected={startDate}
               onChange={(date: Date) => setStartDate(date)}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Fim do contrato</Form.Label>
-            <DatePicker
-              locale={pt}
-              dateFormat="dd/MM/yyyy"
-              selected={endDate}
-              onChange={(date: Date) => setEndDate(date)}
             />
           </Form.Group>
         </Col>
@@ -206,7 +192,7 @@ export function NewPlanningCost({
                 <Form.Control
                   type="number"
                   onChange={(e) => {
-                    setSeveral(Number(e.target.value))
+                    setDiverse(Number(e.target.value))
                   }}
                 />
               </Form.Group>
