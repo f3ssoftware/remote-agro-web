@@ -1,3 +1,5 @@
+import { PlanningCost } from "./PlanningCost";
+
 export class Planning {
     constructor(
         public id: number,
@@ -10,6 +12,7 @@ export class Planning {
         public deleted_at: string,
         public createdAt: string,
         public updatedAt: string,
-        public season: null
+        public season: null,
+        public planning: PlanningCost[]
     ) { }
 }

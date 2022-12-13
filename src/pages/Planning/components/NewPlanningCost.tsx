@@ -15,7 +15,6 @@ export function NewPlanningCost({
 }) {
   const [referenceName, setReferenceName] = useState('')
   const [maintenance, setMaintenance] = useState(0)
-  const [description, setDescription] = useState('')
   const [diesel, setDiesel] = useState(0)
   const [gas, setGas] = useState(0)
   const [arla, setArla] = useState(0)
