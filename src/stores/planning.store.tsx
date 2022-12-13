@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
+import { PlanningCost } from "../models/PlanningCost";
 
-const initialPlanningData: any[] = []
+const initialPlanningData: PlanningCost[] = []
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
