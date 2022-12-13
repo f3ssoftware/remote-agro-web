@@ -25,6 +25,8 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
   const [installmentsQuantity, setInstallmentsQuantity] = useState(0);
   const [installments, setInstallments]: any = useState({});
   const [externalInvoiceId, setExternalInvoiceId] = useState(0);
+  const [recurrencyDate, setRecurrencyDate] = useState(new Date());
+  const [recurrencyQuantity, setRecurrencyQuantity] = useState(1)
 
   useEffect(() => {
     dispatch(asyncFetchPlannings());
@@ -47,7 +49,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
     setInstallments(installmentsFromChildren);
 
   }
-  const register = () => {
+  const register = async () => {
     const exp: ExpenseInvoice = {
       amount: Number(amount),
       number: number.toString(),
@@ -62,17 +64,33 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
     }
 
     switch (paymentMethod) {
+      case 'one_time': {
+        await dispatch(asyncManualRegisterExpense(exp));
+        navigate('financial/balance');
+      } break;
       case 'installments': {
-        exp.installments = installments
+        exp.installments = installments;
+        await dispatch(asyncManualRegisterExpense(exp));
+        navigate('financial/balance');
+      } break;
+      case 'recurrency': {
+        for (let i = 0; i < recurrencyQuantity; i++) {
+          exp.due_date = new Date(recurrencyDate.getFullYear(), recurrencyDate.getMonth() + i, recurrencyDate.getDate()).toISOString();
+          await dispatch(asyncManualRegisterExpense(exp));
+          navigate('financial/balance');
+        }
+      } break;
+      default: {
+        await dispatch(asyncManualRegisterExpense(exp));
+        navigate('financial/balance');
       }
     }
-    dispatch(asyncManualRegisterExpense(exp));
-    navigate('financial/balance');
+
   }
 
   const renderPaymentConditionForm = () => {
     switch (paymentMethod) {
-      case 'SEM_PAGAMENTO':
+      case 'no_payment':
       case 'one_time': {
         return <Col>
           <Form.Group className="mb-3" controlId="">
@@ -98,12 +116,15 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
               }}
             />
           </Form.Group>
-          <Installments installmentsQuantity={installmentsQuantity} onUpdateInstallments={updateInstallments}></Installments>
+          <Installments installmentsQuantity={installmentsQuantity} onUpdateInstallments={updateInstallments} totalAmount={Number(amount)}></Installments>
         </Col>
       }
-      case 'GASTO_MENSAL': {
+      case 'recurrency': {
         return <Col>
-          <MensalExpense></MensalExpense>
+          <MensalExpense onHandleUpdate={(paymentDate: Date, recurrencyQuantity: number) => {
+            setRecurrencyDate(paymentDate);
+            setRecurrencyQuantity(recurrencyQuantity);
+          }}></MensalExpense>
         </Col>
       }
     }
@@ -224,8 +245,8 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
             >
               <option value={"one_time"}>Á vista</option>
               <option value={"installments"}>A prazo</option>
-              <option value={"GASTO_MENSAL"}>Gasto mensal</option>
-              <option value={"SEM_PAGAMENTO"}>Sem necessidade de pagamento</option>
+              <option value={"recurrency"}>Gasto mensal</option>
+              <option value={"no_payment"}>Sem necessidade de pagamento</option>
             </Form.Select>
           </Form.Group>
         </Col>

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { Contract } from '../../../../models/Contract'
 import { asyncFetchCultivations, asyncRegisterContract } from '../../../../stores/financial.store'
+import { useNavigate } from 'react-router-dom'
 
 export function IncomeOthers() {
   const { financial, seasons } = useSelector((state: RootState) => state);
@@ -18,6 +19,7 @@ export function IncomeOthers() {
   const [description, setDescription] = useState('')
   const [cultivation, setCultivation] = useState(new Cultivation());
   const [code, setCode] = useState('');
+  const naviate = useNavigate();
 
   const dispatch = useDispatch<any>();
 
@@ -28,7 +30,7 @@ export function IncomeOthers() {
     console.log(receiveDate)
   }, [reference, totalValue, receiveDate, description])
 
-  const register = () => {
+  const register = async () => {
     const contract: Contract = {
       amount: totalValue,
       code,
@@ -44,7 +46,8 @@ export function IncomeOthers() {
       type: "OTHER"
     }
 
-    dispatch(asyncRegisterContract(contract));
+    await dispatch(asyncRegisterContract(contract));
+    naviate('/financial/balance');
   }
   return (
     <div>

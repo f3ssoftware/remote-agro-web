@@ -9,6 +9,7 @@ import { Cultivation } from "../../../../models/Cultivation";
 import { Contract } from "../../../../models/Contract";
 import { start } from "repl";
 import { Typeahead } from "react-bootstrap-typeahead";
+import { useNavigate } from "react-router-dom";
 
 
 export function IncomeContracts() {
@@ -22,8 +23,9 @@ export function IncomeContracts() {
     const [description, setDescription] = useState('');
     const [cultivation, setCultivation] = useState(new Cultivation());
     const dispatch = useDispatch<any>();
+    const navigate = useNavigate();
 
-    const register = () => {
+    const register = async () => {
         const contract: Contract = {
             amount: contractValue*100,
             code: contractId.toString(),
@@ -39,7 +41,8 @@ export function IncomeContracts() {
             type: "CONTRACT"
         }
 
-        dispatch(asyncRegisterContract(contract));
+        await dispatch(asyncRegisterContract(contract));
+        navigate('/financial/balance');
     }
     useEffect(() => {
         dispatch(asyncFetchCultivations());

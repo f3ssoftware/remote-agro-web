@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap"
 import { InstallmentForm } from "./InstallmentForm"
 
-export function Installments({ installmentsQuantity, onUpdateInstallments }: { installmentsQuantity: number, onUpdateInstallments: any }) {
+export function Installments({ installmentsQuantity, onUpdateInstallments, totalAmount }: { installmentsQuantity: number, onUpdateInstallments: any, totalAmount: number }) {
     const [installments, setInstallments]: any = useState([]);
     const onUpdate = (installment: any, index: number) => {
         const newInstallments = [...installments];
@@ -16,7 +16,7 @@ export function Installments({ installmentsQuantity, onUpdateInstallments }: { i
         {new Array(installmentsQuantity).fill('').map((installment, index) => {
             return <Row>
                 <Col>
-                    <InstallmentForm index={index} onUpdate={onUpdate}></InstallmentForm>
+                    <InstallmentForm index={index} onUpdate={onUpdate} initialAmount={totalAmount / installmentsQuantity}></InstallmentForm>
                 </Col>
             </Row>
         })}

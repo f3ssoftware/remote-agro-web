@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../..";
-import { asyncFetchExpensesInvoicesData } from "../../../../stores/financial.store";
+import { asyncFetchExpensesInvoicesData, filterByButton } from "../../../../stores/financial.store";
 import "../Balance.scss";
 
 export function WalletBalance() {
@@ -17,7 +17,7 @@ export function WalletBalance() {
             {/* <Card.Title>Carteira</Card.Title> */}
             <Row>
                 <Col md={4}>
-                    <Card className="ra-card-billing">
+                    <Card className="ra-card-billing" onClick={() => dispatch(filterByButton('billings'))}>
                         <Card.Body>
                             <h6>Contas a Receber ({financial?.expensesInvoiceData?.unpaidContractsQuantity})</h6>
                             <Row>
@@ -29,7 +29,7 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={4}>
-                    <Card className="ra-card-payments">
+                    <Card className="ra-card-payments" onClick={() => dispatch(filterByButton('payments'))}>
                         <Card.Body>
                             <h6>Contas a Pagar ({financial?.expensesInvoiceData?.unpaidExpensesInvoicesQuantity})</h6>
                             <Row>
@@ -41,7 +41,7 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={4}>
-                    <Card className="ra-card-duedated">
+                    <Card className="ra-card-duedated" onClick={() => dispatch(filterByButton('due_dated'))}>
                         <Card.Body>
                             <h6>Contas Vencidas ({financial?.expensesInvoiceData?.expiredExpensesInvoicesQuantity! + financial.expensesInvoiceData.expiredContractsQuantity!})</h6>
                             <Row>
