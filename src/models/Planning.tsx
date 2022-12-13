@@ -13,6 +13,6 @@ export class Planning {
         public createdAt: string,
         public updatedAt: string,
         public season: null,
-        public planning: PlanningCost[]
+        public plannings: PlanningCost[]
     ) { }
 }
