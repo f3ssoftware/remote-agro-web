@@ -5,6 +5,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import pt from 'date-fns/locale/pt-BR'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
+import { Planning } from '../../../models/Planning'
+import { asyncNewPlannings, asyncNewPlanningsCost } from '../../../stores/planning.store'
+import { PlanningCost } from '../../../models/PlanningCost'
+import { die } from 'immer/dist/internal'
 
 export function NewPlanningCost({
   show,
@@ -47,7 +51,38 @@ export function NewPlanningCost({
   ]
 
   const register = () => {
-    console.log('teste')
+    const plannings: Planning = {
+        name: referenceName,
+        id: 0,
+        owner_id: 0,
+        season_id: 0,
+        season_year: outcomeYear,
+        user_id: 0,
+        type: 'Custos Indiretos',
+        deleted_at: '',
+        createdAt: '',
+        updatedAt: '',
+        season: null,
+        plannings: []
+    }
+    const cost: PlanningCost ={
+        administrative_amount: administrative,
+        arla_amount: arla,
+        canteen_amount: restaurant,
+        conservation_amount: conservation,
+        diesel_amount: diesel,
+        gasoline_amount: gas,
+        labor_amount: labor,
+        maintenance_amount: maintenance,
+        mouth: 0,
+        others_amount: others,
+        outsource_amount: outsourced,
+        rent_amount: rent,
+        storage_amount: storage,
+        year: ''
+    }
+    dispatch(asyncNewPlanningsCost(cost));
+    dispatch(asyncNewPlannings(plannings));
     handleClose();
   }
 
