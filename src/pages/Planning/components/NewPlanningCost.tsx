@@ -48,6 +48,7 @@ export function NewPlanningCost({
 
   const register = () => {
     console.log('teste')
+    handleClose();
   }
 
   useEffect(() => {

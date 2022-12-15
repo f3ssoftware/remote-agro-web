@@ -129,8 +129,7 @@ export function Planning() {
       </Row>
       <NewPlanningModal
         show={showNewPlanningModal}
-        handleClose={() => setShowNewPlannningModal(false)}
-      ></NewPlanningModal>
+        handleClose={() => setShowNewPlannningModal(false)}></NewPlanningModal>
     </Container>
   )
 }

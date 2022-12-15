@@ -19,11 +19,11 @@ const planningStore = createSlice({
 
 export const { setPlanningData} = planningStore.actions;
 export default planningStore.reducer;
-export function asyncFetchPlanning() {
+export function asyncFetchPlanning(planningData: Planning) {
     return async function (dispatch: AppDispatch) {
       try {
         const results = await axios.get(
-          "https://remoteapi.murilobotelho.com.br/plannings",
+          "https://remoteapi.murilobotelho.com.br/plannings", 
           {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`,

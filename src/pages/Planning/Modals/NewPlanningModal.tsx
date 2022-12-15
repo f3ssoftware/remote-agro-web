@@ -9,8 +9,10 @@ export function NewPlanningModal({
 }: {
   show: boolean
   handleClose: any
+
 }) {
     const [registrationType, setRegistrationType] = useState(1);
+
 
   return (
     <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>
@@ -42,9 +44,9 @@ export function NewPlanningModal({
         <Row>
           <Col>
             {registrationType === 1 ? (
-              <NewPlanning show={false} handleClose={undefined}></NewPlanning>
+              <NewPlanning show={false} handleClose={() => handleClose()} index={0} onHandleRemove={undefined}></NewPlanning>
             ) : (
-              <NewPlanningCost show={false} handleClose={undefined}></NewPlanningCost>
+              <NewPlanningCost show={false} handleClose={() => handleClose()}></NewPlanningCost>
             )}
           </Col>
         </Row>

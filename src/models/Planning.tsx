@@ -1,4 +1,5 @@
 import { PlanningCost } from "./PlanningCost";
+import { PlanningInput } from "./PlanningInput";
 
 export class Planning {
     constructor(
@@ -13,6 +14,6 @@ export class Planning {
         public createdAt: string,
         public updatedAt: string,
         public season: null,
-        public plannings: PlanningCost[]
+        public plannings: PlanningCost[] | PlanningInput[]
     ) { }
 }
