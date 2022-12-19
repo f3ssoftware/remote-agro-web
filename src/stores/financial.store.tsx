@@ -177,6 +177,7 @@ export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fr
                 }
             });
             dispatch(setExpensesRevenue(result.data.content));
+            return 0;
         } catch (err) {
             console.log(err);
         }
@@ -495,6 +496,15 @@ export function asyncFetchCultivations() {
                 })
             );
         }
+    };
+}
+
+export function asyncFilterByButton(filter: string) {
+    return async function (dispatch: AppDispatch) {
+        const actualYear = new Date().getFullYear();
+        const actualMonth = new Date().getMonth();
+        await dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+        dispatch(filterByButton(filter))
     };
 }
 
