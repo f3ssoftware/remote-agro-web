@@ -65,23 +65,23 @@ export function NewPlanningCost({
         season: null,
         plannings: []
     }
-    const cost: PlanningCost ={
-        administrative_amount: administrative,
-        arla_amount: arla,
-        canteen_amount: restaurant,
-        conservation_amount: conservation,
-        diesel_amount: diesel,
-        gasoline_amount: gas,
-        labor_amount: labor,
-        maintenance_amount: maintenance,
-        mouth: 0,
-        others_amount: others,
-        outsource_amount: outsourced,
-        rent_amount: rent,
-        storage_amount: storage,
-        year: ''
-    }
-    dispatch(asyncNewPlanningsCost(cost));
+    // const cost: PlanningCost ={
+    //     administrative_amount: administrative,
+    //     arla_amount: arla,
+    //     canteen_amount: restaurant,
+    //     conservation_amount: conservation,
+    //     diesel_amount: diesel,
+    //     gasoline_amount: gas,
+    //     labor_amount: labor,
+    //     maintenance_amount: maintenance,
+    //     mouth: 0,
+    //     others_amount: others,
+    //     outsource_amount: outsourced,
+    //     rent_amount: rent,
+    //     storage_amount: storage,
+    //     year: ''
+    // }
+    // dispatch(asyncNewPlanningsCost(cost));
     dispatch(asyncNewPlannings(plannings));
     handleClose();
   }
