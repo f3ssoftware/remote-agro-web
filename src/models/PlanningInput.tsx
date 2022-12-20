@@ -3,11 +3,11 @@ export class PlanningInput {
         public measure_unit?: string,
         public observations?: string,
         public payment_date?: string,
-        public pms?: null,
+        public pms?: string,
         public product_id?: string,
         public quantity?: number,
-        public seed_quantity_type?: null,
+        public seed_quantity_type?: string,
         public total_price?: number,
-        public treatment?: null
+        public treatment?: any
     ) { }
 }
