@@ -32,6 +32,7 @@ export function NewPlanningTab({
         canteen_amount: restaurant,
         conservation_amount: conservation,
         diesel_amount: diesel,
+        diverse_amount:diverse,
         gasoline_amount: gas,
         labor_amount: labor,
         maintenance_amount: maintenance,
@@ -167,7 +168,7 @@ export function NewPlanningTab({
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="">
-                      <Form.Label style={{ color: '#fff' }}>Outros</Form.Label>
+                      <Form.Label style={{ color: '#fff' }}>Diversos</Form.Label>
                       <Form.Control
                         type="number"
                         onChange={(e) => {

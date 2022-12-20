@@ -37,7 +37,7 @@ export function NewPlanningCost({
   ]
 
   const register = () => {
-    const plannings: Planning = {
+    const planning: Planning = {
         name: referenceName,
         id: 0,
         owner_id: 0,
@@ -49,9 +49,9 @@ export function NewPlanningCost({
         createdAt: '',
         updatedAt: '',
         season: null,
-        plannings: []
+        plannings: plannings
     }
-    dispatch(asyncNewPlannings(plannings));
+    dispatch(asyncNewPlannings(planning));
     handleClose();
   }
 
@@ -59,10 +59,10 @@ export function NewPlanningCost({
     setOutcomeYear(seasons.selectedSeason.year)
   }, [])
 
-const onUpdateItem = (product: PlanningCost, index: number) => {
+const onUpdateItem = (planning: PlanningCost, index: number) => {
   const planningArr = [...plannings];
   planningArr.splice(index, 1);
-  planningArr.push(product);
+  planningArr.push(planning);
   setPlannings(planningArr);
 }
 

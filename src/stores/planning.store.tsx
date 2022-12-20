@@ -72,7 +72,6 @@ export function asyncFetchPlanning() {
               message: "Planejamento cadastrado com sucesso",
               type: "success",
           }));
-          dispatch(setPlanningInput(result.data));
         } catch (err: any) {
             console.log(err);
             dispatch(
@@ -101,7 +100,6 @@ export function asyncNewPlanningsCost(others: PlanningCost) {
             message: "Planejamento cadastrado com sucesso",
             type: "success",
         }));
-        dispatch(setPlanningCost(result.data));
       } catch (err: any) {
           console.log(err);
           dispatch(
@@ -129,7 +127,6 @@ export function asyncNewPlannings(register: Planning) {
             message: "Planejamento cadastrado com sucesso",
             type: "success",
         }));
-        dispatch(setPlannings(result.data));
       } catch (err: any) {
           console.log(err);
           dispatch(

@@ -5,6 +5,7 @@ export class PlanningCost {
         public canteen_amount?: number,
         public conservation_amount?: number,
         public diesel_amount?: number,
+        public diverse_amount?: number,
         public gasoline_amount?: number,
         public labor_amount?: number,
         public maintenance_amount?: number,
