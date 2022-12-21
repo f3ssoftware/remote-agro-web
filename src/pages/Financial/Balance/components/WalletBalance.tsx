@@ -14,11 +14,10 @@ export function WalletBalance() {
     return <Card className="ra-card">
         <Card.Body>
             <h4>Carteira</h4>
-            {/* <Card.Title>Carteira</Card.Title> */}
             <Row>
                 <Col md={4}>
                     <Card className="ra-card-billing" onClick={() => {
-                        dispatch(asyncFilterByButton('billings'))
+                        dispatch(asyncFilterByButton('billings', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
                             <h6>Contas a Receber ({financial?.expensesInvoiceData?.unpaidContractsQuantity})</h6>
@@ -32,7 +31,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={4}>
                     <Card className="ra-card-payments" onClick={() => {
-                        dispatch(asyncFilterByButton('payments'))
+                        dispatch(asyncFilterByButton('payments', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
                             <h6>Contas a Pagar ({financial?.expensesInvoiceData?.unpaidExpensesInvoicesQuantity})</h6>
@@ -46,7 +45,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={4}>
                     <Card className="ra-card-duedated" onClick={async () => {
-                        dispatch(asyncFilterByButton('due_dated'))
+                        dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
                             <h6>Contas Vencidas ({financial?.expensesInvoiceData?.expiredExpensesInvoicesQuantity! + financial.expensesInvoiceData.expiredContractsQuantity!})</h6>

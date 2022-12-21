@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap"
 import { InstallmentForm } from "./InstallmentForm"
 
@@ -9,11 +9,18 @@ export function Installments({ installmentsQuantity, onUpdateInstallments, total
         newInstallments.splice(index, 1);
         newInstallments.push(installment);
         setInstallments(newInstallments);
-        console.log(installments);
-        onUpdateInstallments(installments);
+        onUpdateInstallments(newInstallments);
     }
+
+    useEffect(() => {
+        setInstallments(new Array(installmentsQuantity).fill({
+            amount: totalAmount/installmentsQuantity,
+            due_date: new Date()
+        }));
+    }, [installmentsQuantity, totalAmount]);
+
     return <div>
-        {new Array(installmentsQuantity).fill('').map((installment, index) => {
+        {installments.map((installment: any, index: any) => {
             return <Row>
                 <Col>
                     <InstallmentForm index={index} onUpdate={onUpdate} initialAmount={totalAmount / installmentsQuantity}></InstallmentForm>
