@@ -10,6 +10,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { RootState } from '../../..'
 
+let emptyDate: Date;
 export function NewPlanningItem({
   onHandleRemove,
   index,
@@ -19,7 +20,7 @@ export function NewPlanningItem({
   index: number
   onHandleUpdate: any
 }) {
-  const [payDate, setPayDate] = useState(new Date())
+  const [payDate, setPayDate] = useState(emptyDate)
   const [quantity, setQuantity] = useState(0)
   const [productId, setProductId] = useState(0)
   const [measureUnit, setMeasureUnit] = useState('')
@@ -38,10 +39,17 @@ export function NewPlanningItem({
       measure_unit: measureUnit,
       observations: observation,
       quantity: quantity,
-      
+      treatment: null,
+      total_price: totalCost,
     }
+    if (isSeed){
+      p.treatment = treatment;
+      p.pms = pms;
+      p.seed_quantity_type = seedQuantityType;
+    }
+
     onHandleUpdate(p, index)
-  }, [productId, measureUnit, observation])
+  }, [productId, measureUnit, observation, treatment])
 
   return (
     <div>
@@ -102,7 +110,7 @@ export function NewPlanningItem({
               locale={pt}
               dateFormat="dd/MM/yyyy"
               selected={payDate}
-              onChange={(date: Date) => setPayDate(date)}
+              onChange={(date: any) => setPayDate(date)}
             />
           </Form.Group>
         </Col>
