@@ -10,7 +10,6 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { RootState } from '../../..'
 
-let emptyDate: Date;
 export function NewPlanningItem({
   onHandleRemove,
   index,
@@ -20,15 +19,15 @@ export function NewPlanningItem({
   index: number
   onHandleUpdate: any
 }) {
-  const [payDate, setPayDate] = useState(emptyDate)
+  const [payDate, setPayDate] = useState(new Date())
   const [quantity, setQuantity] = useState(0)
   const [productId, setProductId] = useState(0)
   const [measureUnit, setMeasureUnit] = useState('')
   const [observation, setObservation] = useState('')
   const [userHasProduct, setUserHasProduct] = useState(false)
+  const [userProductId, setUserProductId] = useState(0)
   const [isSeed, setIsSeed] = useState(false)
   const { input } = useSelector((state: RootState) => state)
-  const [userProductId, setUserProductId] = useState(0)
   const [totalCost, setTotalCost] = useState(0)
   const [seedQuantityType, setSeedQuantityType] = useState('')
   const [treatment, setTreatment] = useState('NÃO TRATADA')
@@ -41,15 +40,18 @@ export function NewPlanningItem({
       quantity: quantity,
       treatment: null,
       total_price: totalCost,
+      payment_date: payDate.toISOString(),
     }
-    if (isSeed){
-      p.treatment = treatment;
-      p.pms = pms;
-      p.seed_quantity_type = seedQuantityType;
+    if (isSeed) {
+      p.treatment = treatment
+      p.pms = pms
+      p.seed_quantity_type = seedQuantityType
+    } else {
+      p.product_id = productId
     }
 
     onHandleUpdate(p, index)
-  }, [productId, measureUnit, observation, treatment])
+  }, [productId, measureUnit, observation, quantity, totalCost, payDate])
 
   return (
     <div>
@@ -110,7 +112,7 @@ export function NewPlanningItem({
               locale={pt}
               dateFormat="dd/MM/yyyy"
               selected={payDate}
-              onChange={(date: any) => setPayDate(date)}
+              onChange={(date: Date) => setPayDate(date)}
             />
           </Form.Group>
         </Col>
@@ -179,7 +181,7 @@ export function NewPlanningItem({
         )}
       </Row>
       <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
-        {!userHasProduct && isSeed ? (
+        {!isSeed ? (
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="">

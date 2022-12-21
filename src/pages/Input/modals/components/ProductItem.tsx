@@ -8,7 +8,6 @@ import { RootState } from "../../../..";
 import { Product } from "../../../../models/Product";
 import { ProductListItem } from "../../../../models/ProductListItem";
 import { UserProduct } from "../../../../models/UserProduct";
-import { unformatCurrency } from "../../../../utils/currencyFormat";
 
 export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
     const { input } = useSelector((state: RootState) => state);

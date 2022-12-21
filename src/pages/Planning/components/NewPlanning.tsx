@@ -6,6 +6,8 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { RootState } from '../../..'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { NewPlanningItem } from './NewPlanningItem'
+import { Planning } from '../../../models/Planning'
+import { asyncNewPlannings } from '../../../stores/planning.store'
 
 export function NewPlanning({
   show,
@@ -19,14 +21,27 @@ export function NewPlanning({
   index: number
 }) {
   const [referenceName, setReferenceName] = useState('')
-  const [description, setDescription] = useState('')
   const dispatch = useDispatch<any>()
   const [plannings, setPlannings] = useState([new PlanningInput()])
   const { seasons } = useSelector((state: RootState) => state)
   const [outcomeYear, setOutcomeYear] = useState('')
 
   const register = () => {
-    console.log('teste')
+    const p: Planning = {
+      name: referenceName,
+      id: 0,
+      owner_id: 0,
+      season_id: 0,
+      season_year: outcomeYear,
+      user_id: 0,
+      type: 'Insumos',
+      deleted_at: '',
+      createdAt: '',
+      updatedAt: '',
+      season: null,
+      plannings: plannings
+    }
+    dispatch(asyncNewPlannings(p));
     handleClose();
   }
 
@@ -36,10 +51,13 @@ export function NewPlanning({
     setPlannings(planningsArr);
 }
 
-  // useEffect(() => {
-  //     dispatch(asyncFetchCultivations())
-  //     setSelectedCultivations(financial?.cultivations[0])
-  //   }, [])
+const onUpdateItem = (planning: PlanningInput, index: number) => {
+  const planningsArr = [...plannings];
+  planningsArr.splice(index, 1);
+  planningsArr.push(planning);
+  setPlannings(planningsArr);
+
+}
 
   return (
     <div>
@@ -78,7 +96,7 @@ export function NewPlanning({
         </Col>
       </Row>
       {plannings.map((newPlanning, index) => {
-            return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={undefined}></NewPlanningItem>
+            return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
         })}
       
       <div
