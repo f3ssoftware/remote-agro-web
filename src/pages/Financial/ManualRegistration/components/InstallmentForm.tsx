@@ -10,7 +10,7 @@ export function InstallmentForm({ index, onUpdate, initialAmount }: { index: num
     useEffect(() => {
         onUpdate({
             amount,
-            selectedDate
+            due_date: selectedDate
         }, index);
     }, [amount, selectedDate]);
     return <Row>

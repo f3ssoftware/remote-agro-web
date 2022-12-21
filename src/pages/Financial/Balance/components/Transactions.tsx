@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { start } from "repl";
 import { RootState } from "../../../..";
 import { ExpensesRevenue } from "../../../../models/ExpensesRevenue";
-import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchExpensesAndRevenues, asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchExpensesAndRevenues, asyncPayExpense, setFilterDates } from "../../../../stores/financial.store";
 import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
@@ -31,11 +31,19 @@ export function Transactions() {
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
         paginate(page);
+        dispatch(setFilterDates({
+            startDate: startDate.toLocaleDateString('pt-BR'),
+            endDate: endDate.toLocaleDateString('pt-BR')
+        }));
     }, []);
 
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
+        dispatch(setFilterDates({
+            startDate: startDate.toLocaleDateString('pt-BR'),
+            endDate: endDate.toLocaleDateString('pt-BR')
+        }));
     }, [startDate, endDate]);
 
     useEffect(() => {
@@ -92,17 +100,17 @@ export function Transactions() {
                 </div>
                 <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px' }}>
                     <Table striped bordered hover style={{ tableLayout: 'fixed' }}>
-                    <colgroup>
-                            <col style={{width: '7%'}}></col>
-                            <col style={{width: '10%'}}></col>
-                            <col style={{width: '15%'}}></col>
-                            <col style={{width: '8%'}}></col>
-                            <col style={{width: '20%'}}></col>
-                            <col style={{width: '25%'}}></col>
-                            <col style={{width: '5%'}}></col>
-                            <col style={{width: '5%'}}></col>
-                            <col style={{width: '5%'}}></col>
-                    </colgroup>
+                        <colgroup>
+                            <col style={{ width: '7%' }}></col>
+                            <col style={{ width: '10%' }}></col>
+                            <col style={{ width: '15%' }}></col>
+                            <col style={{ width: '8%' }}></col>
+                            <col style={{ width: '20%' }}></col>
+                            <col style={{ width: '25%' }}></col>
+                            <col style={{ width: '5%' }}></col>
+                            <col style={{ width: '5%' }}></col>
+                            <col style={{ width: '5%' }}></col>
+                        </colgroup>
                         <thead style={{ backgroundColor: '#243C74', color: '#fff', fontSize: '12px' }}>
                             <tr>
                                 <th><small>Data</small></th>

@@ -33,8 +33,11 @@ const financialStore = createSlice({
         plannings: initialPlannings,
         cultivations: initialCultivations,
         externalInvoices: initialExternalInvoices,
-        contracts: initialContracts
-
+        contracts: initialContracts,
+        filterDates: {
+            startDate: new Date().toLocaleDateString('pt-BR'),
+            endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('pt-BR')
+        }
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -47,7 +50,6 @@ const financialStore = createSlice({
             state.expensesRevenue = action.payload;
         },
         setCashFlowChart(state, action) {
-            console.log(action);
             state.chartOrderedPairs = action.payload;
         },
         setPlannings(state, action) {
@@ -89,11 +91,14 @@ const financialStore = createSlice({
                     })
                 }
             }
+        },
+        setFilterDates(state, action) {
+            state.filterDates = action.payload;
         }
-    },
+    }
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, filterByButton } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, filterByButton, setFilterDates } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -499,11 +504,9 @@ export function asyncFetchCultivations() {
     };
 }
 
-export function asyncFilterByButton(filter: string) {
+export function asyncFilterByButton(filter: string, startDate: string, endDate: string) {
     return async function (dispatch: AppDispatch) {
-        const actualYear = new Date().getFullYear();
-        const actualMonth = new Date().getMonth();
-        await dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+        await dispatch(asyncFetchExpensesAndRevenues(1, 300, startDate, endDate));
         dispatch(filterByButton(filter))
     };
 }
