@@ -8,40 +8,33 @@ import {
   Pagination,
 } from 'react-bootstrap'
 import './Planning.scss'
-import { NewPlanningModal } from '../Planning/Modals/NewPlanningModal'
+import { NewPlanningModal } from './Modals/NewPlanningModal'
 import { useEffect, useState } from 'react'
 import planningImg from '../../assets/images/planning_image.png'
-// import {
-//   asyncFetchContractsData,
-//   asyncFetchCultivations,
-// } from '../../../stores/financial.store'
 import { useDispatch, useSelector } from 'react-redux'
-// import { RootState } from '../../../index'
-// import { Contract } from '../../../models/Contract'
+import {
+  asyncFetchPlanningData,
+} from '../../stores/planning.store'
+import { RootState } from '../..'
+import { Planning } from '../../models/Planning'
 
-// const initialContractList: Contract[] = []
-export function Planning() {
+const initialPlanningList: Planning[] = []
+export function PlanningMain() {
   const [showNewPlanningModal, setShowNewPlannningModal] = useState(false)
-  const [selectedCultivations, setSelectedCultivations]: any = useState({})
-  // const { financial } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
-  // const [contracts, setContracts] = useState(initialContractList)
+  // const { planning } = useSelector((state: RootState) => state)
+  const [plannings, setPlannings] = useState(initialPlanningList)
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
 
-  // useEffect(() => {
-  //   dispatch(asyncFetchContractsData())
-  // }, [])
-
-  // useEffect(() => {
-  //   dispatch(asyncFetchCultivations())
-  //   setSelectedCultivations(financial?.cultivations[0])
-  // }, [])
+  useEffect(() => {
+    dispatch(asyncFetchPlanningData())
+  }, [])
 
   // useEffect(() => {
   //   paginate(page)
-  //   setTotalResults(financial.contracts.length)
+  //   setTotalResults(planning.length)
   //   setPageSize(2)
   // }, [financial])
 
@@ -75,19 +68,19 @@ export function Planning() {
                 style={{ marginTop: '2%', marginLeft: '5%', marginRight: '5%' }}
               >
                 <div className="contracts-content">
-                  <div className="contracts-card">
-                    <Row style={{ marginLeft: '1%' }}>
-                      <Col>Nome</Col>
-                    </Row>
-                    <Row style={{ marginLeft: '1%' }}>
-                      <Col>Cultivo:</Col>
-                    </Row>
-                    <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
-                      <Col>Inicio: </Col>
-                      <Col>Final: </Col>
-                      <Col>Pagamento:</Col>
-                    </Row>
-                  </div>
+                  {plannings.map((planning, index) => (
+                    <div className="contracts-card" key={index}>
+                      <Row style={{ marginLeft: '1%' }}>
+                        <Col>Nome: {planning.name}</Col>
+                      </Row>
+                      <Row style={{ marginLeft: '1%' }}>
+                        <Col>Temporada: {planning.season_year}</Col>
+                      </Row>
+                      <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
+                        <Col>Criado em: {planning.createdAt} </Col>
+                      </Row>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -129,7 +122,10 @@ export function Planning() {
       </Row>
       <NewPlanningModal
         show={showNewPlanningModal}
-        handleClose={() => setShowNewPlannningModal(false)}></NewPlanningModal>
+        handleClose={() => setShowNewPlannningModal(false)}
+      ></NewPlanningModal>
     </Container>
   )
 }
+
+

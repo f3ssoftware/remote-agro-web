@@ -15,7 +15,7 @@ import { FarmInput } from "./pages/Input/FarmInput";
 import { Login } from "./pages/Login/Login";
 import { Plot } from "./pages/Plot/Plot";
 import { popMessages } from "./stores/messaging.store";
-import { Planning } from "./pages/Planning/Planning";
+import { PlanningMain } from "./pages/Planning/PlanningMain";
 import { Maintenance } from "./pages/Maintenance/Maintenance";
 
 export function AppWrapper() {
@@ -56,7 +56,7 @@ export function AppWrapper() {
             <Soil></Soil>
         </AppStructure>
         case "planning": return <AppStructure loading={loading.requests.length > 0}>
-            <Planning></Planning>
+            <PlanningMain></PlanningMain>
         </AppStructure>
          case "maintenance": return <AppStructure loading={loading.requests.length > 0}>
             <Maintenance></Maintenance>
