@@ -4,7 +4,6 @@ import { AppDispatch } from "..";
 import { Planning } from "../models/Planning";
 import { PlanningCost } from "../models/PlanningCost";
 import { PlanningInput } from "../models/PlanningInput";
-import { setPlannings } from "./financial.store";
 import { getMessages } from "./messaging.store";
 
 const initialPlanning: Planning[] = [];
@@ -31,7 +30,7 @@ const planningStore = createSlice({
 });
 
 
-export const { setPlanningCost,setPlanningInput} = planningStore.actions;
+export const { setPlanningCost,setPlanningInput, setPlannings} = planningStore.actions;
 export default planningStore.reducer;
 export function asyncFetchPlanningData() {
     return async function (dispatch: AppDispatch) {

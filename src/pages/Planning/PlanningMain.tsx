@@ -22,7 +22,7 @@ const initialPlanningList: Planning[] = []
 export function PlanningMain() {
   const [showNewPlanningModal, setShowNewPlannningModal] = useState(false)
   const dispatch = useDispatch<any>()
-  // const { planning } = useSelector((state: RootState) => state)
+  const { planning } = useSelector((state: RootState) => state)
   const [plannings, setPlannings] = useState(initialPlanningList)
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
@@ -32,18 +32,18 @@ export function PlanningMain() {
     dispatch(asyncFetchPlanningData())
   }, [])
 
-  // useEffect(() => {
-  //   paginate(page)
-  //   setTotalResults(planning.length)
-  //   setPageSize(2)
-  // }, [financial])
+  useEffect(() => {
+    paginate(page)
+    setTotalResults(planning.plannings.length)
+    setPageSize(3)
+  }, [planning])
 
-  // const paginate = (page: number) => {
-  //   const pageSize = 2
-  //   setContracts(
-  //     [...financial.contracts].slice((page - 1) * pageSize, page * pageSize),
-  //   )
-  // }
+  const paginate = (page: number) => {
+    const pageSize = 3
+    setPlannings(
+      [...planning.plannings].slice((page - 1) * pageSize, page * pageSize),
+    )
+  }
 
   return (
     <Container>
@@ -82,6 +82,29 @@ export function PlanningMain() {
                     </div>
                   ))}
                 </div>
+                <div className="flex-center" style={{ marginTop: '5%' }}>
+                      <Pagination size="sm">
+                        <Pagination.Prev
+                          onClick={() => {
+                            if (page > 1) {
+                              paginate(page - 1)
+                              setPage(page - 1)
+                            }
+                          }}
+                        />
+                        <Pagination.Next
+                          onClick={() => {
+                            if (page < totalResults / pageSize) {
+                              console.log(totalResults / pageSize)
+                              paginate(page + 1)
+                              setPage(page + 1)
+                            } else {
+                              console.log('else: ', totalResults / pageSize)
+                            }
+                          }}
+                        />
+                      </Pagination>
+                    </div>
               </div>
             </div>
           </div>
