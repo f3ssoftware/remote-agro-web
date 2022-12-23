@@ -6,17 +6,25 @@ export function Installments({ installmentsQuantity, onUpdateInstallments, total
     const [installments, setInstallments]: any = useState([]);
     const onUpdate = (installment: any, index: number) => {
         const newInstallments = [...installments];
-        newInstallments.splice(index, 1);
-        newInstallments.push(installment);
+        newInstallments[index] = installment;
         setInstallments(newInstallments);
         onUpdateInstallments(newInstallments);
     }
 
     useEffect(() => {
-        setInstallments(new Array(installmentsQuantity).fill({
-            amount: totalAmount/installmentsQuantity,
-            due_date: new Date()
-        }));
+        setInstallments([]);
+        // const installmentsArr = new Array(installmentsQuantity).fill({
+        //     amount: totalAmount / installmentsQuantity,
+        //     due_date: null
+        // });
+        let installmentsArr = [];
+        for (let i = 0; i < installmentsQuantity; i++) {
+            installmentsArr.push({
+                amount: totalAmount / installmentsQuantity,
+                due_date: new Date(new Date().getFullYear(), new Date().getMonth() + i, new Date().getDate())
+            });
+        }
+        setInstallments(installmentsArr);
     }, [installmentsQuantity, totalAmount]);
 
     return <div>

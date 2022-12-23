@@ -111,7 +111,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
             <Form.Control
               type="number"
               min={2}
-              onChange={(e) => {
+              onBlur={(e) => {
                 setInstallmentsQuantity(Number(e.target.value));
               }}
             />
