@@ -13,6 +13,14 @@ export function InstallmentForm({ index, onUpdate, initialAmount }: { index: num
             due_date: selectedDate
         }, index);
     }, [amount, selectedDate]);
+
+    // useEffect(() => {
+    //     onUpdate({
+    //         amount,
+    //         due_date: selectedDate
+    //     }, index);
+    // }, []);
+
     return <Row>
         <Col>
             <Form.Group className="mb-3" controlId="">
