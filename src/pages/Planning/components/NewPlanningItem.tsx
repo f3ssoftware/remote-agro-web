@@ -25,9 +25,9 @@ export function NewPlanningItem({
   const [measureUnit, setMeasureUnit] = useState('')
   const [observation, setObservation] = useState('')
   const [userHasProduct, setUserHasProduct] = useState(false)
+  const [userProductId, setUserProductId] = useState(0)
   const [isSeed, setIsSeed] = useState(false)
   const { input } = useSelector((state: RootState) => state)
-  const [userProductId, setUserProductId] = useState(0)
   const [totalCost, setTotalCost] = useState(0)
   const [seedQuantityType, setSeedQuantityType] = useState('')
   const [treatment, setTreatment] = useState('NÃO TRATADA')
@@ -38,10 +38,20 @@ export function NewPlanningItem({
       measure_unit: measureUnit,
       observations: observation,
       quantity: quantity,
-      
+      treatment: null,
+      total_price: totalCost,
+      payment_date: payDate.toISOString(),
     }
+    if (isSeed) {
+      p.treatment = treatment
+      p.pms = pms
+      p.seed_quantity_type = seedQuantityType
+    } else {
+      p.product_id = productId
+    }
+
     onHandleUpdate(p, index)
-  }, [productId, measureUnit, observation])
+  }, [productId, measureUnit, observation, quantity, totalCost, payDate])
 
   return (
     <div>
@@ -171,7 +181,7 @@ export function NewPlanningItem({
         )}
       </Row>
       <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
-        {!userHasProduct && isSeed ? (
+        {!isSeed ? (
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="">
