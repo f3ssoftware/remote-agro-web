@@ -17,6 +17,7 @@ import {
 } from '../../stores/planning.store'
 import { RootState } from '../..'
 import { Planning } from '../../models/Planning'
+import { PlanningPlotCard } from './components/PlanningPlotCard'
 
 const initialPlanningList: Planning[] = []
 export function PlanningMain() {
@@ -77,7 +78,7 @@ export function PlanningMain() {
                         <Col>Temporada: {planning.season_year}</Col>
                       </Row>
                       <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
-                        <Col>Criado em: {planning.createdAt} </Col>
+                        <Col>Criado em: {new Date(planning.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} </Col>
                       </Row>
                     </div>
                   ))}
@@ -111,36 +112,7 @@ export function PlanningMain() {
         </Col>
 
         <Col xs={8}>
-          <Card className="second-col-card">
-            <Card.Body>
-              <Card.Title className="second-col-text">Histórico</Card.Title>
-              <Card.Text>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    className="second-col-dropdown"
-                    variant="success"
-                    id="dropdown-basic"
-                  >
-                    Planejamentos
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">plan1</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">plan2</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">plan3</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer className="card-footer">
-              <div className="frist-box">
-                <span>Custos diretos</span>
-              </div>
-              <div className="second-box">
-                <span>Custos indiretos</span>
-              </div>
-            </Card.Footer>
-          </Card>
+            <PlanningPlotCard></PlanningPlotCard>
         </Col>
       </Row>
       <NewPlanningModal

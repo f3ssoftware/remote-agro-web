@@ -68,7 +68,7 @@ export function Contracts() {
                     return (
                       <Dropdown.Item
                         key={index}
-                        onClick={() => setSelectedCultivations(financial)}
+                        onClick={() => setSelectedCultivations(cultivations)}
                       >
                         {cultivations.name}
                       </Dropdown.Item>

@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Planning } from '../../../models/Planning'
-import { asyncNewPlannings, asyncNewPlanningsCost } from '../../../stores/planning.store'
+import { asyncNewPlannings } from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
 import {NewPlanningTab} from './NewPlanningTab'
 

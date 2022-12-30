@@ -79,32 +79,28 @@ export function asyncFetchPlanningData() {
     };
 }
 
-export function asyncNewPlanningsCost(others: PlanningCost) {
-  return async function (dispatch: AppDispatch) {
-      try {
-          const result = await axios.post(
-              `https://remoteapi.murilobotelho.com.br/plannings/?type=Custos%20Indiretos&`,
-              others,
-              {
-                  headers: {
-                      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-                  },
-              }
-          );
-          dispatch(getMessages({
-            message: "Planejamento cadastrado com sucesso",
-            type: "success",
-        }));
-      } catch (err: any) {
-          console.log(err);
-          dispatch(
-              getMessages({
-                  message: err.message,
-                  type: "error",
-              })
-          );
-      }
-  };
+export function asyncFetchPlanningsCost() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/plannings/?type=Custos%20Indiretos&`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setPlanningCost(result.data));
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
 }
 export function asyncNewPlannings(register: Planning) {
   return async function (dispatch: AppDispatch) {
