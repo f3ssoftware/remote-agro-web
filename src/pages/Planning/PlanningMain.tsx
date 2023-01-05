@@ -12,12 +12,12 @@ import { NewPlanningModal } from './Modals/NewPlanningModal'
 import { useEffect, useState } from 'react'
 import planningImg from '../../assets/images/planning_image.png'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  asyncFetchPlanningData,
-} from '../../stores/planning.store'
+import { asyncFetchPlanningData } from '../../stores/planning.store'
 import { RootState } from '../..'
 import { Planning } from '../../models/Planning'
 import { PlanningPlotCard } from './components/PlanningPlotCard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye } from '@fortawesome/free-solid-svg-icons'
 
 const initialPlanningList: Planning[] = []
 export function PlanningMain() {
@@ -28,6 +28,7 @@ export function PlanningMain() {
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
+
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
@@ -78,41 +79,47 @@ export function PlanningMain() {
                         <Col>Temporada: {planning.season_year}</Col>
                       </Row>
                       <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
-                        <Col>Criado em: {new Date(planning.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} </Col>
+                        <Col>
+                          Criado em:{' '}
+                          {new Date(planning.createdAt!).toLocaleDateString(
+                            'pt-BR',
+                            { timeZone: 'UTC' },
+                          )}{' '}
+                        </Col>
                       </Row>
                     </div>
                   ))}
                 </div>
                 <div className="flex-center" style={{ marginTop: '5%' }}>
-                      <Pagination size="sm">
-                        <Pagination.Prev
-                          onClick={() => {
-                            if (page > 1) {
-                              paginate(page - 1)
-                              setPage(page - 1)
-                            }
-                          }}
-                        />
-                        <Pagination.Next
-                          onClick={() => {
-                            if (page < totalResults / pageSize) {
-                              console.log(totalResults / pageSize)
-                              paginate(page + 1)
-                              setPage(page + 1)
-                            } else {
-                              console.log('else: ', totalResults / pageSize)
-                            }
-                          }}
-                        />
-                      </Pagination>
-                    </div>
+                  <Pagination size="sm">
+                    <Pagination.Prev
+                      onClick={() => {
+                        if (page > 1) {
+                          paginate(page - 1)
+                          setPage(page - 1)
+                        }
+                      }}
+                    />
+                    <Pagination.Next
+                      onClick={() => {
+                        if (page < totalResults / pageSize) {
+                          console.log(totalResults / pageSize)
+                          paginate(page + 1)
+                          setPage(page + 1)
+                        } else {
+                          console.log('else: ', totalResults / pageSize)
+                        }
+                      }}
+                    />
+                  </Pagination>
+                </div>
               </div>
             </div>
           </div>
         </Col>
 
         <Col xs={8}>
-            <PlanningPlotCard></PlanningPlotCard>
+          <PlanningPlotCard></PlanningPlotCard>
         </Col>
       </Row>
       <NewPlanningModal
@@ -122,5 +129,3 @@ export function PlanningMain() {
     </Container>
   )
 }
-
-

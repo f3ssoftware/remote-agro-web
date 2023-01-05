@@ -14,7 +14,6 @@ const planningStore = createSlice({
     initialState: {
         plannings: initialPlanning,
         planningsCost: initialPalnningCost,
-        planningInput: initialPlanningInput
     },
     reducers: {
         setPlannings(state,action){
@@ -22,15 +21,12 @@ const planningStore = createSlice({
         },
         setPlanningCost(state,action){
           state.planningsCost=action.payload
-        },
-        setPlanningInput(state,action){
-          state.planningInput=action.payload
         }
     }
 });
 
 
-export const { setPlanningCost,setPlanningInput, setPlannings} = planningStore.actions;
+export const { setPlanningCost, setPlannings} = planningStore.actions;
 export default planningStore.reducer;
 export function asyncFetchPlanningData() {
     return async function (dispatch: AppDispatch) {
@@ -51,33 +47,7 @@ export function asyncFetchPlanningData() {
     };
   }
 
-  export function asyncNewPlanningsInput(input: PlanningInput) {
-    return async function (dispatch: AppDispatch) {
-        try {
-            const result = await axios.post(
-                `https://remoteapi.murilobotelho.com.br/plannings/?type=Insumos&?`,
-                input,
-                {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-                    },
-                }
-            );
-            dispatch(getMessages({
-              message: "Planejamento cadastrado com sucesso",
-              type: "success",
-          }));
-        } catch (err: any) {
-            console.log(err);
-            dispatch(
-                getMessages({
-                    message: err.message,
-                    type: "error",
-                })
-            );
-        }
-    };
-}
+
 
 export function asyncFetchPlanningsCost() {
     return async function (dispatch: AppDispatch) {
