@@ -3,12 +3,10 @@ import axios from "axios";
 import { AppDispatch } from "..";
 import { Planning } from "../models/Planning";
 import { PlanningCost } from "../models/PlanningCost";
-import { PlanningInput } from "../models/PlanningInput";
 import { getMessages } from "./messaging.store";
 
 const initialPlanning: Planning[] = [];
 const initialPalnningCost: PlanningCost[]=[];
-const initialPlanningInput: PlanningInput[]=[];
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
@@ -99,4 +97,34 @@ export function asyncNewPlannings(register: Planning) {
           );
       }
   };
+}
+
+export function asyncDeletePlanning(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.delete(
+                `https://remoteapi.murilobotelho.com.br/plannings/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(asyncFetchPlanningData());
+            dispatch(
+                getMessages({
+                    message: "Conta excluída com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
 }
