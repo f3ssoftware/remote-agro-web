@@ -94,11 +94,11 @@ export function Transactions() {
                         </Form>
                     </Col>
                 </Row>
-                <div className="flex-right" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '2%', marginBottom: '2%' }}>
+                {/* <div className="flex-right" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '2%', marginBottom: '2%' }}>
                     <h5>{`${startDate.toLocaleDateString('pt-BR')} até ${endDate.toLocaleDateString('pt-BR')}`}</h5>
                     <FontAwesomeIcon icon={faCalendar} onClick={() => setShowModalDates(true)} style={{ cursor: 'pointer' }}></FontAwesomeIcon>
-                </div>
-                <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '300px' }}>
+                </div> */}
+                <div style={{ overflowX: 'hidden', overflowY: 'scroll', maxHeight: '670px' }}>
                     <Table striped bordered hover style={{ tableLayout: 'fixed' }}>
                         <colgroup>
                             <col style={{ width: '7%' }}></col>
@@ -118,7 +118,7 @@ export function Transactions() {
                                 <th><small>Valor</small></th>
                                 <th><small>NF</small></th>
                                 <th><small>Categoria</small></th>
-                                <th><small>Categoria</small></th>
+                                <th><small>Obs</small></th>
                                 <th><small>Pago</small></th>
                                 <th><small>Conciliado</small></th>
                                 <th><small>Ações</small></th>

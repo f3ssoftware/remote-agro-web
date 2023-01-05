@@ -15,7 +15,7 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId, amou
         }
 
         if (contractId && contractId !== 0) {
-            dispatch(asyncPayContract(contractId, bankAccountId, amount));
+            dispatch(asyncPayContract(contractId, bankAccountId, amount*100));
         }
 
         await dispatch(asyncFetchBankAccountsData);

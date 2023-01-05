@@ -25,22 +25,22 @@ export function Balance() {
     return (
         <div className="balance-content">
             <Row>
-                <Col md={8}>
+                <Col md={12}>
                     <WalletBalance></WalletBalance>
                 </Col>
-                <Col md={4}>
+                {/* <Col md={4}>
                     <TotalBalance></TotalBalance>
-                </Col>
+                </Col> */}
             </Row>
             <Row>
-                <Col md={8}>
+                <Col md={12}>
                     <Transactions></Transactions>
                 </Col>
-                <Col md={4}>
+                {/* <Col md={4}>
                     <BankAccounts></BankAccounts>
-                </Col>
+                </Col> */}
             </Row>
-            <Row style={{ marginTop: '2%' }}>
+            {/* <Row style={{ marginTop: '2%' }}>
                 <Col md={8}>
                     <Cashflow></Cashflow>
                 </Col>
@@ -71,7 +71,7 @@ export function Balance() {
                     </div>
 
                 </Col>
-            </Row>
+            </Row> */}
         </div>
     )
 }

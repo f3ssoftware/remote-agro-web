@@ -4,13 +4,68 @@ $ra-card-payments-bg: #848419;
 $ra-card-payments-bg-hover: #cfcf21;
 $ra-card-duedated-bg: #911414;
 $ra-card-duedated-bg-hover: #d81919;
+$ra-card-total-balance-bg: #7c542b;
+$ra-card-total-balance-bg-hover: #a36d37;
 $total-balance-btn-bg: #7c542b;
+$ra-card-paid-bg: #4C9626;
+$ra-card-paid-bg-hover: #6ad136;
+$ra-card-received-bg: #4C9626;
+$ra-card-received-bg-hover: #6ad136;
 
 .balance-content {
   // padding-left: 5%;
   padding-right: 2%;
   max-height: 70vh;
 }
+
+.ra-card-total-balance {
+  background-color: $ra-card-total-balance-bg;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-total-balance:hover {
+  background-color: $ra-card-total-balance-bg-hover;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-paid {
+  background-color: $ra-card-paid-bg;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-paid:hover {
+  background-color: $ra-card-paid-bg-hover;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-received {
+  background-color: $ra-card-received-bg;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-received:hover {
+  background-color: $ra-card-received-bg-hover;
+  border: none;
+  color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
 .ra-card-billing {
   background-color: $ra-card-billing-bg;
   border: none;
