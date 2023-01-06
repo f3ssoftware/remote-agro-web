@@ -11,6 +11,7 @@ $ra-card-paid-bg: #4C9626;
 $ra-card-paid-bg-hover: #6ad136;
 $ra-card-received-bg: #4C9626;
 $ra-card-received-bg-hover: #6ad136;
+$ra-card-inactive: #C3C3C3;
 
 .balance-content {
   // padding-left: 5%;
@@ -110,6 +111,22 @@ $ra-card-received-bg-hover: #6ad136;
   background-color: $ra-card-duedated-bg-hover;
   border: none;
   color: #fff;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-inactive {
+  background-color: $ra-card-inactive;
+  border: none;
+  color: #000;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ra-card-inactive:hover {
+  background-color: $ra-card-inactive;
+  border: none;
+  color: #000;
   height: 100%;
   cursor: pointer;
 }

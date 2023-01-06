@@ -19,6 +19,7 @@ export function WalletBalance() {
     const [endDate, setEndDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0));
     const [showModalBankAccounts, setShowModalBankAccounts] = useState(false);
     const dispatch = useDispatch<any>();
+    const [activeCard, setActiveCard] = useState('total');
 
     const ExampleCustomInput = forwardRef<any, any>(({ value, onClick }, ref) => (
         <button style={{ backgroundColor: '#7c542b', border: 'none', borderRadius: 10, fontWeight: 'bold', fontSize: '20px' }} onClick={onClick} ref={ref}>
@@ -69,8 +70,9 @@ export function WalletBalance() {
 
             <Row>
                 <Col md={2}>
-                    <Card className="ra-card-total-balance" onClick={() => {
-                        dispatch(asyncFilterByButton('billings', financial.filterDates.startDate, financial.filterDates.endDate));
+                    <Card className={activeCard === 'total' ? 'ra-card-total-balance' : 'ra-card-inactive'} onClick={() => {
+                        setActiveCard('total');
+                        dispatch(asyncFilterByButton('total', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
                             <h6>Total</h6>
@@ -84,7 +86,8 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className="ra-card-billing" onClick={() => {
+                    <Card className={activeCard === 'billings' ? 'ra-card-billing' : 'ra-card-inactive'} onClick={() => {
+                        setActiveCard('billings');
                         dispatch(asyncFilterByButton('billings', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
@@ -98,7 +101,8 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className="ra-card-payments" onClick={() => {
+                    <Card className={activeCard === 'payments' ? 'ra-card-payments' : 'ra-card-inactive'}  onClick={() => {
+                        setActiveCard('payments');
                         dispatch(asyncFilterByButton('payments', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
@@ -112,7 +116,8 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className="ra-card-duedated" onClick={async () => {
+                    <Card className={activeCard === 'due_dated' ? 'ra-card-duedated' : 'ra-card-inactive'} onClick={async () => {
+                        setActiveCard('due_dated');
                         dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
@@ -126,7 +131,8 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className="ra-card-paid" onClick={async () => {
+                    <Card className={activeCard === 'payments' ? 'ra-card-paid' : 'ra-card-inactive'} onClick={async () => {
+                        setActiveCard('payments');
                         dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
@@ -140,7 +146,8 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className="ra-card-received" onClick={async () => {
+                    <Card className={activeCard === 'received' ? 'ra-card-received' : 'ra-card-inactive'} onClick={async () => {
+                        setActiveCard('received');
                         dispatch(asyncFilterByButton('received', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
@@ -157,10 +164,5 @@ export function WalletBalance() {
             </Row>
         </Card.Body>
         <BankAccountsModal show={showModalBankAccounts} handleClose={() => setShowModalBankAccounts(false)}></BankAccountsModal>
-        {/* <TransactionDates show={showModalDates} handleClose={() => setShowModalDates(false)} onUpdate={(startDate: any, endDate: any) => {
-            setStartDate(startDate);
-            setEndDate(endDate);
-            setShowModalDates(false);
-        }}></TransactionDates> */}
     </Card>
 }

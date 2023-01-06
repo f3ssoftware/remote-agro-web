@@ -75,6 +75,7 @@ const financialStore = createSlice({
                     //         return expense;
                     //     }
                     // });
+                    state.expensesRevenue = state.expensesRevenue;
                 } break;
                 case 'billings': {
                     state.expensesRevenue = state.expensesRevenue.filter(expense => {
@@ -89,6 +90,13 @@ const financialStore = createSlice({
                             return exp;
                         }
                     });
+                } break;
+                case 'paid': {
+                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
+                        if(exp.is_paid) {
+                            return exp;
+                        }
+                    })
                 } break;
                 case 'due_dated': {
                     state.expensesRevenue = state.expensesRevenue.filter(exp => {
