@@ -113,7 +113,35 @@ export function asyncDeletePlanning(id: number) {
             dispatch(asyncFetchPlanningData());
             dispatch(
                 getMessages({
-                    message: "Conta excluída com sucesso",
+                    message: "Planejamento excluído com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+export function asyncEditPlanning(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/plannings/${id}?type=Insumos&`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: "Editado com sucesso",
                     type: "success",
                 })
             );
