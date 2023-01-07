@@ -69,6 +69,14 @@ const financialStore = createSlice({
             // const nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
             // dispatch(asyncFetchExpensesAndRevenues(1, 300, `${today.getDate()}/${today.getMonth() + 1}/${today.getUTCFullYear()}`, `${nextMonth.getDate()}/${nextMonth.getMonth() + 1}/${nextMonth.getUTCFullYear()}`));
             switch (action.payload) {
+                case 'total': {
+                    // state.expensesRevenue = state.expensesRevenue.filter(expense => {
+                    //     if (expense.contract_id) {
+                    //         return expense;
+                    //     }
+                    // });
+                    state.expensesRevenue = state.expensesRevenue;
+                } break;
                 case 'billings': {
                     state.expensesRevenue = state.expensesRevenue.filter(expense => {
                         if (expense.contract_id) {
@@ -82,6 +90,13 @@ const financialStore = createSlice({
                             return exp;
                         }
                     });
+                } break;
+                case 'paid': {
+                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
+                        if(exp.is_paid) {
+                            return exp;
+                        }
+                    })
                 } break;
                 case 'due_dated': {
                     state.expensesRevenue = state.expensesRevenue.filter(exp => {
