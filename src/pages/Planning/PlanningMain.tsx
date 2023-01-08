@@ -14,7 +14,7 @@ import planningImg from '../../assets/images/planning_image.png'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   asyncDeletePlanning,
-  asyncEditPlanning,
+  asyncFetchEditPlannings,
   asyncFetchPlanningData,
 } from '../../stores/planning.store'
 import { RootState } from '../..'
@@ -55,7 +55,7 @@ export function PlanningMain() {
     dispatch(asyncFetchPlanningData)
   }
   const editPlanning = (id: number) =>{
-    dispatch(asyncEditPlanning(id))
+    dispatch(asyncFetchEditPlannings(id))
   }
 
   return (

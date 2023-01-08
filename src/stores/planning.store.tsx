@@ -6,25 +6,26 @@ import { PlanningCost } from "../models/PlanningCost";
 import { getMessages } from "./messaging.store";
 
 const initialPlanning: Planning[] = [];
-const initialPalnningCost: PlanningCost[]=[];
+const initialEditPlanning: Planning[]=[];
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
         plannings: initialPlanning,
-        planningsCost: initialPalnningCost,
+        editPlannings: initialEditPlanning,
+
     },
     reducers: {
         setPlannings(state,action){
           state.plannings=action.payload
         },
-        setPlanningCost(state,action){
-          state.planningsCost=action.payload
-        }
+        setEditPlannings(state,action){
+            state.editPlannings=action.payload
+          }
     }
 });
 
 
-export const { setPlanningCost, setPlannings} = planningStore.actions;
+export const { setPlannings, setEditPlannings} = planningStore.actions;
 export default planningStore.reducer;
 export function asyncFetchPlanningData() {
     return async function (dispatch: AppDispatch) {
@@ -47,29 +48,7 @@ export function asyncFetchPlanningData() {
 
 
 
-export function asyncFetchPlanningsCost() {
-    return async function (dispatch: AppDispatch) {
-        try {
-            const result = await axios.get(
-                `https://remoteapi.murilobotelho.com.br/plannings/?type=Custos%20Indiretos&`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-                    },
-                }
-            );
-            dispatch(setPlanningCost(result.data));
-        } catch (err: any) {
-            console.log(err);
-            dispatch(
-                getMessages({
-                    message: err.message,
-                    type: "error",
-                })
-            );
-        }
-    };
-}
+
 export function asyncNewPlannings(register: Planning) {
   return async function (dispatch: AppDispatch) {
       try {
@@ -128,31 +107,13 @@ export function asyncDeletePlanning(id: number) {
         }
     };
 }
-export function asyncEditPlanning(id: number) {
+export function asyncFetchEditPlannings(id: number) {
     return async function (dispatch: AppDispatch) {
-        try {
-            const result = await axios.get(
-                `https://remoteapi.murilobotelho.com.br/plannings/${id}?type=Insumos&`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-                    },
-                }
-            );
-            dispatch(
-                getMessages({
-                    message: "Editado com sucesso",
-                    type: "success",
-                })
-            );
-        } catch (err: any) {
-            console.log(err);
-            dispatch(
-                getMessages({
-                    message: err.response.data.message,
-                    type: "error",
-                })
-            );
-        }
-    };
+        const results = await axios.get(`https://remoteapi.murilobotelho.com.br/plannings/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+        dispatch(setEditPlannings(results.data));
+    }
 }
