@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Button, Form, Dropdown, Tabs, Tab } from 'react-bootstrap'
+import { Row, Col, Button, Form, Dropdown, Tabs, Tab, Modal } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
@@ -20,7 +20,7 @@ export function EditPlanningCost({
   const [plannings, setPlannings] = useState([new PlanningCost()])
   const dispatch = useDispatch<any>()
   const { seasons } = useSelector((state: RootState) => state)
-  // const { editPlannings } = useSelector((state: RootState) => state)
+  const { planning } = useSelector((state: RootState) => state)
   const [outcomeYear, setOutcomeYear] = useState('')
   const month = [
     'Setembro',
@@ -57,8 +57,8 @@ export function EditPlanningCost({
   }
 
   useEffect(() => {
-    setOutcomeYear(seasons.selectedSeason.year)
-    // setReferenceName(editPlannings.referenceName)
+    setOutcomeYear(planning.editPlannings.season_year)
+    setReferenceName(planning.editPlannings.name)
   }, [])
 
 const onUpdateItem = (planning: PlanningCost, index: number) => {
@@ -68,7 +68,11 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
   setPlannings(planningArr);
 }
 
-  return (
+  return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
+            <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
+            <Modal.Title> <span style={{ color: '#fff' }}>Planejamento - {planning.editPlannings.name}</span></Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: "#7C5529" }}>
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col>
@@ -76,6 +80,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
             <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
             <Form.Control
               type="text"
+              value={referenceName}
               onChange={(e) => {
                 setReferenceName(e.target.value)
               }}
@@ -137,7 +142,8 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
         </Button>
       </div>
     </div>
-  )
+  </Modal.Body>
+  </Modal>
 }
 
 

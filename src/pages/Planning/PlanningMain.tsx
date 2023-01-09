@@ -22,6 +22,7 @@ import { Planning } from '../../models/Planning'
 import { PlanningPlotCard } from './components/PlanningPlotCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { EditPlanningCost } from './components/EditPlanningCost'
 
 const initialPlanningList: Planning[] = []
 export function PlanningMain() {
@@ -32,6 +33,7 @@ export function PlanningMain() {
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
+  const [showPlanningModal, setShowPlanningModal] = useState(false);
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
@@ -107,6 +109,7 @@ export function PlanningMain() {
                             onClick={() => {
                               console.log(planning.id)
                               editPlanning(planning.id!)
+                              setShowPlanningModal(true)
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -159,6 +162,10 @@ export function PlanningMain() {
         show={showNewPlanningModal}
         handleClose={() => setShowNewPlannningModal(false)}
       ></NewPlanningModal>
+      <EditPlanningCost
+        show={showPlanningModal}
+        handleClose={() => setShowPlanningModal(false)}
+      ></EditPlanningCost>
     </Container>
   )
 }

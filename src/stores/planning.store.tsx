@@ -2,16 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "..";
 import { Planning } from "../models/Planning";
-import { PlanningCost } from "../models/PlanningCost";
 import { getMessages } from "./messaging.store";
 
 const initialPlanning: Planning[] = [];
-const initialEditPlanning: Planning[]=[];
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
         plannings: initialPlanning,
-        editPlannings: initialEditPlanning,
+        editPlannings: {
+            id: 1,
+            season_year: '',
+            name: '',
+            type: '',
+            deleted_at: '',
+            createdAt: '',
+            updatedAt: '',
+            season: null,
+        }
 
     },
     reducers: {
@@ -109,11 +116,22 @@ export function asyncDeletePlanning(id: number) {
 }
 export function asyncFetchEditPlannings(id: number) {
     return async function (dispatch: AppDispatch) {
+        try{
+
         const results = await axios.get(`https://remoteapi.murilobotelho.com.br/plannings/${id}`, {
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
         dispatch(setEditPlannings(results.data));
+    } catch (err: any) {
+        console.log(err);
+        dispatch(
+            getMessages({
+                message: err.response.data.message,
+                type: "error",
+            })
+        );
+    }
     }
 }
