@@ -86,7 +86,7 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className={activeCard === 'billings' ? 'ra-card-billing' : 'ra-card-inactive'} onClick={() => {
+                    <Card className={activeCard === 'billings' || activeCard === 'total' ? 'ra-card-billing' : 'ra-card-inactive'} onClick={() => {
                         setActiveCard('billings');
                         dispatch(asyncFilterByButton('billings', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -101,7 +101,7 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className={activeCard === 'payments' ? 'ra-card-payments' : 'ra-card-inactive'}  onClick={() => {
+                    <Card className={activeCard === 'payments' || activeCard === 'total' ? 'ra-card-payments' : 'ra-card-inactive'}  onClick={() => {
                         setActiveCard('payments');
                         dispatch(asyncFilterByButton('payments', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -116,7 +116,7 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className={activeCard === 'due_dated' ? 'ra-card-duedated' : 'ra-card-inactive'} onClick={async () => {
+                    <Card className={activeCard === 'due_dated' || activeCard === 'total' ? 'ra-card-duedated' : 'ra-card-inactive'} onClick={async () => {
                         setActiveCard('due_dated');
                         dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -131,8 +131,8 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className={activeCard === 'payments' ? 'ra-card-paid' : 'ra-card-inactive'} onClick={async () => {
-                        setActiveCard('payments');
+                    <Card className={activeCard === 'paid' || activeCard === 'total' ? 'ra-card-paid' : 'ra-card-inactive'} onClick={async () => {
+                        setActiveCard('paid');
                         dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
@@ -146,7 +146,7 @@ export function WalletBalance() {
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className={activeCard === 'received' ? 'ra-card-received' : 'ra-card-inactive'} onClick={async () => {
+                    <Card className={activeCard === 'received' || activeCard === 'total' ? 'ra-card-received' : 'ra-card-inactive'} onClick={async () => {
                         setActiveCard('received');
                         dispatch(asyncFilterByButton('received', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
