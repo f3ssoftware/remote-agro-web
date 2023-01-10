@@ -12,12 +12,17 @@ import { NewPlanningModal } from './Modals/NewPlanningModal'
 import { useEffect, useState } from 'react'
 import planningImg from '../../assets/images/planning_image.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { asyncFetchPlanningData } from '../../stores/planning.store'
+import {
+  asyncDeletePlanning,
+  asyncFetchEditPlannings,
+  asyncFetchPlanningData,
+} from '../../stores/planning.store'
 import { RootState } from '../..'
 import { Planning } from '../../models/Planning'
 import { PlanningPlotCard } from './components/PlanningPlotCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { EditPlanningCost } from './components/EditPlanningCost'
 
 const initialPlanningList: Planning[] = []
 export function PlanningMain() {
@@ -28,7 +33,7 @@ export function PlanningMain() {
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
-
+  const [showPlanningModal, setShowPlanningModal] = useState(false);
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
@@ -45,6 +50,14 @@ export function PlanningMain() {
     setPlannings(
       [...planning.plannings].slice((page - 1) * pageSize, page * pageSize),
     )
+  }
+
+  const deletePlanning = (id: number) => {
+    dispatch(asyncDeletePlanning(id))
+    dispatch(asyncFetchPlanningData)
+  }
+  const editPlanning = (id: number) =>{
+    dispatch(asyncFetchEditPlannings(id))
   }
 
   return (
@@ -77,6 +90,29 @@ export function PlanningMain() {
                       </Row>
                       <Row style={{ marginLeft: '1%' }}>
                         <Col>Temporada: {planning.season_year}</Col>
+                        <Col>
+                          {' '}
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              console.log(planning.id)
+                              deletePlanning(planning.id!)
+                            }}
+                          ></FontAwesomeIcon>
+                        </Col>
+                        <Col>
+                          {' '}
+                          <FontAwesomeIcon
+                            icon={faPen}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              console.log(planning.id)
+                              editPlanning(planning.id!)
+                              setShowPlanningModal(true)
+                            }}
+                          ></FontAwesomeIcon>
+                        </Col>
                       </Row>
                       <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
                         <Col>
@@ -126,6 +162,10 @@ export function PlanningMain() {
         show={showNewPlanningModal}
         handleClose={() => setShowNewPlannningModal(false)}
       ></NewPlanningModal>
+      <EditPlanningCost
+        show={showPlanningModal}
+        handleClose={() => setShowPlanningModal(false)}
+      ></EditPlanningCost>
     </Container>
   )
 }
