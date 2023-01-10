@@ -22,13 +22,18 @@ export function WalletBalance() {
     const [activeCard, setActiveCard] = useState('total');
 
     const ExampleCustomInput = forwardRef<any, any>(({ value, onClick }, ref) => (
-        <button style={{ backgroundColor: '#7c542b', border: 'none', borderRadius: 10, fontWeight: 'bold', fontSize: '20px' }} onClick={onClick} ref={ref}>
+        <button style={{ backgroundColor: '#7c542b', border: 'none', borderRadius: 10, fontWeight: 'bold', fontSize: '20px', color: '#FFF' }} onClick={onClick} ref={ref}>
             {value}
         </button>
     ));
 
+    const fetchExpensesInvoicesData = () => {
+        const startDate = financial.filterDates.startDate;
+        const endDate = financial.filterDates.endDate;
+        dispatch(asyncFetchExpensesInvoicesData(startDate, endDate));
+    }
     useEffect(() => {
-        dispatch(asyncFetchExpensesInvoicesData());
+        fetchExpensesInvoicesData();
     }, []);
 
     useEffect(() => {
@@ -37,6 +42,7 @@ export function WalletBalance() {
             startDate: startDate.toLocaleDateString('pt-BR'),
             endDate: endDate.toLocaleDateString('pt-BR')
         }));
+        fetchExpensesInvoicesData();
     }, [startDate, endDate]);
     return <Card className="ra-card">
         <Card.Body>
@@ -57,7 +63,6 @@ export function WalletBalance() {
                 </Col>
                 <Col md={2}>
                     <Form.Group className="mb-3" controlId="">
-                        {/* <Form.Label>Até</Form.Label> */}
                         <DatePicker selected={endDate} onChange={(date: any) => {
                             setEndDate(date);
                         }} locale={pt} dateFormat="dd/MM/yyyy" customInput={<ExampleCustomInput></ExampleCustomInput>} />
@@ -94,14 +99,14 @@ export function WalletBalance() {
                             <h6>Contas a Receber ({financial?.expensesInvoiceData?.unpaidContractsQuantity})</h6>
                             <Row>
                                 <Col>
-                                    <h4>{`${financial?.expensesInvoiceData?.unpaidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h4>
+                                    <h5>{`${financial?.expensesInvoiceData?.unpaidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h5>
                                 </Col>
                             </Row>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col md={2}>
-                    <Card className={activeCard === 'payments' || activeCard === 'total' ? 'ra-card-payments' : 'ra-card-inactive'}  onClick={() => {
+                    <Card className={activeCard === 'payments' || activeCard === 'total' ? 'ra-card-payments' : 'ra-card-inactive'} onClick={() => {
                         setActiveCard('payments');
                         dispatch(asyncFilterByButton('payments', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -109,7 +114,7 @@ export function WalletBalance() {
                             <h6>Contas a Pagar ({financial?.expensesInvoiceData?.unpaidExpensesInvoicesQuantity})</h6>
                             <Row>
                                 <Col>
-                                    <h4>{financial?.expensesInvoiceData?.unpaidExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h4>
+                                    <h5>{financial?.expensesInvoiceData?.unpaidExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -124,7 +129,7 @@ export function WalletBalance() {
                             <h6>Contas Vencidas ({financial?.expensesInvoiceData?.expiredExpensesInvoicesQuantity! + financial.expensesInvoiceData.expiredContractsQuantity!})</h6>
                             <Row>
                                 <Col>
-                                    <h4>{financial?.expensesInvoiceData?.expiredExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h4>
+                                    <h5>{financial?.expensesInvoiceData?.expiredExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -136,10 +141,10 @@ export function WalletBalance() {
                         dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
-                            <h6>Pagos ({financial?.expensesInvoiceData?.paidContractsQuantity!})</h6>
+                            <h6>Pagos ({financial?.expensesInvoiceData?.paidExpensesInvoicesQuantity!})</h6>
                             <Row>
                                 <Col>
-                                    <h4>{financial?.expensesInvoiceData?.paidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h4>
+                                    <h5>{financial?.expensesInvoiceData?.paidExpensesInvoicesData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -151,11 +156,11 @@ export function WalletBalance() {
                         dispatch(asyncFilterByButton('received', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
-                            <h6>Recebidas (?)</h6>
+                            <h6>Recebidas ({financial.expensesInvoiceData.paidContractsQuantity})</h6>
                             <Row>
                                 <Col>
-                                    {/* <h4>{financial?.expensesInvoiceData?.paidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h4> */}
-                                    <h4>R$ ?</h4>
+                                    <h5>{financial?.expensesInvoiceData?.paidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                                    {/* <h4>R$ ?</h4> */}
                                 </Col>
                             </Row>
                         </Card.Body>

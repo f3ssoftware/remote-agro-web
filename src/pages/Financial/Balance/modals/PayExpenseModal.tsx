@@ -11,7 +11,7 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId, amou
 
     const payExpense = async () => {
         if (expenseId && expenseId !== 0) {
-            dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id))
+            dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id, amount))
         }
 
         if (contractId && contractId !== 0) {

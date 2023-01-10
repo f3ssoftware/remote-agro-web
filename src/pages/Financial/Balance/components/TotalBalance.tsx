@@ -25,11 +25,13 @@ export function TotalBalance() {
     }, [financial])
 
     const fetchExpensesInvoicesData = async () => {
-        await dispatch(asyncFetchExpensesInvoicesData());
+        const startDate = financial.filterDates.startDate;
+        const endDate = financial.filterDates.endDate;
+        await dispatch(asyncFetchExpensesInvoicesData(startDate, endDate));
     }
 
     return <h5>{totalBalance.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
-    
+
     // return <Card className="ra-card">
     //     <Card.Body>
     //         <Card.Title>Saldo Total</Card.Title>
