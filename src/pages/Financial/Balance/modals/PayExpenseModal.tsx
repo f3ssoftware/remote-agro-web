@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
@@ -18,9 +18,13 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId, amou
             dispatch(asyncPayContract(contractId, bankAccountId, amount*100));
         }
 
-        await dispatch(asyncFetchBankAccountsData);
+        await dispatch(asyncFetchBankAccountsData());
         handleClose();
     }
+
+    useEffect(() => {
+        dispatch(asyncFetchBankAccountsData());
+    }, [])
 
     return <Modal backdrop={'static'} show={show} onHide={handleClose}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
@@ -34,6 +38,7 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId, amou
                         <Form.Select aria-label="Default select example" onChange={(e) => {
                             setBankAccountId(Number(e.target.value));
                         }}>
+                            <option value={0}></option>
                             {financial.bankAccounts.map((bankAccount, index) => {
                                 return <option key={index} value={bankAccount.id}>{bankAccount.nickname}</option>;
                             })}
@@ -46,7 +51,7 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId, amou
             <Button variant="danger" onClick={handleClose}>
                 Cancelar
             </Button>
-            <Button variant="success" onClick={() => payExpense()}>
+            <Button variant="success" onClick={() => payExpense()} disabled={bankAccountId === 0}>
                 Registrar
             </Button>
         </Modal.Footer>
