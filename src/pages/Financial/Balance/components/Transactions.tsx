@@ -1,4 +1,4 @@
-import { faCalendar, faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faEye, faPencil, faPrint, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, InputGroup, Row, Table } from "react-bootstrap";
@@ -10,6 +10,8 @@ import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchBankAccountsData,
 import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
+import jsPDF from "jspdf";
+import autoTable  from "jspdf-autotable";
 
 const initialTransactions: ExpensesRevenue[] = []
 export function Transactions() {
@@ -87,6 +89,24 @@ export function Transactions() {
                         <h5>Transações</h5>
                     </Col>
                     <Col>
+                        <FontAwesomeIcon icon={faPrint} style={{ cursor: 'pointer' }} onClick={() => {
+                           const doc = new jsPDF()
+
+                           const info: any = []
+                           transactions.forEach((er) =>{
+                                info.push([new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),er.reference, Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true }),er.number,er.cost_type,er.observations])
+                           })
+
+                           autoTable(doc,{
+                                head: [['Data', 'Fornecedor/Cliente', 'Valor', 'NF', 'Categoria', 'Obs', 'Pago', 'Conciliado']],
+                                body: info
+                           })
+
+                           doc.save('teste.pdf')
+                    
+                        }}></FontAwesomeIcon>
+                    </Col>
+                    <Col style={{ marginBottom: '1%'}}>
                         <Form>
                             <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px', height: '30px' }} placeholder="Pesquisar" onChange={(e) => {
                                 setFindTransaction(e.target.value);
