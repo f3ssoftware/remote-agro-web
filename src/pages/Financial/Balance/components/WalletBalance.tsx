@@ -138,7 +138,7 @@ export function WalletBalance() {
                 <Col md={2}>
                     <Card className={activeCard === 'paid' || activeCard === 'total' ? 'ra-card-paid' : 'ra-card-inactive'} onClick={async () => {
                         setActiveCard('paid');
-                        dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
+                        dispatch(asyncFilterByButton('paid', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
                         <Card.Body>
                             <h6>Pagos ({financial?.expensesInvoiceData?.paidExpensesInvoicesQuantity!})</h6>
