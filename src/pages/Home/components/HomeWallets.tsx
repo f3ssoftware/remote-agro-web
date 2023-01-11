@@ -24,7 +24,9 @@ export function HomeWallets() {
     ));
 
     useEffect(() => {
-        dispatch(asyncFetchExpensesInvoicesData());
+        const startDate = financial.filterDates.startDate;
+        const endDate = financial.filterDates.endDate;
+        dispatch(asyncFetchExpensesInvoicesData(startDate, endDate));
     }, []);
 
     useEffect(() => {

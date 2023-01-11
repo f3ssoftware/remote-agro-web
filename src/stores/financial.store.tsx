@@ -117,12 +117,12 @@ export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setC
     financialStore.actions;
 export default financialStore.reducer;
 
-export function asyncFetchExpensesInvoicesData() {
+export function asyncFetchExpensesInvoicesData(fromDate: string, untilDate: string) {
     return async function (dispatch: AppDispatch) {
         try {
             // dispatch(pushLoading('expenses-invoice-data'));
             const result = await axios.get(
-                `https://remoteapi.murilobotelho.com.br/expenses-invoices-data`,
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices-data?from_date=${fromDate}&until_date=${untilDate}`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -247,7 +247,7 @@ export function asyncFetchChart() {
     };
 }
 
-export function asyncPayExpense(id: number, bankAccountId: number, seasonId: number) {
+export function asyncPayExpense(id: number, bankAccountId: number, seasonId: number, amount: number) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.put(
@@ -255,7 +255,8 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
                 {
                     bank_account_id: bankAccountId,
                     was_paid: true,
-                    season_id: seasonId
+                    season_id: seasonId,
+                    amount
                 },
                 {
                     headers: {
@@ -268,7 +269,7 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData());
+            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(
                 getMessages({
                     message: "Pagamento realizado com sucesso",
@@ -287,7 +288,7 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData());
+            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
         }
     };
 }
@@ -313,7 +314,7 @@ export function asyncPayContract(id: number, bankAccountId: number, amount: numb
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData());
+            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(
                 getMessages({
                     message: "Pagamento realizado com sucesso",
@@ -351,7 +352,7 @@ export function asyncConciliateExpense(id: number, seasonId: number) {
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData());
+            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(
                 getMessages({
                     message: "Transação conciliada com sucesso",
@@ -385,7 +386,7 @@ export function asyncDeleteExpense(id: number) {
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData());
+            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(
                 getMessages({
                     message: "Conta excluída com sucesso",
@@ -427,7 +428,7 @@ export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData());
+            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
         } catch (err: any) {
             console.log(err);
             dispatch(

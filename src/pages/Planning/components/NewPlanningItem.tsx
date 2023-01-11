@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { RootState } from '../../..'
+import { asyncFetchInput } from '../../../stores/input.store'
 
 export function NewPlanningItem({
   onHandleRemove,
@@ -32,6 +33,7 @@ export function NewPlanningItem({
   const [seedQuantityType, setSeedQuantityType] = useState('')
   const [treatment, setTreatment] = useState('NÃO TRATADA')
   const [pms, setPms] = useState('')
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
     const p: PlanningInput = {
@@ -52,6 +54,10 @@ export function NewPlanningItem({
 
     onHandleUpdate(p, index)
   }, [productId, measureUnit, observation, quantity, totalCost, payDate])
+
+  // useEffect(() => {
+  //   dispatch(asyncFetchInput());
+  // }, [])
 
   return (
     <div>

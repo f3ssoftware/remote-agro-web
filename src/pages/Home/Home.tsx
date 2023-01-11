@@ -15,9 +15,14 @@ import { HomeWallets } from "./components/HomeWallets";
 export function Home() {
     const { financial } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
+    const fetchExpensesInvoicesData = () => {
+        const startDate = financial.filterDates.startDate;
+        const endDate = financial.filterDates.endDate;
+        dispatch(asyncFetchExpensesInvoicesData(startDate, endDate));
+    }
     useEffect(() => {
-        dispatch(asyncFetchExpensesInvoicesData());
-    }, [])
+        fetchExpensesInvoicesData();
+    }, []);
     return <div className="balance-content">
         <Row>
             <Col md={8}>
@@ -36,29 +41,29 @@ export function Home() {
             <Col>
                 {/* <Productivity></Productivity> */}
                 <div style={{ height: '300px', overflowY: 'scroll' }}>
-                        {costTypesList.map(costType => {
-                            return <Row>
-                                <Col md={2}>
+                    {costTypesList.map(costType => {
+                        return <Row>
+                            <Col md={2}>
 
-                                </Col>
-                                <Col>
-                                    <Row>
-                                        <Col md={10}>
-                                            <ProgressBar variant="success" now={(financial.expensesRevenue.filter(exp => exp.cost_type === costType.value).length / financial.expensesRevenue.length) * 100} />
-                                        </Col>
-                                        <Col md={2}>
-                                            <span className="percentage-span">{`${((financial.expensesRevenue.filter(exp => exp.cost_type === costType.value).length / financial.expensesRevenue.length) * 100).toFixed(1)}%`}</span>
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginTop: '2%' }}>
-                                        <Col>
-                                            <span style={{ color: '#fff' }}>{costType.label}</span>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                        })}
-                    </div>
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <Col md={10}>
+                                        <ProgressBar variant="success" now={(financial.expensesRevenue.filter(exp => exp.cost_type === costType.value).length / financial.expensesRevenue.length) * 100} />
+                                    </Col>
+                                    <Col md={2}>
+                                        <span className="percentage-span">{`${((financial.expensesRevenue.filter(exp => exp.cost_type === costType.value).length / financial.expensesRevenue.length) * 100).toFixed(1)}%`}</span>
+                                    </Col>
+                                </Row>
+                                <Row style={{ marginTop: '2%' }}>
+                                    <Col>
+                                        <span style={{ color: '#fff' }}>{costType.label}</span>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    })}
+                </div>
             </Col>
         </Row>
     </div>
