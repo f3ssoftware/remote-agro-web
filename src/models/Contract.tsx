@@ -22,4 +22,6 @@ export class Contract {
     season_id?: number;
 
     type?: string
+
+    id?: number
 }
