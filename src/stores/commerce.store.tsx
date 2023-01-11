@@ -10,7 +10,10 @@ const farmStore = createSlice({
     name: "commerce",
     initialState: {
         plots: [],
-        silo: initialSilo
+        silo: initialSilo,
+        contracts: {
+
+        }
     },
     reducers: {
         setPlots(state, action) {
@@ -18,11 +21,15 @@ const farmStore = createSlice({
         },
         setSilo(state,action){
             state.silo = action.payload
+        },
+        setEditContracts(state,action){
+            state.contracts = action.payload
         }
+        
     },
 });
 
-export const { setPlots, setSilo } =
+export const { setPlots, setSilo, setEditContracts } =
     farmStore.actions;
 export default farmStore.reducer;
 
@@ -93,5 +100,28 @@ export function asyncFetchSiloData() {
             }));
         }
     }
+}
+
+export function asyncFetchEditContracts(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/contracts/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setEditContracts(result.data));
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: err.result.data.error,
+                    type: "error",
+                })
+            );
+        }
+    };
 }
 

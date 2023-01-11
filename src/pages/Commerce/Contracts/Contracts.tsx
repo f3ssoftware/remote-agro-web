@@ -17,6 +17,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../index'
 import { Contract } from '../../../models/Contract'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { asyncFetchEditContracts } from '../../../stores/commerce.store'
 
 const initialContractList: Contract[] = []
 export function Contracts() {
@@ -49,6 +52,14 @@ export function Contracts() {
     setContracts(
       [...financial.contracts].slice((page - 1) * pageSize, page * pageSize),
     )
+  }
+
+  // const deleteContract = (id: number) => {
+  //   dispatch(asyncDeletecontract(id))
+  //   dispatch(asyncFetchContractsData)
+  // }
+  const editContract = (id: number) =>{
+    dispatch(asyncFetchEditContracts(id))
   }
 
   return (
@@ -88,54 +99,116 @@ export function Contracts() {
                   +
                 </Button>
               </div>
-              <div style={{ marginTop: '2%', marginLeft: '5%', marginRight:'5%' }}>
-                    <div className="contracts-content">
-                      {contracts.map((contract, index) => (
-                        <div  className="contracts-card" key={index}>
-                          <Row style={{marginLeft: '1%'}}>
-                            <Col>
-                              <b>{contract.name}</b>
-                            </Col>
-                          </Row >
-                          <Row style={{marginLeft: '1%'}}>
-                            <Col>Cultivo: {contract.cultivation_name}</Col>
-                          </Row>
-                          <Row style={{marginLeft: '1%' ,marginRight: '1%'}}>
-                            <Col>Inicio: {new Date(contract.start_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</Col>
-                            <Col>Final: {new Date(contract.end_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</Col>
-                            <Col>Pagamento: {new Date(contract.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</Col>
-                          </Row>
-
-                          <div style={{marginTop: '2%', marginRight: '2%'}} className="flex-right">
-                            <h5 style={{ color: (Number(contract.amount)) > 0 ? '#4C9626' : '#911414' }}>{Number(contract.amount!/100).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
-                        </div>
-                        </div>
-                      ))}
+              <div
+                style={{ marginTop: '2%', marginLeft: '5%', marginRight: '5%' }}
+              >
+                <div className="contracts-content">
+                  {contracts.map((contract, index) => (
+                    <div className="contracts-card" key={index}>
+                      <Row style={{ marginLeft: '1%' }}>
+                        <Col>
+                          <b>{contract.name}</b>
+                        </Col>
+                      </Row>
+                      <Row style={{ marginLeft: '1%' }}>
+                        <Col>Cultivo: {contract.cultivation_name}</Col>
+                      </Row>
+                      <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
+                        <Col>
+                          Inicio:{' '}
+                          {new Date(contract.start_date!).toLocaleDateString(
+                            'pt-BR',
+                            { timeZone: 'UTC' },
+                          )}
+                        </Col>
+                        <Col>
+                          Final:{' '}
+                          {new Date(contract.end_date!).toLocaleDateString(
+                            'pt-BR',
+                            { timeZone: 'UTC' },
+                          )}
+                        </Col>
+                        <Col>
+                          Pagamento:{' '}
+                          {new Date(contract.payment_date!).toLocaleDateString(
+                            'pt-BR',
+                            { timeZone: 'UTC' },
+                          )}
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '2%', marginRight: '2%', marginLeft: '2%' }}>
+                        <Col>
+                          {' '}
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              // console.log(contract.id)
+                              // deletePlanning(contract.id!)
+                            }}
+                          ></FontAwesomeIcon>
+                        </Col>
+                        <Col>
+                          {' '}
+                          <FontAwesomeIcon
+                            icon={faPen}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              console.log(contract.id)
+                              editContract(contract.id!)
+                              // setShowPlanningModal(true)
+                            }}
+                          ></FontAwesomeIcon>
+                        </Col>
+                        <Col>
+                          <div className="flex-right">
+                            <h5
+                              style={{
+                                color:
+                                  Number(contract.amount) > 0
+                                    ? '#4C9626'
+                                    : '#911414',
+                              }}
+                            >
+                              {Number(contract.amount! / 100).toLocaleString(
+                                'pt-BR',
+                                {
+                                  maximumFractionDigits: 2,
+                                  style: 'currency',
+                                  currency: 'BRL',
+                                  useGrouping: true,
+                                },
+                              )}
+                            </h5>
+                          </div>
+                        </Col>
+                      </Row>
                     </div>
-                    <div className="flex-center" style={{ marginTop: '5%' }}>
-                      <Pagination size="sm">
-                        <Pagination.Prev
-                          onClick={() => {
-                            if (page > 1) {
-                              paginate(page - 1)
-                              setPage(page - 1)
-                            }
-                          }}
-                        />
-                        <Pagination.Next
-                          onClick={() => {
-                            if (page < totalResults / pageSize) {
-                              console.log(totalResults / pageSize)
-                              paginate(page + 1)
-                              setPage(page + 1)
-                            } else {
-                              console.log('else: ', totalResults / pageSize)
-                            }
-                          }}
-                        />
-                      </Pagination>
-                    </div>
-
+                  ))}
+                </div>
+                <div className="flex-center" style={{ marginTop: '5%' }}>
+                  <Pagination size="sm">
+                    <Pagination.Prev
+                      onClick={() => {
+                        if (page > 1) {
+                          paginate(page - 1)
+                          setPage(page - 1)
+                        }
+                      }}
+                    />
+                    <Pagination.Next
+                      onClick={() => {
+                        if (page < totalResults / pageSize) {
+                          console.log(totalResults / pageSize)
+                          paginate(page + 1)
+                          setPage(page + 1)
+                        } else {
+                          console.log('else: ', totalResults / pageSize)
+                        }
+                      }}
+                    />
+                  </Pagination>
+                </div>
               </div>
             </div>
           </div>
