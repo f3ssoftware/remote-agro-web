@@ -28,9 +28,9 @@ export function WalletBalance() {
     ));
 
     const fetchExpensesInvoicesData = () => {
-        const startDate = financial.filterDates.startDate;
-        const endDate = financial.filterDates.endDate;
-        dispatch(asyncFetchExpensesInvoicesData(startDate, endDate));
+        // const startDate = financial.filterDates.startDate;
+        // const endDate = financial.filterDates.endDate;
+        dispatch(asyncFetchExpensesInvoicesData(startDate.toLocaleDateString('pt-BR'), endDate.toLocaleDateString('pt-BR')));
     }
     useEffect(() => {
         fetchExpensesInvoicesData();

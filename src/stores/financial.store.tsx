@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { startOfDecade } from "date-fns";
+import { startOfDecade, startOfSecond } from "date-fns";
 import { AppDispatch } from "..";
 import { BankAccount } from "../models/BankAccount";
 import { Contract } from "../models/Contract";
@@ -70,30 +70,25 @@ const financialStore = createSlice({
             // dispatch(asyncFetchExpensesAndRevenues(1, 300, `${today.getDate()}/${today.getMonth() + 1}/${today.getUTCFullYear()}`, `${nextMonth.getDate()}/${nextMonth.getMonth() + 1}/${nextMonth.getUTCFullYear()}`));
             switch (action.payload) {
                 case 'total': {
-                    // state.expensesRevenue = state.expensesRevenue.filter(expense => {
-                    //     if (expense.contract_id) {
-                    //         return expense;
-                    //     }
-                    // });
                     state.expensesRevenue = state.expensesRevenue;
                 } break;
                 case 'billings': {
                     state.expensesRevenue = state.expensesRevenue.filter(expense => {
-                        if (expense.contract_id) {
+                        if (expense.contract_id && !expense.bank_account_id && !expense.is_paid) {
                             return expense;
                         }
                     });
                 } break;
                 case 'payments': {
                     state.expensesRevenue = state.expensesRevenue.filter(exp => {
-                        if (exp.expenses_invoice_id) {
+                        if (exp.expenses_invoice_id && !exp.bank_account_id && !exp.is_paid) {
                             return exp;
                         }
                     });
                 } break;
                 case 'paid': {
                     state.expensesRevenue = state.expensesRevenue.filter(exp => {
-                        if(exp.is_paid) {
+                        if (exp.is_paid && exp.expenses_invoice_id && exp.bank_account_id) {
                             return exp;
                         }
                     })
@@ -101,6 +96,13 @@ const financialStore = createSlice({
                 case 'due_dated': {
                     state.expensesRevenue = state.expensesRevenue.filter(exp => {
                         if (new Date(exp.payment_date!) < new Date() && !exp.is_paid && exp.expenses_invoice_id) {
+                            return exp;
+                        }
+                    })
+                } break;
+                case 'received': {
+                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
+                        if(exp.contract_id && exp.bank_account_id && exp.is_paid) {
                             return exp;
                         }
                     })
