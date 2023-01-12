@@ -20,6 +20,7 @@ import { Contract } from '../../../models/Contract'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { asyncDeleteContract, asyncFetchEditContracts } from '../../../stores/commerce.store'
+import { EditContractModal } from '../modals/NewContractModal/EditContractModal'
 
 const initialContractList: Contract[] = []
 export function Contracts() {
@@ -31,6 +32,7 @@ export function Contracts() {
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
+  const [showEditContractModal, setShowEditContractModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -156,7 +158,7 @@ export function Contracts() {
                             onClick={() => {
                               console.log(contract.id)
                               editContract(contract.id!)
-                              // setShowPlanningModal(true)
+                              setShowEditContractModal(true)
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -257,6 +259,10 @@ export function Contracts() {
         show={showNewContractModal}
         handleClose={() => setShowNewContractModal(false)}
       ></NewContractModal>
+      <EditContractModal
+        show={showEditContractModal}
+        handleClose={() => setShowEditContractModal(false)}
+      ></EditContractModal>
     </Container>
   )
 }

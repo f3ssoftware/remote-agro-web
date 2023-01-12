@@ -94,7 +94,7 @@ export function Transactions() {
 
                            const info: any = []
                            transactions.forEach((er) =>{
-                                info.push([new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),er.reference, Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true }),er.number,er.cost_type,er.observations])
+                                info.push([new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),er.reference, Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true }),er.number,er.cost_type,er.observations, er.is_paid?'Sim':'Não', er.is_concilliated?'Sim':'Não'])
                            })
 
                            autoTable(doc,{

@@ -83,7 +83,7 @@ export function WalletBalance() {
                             <h6>Total</h6>
                             <Row>
                                 <Col>
-                                    <h5>{`${Number(((financial?.expensesInvoiceData?.unpaidContractsData! + financial.expensesInvoiceData.paidContractsData!) - (financial.expensesInvoiceData.unpaidExpensesInvoicesData! + financial.expensesInvoiceData.expiredContractsData! + financial.expensesInvoiceData.paidExpensesInvoicesData!))).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h5>
+                                    <h6>{`${Number(((financial?.expensesInvoiceData?.unpaidContractsData! + financial.expensesInvoiceData.paidContractsData!) - (financial.expensesInvoiceData.unpaidExpensesInvoicesData! + financial.expensesInvoiceData.expiredContractsData! + financial.expensesInvoiceData.paidExpensesInvoicesData!))).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h6>
                                     {/* <h4>{`${financial?.expensesInvoiceData?.unpaidContractsData?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h4> */}
                                     {/* <TotalBalance></TotalBalance> */}
                                 </Col>
@@ -100,7 +100,7 @@ export function WalletBalance() {
                             <h6>Contas a Receber ({financial?.expensesInvoiceData?.unpaidContractsQuantity})</h6>
                             <Row>
                                 <Col>
-                                    <h5>{`${financial?.expensesInvoiceData?.unpaidContractsData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h5>
+                                    <h6>{`${financial?.expensesInvoiceData?.unpaidContractsData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}`}</h6>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -115,7 +115,7 @@ export function WalletBalance() {
                             <h6>Contas a Pagar ({financial?.expensesInvoiceData?.unpaidExpensesInvoicesQuantity})</h6>
                             <Row>
                                 <Col>
-                                    <h5>{financial?.expensesInvoiceData?.unpaidExpensesInvoicesData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                                    <h6>{financial?.expensesInvoiceData?.unpaidExpensesInvoicesData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h6>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -130,7 +130,7 @@ export function WalletBalance() {
                             <h6>Contas Vencidas ({financial?.expensesInvoiceData?.expiredExpensesInvoicesQuantity! + financial.expensesInvoiceData.expiredContractsQuantity!})</h6>
                             <Row>
                                 <Col>
-                                    <h5>{financial?.expensesInvoiceData?.expiredExpensesInvoicesData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                                    <h6>{financial?.expensesInvoiceData?.expiredExpensesInvoicesData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h6>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -145,7 +145,7 @@ export function WalletBalance() {
                             <h6>Pagos ({financial?.expensesInvoiceData?.paidExpensesInvoicesQuantity!})</h6>
                             <Row>
                                 <Col>
-                                    <h5>{financial?.expensesInvoiceData?.paidExpensesInvoicesData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                                    <h6>{financial?.expensesInvoiceData?.paidExpensesInvoicesData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h6>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -160,7 +160,7 @@ export function WalletBalance() {
                             <h6>Recebidas ({financial.expensesInvoiceData.paidContractsQuantity})</h6>
                             <Row>
                                 <Col>
-                                    <h5>{financial?.expensesInvoiceData?.paidContractsData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h5>
+                                    <h6>{financial?.expensesInvoiceData?.paidContractsData?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</h6>
                                     {/* <h4>R$ ?</h4> */}
                                 </Col>
                             </Row>
