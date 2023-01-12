@@ -19,7 +19,7 @@ import { RootState } from '../../../index'
 import { Contract } from '../../../models/Contract'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { asyncFetchEditContracts } from '../../../stores/commerce.store'
+import { asyncDeleteContract, asyncFetchEditContracts } from '../../../stores/commerce.store'
 
 const initialContractList: Contract[] = []
 export function Contracts() {
@@ -54,10 +54,10 @@ export function Contracts() {
     )
   }
 
-  // const deleteContract = (id: number) => {
-  //   dispatch(asyncDeletecontract(id))
-  //   dispatch(asyncFetchContractsData)
-  // }
+  const deleteContract = (id: number) => {
+    dispatch(asyncDeleteContract(id))
+    dispatch(asyncFetchContractsData)
+  }
   const editContract = (id: number) =>{
     dispatch(asyncFetchEditContracts(id))
   }
@@ -143,8 +143,8 @@ export function Contracts() {
                             icon={faTrash}
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
-                              // console.log(contract.id)
-                              // deletePlanning(contract.id!)
+                              console.log(contract.id)
+                              deleteContract(contract.id!)
                             }}
                           ></FontAwesomeIcon>
                         </Col>

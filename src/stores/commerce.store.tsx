@@ -3,6 +3,7 @@ import axios from "axios";
 import { AppDispatch } from "..";
 import { Silo } from "../models/Silo";
 import { getMessages } from "./messaging.store";
+import { asyncFetchContractsData } from "./financial.store";
 
 
 const initialSilo: Silo [] = [];
@@ -124,4 +125,32 @@ export function asyncFetchEditContracts(id: number) {
         }
     };
 }
-
+export function asyncDeleteContract(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.delete(
+                `https://remoteapi.murilobotelho.com.br/plannings/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(asyncFetchContractsData());
+            dispatch(
+                getMessages({
+                    message: "Contrato excluído com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
