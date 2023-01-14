@@ -65,9 +65,7 @@ const financialStore = createSlice({
             state.contracts = action.payload
         },
         filterByButton(state, action) {
-            // const today = new Date()
-            // const nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
-            // dispatch(asyncFetchExpensesAndRevenues(1, 300, `${today.getDate()}/${today.getMonth() + 1}/${today.getUTCFullYear()}`, `${nextMonth.getDate()}/${nextMonth.getMonth() + 1}/${nextMonth.getUTCFullYear()}`));
+
             switch (action.payload) {
                 case 'total': {
                     state.expensesRevenue = state.expensesRevenue;
@@ -190,12 +188,20 @@ export function asyncFetchContractsData() {
     };
 }
 
-export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fromDate: string, untilDate: string) {
+export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fromDate: string, untilDate: string, paymentStatus?: string | null, type?: string | null) {
     return async function (dispatch: AppDispatch) {
         try {
-            const result = await axios.get(`https://remoteapi.murilobotelho.com.br/expenses-and-revenues/?page=${page}&pageSize=${pageSize}&from_date=${fromDate}&until_date=${untilDate}`, {
+            const result = await axios.get(`https://remoteapi.murilobotelho.com.br/expenses-and-revenues/`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                },
+                params: {
+                    page,
+                    pageSize,
+                    from_date: fromDate,
+                    until_date: untilDate,
+                    payment_status: paymentStatus,
+                    type,
                 }
             });
             dispatch(setExpensesRevenue(result.data.content));
@@ -524,7 +530,34 @@ export function asyncFetchCultivations() {
 
 export function asyncFilterByButton(filter: string, startDate: string, endDate: string) {
     return async function (dispatch: AppDispatch) {
-        await dispatch(asyncFetchExpensesAndRevenues(1, 300, startDate, endDate));
+        let paymentStatus = null;
+        let type=null;
+        switch (filter) {
+            case 'total': {
+                paymentStatus = null;
+            } break;
+            case 'billings': {
+                paymentStatus = 'unpaid'
+                type='contract'
+            } break;
+            case 'payments': {
+                paymentStatus = 'unpaid';
+                type='expenses_invoices';
+            } break;
+            case 'paid': {
+                paymentStatus = 'paid';
+                type='expenses_invoices';
+            } break;
+            case 'due_dated': {
+                paymentStatus='expired';
+                type='expenses_invoice'
+            } break;
+            case 'received': {
+                paymentStatus = 'paid'
+                type='contract'
+            }
+        }
+        await dispatch(asyncFetchExpensesAndRevenues(1, 300, startDate, endDate, paymentStatus, type));
         dispatch(filterByButton(filter))
     };
 }

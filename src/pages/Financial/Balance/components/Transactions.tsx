@@ -161,7 +161,7 @@ export function Transactions() {
                                                 setContractId(er.contract_id!);
                                                 setAmount(Number(er.amount)!);
                                             }
-                                        }} checked={er.is_paid} />
+                                        }} checked={!!er.is_paid} />
                                     </td>
                                     <td>
                                         <Form.Check aria-label="Conciliado" checked={er.is_concilliated} onChange={(e: any) => {
