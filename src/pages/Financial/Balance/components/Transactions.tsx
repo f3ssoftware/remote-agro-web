@@ -11,7 +11,7 @@ import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
 import jsPDF from "jspdf";
-import autoTable  from "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 const initialTransactions: ExpensesRevenue[] = []
 export function Transactions() {
@@ -89,24 +89,44 @@ export function Transactions() {
                         <h5>Transações</h5>
                     </Col>
                     <Col>
-                        <FontAwesomeIcon icon={faPrint} style={{ cursor: 'pointer' }} onClick={() => {
-                           const doc = new jsPDF()
+                        <FontAwesomeIcon icon={faPrint} style={{ cursor: 'pointer', marginLeft: '1%' }} onClick={() => {
+                            const doc = new jsPDF()
 
-                           const info: any = []
-                           transactions.forEach((er) =>{
-                                info.push([new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),er.reference, Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true }),er.number,er.cost_type,er.observations, er.is_paid?'Sim':'Não', er.is_concilliated?'Sim':'Não'])
-                           })
+                            const info: any = []
+                            transactions.forEach((er) => {
+                                info.push([new Date(er.payment_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }), er.reference, Number(er.amount).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true }), er.number, er.cost_type, er.observations, er.is_paid ? 'Sim' : 'Não', er.is_concilliated ? 'Sim' : 'Não'])
+                            })
 
-                           autoTable(doc,{
+                            autoTable(doc, {
                                 head: [['Data', 'Fornecedor/Cliente', 'Valor', 'NF', 'Categoria', 'Obs', 'Pago', 'Conciliado']],
                                 body: info
-                           })
+                            })
 
-                           doc.save('teste.pdf')
-                    
+                            switch(financial.activeCard) {
+                                case 'total': {
+                                    doc.save(`TOTAL_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
+                                } break;
+                                case 'billings': {
+                                    doc.save(`CONTAS_RECEBER_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
+                                } break;
+                                case 'payments': {
+                                    doc.save(`CONTAS_PAGAR_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
+                                } break;
+                                case 'due_dated': {
+                                    doc.save(`VENCIDAS_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
+                                } break;
+                                case 'paid': {
+                                    doc.save(`PAGAS_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
+                                } break;
+                                case 'received': {
+                                    doc.save(`RECEBIDAS_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
+                                } break;
+                            }
+                            
+
                         }}></FontAwesomeIcon>
                     </Col>
-                    <Col style={{ marginBottom: '1%'}}>
+                    <Col style={{ marginBottom: '1%' }} md={5}>
                         <Form>
                             <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px', height: '30px' }} placeholder="Pesquisar" onChange={(e) => {
                                 setFindTransaction(e.target.value);

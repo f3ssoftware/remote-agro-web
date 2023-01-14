@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useState } from "react";
 import { Card, Row, Col, Form } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../..";
-import { asyncFetchExpensesAndRevenues, asyncFetchExpensesInvoicesData, asyncFilterByButton, filterByButton, setFilterDates } from "../../../../stores/financial.store";
+import { asyncFetchExpensesAndRevenues, asyncFetchExpensesInvoicesData, asyncFilterByButton, setCardActive, setFilterDates } from "../../../../stores/financial.store";
 import "../Balance.scss";
 import { TransactionDates } from "../modals/TransactionDates";
 import { faArrowRightLong, faCalendar } from "@fortawesome/free-solid-svg-icons";
@@ -76,6 +76,7 @@ export function WalletBalance() {
             <Row>
                 <Col md={2}>
                     <Card className={activeCard === 'total' ? 'ra-card-total-balance' : 'ra-card-inactive'} onClick={() => {
+                        dispatch(setCardActive('total'));
                         setActiveCard('total');
                         dispatch(asyncFilterByButton('total', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -93,6 +94,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={2}>
                     <Card className={activeCard === 'billings' || activeCard === 'total' ? 'ra-card-billing' : 'ra-card-inactive'} onClick={() => {
+                        dispatch(setCardActive('billings'));
                         setActiveCard('billings');
                         dispatch(asyncFilterByButton('billings', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -108,6 +110,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={2}>
                     <Card className={activeCard === 'payments' || activeCard === 'total' ? 'ra-card-payments' : 'ra-card-inactive'} onClick={() => {
+                        dispatch(setCardActive('payments'));
                         setActiveCard('payments');
                         dispatch(asyncFilterByButton('payments', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -123,6 +126,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={2}>
                     <Card className={activeCard === 'due_dated' || activeCard === 'total' ? 'ra-card-duedated' : 'ra-card-inactive'} onClick={async () => {
+                        dispatch(setCardActive('due_dated'));
                         setActiveCard('due_dated');
                         dispatch(asyncFilterByButton('due_dated', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -138,6 +142,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={2}>
                     <Card className={activeCard === 'paid' || activeCard === 'total' ? 'ra-card-paid' : 'ra-card-inactive'} onClick={async () => {
+                        dispatch(setCardActive('paid'));
                         setActiveCard('paid');
                         dispatch(asyncFilterByButton('paid', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>
@@ -153,6 +158,7 @@ export function WalletBalance() {
                 </Col>
                 <Col md={2}>
                     <Card className={activeCard === 'received' || activeCard === 'total' ? 'ra-card-received' : 'ra-card-inactive'} onClick={async () => {
+                        dispatch(setCardActive('received'));
                         setActiveCard('received');
                         dispatch(asyncFilterByButton('received', financial.filterDates.startDate, financial.filterDates.endDate));
                     }}>

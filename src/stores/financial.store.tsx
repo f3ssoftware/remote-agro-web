@@ -37,7 +37,8 @@ const financialStore = createSlice({
         filterDates: {
             startDate: new Date().toLocaleDateString('pt-BR'),
             endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('pt-BR')
-        }
+        },
+        activeCard: 'total',
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -64,56 +65,16 @@ const financialStore = createSlice({
         setContracts(state, action) {
             state.contracts = action.payload
         },
-        filterByButton(state, action) {
-
-            switch (action.payload) {
-                case 'total': {
-                    state.expensesRevenue = state.expensesRevenue;
-                } break;
-                case 'billings': {
-                    state.expensesRevenue = state.expensesRevenue.filter(expense => {
-                        if (expense.contract_id && !expense.bank_account_id && !expense.is_paid) {
-                            return expense;
-                        }
-                    });
-                } break;
-                case 'payments': {
-                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
-                        if (exp.expenses_invoice_id && !exp.bank_account_id && !exp.is_paid) {
-                            return exp;
-                        }
-                    });
-                } break;
-                case 'paid': {
-                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
-                        if (exp.is_paid && exp.expenses_invoice_id && exp.bank_account_id) {
-                            return exp;
-                        }
-                    })
-                } break;
-                case 'due_dated': {
-                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
-                        if (new Date(exp.payment_date!) < new Date() && !exp.is_paid && exp.expenses_invoice_id) {
-                            return exp;
-                        }
-                    })
-                } break;
-                case 'received': {
-                    state.expensesRevenue = state.expensesRevenue.filter(exp => {
-                        if(exp.contract_id && exp.bank_account_id && exp.is_paid) {
-                            return exp;
-                        }
-                    })
-                }
-            }
-        },
         setFilterDates(state, action) {
             state.filterDates = action.payload;
+        },
+        setCardActive(state, action) {
+            state.activeCard = action.payload;
         }
     }
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, filterByButton, setFilterDates } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, setFilterDates, setCardActive } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -531,34 +492,33 @@ export function asyncFetchCultivations() {
 export function asyncFilterByButton(filter: string, startDate: string, endDate: string) {
     return async function (dispatch: AppDispatch) {
         let paymentStatus = null;
-        let type=null;
+        let type = null;
         switch (filter) {
             case 'total': {
                 paymentStatus = null;
             } break;
             case 'billings': {
                 paymentStatus = 'unpaid'
-                type='contract'
+                type = 'contract'
             } break;
             case 'payments': {
                 paymentStatus = 'unpaid';
-                type='expenses_invoices';
+                type = 'expenses_invoices';
             } break;
             case 'paid': {
                 paymentStatus = 'paid';
-                type='expenses_invoices';
+                type = 'expenses_invoices';
             } break;
             case 'due_dated': {
-                paymentStatus='expired';
-                type='expenses_invoice'
+                paymentStatus = 'expired';
+                type = 'expenses_invoice'
             } break;
             case 'received': {
                 paymentStatus = 'paid'
-                type='contract'
+                type = 'contract'
             }
         }
         await dispatch(asyncFetchExpensesAndRevenues(1, 300, startDate, endDate, paymentStatus, type));
-        dispatch(filterByButton(filter))
     };
 }
 
