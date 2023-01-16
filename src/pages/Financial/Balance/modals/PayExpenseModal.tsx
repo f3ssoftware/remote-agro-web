@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncPayContract, asyncPayExpense } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncFetchExpensesAndRevenues, asyncFilterByButton, asyncPayContract, asyncPayExpense } from "../../../../stores/financial.store";
 
 export function PayExpenseModal({ show, handleClose, expenseId, contractId, amount, expensesRevenuesId }: { show: boolean, handleClose: any, expenseId: number, contractId: number, amount: number, expensesRevenuesId: number }) {
     const [bankAccountId, setBankAccountId] = useState(0);
@@ -15,10 +15,11 @@ export function PayExpenseModal({ show, handleClose, expenseId, contractId, amou
         }
 
         if (contractId && contractId !== 0) {
-            dispatch(asyncPayContract(contractId, bankAccountId, amount*100));
+            dispatch(asyncPayContract(contractId, bankAccountId, amount * 100));
         }
 
         await dispatch(asyncFetchBankAccountsData());
+        await dispatch(asyncFilterByButton(financial.activeCard, financial.filterDates.startDate, financial.filterDates.endDate));
         handleClose();
     }
 

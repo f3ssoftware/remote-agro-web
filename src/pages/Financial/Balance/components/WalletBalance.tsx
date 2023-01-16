@@ -44,6 +44,7 @@ export function WalletBalance() {
         }));
         fetchExpensesInvoicesData();
     }, [startDate, endDate]);
+
     return <Card className="ra-card">
         <Card.Body>
             <Row>

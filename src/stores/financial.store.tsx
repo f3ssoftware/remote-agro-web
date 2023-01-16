@@ -39,6 +39,7 @@ const financialStore = createSlice({
             endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('pt-BR')
         },
         activeCard: 'total',
+        type: '',
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -70,11 +71,14 @@ const financialStore = createSlice({
         },
         setCardActive(state, action) {
             state.activeCard = action.payload;
+        },
+        setType(state, action) {
+            state.type = action.payload
         }
     }
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, setFilterDates, setCardActive } =
+export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, setFilterDates, setCardActive, setType } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -236,7 +240,7 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
             );
             const actualYear = new Date().getFullYear();
             const actualMonth = new Date().getMonth();
-            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            // dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
             dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
@@ -255,7 +259,7 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
             );
             const actualYear = new Date().getFullYear();
             const actualMonth = new Date().getMonth();
-            dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            // dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
             dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));

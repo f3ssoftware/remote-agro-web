@@ -86,7 +86,7 @@ export function SefazInvoice() {
                     </tr>
                 </thead>
                 <tbody style={{ backgroundColor: '#fff', color: '#000', fontSize: '12px' }}>
-                    {externalInvoices.map((extInv, index) => {
+                    {externalInvoices.filter(ext => ext.status === 'autorizada').map((extInv, index) => {
                         return <tr key={index}>
                             <td>{new Date(extInv?.issued_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                             <td>{extInv.issuer_name}</td>

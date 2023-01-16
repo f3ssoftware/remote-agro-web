@@ -8,12 +8,14 @@ const userStore = createSlice({
   initialState: {
     name: "",
     role: "",
+    reportUrl: "",
   },
   reducers: {
     fetchUser(state: any, action) {
       console.log(action);
       state.name = action.payload.user.name;
       state.role = action.payload.user.role;
+      state.reportUrl = action.payload.user.web_reports_url;
     },
   },
 });
