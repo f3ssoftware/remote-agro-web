@@ -216,7 +216,7 @@ export function asyncFetchChart() {
     };
 }
 
-export function asyncPayExpense(id: number, bankAccountId: number, seasonId: number, amount: number) {
+export function asyncPayExpense(id: number, bankAccountId: number, seasonId: number, amount: number, expensesRevenueId: number) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.put(
@@ -225,7 +225,8 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
                     bank_account_id: bankAccountId,
                     was_paid: true,
                     season_id: seasonId,
-                    amount
+                    amount,
+                    expenses_and_revenue_id: expensesRevenueId
                 },
                 {
                     headers: {

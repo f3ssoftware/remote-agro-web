@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { asyncConciliateExpense, asyncFetchBankAccountsData, asyncPayContract, asyncPayExpense } from "../../../../stores/financial.store";
 
-export function PayExpenseModal({ show, handleClose, expenseId, contractId, amount }: { show: boolean, handleClose: any, expenseId: number, contractId: number, amount: number }) {
+export function PayExpenseModal({ show, handleClose, expenseId, contractId, amount, expensesRevenuesId }: { show: boolean, handleClose: any, expenseId: number, contractId: number, amount: number, expensesRevenuesId: number }) {
     const [bankAccountId, setBankAccountId] = useState(0);
     const { financial, seasons } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
 
     const payExpense = async () => {
         if (expenseId && expenseId !== 0) {
-            dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id, amount))
+            dispatch(asyncPayExpense(expenseId, bankAccountId, seasons.selectedSeason.id, amount, expensesRevenuesId))
         }
 
         if (contractId && contractId !== 0) {

@@ -29,6 +29,7 @@ export function Transactions() {
     const [totalResults, setTotalResults] = useState(0);
     const [contractId, setContractId] = useState(0);
     const [amount, setAmount] = useState(0);
+    const [expenseRevenueId, setExpenseRevenueId] = useState(0);
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
@@ -180,6 +181,7 @@ export function Transactions() {
                                                 setExpenseId(er.expenses_invoice_id!);
                                                 setContractId(er.contract_id!);
                                                 setAmount(Number(er.amount)!);
+                                                setExpenseRevenueId(er.id!);
                                             }
                                         }} checked={!!er.is_paid} />
                                     </td>
@@ -200,7 +202,6 @@ export function Transactions() {
                                     <td>
                                         <div className="flex-space-between">
                                             <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => {
-                                                console.log(er.id);
                                                 setExpenseId(er.expenses_invoice_id!);
                                                 deleteExpense(er.expenses_invoice_id!);
                                             }}></FontAwesomeIcon>
@@ -213,7 +214,7 @@ export function Transactions() {
                 </div>
             </Card.Body>
         </Card>
-        <PayExpenseModal show={showModalPayExpense} handleClose={() => setShowModalPayExpense(false)} expenseId={expenseId} contractId={contractId} amount={amount}></PayExpenseModal>
+        <PayExpenseModal show={showModalPayExpense} handleClose={() => setShowModalPayExpense(false)} expenseId={expenseId} contractId={contractId} amount={amount} expensesRevenuesId={expenseRevenueId}></PayExpenseModal>
         <TransactionDates show={showModalDates} handleClose={() => setShowModalDates(false)} onUpdate={(startDate: any, endDate: any) => {
             setStartDate(startDate);
             setEndDate(endDate);
