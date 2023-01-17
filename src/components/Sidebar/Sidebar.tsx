@@ -2,7 +2,7 @@ import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 import "./Sidebar.scss";
 import logo from "../../assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faMapLocationDot, faLeaf, faMoneyBills, faBuilding, faTractor, faClock, faSeedling } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faMapLocationDot, faLeaf, faMoneyBills, faBuilding, faTractor, faClock, faSeedling, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function Sidebar() {
@@ -91,6 +91,12 @@ const SidebarItems = [
         icon: faSeedling,
         title: 'Solo',
         url: "soil"
-    }
+    },
+
+    // {
+    //     icon: faFileAlt,
+    //     title: 'Relatórios',
+    //     url: "report"
+    // }
 
 ]

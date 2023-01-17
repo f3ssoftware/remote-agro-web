@@ -17,6 +17,7 @@ import { Plot } from "./pages/Plot/Plot";
 import { popMessages } from "./stores/messaging.store";
 import { PlanningMain } from "./pages/Planning/PlanningMain";
 import { Maintenance } from "./pages/Maintenance/Maintenance";
+import { Report } from "./pages/Report/Report";
 
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
@@ -61,6 +62,10 @@ export function AppWrapper() {
          case "maintenance": return <AppStructure loading={loading.requests.length > 0}>
             <Maintenance></Maintenance>
         </AppStructure>
+        //  case "report": return <AppStructure loading={loading.requests.length > 0}>
+        //     <Report></Report>
+        // </AppStructure>
+        
         default: return <div>403 not found</div>
     }
 }
