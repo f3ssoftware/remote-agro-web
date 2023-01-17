@@ -60,7 +60,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
       payment_method: paymentMethod,
       year: outcomeYear.toString(),
       external_expenses_invoice_id: externalInvoiceId,
-      observation,
+      observations: observation,
     }
 
     switch (paymentMethod) {
@@ -191,8 +191,10 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
             <Form.Label >Observações</Form.Label>
             <Form.Control
               type="text"
+              value={observation}
               onChange={(e) => {
-                return setObservation(e.target.value)
+                console.log('observation', e.target.value);
+                setObservation(e.target.value)
               }}
             />
           </Form.Group>
