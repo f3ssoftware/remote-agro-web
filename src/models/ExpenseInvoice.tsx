@@ -10,6 +10,6 @@ export class ExpenseInvoice {
         public installments?: any[],
         public payment_method?: string,
         public external_expenses_invoice_id?: number,
-        public observation?: string,
+        public observations?: string,
     ) { }
 }
