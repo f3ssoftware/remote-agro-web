@@ -262,7 +262,7 @@ export function asyncPayExpense(id: number, bankAccountId: number, seasonId: num
             // dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            // dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
         }
     };
 }
@@ -288,7 +288,7 @@ export function asyncPayContract(id: number, bankAccountId: number, amount: numb
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(asyncFetchBankAccountsData());
             dispatch(asyncFetchChart());
-            dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
+            // dispatch(asyncFetchExpensesInvoicesData(new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
             dispatch(
                 getMessages({
                     message: "Pagamento realizado com sucesso",
