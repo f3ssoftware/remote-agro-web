@@ -12,6 +12,7 @@ import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
 
 const initialTransactions: ExpensesRevenue[] = []
 export function Transactions() {
@@ -19,6 +20,7 @@ export function Transactions() {
     const dispatch = useDispatch<any>();
     const [showModalPayExpense, setShowModalPayExpense] = useState(false);
     const [expenseId, setExpenseId] = useState(0);
+    const [deleteExpense, setDeleteExpense] = useState(0)
     const [startDate, setStartDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));
     const [endDate, setEndDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0));
     const [showModalDates, setShowModalDates] = useState(false);
@@ -30,6 +32,7 @@ export function Transactions() {
     const [contractId, setContractId] = useState(0);
     const [amount, setAmount] = useState(0);
     const [expenseRevenueId, setExpenseRevenueId] = useState(0);
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
@@ -67,11 +70,11 @@ export function Transactions() {
         dispatch(asyncConciliateExpense(expenseId, seasons.selectedSeason.id));
     }
 
-    const deleteExpense = (id: number) => {
-        dispatch(asyncDeleteExpense(id));
-        dispatch(asyncFetchBankAccountsData);
-        dispatch(asyncFetchExpensesAndRevenues);
-    }
+    // const deleteExpense = (id: number) => {
+    //     dispatch(asyncDeleteExpense(id));
+    //     dispatch(asyncFetchBankAccountsData);
+    //     dispatch(asyncFetchExpensesAndRevenues);
+    // }
 
     const find = () => {
         setTransactions(financial.expensesRevenue?.filter((transaction: ExpensesRevenue) => {
@@ -202,8 +205,9 @@ export function Transactions() {
                                     <td>
                                         <div className="flex-space-between">
                                             <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => {
-                                                setExpenseId(er.expenses_invoice_id!);
-                                                deleteExpense(er.expenses_invoice_id!);
+                                                setShowDeleteModal(true)
+                                                setExpenseId(er.expenses_invoice_id!)
+                                                setDeleteExpense(er.expenses_invoice_id!)
                                             }}></FontAwesomeIcon>
                                         </div>
                                     </td>
@@ -220,5 +224,6 @@ export function Transactions() {
             setEndDate(endDate);
             setShowModalDates(false);
         }}></TransactionDates>
+        <DeleteConfirmationModal show={showDeleteModal} handleClose={() => setShowDeleteModal(false)} id={0}></DeleteConfirmationModal>
     </div >
 }

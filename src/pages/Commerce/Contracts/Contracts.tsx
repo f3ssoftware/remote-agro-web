@@ -227,7 +227,7 @@ export function Contracts() {
                     variant="success"
                     id="dropdown-basic"
                   >
-                    Todos os contratos
+                    Contratos
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
