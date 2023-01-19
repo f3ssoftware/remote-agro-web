@@ -62,9 +62,9 @@ export function AppWrapper() {
          case "maintenance": return <AppStructure loading={loading.requests.length > 0}>
             <Maintenance></Maintenance>
         </AppStructure>
-        //  case "report": return <AppStructure loading={loading.requests.length > 0}>
-        //     <Report></Report>
-        // </AppStructure>
+         case "report": return <AppStructure loading={loading.requests.length > 0}>
+            <Report></Report>
+        </AppStructure>
         
         default: return <div>403 not found</div>
     }

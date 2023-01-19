@@ -93,10 +93,10 @@ const SidebarItems = [
         url: "soil"
     },
 
-    // {
-    //     icon: faFileAlt,
-    //     title: 'Relatórios',
-    //     url: "report"
-    // }
+    {
+        icon: faFileAlt,
+        title: 'Relatórios',
+        url: "report"
+    }
 
 ]
