@@ -7,20 +7,20 @@ import { useDispatch } from 'react-redux'
 export function DeleteConfirmationModal({
   show,
   handleClose,
-  id
+//   id
 }: {
 
   show: boolean
   handleClose: any
-  id: number
+//   id: number
 }) {
     const dispatch = useDispatch<any>();
     
-    const deleteExpense = (id: number) => {
-        dispatch(asyncDeleteExpense(id));
-        dispatch(asyncFetchBankAccountsData);
-        dispatch(asyncFetchExpensesAndRevenues);
-    }
+    // const deleteExpense = (id: number) => {
+    //     dispatch(asyncDeleteExpense(id));
+    //     dispatch(asyncFetchBankAccountsData);
+    //     dispatch(asyncFetchExpensesAndRevenues);
+    // }
 
   return (
     <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>
@@ -41,7 +41,8 @@ export function DeleteConfirmationModal({
             <Button
               variant="success"
               onClick={() => {
-                deleteExpense(id)
+                console.log()
+                // deleteExpense(id)
               }}
             >
               Confirmar
