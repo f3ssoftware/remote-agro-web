@@ -28,15 +28,19 @@ export function WalletBalance() {
     ));
 
     const fetchExpensesInvoicesData = () => {
-        // const startDate = financial.filterDates.startDate;
-        // const endDate = financial.filterDates.endDate;
         dispatch(asyncFetchExpensesInvoicesData(startDate.toLocaleDateString('pt-BR'), endDate.toLocaleDateString('pt-BR')));
     }
+
+    useEffect(() => {
+        setActiveCard(financial.activeCard);
+    }, [financial]);
+
     useEffect(() => {
         fetchExpensesInvoicesData();
     }, []);
 
     useEffect(() => {
+        dispatch(setCardActive('total'));
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
         dispatch(setFilterDates({
             startDate: startDate.toLocaleDateString('pt-BR'),
