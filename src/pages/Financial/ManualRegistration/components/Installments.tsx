@@ -31,7 +31,7 @@ export function Installments({ installmentsQuantity, onUpdateInstallments, total
         {installments.map((installment: any, index: any) => {
             return <Row>
                 <Col>
-                    <InstallmentForm index={index} onUpdate={onUpdate} initialAmount={totalAmount / installmentsQuantity}></InstallmentForm>
+                    <InstallmentForm index={index} onUpdate={onUpdate} initialAmount={totalAmount / installmentsQuantity} totalAmount={totalAmount}></InstallmentForm>
                 </Col>
             </Row>
         })}

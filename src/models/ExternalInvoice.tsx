@@ -2,6 +2,7 @@ export class ExternalInvoice {
     constructor(
         public id?: number,
         public entity_id?: number,
+        public entity?: {id: number, name: string},
         public expenses_invoice_id?: number,
         public external_id?: string,
         public issuer_name?: string,

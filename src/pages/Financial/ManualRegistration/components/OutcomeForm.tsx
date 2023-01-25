@@ -90,7 +90,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
 
   const renderPaymentConditionForm = () => {
     switch (paymentMethod) {
-      case 'no_payment':
+      case 'none':
       case 'one_time': {
         return <Col>
           <Form.Group className="mb-3" controlId="">
@@ -248,7 +248,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
               <option value={"one_time"}>Á vista</option>
               <option value={"installments"}>A prazo</option>
               <option value={"recurrency"}>Gasto mensal</option>
-              <option value={"no_payment"}>Sem necessidade de pagamento</option>
+              <option value={"none"}>Sem necessidade de pagamento</option>
             </Form.Select>
           </Form.Group>
         </Col>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
-export function InstallmentForm({ index, onUpdate, initialAmount }: { index: number, onUpdate: any, initialAmount: number }) {
+export function InstallmentForm({ index, onUpdate, initialAmount, totalAmount }: { index: number, onUpdate: any, initialAmount: number, totalAmount: number }) {
     const [amount, setAmount] = useState(initialAmount);
     const [selectedDate, setSelectedDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()));
 
@@ -28,8 +28,10 @@ export function InstallmentForm({ index, onUpdate, initialAmount }: { index: num
                 <Form.Control
                     value={amount}
                     type="text"
+                    onChange={(e) => {
+                        setAmount(Number(e.currentTarget.value));
+                    }}
                     onBlur={(e) => {
-                        console.log(e.currentTarget.value);
                         if (isNaN(Number(e.currentTarget.value))) {
                             e.currentTarget.value = '';
                         } else {

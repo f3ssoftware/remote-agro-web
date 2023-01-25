@@ -90,7 +90,7 @@ export function SefazInvoice() {
                         return <tr key={index}>
                             <td>{new Date(extInv?.issued_date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                             <td>{extInv.issuer_name}</td>
-                            <td>{extInv.issuer_document}</td>
+                            <td>{extInv?.entity?.name}</td>
                             <td>{extInv.nfe_key!.slice(28, 33)}</td>
                             <td>{Number(extInv.total_value)!.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                             <td><Button className="launch-btn" disabled={extInv.expenses_invoice_id !== null} variant="success" onClick={() => {
