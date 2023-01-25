@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { asyncDeleteContract, asyncFetchEditContracts } from '../../../stores/commerce.store'
 import { EditContractModal } from '../modals/NewContractModal/EditContractModal'
+import { ContractLoad } from '../modals/components/ContractLoad'
 
 const initialContractList: Contract[] = []
 export function Contracts() {
@@ -230,45 +231,7 @@ export function Contracts() {
             </div>
           </div>
         </Col>
-
-        <Col xs={8}>
-          <Card className="second-col-card">
-            <Card.Body>
-              <Card.Title className="second-col-text">Cargas</Card.Title>
-              <Card.Text>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    className="second-col-dropdown"
-                    variant="success"
-                    id="dropdown-basic"
-                  >
-                    Contratos
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Contrato1</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Contrato2</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Contrato3</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer className="card-footer">
-              <div className="frist-box">
-                <span>Valor recebido</span>
-              </div>
-              <div className="second-box">
-                <span>Valor a receber</span>
-              </div>
-              <div className="second-col-date">
-                <span>Data</span>
-              </div>
-              <div className="second-col-value">
-                <span>Valor recebido</span>
-              </div>
-            </Card.Footer>
-          </Card>
-        </Col>
+        <ContractLoad></ContractLoad>
       </Row>
       <NewContractModal
         show={showNewContractModal}
