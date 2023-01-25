@@ -39,6 +39,10 @@ export function Contracts() {
   }, [])
 
   useEffect(() => {
+    filter()
+  }, [selectedCultivations])
+
+  useEffect(() => {
     dispatch(asyncFetchCultivations())
     setSelectedCultivations(financial?.cultivations[0])
   }, [])
@@ -48,6 +52,16 @@ export function Contracts() {
     setTotalResults(financial.contracts.length)
     setPageSize(2)
   }, [financial])
+
+  const filter = () => {
+    setContracts(contracts.filter((contract: any) => {
+        if(contract.id == contract.selectedCultivations){
+          return contract;
+        }
+        return null
+
+    }))
+  }
 
   const paginate = (page: number) => {
     const pageSize = 2
@@ -63,6 +77,7 @@ export function Contracts() {
   const editContract = (id: number) =>{
     dispatch(asyncFetchEditContracts(id))
   }
+
 
   return (
     <Container>
