@@ -9,6 +9,7 @@ import { RootState } from '../../../../index'
 import { Contract } from "../../../../models/Contract";
 import { Cultivation } from "../../../../models/Cultivation"
 import { Typeahead } from "react-bootstrap-typeahead";
+import { asyncEditContract } from "../../../../stores/commerce.store";
 
 export function EditContract({show, handleClose}: {show: boolean, handleClose: any}){
     const [contractName,setContractName] = useState('');
@@ -23,7 +24,7 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
     const { financial,seasons } = useSelector((state: RootState) => state)
     const dispatch = useDispatch<any>()
 
-    const register = () => {
+    const edit = () => {
         const contract: Contract = {
             name: contractName,
             code: contractId.toString(),
@@ -40,6 +41,7 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
             
         }
         dispatch(asyncRegisterContract(contract));
+        handleClose()
     }
 
     useEffect(()=>{
@@ -125,7 +127,7 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
         </Row>
 
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => {register();}}>Editar</Button>
+                <Button variant="success" onClick={() => {edit();}}>Editar</Button>
         </div>
     </div>
 }

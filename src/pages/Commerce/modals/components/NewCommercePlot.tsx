@@ -11,9 +11,7 @@ export function NewCommercePlot({}){
     const [description,setDescription] = useState('');
     const dispatch = useDispatch<any>()
 
-    useEffect(()=>{
-        console.log(description)
-    },[siloName,description]);
+
 
     const register = () => {
         const silo: Silo = {

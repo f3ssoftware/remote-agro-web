@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import logoCard from '../../../assets/images/logoCard.png'
 import { Silo } from '../../../models/Silo'
-import { asyncFetchSiloData } from '../../../stores/commerce.store'
+import { asyncDeleteSilo, asyncFetchSiloData } from '../../../stores/commerce.store'
 import '../CommercePlot/Commerceplot.scss'
 import { NewCommercePlotModal } from '../modals/NewCommercePlotModal/NewCommercePlotModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 const initialSiloList: Silo[] = []
 export function CommercePlot() {
@@ -39,6 +41,11 @@ export function CommercePlot() {
     )
   }
 
+  const deleteSilo = (id: number) => {
+    dispatch(asyncDeleteSilo(id))
+    dispatch(asyncFetchSiloData)
+  }
+
   return (
     <Container>
       <div className="main-box">
@@ -62,7 +69,16 @@ export function CommercePlot() {
               <Card className="cardBody">
                 <Card.Img variant="top" src={logoCard} className="logoCard" />
                 <Card.Body>
-                  <Card.Title className="cardTitle">{silo.name}</Card.Title>
+                  <Card.Title className="cardTitle">{silo.name}
+                            {' '}
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => {
+                                deleteSilo(silo.id!)
+                              }}
+                            ></FontAwesomeIcon>
+                  </Card.Title>
                   <Card.Text className="cardText">
                      {silo?.cultivations?.map(
                         (ss: any) => `${ss?.name} ${ss?.SiloCultivar?.quantity} `,
