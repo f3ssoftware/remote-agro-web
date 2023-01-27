@@ -15,6 +15,6 @@ export const costTypesList = [
     { value: 'Cantina', label: 'Cantina' },
     { value: 'Diversos', label: 'Diversos' },
     { value: 'Arrendo', label: 'Arrendo' },
-    { value: 'Tercerizado', label: 'Tercerizado' },
+    { value: 'Terceirizado', label: 'Terceirizado' },
     { value: 'Confinamento', label: 'Confinamento' }
   ];
