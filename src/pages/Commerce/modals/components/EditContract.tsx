@@ -44,30 +44,24 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
         handleClose()
     }
 
-    useEffect(()=>{
-        console.log(contractName)
-    },[contractName])
-
-
     useEffect(() => {
         dispatch(asyncFetchCultivations())
         setSelectedCultivations(financial?.cultivations[0])
       }, [])
 
-
-
+      
     return <div>
         <Row  style={{marginTop: '2%'}}>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Nome para o contrato</Form.Label>
-                        <Form.Control type="text" onChange={(e) => {setContractName(e.target.value);}} />
+                        <Form.Control type="text" value= {contractName} onChange={(e) => {setContractName(e.target.value);}} />
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Codigo do contrato</Form.Label>
-                        <Form.Control type="number" onChange={(e) => {setContractId(Number(e.target.value));}} />
+                        <Form.Control type="number" value={contractId} onChange={(e) => {setContractId(Number(e.target.value));}} />
                     </Form.Group>
                 </Col>
                 <Row style={{marginTop: '2%'}}>
@@ -86,13 +80,13 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Sacas Totais</Form.Label>
-                        <Form.Control type="number" onChange={(e) => {setBags(Number(e.target.value));}} />
+                        <Form.Control type="number" value={bags.toString()} onChange={(e) => {setBags(Number(e.target.value));}} />
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label style={{ color: '#fff' }}>Valor total do contrato</Form.Label>
-                        <Form.Control type="number" onChange={(e) => {setContractPrice(Number(e.target.value));}} />
+                        <Form.Control type="number" value={contractPrice} onChange={(e) => {setContractPrice(Number(e.target.value));}} />
                     </Form.Group>
                 </Col>  
                 </Row>
@@ -100,19 +94,19 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
                     <Col>
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: '#fff' }}>Inicio do contrato</Form.Label>
-                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={startDate} onChange={(date:Date)=> setStartDate(date)} />
+                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={startDate} value={startDate.toISOString()} onChange={(date:Date)=> setStartDate(date)} />
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: '#fff' }}>Fim do contrato</Form.Label>
-                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={endDate} onChange={(date:Date)=> setEndDate(date)} />
+                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={endDate} value={endDate.toISOString()} onChange={(date:Date)=> setEndDate(date)} />
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
-                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={payDate} onChange={(date:Date)=> setPayDate(date)} />
+                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={payDate} value={payDate.toISOString()} onChange={(date:Date)=> setPayDate(date)} />
                         </Form.Group>
                     </Col>
                 </Row>
@@ -120,7 +114,7 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
                     <Col>
                         <Form.Group className="mb-3" controlId="">  
                             <Form.Label style={{ color: '#fff' }}>Descrição adicional</Form.Label>
-                            <Form.Control type="text" onChange={(e) => {setDescription(e.target.value);}} />
+                            <Form.Control type="text" value={description} onChange={(e) => {setDescription(e.target.value);}} />
                         </Form.Group>
                     </Col>
                 </Row>
