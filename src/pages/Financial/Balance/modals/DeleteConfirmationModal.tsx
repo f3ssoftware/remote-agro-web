@@ -1,17 +1,20 @@
 import { Button, Modal } from 'react-bootstrap'
-import { asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchExpensesAndRevenues } from '../../../../stores/financial.store'
+import { asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchContractsData, asyncFetchExpensesAndRevenues } from '../../../../stores/financial.store'
 import { useDispatch } from 'react-redux'
+import { asyncDeleteContract } from '../../../../stores/commerce.store'
 
 
 export function DeleteConfirmationModal({
   show,
   handleClose,
-  id
+  id,
+  id2
 }: {
 
   show: boolean
   handleClose: any
   id: number
+  id2: number
 }) {
     const dispatch = useDispatch<any>();
     
@@ -19,6 +22,11 @@ export function DeleteConfirmationModal({
         dispatch(asyncDeleteExpense(id));
         dispatch(asyncFetchBankAccountsData);
         dispatch(asyncFetchExpensesAndRevenues);
+    }
+
+    const deleteContract = (id2: number) => {
+      dispatch(asyncDeleteContract(id2))
+      dispatch(asyncFetchContractsData)
     }
 
   return (
@@ -42,6 +50,7 @@ export function DeleteConfirmationModal({
               onClick={() => {
                 handleClose()
                 deleteExpense(id)
+                deleteContract(id2)
               }}
             >
               Confirmar

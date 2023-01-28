@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { start } from "repl";
 import { RootState } from "../../../..";
 import { ExpensesRevenue } from "../../../../models/ExpensesRevenue";
-import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchExpensesAndRevenues, asyncPayExpense, setFilterDates } from "../../../../stores/financial.store";
+import { asyncConciliateExpense, asyncDeleteExpense, asyncFetchBankAccountsData, asyncFetchContractsData, asyncFetchExpensesAndRevenues, asyncPayExpense, setFilterDates } from "../../../../stores/financial.store";
 import { getMessages } from "../../../../stores/messaging.store";
 import { PayExpenseModal } from "../modals/PayExpenseModal";
 import { TransactionDates } from "../modals/TransactionDates";
@@ -21,6 +21,7 @@ export function Transactions() {
     const [showModalPayExpense, setShowModalPayExpense] = useState(false);
     const [expenseId, setExpenseId] = useState(0);
     const [deleteExpense, setDeleteExpense] = useState(0)
+    const [deleteContract, setDeleteContract] = useState(0)
     const [startDate, setStartDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));
     const [endDate, setEndDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0));
     const [showModalDates, setShowModalDates] = useState(false);
@@ -200,9 +201,10 @@ export function Transactions() {
                                     <td>
                                         <div className="flex-space-between">
                                             <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => {
+                                                setShowDeleteModal(true)
                                                 setExpenseId(er.expenses_invoice_id!);
                                                 setDeleteExpense(er.expenses_invoice_id!);
-                                                setShowDeleteModal(true)
+                                                setDeleteContract(er.contract_id!)
                                             }}></FontAwesomeIcon>
                                         </div>
                                     </td>
@@ -219,6 +221,6 @@ export function Transactions() {
             setEndDate(endDate);
             setShowModalDates(false);
         }}></TransactionDates>
-        <DeleteConfirmationModal show={showDeleteModal} handleClose={() => setShowDeleteModal(false)} id={deleteExpense}></DeleteConfirmationModal>
+        <DeleteConfirmationModal show={showDeleteModal} handleClose={() => setShowDeleteModal(false)} id={deleteExpense} id2={deleteContract}></DeleteConfirmationModal>
     </div >
 }
