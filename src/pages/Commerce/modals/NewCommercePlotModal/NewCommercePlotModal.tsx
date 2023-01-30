@@ -3,9 +3,6 @@ import { NewCommercePlot } from "../components/NewCommercePlot"
 
 export function NewCommercePlotModal({show, handleClose}: {show: boolean, handleClose: any}){
 
-    const register = () => {
-        console.log('teste botão')
-    }
 
     return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'sm'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>

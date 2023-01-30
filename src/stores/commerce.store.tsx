@@ -4,17 +4,17 @@ import { AppDispatch } from "..";
 import { Silo } from "../models/Silo";
 import { getMessages } from "./messaging.store";
 import { asyncFetchContractsData } from "./financial.store";
+import { Contract } from "../models/Contract";
 
 
 const initialSilo: Silo [] = [];
+const initialContracts: Contract[] = []
 const farmStore = createSlice({
     name: "commerce",
     initialState: {
         plots: [],
         silo: initialSilo,
-        contracts: {
-
-        }
+        contracts: initialContracts
     },
     reducers: {
         setPlots(state, action) {
@@ -125,11 +125,43 @@ export function asyncFetchEditContracts(id: number) {
         }
     };
 }
+
+export function asyncEditContract(contract: Contract, id:number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.put(
+                `https://remoteapi.murilobotelho.com.br/contracts/${id}`,
+                contract,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: "Contrato editado com sucesso" ,
+                    type: "success",
+                })
+            );
+            return 0;
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
 export function asyncDeleteContract(id: number) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.delete(
-                `https://remoteapi.murilobotelho.com.br/plannings/${id}`,
+                `https://remoteapi.murilobotelho.com.br/contracts/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -154,3 +186,34 @@ export function asyncDeleteContract(id: number) {
         }
     };
 }
+
+export function asyncDeleteSilo(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.delete(
+                `https://remoteapi.murilobotelho.com.br/silos/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(asyncFetchSiloData());
+            dispatch(
+                getMessages({
+                    message: "Contrato excluído com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+

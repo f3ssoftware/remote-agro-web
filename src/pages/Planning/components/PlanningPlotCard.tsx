@@ -17,13 +17,12 @@ export function PlanningPlotCard() {
 
   return (
     <div>
-      <Card className="second-col-card">
+      <Card className="second-col-plot">
         <Card.Body>
-          <Card.Title className="second-col-text">Histórico</Card.Title>
-          <Card.Text>
-            <Dropdown>
+          <Card.Title className="second-col-text">Histórico
+          <Dropdown>
               <Dropdown.Toggle
-                className="second-col-dropdown"
+                className="plot-dropdown"
                 variant="success"
                 id="dropdown-basic"
               >
@@ -43,6 +42,9 @@ export function PlanningPlotCard() {
                   })}
               </Dropdown.Menu>
             </Dropdown>
+          </Card.Title>
+          <Card.Text>
+            
           </Card.Text>
         </Card.Body>
         <Card.Footer className="card-footer">

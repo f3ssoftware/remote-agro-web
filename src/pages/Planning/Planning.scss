@@ -83,7 +83,7 @@
     text-align: center;
     border: none;
   }
-  .second-col-card {
+  .second-col-plot {
     background: #ece4b4;
     border-radius: 20px;
     height: 96%;
@@ -96,13 +96,17 @@
     font-size: 24px;
     line-height: 36px;
     color: #000000;
+    display: flex;
   }
 
-  .second-col-dropdown {
-    position: relative;
-    left: 43.9vw;
-    bottom: 7.54vh;
-    border-radius: 0px 10px;
+  .plot-dropdown {
+    // position: relative;
+    // left: 43.9vw;
+    // bottom: 7.54vh;
+    margin-left: 35vw;
+    // margin-bottom: 10vh;
+    border-radius: 10px 10px 10px 10px;
+    display: flex;
   }
 
   .card-footer {

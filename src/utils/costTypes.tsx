@@ -8,7 +8,6 @@ export const costTypesList = [
     { value: 'Pessoal', label: 'Pessoal' },
     { value: 'Conservação', label: 'Conservação' },
     { value: 'Investimento', label: 'Investimento' },
-    { value: 'Saída', label: 'Saída' },
     { value: 'Empréstimo', label: 'Empréstimo' },
     { value: 'Venda', label: 'Venda' },
     { value: 'Mão-de-obra', label: 'Mão-de-obra' },
@@ -16,8 +15,6 @@ export const costTypesList = [
     { value: 'Cantina', label: 'Cantina' },
     { value: 'Diversos', label: 'Diversos' },
     { value: 'Arrendo', label: 'Arrendo' },
-    { value: 'Confinamento', label: 'Confinamento' },
-    { value: 'Entrada (outros)', label: 'Entrada (outros)' },
-    { value: 'Terceirizados', label: 'Terceirizados' },
-    { value: 'Movimentação interna', label: 'Movimentação interna' },
+    { value: 'Terceirizado', label: 'Terceirizado' },
+    { value: 'Confinamento', label: 'Confinamento' }
   ];

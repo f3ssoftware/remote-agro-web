@@ -42,9 +42,6 @@ export function NewContract({show, handleClose}: {show: boolean, handleClose: an
         dispatch(asyncRegisterContract(contract));
     }
 
-    useEffect(()=>{
-        console.log(contractName)
-    },[contractName])
 
 
     useEffect(() => {
