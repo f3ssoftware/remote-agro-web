@@ -49,8 +49,11 @@ export function DeleteConfirmationModal({
               variant="success"
               onClick={() => {
                 handleClose()
+              if(id){
                 deleteExpense(id)
+              }else{
                 deleteContract(id2)
+              }
               }}
             >
               Confirmar

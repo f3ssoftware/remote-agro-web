@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import { OutcomeForm } from './OutcomeForm'
 import { costTypesList } from '../../../../utils/costTypes'
+import { laborCostList } from '../../../../utils/laborCostTypes'
+import { outsourcedCostList } from '../../../../utils/outsourcedCostTypes'
 
 export function Outcome({ sefaz }: { sefaz?: any}) {
   const [outcomeType, setOutcomeType] = useState('Insumos')
@@ -51,6 +53,36 @@ export function Outcome({ sefaz }: { sefaz?: any}) {
             }}
           />
         </Form.Group>
+      }
+      case 'Mão-de-obra': {
+        return<Form.Group className="mb-3" controlId="">
+        <Form.Label>Tipos de custos</Form.Label>
+        <Form.Select
+          aria-label=""
+          onChange={(e) => {
+            return setCostAction(e.target.value)
+          }}
+        ><option value=''>Selecione uma opção</option>
+          {laborCostList.map((costType, index) => {
+            return <option value={costType.value}>{costType.label}</option>
+          })}
+        </Form.Select>
+      </Form.Group>
+      }
+      case 'Terceirizado': {
+        return<Form.Group className="mb-3" controlId="">
+        <Form.Label>Tipos de custos</Form.Label>
+        <Form.Select
+          aria-label=""
+          onChange={(e) => {
+            return setCostAction(e.target.value)
+          }}
+        ><option value=''>Selecione uma opção</option>
+          {outsourcedCostList.map((costType, index) => {
+            return <option value={costType.value}>{costType.label}</option>
+          })}
+        </Form.Select>
+      </Form.Group>
       }
     }
   }
