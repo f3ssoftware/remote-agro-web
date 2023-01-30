@@ -4,7 +4,7 @@ import { Col, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
 export function InstallmentForm({ index, onUpdate, initialAmount, totalAmount }: { index: number, onUpdate: any, initialAmount: number, totalAmount: number }) {
-    const [amount, setAmount] = useState(initialAmount);
+    const [amount, setAmount] = useState<string>(initialAmount.toString());
     const [selectedDate, setSelectedDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()));
 
     useEffect(() => {
@@ -29,13 +29,13 @@ export function InstallmentForm({ index, onUpdate, initialAmount, totalAmount }:
                     value={amount}
                     type="text"
                     onChange={(e) => {
-                        setAmount(Number(e.currentTarget.value));
+                        setAmount(e.currentTarget.value);
                     }}
                     onBlur={(e) => {
                         if (isNaN(Number(e.currentTarget.value))) {
                             e.currentTarget.value = '';
                         } else {
-                            setAmount(Number(e.currentTarget.value));
+                            setAmount(e.currentTarget.value);
                             e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
                         }
                     }} onKeyUp={(e) => {

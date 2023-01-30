@@ -40,12 +40,15 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
 
   }, []);
 
-  useEffect(() => {
-    console.log(expirationDate)
-  }, [outcomeYear, reference, amount, observation, number, plan, paymentMethod, expirationDate]);
+  // useEffect(() => {
+  //   console.log('amount mudou', amount);
+  // }, [amount])
+
+  // useEffect(() => {
+  //   console.log(expirationDate)
+  // }, [outcomeYear, reference, amount, observation, number, plan, paymentMethod, expirationDate]);
 
   const updateInstallments = (installmentsFromChildren: any[]) => {
-    console.log(installmentsFromChildren);
     setInstallments(installmentsFromChildren);
 
   }
@@ -167,8 +170,10 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Valor</Form.Label>
             <Form.Control
-              value={amount.toString()}
-              onChange={(e) => setAmount(e.currentTarget.value)}
+              value={amount}
+              onChange={(e) => {
+                setAmount(e.currentTarget.value)
+              }}
               type="text" onBlur={(e) => {
                 if (isNaN(Number(e.currentTarget.value))) {
                   e.currentTarget.value = '';
