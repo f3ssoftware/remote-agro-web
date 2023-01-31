@@ -34,6 +34,8 @@ export function Contracts() {
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
   const [showEditContractModal, setShowEditContractModal] = useState(false)
+  const [contractId, setContractId] = useState(0)
+
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -174,6 +176,7 @@ export function Contracts() {
                             onClick={() => {
                               console.log(contract.id)
                               editContract(contract.id!)
+                              setContractId(contract.id!)
                               setShowEditContractModal(true)
                             }}
                           ></FontAwesomeIcon>
@@ -240,6 +243,7 @@ export function Contracts() {
       <EditContractModal
         show={showEditContractModal}
         handleClose={() => setShowEditContractModal(false)}
+        id={contractId}
       ></EditContractModal>
     </Container>
   )

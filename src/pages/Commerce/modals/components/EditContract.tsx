@@ -9,9 +9,9 @@ import { RootState } from '../../../../index'
 import { Contract } from "../../../../models/Contract";
 import { Cultivation } from "../../../../models/Cultivation"
 import { Typeahead } from "react-bootstrap-typeahead";
-import { asyncEditContract } from "../../../../stores/commerce.store";
+import { asyncEditContract, asyncFetchEditContracts } from "../../../../stores/commerce.store";
 
-export function EditContract({show, handleClose}: {show: boolean, handleClose: any}){
+export function EditContract({show, handleClose, id}: {show: boolean, handleClose: any, id: number}){
     const [contractName,setContractName] = useState('');
     const [contractId,setContractId] = useState(0);
     const [description,setDescription] = useState('');
@@ -21,7 +21,7 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
     const [endDate,setEndDate] = useState(new Date());
     const [payDate,setPayDate] = useState(new Date());
     const [selectedCultivations, setSelectedCultivations]: any = useState({})
-    const { financial,seasons } = useSelector((state: RootState) => state)
+    const { financial,seasons, commerce } = useSelector((state: RootState) => state)
     const dispatch = useDispatch<any>()
 
     const edit = () => {
@@ -43,7 +43,9 @@ export function EditContract({show, handleClose}: {show: boolean, handleClose: a
         dispatch(asyncRegisterContract(contract));
         handleClose()
     }
-
+    useEffect(() => {
+        // setContractName(commerce.contracts)
+      }, [commerce])
     useEffect(() => {
         dispatch(asyncFetchCultivations())
         setSelectedCultivations(financial?.cultivations[0])
