@@ -60,8 +60,8 @@ export function Contracts() {
   }, [financial])
 
   const filter = () => {
-    setContracts(contracts.filter((contract: any) => {
-        if(contract.id == contract.selectedCultivations){
+    setContracts(financial.contracts.filter((contract: any) => {
+        if(contract.cultivation_id == selectedCultivations.id){
           return contract;
         }
         return null

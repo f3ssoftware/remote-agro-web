@@ -17,9 +17,9 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
     const [description,setDescription] = useState('');
     const [bags,setBags] = useState(0);
     const [contractPrice,setContractPrice] = useState(0);
-    const [startDate,setStartDate] = useState(new Date());
-    const [endDate,setEndDate] = useState(new Date());
-    const [payDate,setPayDate] = useState(new Date());
+    const [startDate,setStartDate] = useState<Date>(new Date());
+    const [endDate,setEndDate] = useState<Date>(new Date());
+    const [payDate,setPayDate] = useState<Date>(new Date());
     const [selectedCultivations, setSelectedCultivations]: any = useState({})
     const { financial,seasons, commerce } = useSelector((state: RootState) => state)
     const dispatch = useDispatch<any>()
@@ -106,19 +106,19 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     <Col>
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: '#fff' }}>Inicio do contrato</Form.Label>
-                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={startDate} value={startDate.toISOString()} onChange={(date:Date)=> setStartDate(date)} />
+                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={startDate} onChange={(date:Date)=> setStartDate(date)} />
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: '#fff' }}>Fim do contrato</Form.Label>
-                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={endDate} value={endDate.toISOString()} onChange={(date:Date)=> setEndDate(date)} />
+                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={endDate} onChange={(date:Date)=> setEndDate(date)} />
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group className="mb-3" controlId="">
                             <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
-                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={payDate} value={payDate.toISOString()} onChange={(date:Date)=> setPayDate(date)} />
+                            <DatePicker locale={pt} dateFormat='dd/MM/yyyy' selected={payDate} onChange={(date:Date)=> setPayDate(date)} />
                         </Form.Group>
                     </Col>
                 </Row>

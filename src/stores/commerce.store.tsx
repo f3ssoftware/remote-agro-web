@@ -9,7 +9,7 @@ import { Contract } from "../models/Contract";
 
 const initialSilo: Silo [] = [];
 const initialEditContracts: Contract = {}
-const farmStore = createSlice({
+const commerceStore = createSlice({
     name: "commerce",
     initialState: {
         plots: [],
@@ -31,8 +31,8 @@ const farmStore = createSlice({
 });
 
 export const { setPlots, setSilo, setEditContracts } =
-    farmStore.actions;
-export default farmStore.reducer;
+    commerceStore.actions;
+export default commerceStore.reducer;
 
 
 export function asyncFetchPlots(farmId: number) {
