@@ -40,12 +40,22 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
             season_id: seasons.selectedSeason.id
             
         }
-        dispatch(asyncRegisterContract(contract));
-        handleClose()
+        dispatch(asyncEditContract(id, contract));
     }
     useEffect(() => {
-        // setContractName(commerce.contracts)
+        setContractName(commerce.editContracts.name!);
+        setContractId(Number(commerce.editContracts.code!))
+        setDescription(commerce.editContracts.description!)
+        setBags(Number(commerce.editContracts.sacks!))
+        setContractPrice(Number(commerce.editContracts.amount!))
+        setSelectedCultivations(commerce.editContracts.cultivation_name!)
+        if(commerce.editContracts.payment_date && commerce.editContracts.start_date && commerce.editContracts.end_date != null ){
+            setPayDate(new Date(commerce.editContracts.payment_date!))
+            setStartDate(new Date(commerce.editContracts.start_date!))
+            setEndDate(new Date(commerce.editContracts.end_date!))
+        }
       }, [commerce])
+
     useEffect(() => {
         dispatch(asyncFetchCultivations())
         setSelectedCultivations(financial?.cultivations[0])

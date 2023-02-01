@@ -8,13 +8,13 @@ import { Contract } from "../models/Contract";
 
 
 const initialSilo: Silo [] = [];
-const initialContracts: Contract[] = []
+const initialEditContracts: Contract = {}
 const farmStore = createSlice({
     name: "commerce",
     initialState: {
         plots: [],
         silo: initialSilo,
-        contracts: initialContracts
+        editContracts: initialEditContracts,
     },
     reducers: {
         setPlots(state, action) {
@@ -24,7 +24,7 @@ const farmStore = createSlice({
             state.silo = action.payload
         },
         setEditContracts(state,action){
-            state.contracts = action.payload
+            state.editContracts = action.payload
         }
         
     },
@@ -126,7 +126,7 @@ export function asyncFetchEditContracts(id: number) {
     };
 }
 
-export function asyncEditContract(contract: Contract, id:number) {
+export function asyncEditContract(id: number, contract: Contract) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.put(
@@ -144,7 +144,6 @@ export function asyncEditContract(contract: Contract, id:number) {
                     type: "success",
                 })
             );
-            return 0;
         } catch (err: any) {
             console.log(err);
             dispatch(

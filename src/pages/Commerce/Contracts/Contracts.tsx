@@ -22,6 +22,7 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { asyncDeleteContract, asyncFetchEditContracts } from '../../../stores/commerce.store'
 import { EditContractModal } from '../modals/NewContractModal/EditContractModal'
 import { ContractLoad } from '../modals/components/ContractLoad'
+import { DeleteConfirmation } from '../modals/components/DeleteConfirmation'
 
 const initialContractList: Contract[] = []
 export function Contracts() {
@@ -35,6 +36,8 @@ export function Contracts() {
   const [page, setPage] = useState(1)
   const [showEditContractModal, setShowEditContractModal] = useState(false)
   const [contractId, setContractId] = useState(0)
+  const [deleteContracts, setDeleteContracts] = useState(0)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
 
   useEffect(() => {
@@ -73,10 +76,6 @@ export function Contracts() {
     )
   }
 
-  const deleteContract = (id: number) => {
-    dispatch(asyncDeleteContract(id))
-    dispatch(asyncFetchContractsData)
-  }
   const editContract = (id: number) =>{
     dispatch(asyncFetchEditContracts(id))
   }
@@ -99,6 +98,7 @@ export function Contracts() {
                     return (
                       <Dropdown.Item
                         key={index}
+                        // value={}
                         onClick={() => setSelectedCultivations(cultivations)}
                       >
                         {cultivations.name}
@@ -164,7 +164,8 @@ export function Contracts() {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(contract.id)
-                              deleteContract(contract.id!)
+                              setShowDeleteModal(true)
+                              setDeleteContracts(contract.id!)
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -245,6 +246,9 @@ export function Contracts() {
         handleClose={() => setShowEditContractModal(false)}
         id={contractId}
       ></EditContractModal>
+      <DeleteConfirmation show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        id={deleteContracts}></DeleteConfirmation>
     </Container>
   )
 }
