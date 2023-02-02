@@ -25,7 +25,8 @@ const commerceStore = createSlice({
         },
         setEditContracts(state,action){
             state.editContracts = action.payload
-        }
+        },
+
         
     },
 });

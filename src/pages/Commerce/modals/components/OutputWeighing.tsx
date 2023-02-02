@@ -5,7 +5,7 @@ import { RootState } from '../../../..'
 import { NewOutputWeighing } from './NewOutputWeighing'
 
 
-export function InputWeighing({
+export function OutputWeighing({
   show,
   handleClose,
 }: {

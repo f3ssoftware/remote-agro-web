@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
-import { NewOutputWeighing } from './NewOutputWeighing'
+import { NewSepareteWeighing } from './NewSepareteWeighing'
 
 
-export function InputWeighing({
+export function SepareteWeighing({
   show,
   handleClose,
 }: {
@@ -36,7 +36,7 @@ export function InputWeighing({
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <NewOutputWeighing show={false} handleClose={undefined}></NewOutputWeighing>
+        <NewSepareteWeighing show={false} handleClose={undefined}></NewSepareteWeighing>
       </Row>
       {/* {plannings.map((newPlanning, index) => {
             return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
