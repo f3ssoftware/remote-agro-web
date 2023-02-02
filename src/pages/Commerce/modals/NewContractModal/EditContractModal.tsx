@@ -9,7 +9,7 @@ export function EditContractModal({show, handleClose,id}: {show: boolean, handle
             <Modal.Title> <span style={{ color: '#fff' }}>Editar contrato</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            <EditContract show={false} handleClose={undefined} id={id}></EditContract>
+            <EditContract show={false} handleClose={handleClose} id={id}></EditContract>
         </Modal.Body>
     </Modal >
 }

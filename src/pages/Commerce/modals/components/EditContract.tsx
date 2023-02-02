@@ -133,7 +133,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
         </Row>
 
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="success" onClick={() => {edit();}}>Editar</Button>
+                <Button variant="success" onClick={() => {edit(); handleClose()}}>Editar</Button>
         </div>
     </div>
 }
