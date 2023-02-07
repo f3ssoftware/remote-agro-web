@@ -1,16 +1,18 @@
 import { Container, Button, Row, Col } from 'react-bootstrap'
 import '../CommerceWeighing/CommerceWeighing.scss'
 import { useState } from 'react'
-import { InputWeighingModal } from '../modals/CommerceWeighingModal/InputWeighingModal'
 import { OutputWeighingModal } from '../modals/CommerceWeighingModal/OutputWeighingModal'
 import { SepareteWeighingModal } from '../modals/CommerceWeighingModal/SepareteWeighingModal'
 import { TransferWeighingModal } from '../modals/CommerceWeighingModal/TransferWeighingModal'
+import { InputWeighing } from '../modals/components/InputWeighing'
+import { useNavigate } from 'react-router-dom'
 
 export function CommerceWeighing() {
-  const [showInputWheighingModal, setShowInputWeighingModal] = useState(false)
+  const [showInputWheighing, setShowInputWeighing] = useState(false)
   const [showOutputWheighingModal, setShowOutputWeighingModal] = useState(false)
   const [showSepareteWeighingModal, setShowSepareteWeighingModal] = useState(false)
   const [showTransferWeighingModal, setShowTransferWeighingModal] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <Container>
@@ -22,7 +24,7 @@ export function CommerceWeighing() {
           <Col md={1}>
             <Button
               className="inputs-btnW"
-              onClick={() => setShowInputWeighingModal(true)}
+              onClick={() => navigate("commerce/weighing/input")}
             >
               Entrada
             </Button>
@@ -48,7 +50,6 @@ export function CommerceWeighing() {
           </Col>
         </Row>
       </div>
-      <InputWeighingModal show={showInputWheighingModal} handleClose={() => setShowInputWeighingModal(false)}></InputWeighingModal>
       <OutputWeighingModal show={showOutputWheighingModal} handleClose={()=> setShowOutputWeighingModal(false)}></OutputWeighingModal>
       <SepareteWeighingModal show={showSepareteWeighingModal} handleClose={()=> setShowSepareteWeighingModal(false)}></SepareteWeighingModal>
       <TransferWeighingModal show={showTransferWeighingModal} handleClose={()=> setShowTransferWeighingModal(false)}></TransferWeighingModal>

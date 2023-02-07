@@ -3,9 +3,10 @@ import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncTransferWeighing } from '../../../../stores/commerce.store'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
+import { TransferWeighing } from '../../../../models/TransferWeighing'
 
 
 export function NewTransferWeighing({
@@ -18,7 +19,8 @@ export function NewTransferWeighing({
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [selectedSilo, setSelectedSilo]: any = useState({})
+  const [selectedSiloInput, setSelectedSiloInput]: any = useState({})
+  const [selectedSiloOutput, setSelectedSiloOutput]: any = useState({})
   const [quantity, setQuantity] = useState(0)
 
 
@@ -28,17 +30,31 @@ export function NewTransferWeighing({
     dispatch(asyncFetchCultivations())
   }, [])
 
+  const save = () =>{
+    const transfer = {
+      weighings: {
+        cultivation_id: selectedCultivation.id,
+        input_silo_id: selectedSiloInput.id,
+        weighing_date: new Date().toISOString(),
+        output_silo_id: selectedSiloOutput.id,
+        transfer_quantity: quantity,
+        type: 'Transferência'
+      }
+    }
+    dispatch(asyncTransferWeighing(transfer))
+  }
+
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
       <Col>
         <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#fff'}}>Silo de entrada</Form.Label>
+            <Form.Label style={{color: '#fff'}}>Silo de Saída</Form.Label>
             <Typeahead
-              id="silo"
+              id="siloOutput"
               onChange={(selected: any) => {
-                setSelectedSilo(selected[0]);
+                setSelectedSiloOutput(selected[0]);
               }}
               options={commerce?.silo?.map((silo: any) => {
                 return { id: silo.id, label: silo.name, ...silo }
@@ -62,11 +78,11 @@ export function NewTransferWeighing({
         </Col>
         <Col>
         <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#fff'}}>Silo de saída</Form.Label>
+            <Form.Label style={{color: '#fff'}}>Silo de Entrada</Form.Label>
             <Typeahead
-              id="silo"
+              id="siloInput"
               onChange={(selected: any) => {
-                setSelectedSilo(selected[0]);
+                setSelectedSiloInput(selected[0]);
               }}
               options={commerce?.silo?.map((silo: any) => {
                 return { id: silo.id, label: silo.name, ...silo }
@@ -99,7 +115,7 @@ export function NewTransferWeighing({
         <Button
           variant="success"
           onClick={() => {
-            // register()
+            save()
           }}
         >
           Salvar

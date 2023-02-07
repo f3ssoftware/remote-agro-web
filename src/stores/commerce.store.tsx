@@ -5,16 +5,19 @@ import { Silo } from "../models/Silo";
 import { getMessages } from "./messaging.store";
 import { asyncFetchContractsData } from "./financial.store";
 import { Contract } from "../models/Contract";
+import { TransferWeighing } from "../models/TransferWeighing";
 
 
 const initialSilo: Silo [] = [];
 const initialEditContracts: Contract = {}
+const initialTransferWeighing: TransferWeighing [] = []
 const commerceStore = createSlice({
     name: "commerce",
     initialState: {
         plots: [],
         silo: initialSilo,
         editContracts: initialEditContracts,
+        transferWeighing: initialTransferWeighing 
     },
     reducers: {
         setPlots(state, action) {
@@ -26,12 +29,14 @@ const commerceStore = createSlice({
         setEditContracts(state,action){
             state.editContracts = action.payload
         },
-
+        setTransferWeighing(state, action){
+            state.transferWeighing = action.payload
+        }
         
     },
 });
 
-export const { setPlots, setSilo, setEditContracts } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing } =
     commerceStore.actions;
 export default commerceStore.reducer;
 
@@ -59,6 +64,30 @@ export function asyncFetchPlots(farmId: number) {
             );
         }
     };
+}
+
+export function asyncTransferWeighing(transfer :any) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/weighings`,
+            transfer, 
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(getMessages({
+                message: "Transferência realizada com sucesso",
+                type: "success",
+            }));
+            dispatch(setTransferWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
 }
 
 export function asyncCreateCommercePlot(silo :Silo) {

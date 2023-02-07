@@ -13,7 +13,6 @@ export function TransferWeighing({
   handleClose: any
 }) {
   const dispatch = useDispatch<any>()
-  const { farm, commerce } = useSelector((state: RootState) => state)
 
 
 

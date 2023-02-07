@@ -19,6 +19,7 @@ export function NewInputWeighing({
   const [selectedFarm, setSelectedFarm]: any = useState({})
   const [selectedPlot, setSelectedPlot]: any = useState({})
   const [selectedSilo, setSelectedSilo]: any = useState({})
+  const [selectedCultivar, setSelectedCultivar]: any = useState({})
   const [licensePlate, setLicensePlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
@@ -45,7 +46,7 @@ export function NewInputWeighing({
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color:'#fff'}}>Fazenda</Form.Label>
+            <Form.Label style={{color:'#000'}}>Fazenda</Form.Label>
             <Typeahead
               id="farm"
               onChange={(selected: any) => {
@@ -59,7 +60,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#fff'}}>Talhões</Form.Label>
+            <Form.Label style={{color: '#000'}}>Talhões</Form.Label>
             <Typeahead
               id="field"
               onChange={(selected: any) => {
@@ -84,8 +85,22 @@ export function NewInputWeighing({
           </Form.Group>
         </Col>
         <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{color: '#000'}}>Cultivar</Form.Label>
+            <Typeahead
+              id="cultivar"
+              onChange={(selected: any) => {
+                setSelectedCultivar(selected[0]);
+              }}
+              options={selectedPlot?.cultivar?.map((cultivar: any) => {
+                return { id: cultivar.id, label: cultivar.name, ...cultivar }
+              })}
+            />
+          </Form.Group>
+        </Col>
+        <Col>
         <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#fff'}}>Silo</Form.Label>
+            <Form.Label style={{color: '#000'}}>Silo</Form.Label>
             <Typeahead
               id="silo"
               onChange={(selected: any) => {
@@ -99,7 +114,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Placa</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
               value={licensePlate}
@@ -111,7 +126,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Motorista</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
               value={driver}
@@ -123,7 +138,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Transportadora</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
               value={company}
@@ -135,7 +150,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Peso líquido</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
               value={netWeighing}
@@ -149,7 +164,7 @@ export function NewInputWeighing({
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>UMID (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
               value={humidity}
@@ -161,7 +176,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Desconto UMID (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
               value={humidityDiscount}
@@ -173,7 +188,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Impureza (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
               value={impurity}
@@ -185,7 +200,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Desconto (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
               value={discount}
@@ -197,7 +212,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Desconto total (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Desconto total (%)</Form.Label>
             <Form.Control
               type="number"
               value={totalDiscount}
@@ -209,7 +224,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Peso final</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
               value={totalWeighning}
@@ -221,7 +236,7 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
             <Form.Control
               type="text"
               value={observation}

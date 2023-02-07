@@ -4,6 +4,7 @@ import { Contracts } from "./Contracts/Contracts";
 import { CommercePlot } from "./CommercePlot/CommercePlot";
 import React from "react";
 import { CommerceWeighing } from "./CommerceWeighing/CommerceWeighing";
+import { InputWeighing } from "./modals/components/InputWeighing";
 
 export function Commerce() {
   const location = useLocation();
@@ -20,6 +21,9 @@ export function Commerce() {
       return <CommercePlot></CommercePlot>;
     }
     case "weighing": {
+      if(location.pathname.split('/')[3] === 'input') {
+        return <InputWeighing></InputWeighing>  
+      } 
       return <CommerceWeighing></CommerceWeighing>
     }
     default: {
