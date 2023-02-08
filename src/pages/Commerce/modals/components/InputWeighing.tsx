@@ -9,10 +9,6 @@ export function InputWeighing() {
   const dispatch = useDispatch<any>()
   const { farm, commerce } = useSelector((state: RootState) => state)
 
-
-
-
-
 //     const onRemoveItem = (index: number) => {
 //       const inputArr = [...];
 //       planningsArr.splice(index, 1);
@@ -37,7 +33,7 @@ export function InputWeighing() {
         </Row>
         <div>
           <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
-            <NewInputWeighing show={false} handleClose={undefined}></NewInputWeighing>
+            <NewInputWeighing></NewInputWeighing>
           </Row>
           {/* {plannings.map((newPlanning, index) => {
                 return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>

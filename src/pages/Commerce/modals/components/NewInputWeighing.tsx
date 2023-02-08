@@ -6,13 +6,7 @@ import { asyncFetchFarms, selectAFarm } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchSiloData } from '../../../../stores/commerce.store'
 
-export function NewInputWeighing({
-  show,
-  handleClose,
-}: {
-  show: boolean
-  handleClose: any
-}) {
+export function NewInputWeighing() {
   const dispatch = useDispatch<any>()
   const { farm, commerce } = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState({})

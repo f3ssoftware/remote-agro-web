@@ -37,7 +37,7 @@ export function SepareteWeighing() {
         </Row>
         <div>
           <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
-            <NewSepareteWeighing show={false} handleClose={undefined}></NewSepareteWeighing>
+            <NewSepareteWeighing></NewSepareteWeighing>
           </Row>
           {/* {plannings.map((newPlanning, index) => {
                 return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>

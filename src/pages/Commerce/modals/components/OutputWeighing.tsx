@@ -37,7 +37,7 @@ export function OutputWeighing() {
         </Row>
         <div>
           <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
-            <NewOutputWeighing show={false} handleClose={undefined}></NewOutputWeighing>
+            <NewOutputWeighing></NewOutputWeighing>
           </Row>
           {/* {plannings.map((newPlanning, index) => {
                 return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>

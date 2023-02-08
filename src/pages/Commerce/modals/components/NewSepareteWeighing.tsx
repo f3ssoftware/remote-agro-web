@@ -7,13 +7,7 @@ import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../sto
 import { Cultivation } from '../../../../models/Cultivation'
 
 
-export function NewSepareteWeighing({
-  show,
-  handleClose,
-}: {
-  show: boolean
-  handleClose: any
-}) {
+export function NewSepareteWeighing() {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
