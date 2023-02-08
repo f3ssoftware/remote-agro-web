@@ -136,6 +136,32 @@ export function NewOutputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
+            <Button
+              variant="success"
+              onClick={() => {
+                
+              }}
+            >
+              Receber
+            </Button>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
+            <Button
+              variant="success"
+              onClick={() => {
+                
+              }}
+            >
+              Receber
+            </Button>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"

@@ -1,8 +1,6 @@
 import { Container, Button, Row, Col } from 'react-bootstrap'
 import '../CommerceWeighing/CommerceWeighing.scss'
 import { useState } from 'react'
-import { OutputWeighingModal } from '../modals/CommerceWeighingModal/OutputWeighingModal'
-import { SepareteWeighingModal } from '../modals/CommerceWeighingModal/SepareteWeighingModal'
 import { TransferWeighingModal } from '../modals/CommerceWeighingModal/TransferWeighingModal'
 import { InputWeighing } from '../modals/components/InputWeighing'
 import { useNavigate } from 'react-router-dom'
@@ -31,12 +29,12 @@ export function CommerceWeighing() {
           </Col>
           <Col md={1}>
             <Button className="inputs-btnW"
-            onClick={() => setShowOutputWeighingModal(true)}
+            onClick={() => navigate("commerce/weighing/output")}
             >Saída</Button>
           </Col>
           <Col md={1}>
             <Button className="inputs-btnW"
-            onClick={() => setShowSepareteWeighingModal(true)}>Avulsa</Button>
+            onClick={() => navigate("commerce/weighing/separete")}>Avulsa</Button>
           </Col>
           <Col md={2}>
             <Button className="inputs-btnW"
@@ -50,8 +48,6 @@ export function CommerceWeighing() {
           </Col>
         </Row>
       </div>
-      <OutputWeighingModal show={showOutputWheighingModal} handleClose={()=> setShowOutputWeighingModal(false)}></OutputWeighingModal>
-      <SepareteWeighingModal show={showSepareteWeighingModal} handleClose={()=> setShowSepareteWeighingModal(false)}></SepareteWeighingModal>
       <TransferWeighingModal show={showTransferWeighingModal} handleClose={()=> setShowTransferWeighingModal(false)}></TransferWeighingModal>
     </Container>
   )

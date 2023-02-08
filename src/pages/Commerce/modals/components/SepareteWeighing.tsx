@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Row } from 'react-bootstrap'
+import { Col, Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { NewSepareteWeighing } from './NewSepareteWeighing'
 
 
-export function SepareteWeighing({
-  show,
-  handleClose,
-}: {
-  show: boolean
-  handleClose: any
-}) {
+export function SepareteWeighing() {
   const dispatch = useDispatch<any>()
   const { farm, commerce } = useSelector((state: RootState) => state)
 
@@ -34,24 +28,33 @@ export function SepareteWeighing({
   // }
 
   return (
-    <div>
-      <Row style={{ marginTop: '2%' }}>
-        <NewSepareteWeighing show={false} handleClose={undefined}></NewSepareteWeighing>
-      </Row>
-      {/* {plannings.map((newPlanning, index) => {
-            return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
-        })} */}
+    <Container>
+      <div className="main-boxW">
+        <Row>
+          <Col md={4} className="title-boxW">
+            <span>Pesagens Avulsas</span>
+          </Col>
+        </Row>
+        <div>
+          <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
+            <NewSepareteWeighing show={false} handleClose={undefined}></NewSepareteWeighing>
+          </Row>
+          {/* {plannings.map((newPlanning, index) => {
+                return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
+            })} */}
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: '2%',
-        }}
-      >
-        {/* <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningInput()])}>Adicionar Linha</Button> */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: '2%',
+            }}
+          >
+            {/* <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningInput()])}>Adicionar Linha</Button> */}
+          </div>
+        </div>
       </div>
-    </div>
+    </Container>
   )
 }

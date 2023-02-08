@@ -5,6 +5,8 @@ import { CommercePlot } from "./CommercePlot/CommercePlot";
 import React from "react";
 import { CommerceWeighing } from "./CommerceWeighing/CommerceWeighing";
 import { InputWeighing } from "./modals/components/InputWeighing";
+import { OutputWeighing } from "./modals/components/OutputWeighing";
+import { SepareteWeighing } from "./modals/components/SepareteWeighing";
 
 export function Commerce() {
   const location = useLocation();
@@ -23,7 +25,12 @@ export function Commerce() {
     case "weighing": {
       if(location.pathname.split('/')[3] === 'input') {
         return <InputWeighing></InputWeighing>  
-      } 
+      }
+      if(location.pathname.split('/')[3] === 'output') {
+        return <OutputWeighing></OutputWeighing>  
+      }if(location.pathname.split('/')[3] === 'separete') {
+        return <SepareteWeighing></SepareteWeighing>  
+      }
       return <CommerceWeighing></CommerceWeighing>
     }
     default: {

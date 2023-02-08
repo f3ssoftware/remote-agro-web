@@ -31,8 +31,8 @@ export function InputWeighing() {
     <Container>
       <div className="main-boxW">
         <Row>
-          <Col md={2} className="title-boxW">
-            <span>Pesagens</span>
+          <Col md={4} className="title-boxW">
+            <span>Pesagens de entrada</span>
           </Col>
         </Row>
         <div>

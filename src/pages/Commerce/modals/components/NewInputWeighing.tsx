@@ -6,7 +6,6 @@ import { asyncFetchFarms, selectAFarm } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchSiloData } from '../../../../stores/commerce.store'
 
-
 export function NewInputWeighing({
   show,
   handleClose,
@@ -33,24 +32,23 @@ export function NewInputWeighing({
   const [company, setCompany] = useState('')
 
   useEffect(() => {
-    dispatch(asyncFetchFarms());
+    dispatch(asyncFetchFarms())
     dispatch(asyncFetchSiloData())
-    setSelectedFarm(farm?.farms[0]);
-    dispatch(selectAFarm(farm?.farms[0]));
+    setSelectedFarm(farm?.farms[0])
+    dispatch(selectAFarm(farm?.farms[0]))
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
-
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color:'#000'}}>Fazenda</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
             <Typeahead
               id="farm"
               onChange={(selected: any) => {
-                setSelectedFarm(selected[0]);
+                setSelectedFarm(selected[0])
               }}
               options={farm?.farms?.map((farm: any) => {
                 return { id: farm.id, label: farm.name, ...farm }
@@ -60,11 +58,11 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Talhões</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Talhões</Form.Label>
             <Typeahead
               id="field"
               onChange={(selected: any) => {
-                setSelectedPlot(selected[0]);
+                setSelectedPlot(selected[0])
               }}
               options={selectedFarm?.fields?.map((field: any) => {
                 return { id: field.id, label: field.name, ...field }
@@ -86,11 +84,11 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Cultivar</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Cultivar</Form.Label>
             <Typeahead
               id="cultivar"
               onChange={(selected: any) => {
-                setSelectedCultivar(selected[0]);
+                setSelectedCultivar(selected[0])
               }}
               options={selectedPlot?.cultivar?.map((cultivar: any) => {
                 return { id: cultivar.id, label: cultivar.name, ...cultivar }
@@ -99,12 +97,12 @@ export function NewInputWeighing({
           </Form.Group>
         </Col>
         <Col>
-        <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Silo</Form.Label>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
               onChange={(selected: any) => {
-                setSelectedSilo(selected[0]);
+                setSelectedSilo(selected[0])
               }}
               options={commerce?.silo?.map((silo: any) => {
                 return { id: silo.id, label: silo.name, ...silo }
@@ -146,6 +144,32 @@ export function NewInputWeighing({
                 setCompany(e.target.value)
               }}
             />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
+            <Button
+              variant="success"
+              onClick={() => {
+                
+              }}
+            >
+              Receber
+            </Button>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
+            <Button
+              variant="success"
+              onClick={() => {
+                
+              }}
+            >
+              Receber
+            </Button>
           </Form.Group>
         </Col>
         <Col>
@@ -212,7 +236,9 @@ export function NewInputWeighing({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Desconto total (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>
+              Desconto total (%)
+            </Form.Label>
             <Form.Control
               type="number"
               value={totalDiscount}
