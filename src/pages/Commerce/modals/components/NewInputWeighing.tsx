@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
-import { asyncFetchFarms, selectAFarm } from '../../../../stores/farm.store'
+import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchSiloData } from '../../../../stores/commerce.store'
+import { calculateHumidityDiscount } from './weighingsHelpers'
 
 export function NewInputWeighing() {
   const dispatch = useDispatch<any>()
-  const { farm, commerce } = useSelector((state: RootState) => state)
+  const { farm, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState({})
   const [selectedPlot, setSelectedPlot]: any = useState({})
   const [selectedSilo, setSelectedSilo]: any = useState({})
@@ -16,6 +17,8 @@ export function NewInputWeighing() {
   const [licensePlate, setLicensePlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
+  const [grossWeighing, setGrossWeighing] = useState(0)
+  const [tare, setTare] = useState(0)
   const [humidity, setHumidity] = useState(0)
   const [humidityDiscount, setHumidityDiscount] = useState(0)
   const [impurity, setImpurity] = useState(0)
@@ -26,12 +29,33 @@ export function NewInputWeighing() {
   const [company, setCompany] = useState('')
 
   useEffect(() => {
-    dispatch(asyncFetchFarms())
+    dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
     dispatch(asyncFetchSiloData())
     setSelectedFarm(farm?.farms[0])
     dispatch(selectAFarm(farm?.farms[0]))
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
+
+  useEffect(() => {
+    setNetWeighing(grossWeighing-tare)
+  }, [grossWeighing, tare])
+
+  useEffect(() => {
+    setDiscount(impurity==0? 0: impurity-1)
+  }, [impurity])
+
+  useEffect(() => {
+    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivar?.cultivation_id))
+  }, [humidity])
+
+  useEffect(() => {
+    dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivares' }));
+    setSelectedFarm(null);
+    setSelectedPlot(null);
+    setSelectedCultivar(null);
+  }, [seasons])
+
+
 
   return (
     <div>
@@ -53,15 +77,15 @@ export function NewInputWeighing() {
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Talhões</Form.Label>
-            <Typeahead
+            {selectedFarm?.fields?.length > 0 ? <Typeahead
               id="field"
               onChange={(selected: any) => {
                 setSelectedPlot(selected[0])
               }}
               options={selectedFarm?.fields?.map((field: any) => {
                 return { id: field.id, label: field.name, ...field }
-              })}
-            />
+              })}/> : <></>}
+            
             {/* <Form.Select
               value={selectedPlot?.name}
               aria-label=""
@@ -79,15 +103,16 @@ export function NewInputWeighing() {
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Cultivar</Form.Label>
-            <Typeahead
+            {selectedPlot?.cultivares?.length > 0 ? <Typeahead
               id="cultivar"
               onChange={(selected: any) => {
                 setSelectedCultivar(selected[0])
               }}
-              options={selectedPlot?.cultivar?.map((cultivar: any) => {
+              options={selectedPlot?.cultivares?.map((cultivar: any) => {
                 return { id: cultivar.id, label: cultivar.name, ...cultivar }
               })}
-            />
+            /> : <></>}
+            
           </Form.Group>
         </Col>
         <Col>
@@ -143,27 +168,25 @@ export function NewInputWeighing() {
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-            <Button
-              variant="success"
-              onClick={() => {
-                
+            <Form.Control
+              type="number"
+              value={grossWeighing}
+              onChange={(e) => {
+                setGrossWeighing(Number(e.target.value))
               }}
-            >
-              Receber
-            </Button>
+            />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
-            <Button
-              variant="success"
-              onClick={() => {
-                
+            <Form.Control
+              type="number"
+              value={tare}
+              onChange={(e) => {
+                setTare(Number(e.target.value))
               }}
-            >
-              Receber
-            </Button>
+            />
           </Form.Group>
         </Col>
         <Col>

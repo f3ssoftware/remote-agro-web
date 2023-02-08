@@ -27,15 +27,16 @@ export const { setFarms, selectAFarm } =
 export default farmStore.reducer;
 
 
-export function asyncFetchFarms() {
+export function asyncFetchFarms(params?: any) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.get(
-                `https://remoteapi.murilobotelho.com.br/farms`,
+                `https://remoteapi.murilobotelho.com.br/farms?include=cultivares&include=cultivations`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                     },
+                    params,
                 }
             );
             dispatch(
