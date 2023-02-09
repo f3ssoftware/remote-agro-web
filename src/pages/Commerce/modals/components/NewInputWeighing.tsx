@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncManualInputWeighing } from '../../../../stores/commerce.store'
 import { calculateHumidityDiscount } from './weighingsHelpers'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
-export function NewInputWeighing() {
+export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState({})
   const [selectedPlot, setSelectedPlot]: any = useState({})
   const [selectedSilo, setSelectedSilo]: any = useState({})
   const [selectedCultivar, setSelectedCultivar]: any = useState({})
-  const [licensePlate, setLicensePlate] = useState('')
+  const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
   const [grossWeighing, setGrossWeighing] = useState(0)
@@ -55,11 +57,59 @@ export function NewInputWeighing() {
     setSelectedCultivar(null);
   }, [seasons])
 
+  useEffect(()=>{
+    setTotalDiscount(discount+humidityDiscount)
+  }, [discount,humidityDiscount])
+
+  useEffect(()=>{
+    setTotalWeighning(netWeighing*((100-totalDiscount)/100))
+  }, [netWeighing, totalDiscount])
+
+  const Save = () =>{
+    const manualInput = {
+      weighings: {
+        farm_id: selectedFarm.id,
+        field_id: selectedPlot.id,
+        cultivar_id: selectedCultivar.id,
+        silo_id: selectedSilo.id,
+        gross_weight: grossWeighing,
+        net_weight: netWeighing,
+        humidity: humidity,
+        impurity: impurity,
+        discount: discount,
+        final_weight: totalWeighning,
+        type: "Entrada",
+        shipping_company: company,
+        humidity_discount: humidityDiscount.toString(),
+        total_discount: totalDiscount.toString(),
+        observations: observation,
+        tare_weight: tare,
+        mode: "Manual",
+        car_plate: carPlate
+      }
+    }
+    dispatch(asyncManualInputWeighing(manualInput))
+  }
 
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
+      {index !== 0 ? (
+          <Col md={1}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                onHandleRemove(index)
+              }}
+              style={{ marginTop: '45%' }}
+            >
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
@@ -85,19 +135,6 @@ export function NewInputWeighing() {
               options={selectedFarm?.fields?.map((field: any) => {
                 return { id: field.id, label: field.name, ...field }
               })}/> : <></>}
-            
-            {/* <Form.Select
-              value={selectedPlot?.name}
-              aria-label=""
-              onChange={(e) => {
-                return setSelectedPlot(e.target.value)
-              }}
-            >
-              {' '}
-              {selectedFarm?.fields?.map((field: any, index: number) => {
-                return <option key={index}>{field.name}</option>
-              })}
-            </Form.Select> */}
           </Form.Group>
         </Col>
         <Col>
@@ -134,9 +171,9 @@ export function NewInputWeighing() {
             <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
-              value={licensePlate}
+              value={carPlate}
               onChange={(e) => {
-                setLicensePlate(e.target.value)
+                setCarPlate(e.target.value)
               }}
             />
           </Form.Group>
@@ -302,7 +339,7 @@ export function NewInputWeighing() {
         <Button
           variant="success"
           onClick={() => {
-            // register()
+            Save()
           }}
         >
           Salvar

@@ -6,18 +6,21 @@ import { getMessages } from "./messaging.store";
 import { asyncFetchContractsData } from "./financial.store";
 import { Contract } from "../models/Contract";
 import { TransferWeighing } from "../models/TransferWeighing";
+import { ManualInputWeighing } from "../models/ManualInputWeighing";
 
 
 const initialSilo: Silo [] = [];
 const initialEditContracts: Contract = {}
 const initialTransferWeighing: TransferWeighing [] = []
+const initialManualInputWeighing: ManualInputWeighing [] = []
 const commerceStore = createSlice({
     name: "commerce",
     initialState: {
         plots: [],
         silo: initialSilo,
         editContracts: initialEditContracts,
-        transferWeighing: initialTransferWeighing 
+        transferWeighing: initialTransferWeighing ,
+        manualInputWeighing: initialManualInputWeighing
     },
     reducers: {
         setPlots(state, action) {
@@ -31,12 +34,15 @@ const commerceStore = createSlice({
         },
         setTransferWeighing(state, action){
             state.transferWeighing = action.payload
+        },
+        setManualInputWeighing(state, action){
+            state.manualInputWeighing = action.payload
         }
         
     },
 });
 
-export const { setPlots, setSilo, setEditContracts, setTransferWeighing } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setManualInputWeighing } =
     commerceStore.actions;
 export default commerceStore.reducer;
 
@@ -81,6 +87,30 @@ export function asyncTransferWeighing(transfer :any) {
                 type: "success",
             }));
             dispatch(setTransferWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
+export function asyncManualInputWeighing(mInput :any) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/weighings`,
+            mInput, 
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(getMessages({
+                message: "Pesagem de entrada salva com sucesso",
+                type: "success",
+            }));
+            dispatch(setManualInputWeighing(result.data));
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
