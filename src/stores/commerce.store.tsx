@@ -7,12 +7,17 @@ import { asyncFetchContractsData } from "./financial.store";
 import { Contract } from "../models/Contract";
 import { TransferWeighing } from "../models/TransferWeighing";
 import { ManualInputWeighing } from "../models/ManualInputWeighing";
+import { ManualOutputWeighing } from "../models/ManualOutputWeighing";
+import { ManualSeparateWeighing } from "../models/ManualSepareteWeighing";
 
 
 const initialSilo: Silo [] = [];
 const initialEditContracts: Contract = {}
 const initialTransferWeighing: TransferWeighing [] = []
-const initialManualInputWeighing: ManualInputWeighing [] = []
+const initialInputWeighing: ManualInputWeighing [] = []
+const initialAutoInputWeighing: ManualInputWeighing = {}
+const initialOutputWeighing: ManualOutputWeighing [] = []
+const initialSeparateWeighing: ManualSeparateWeighing [] = []
 const commerceStore = createSlice({
     name: "commerce",
     initialState: {
@@ -20,7 +25,10 @@ const commerceStore = createSlice({
         silo: initialSilo,
         editContracts: initialEditContracts,
         transferWeighing: initialTransferWeighing ,
-        manualInputWeighing: initialManualInputWeighing
+        inputWeighing: initialInputWeighing,
+        autoInputWeighing: initialAutoInputWeighing,
+        outputWeighing: initialOutputWeighing,
+        separateWeighing: initialSeparateWeighing
     },
     reducers: {
         setPlots(state, action) {
@@ -35,14 +43,23 @@ const commerceStore = createSlice({
         setTransferWeighing(state, action){
             state.transferWeighing = action.payload
         },
-        setManualInputWeighing(state, action){
-            state.manualInputWeighing = action.payload
+        setInputWeighing(state, action){
+            state.inputWeighing = action.payload
+        },
+        setAutoInputWeighing(state, action){
+            state.autoInputWeighing = action.payload
+        },
+        setOutputWeighing(state,action){
+            state.outputWeighing = action.payload
+        },
+        setSeparateWeighing(state, action){
+            state.separateWeighing = action.payload
         }
         
     },
 });
 
-export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setManualInputWeighing } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing } =
     commerceStore.actions;
 export default commerceStore.reducer;
 
@@ -96,11 +113,11 @@ export function asyncTransferWeighing(transfer :any) {
     }
 }
 
-export function asyncManualInputWeighing(mInput :any) {
+export function asyncInputWeighing(input :any) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.post(`https://remoteapi.murilobotelho.com.br/weighings`,
-            mInput, 
+            input, 
             {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -110,7 +127,74 @@ export function asyncManualInputWeighing(mInput :any) {
                 message: "Pesagem de entrada salva com sucesso",
                 type: "success",
             }));
-            dispatch(setManualInputWeighing(result.data));
+            dispatch(setInputWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
+export function asyncFetchWeighingData() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(`https://remoteweighingsapi.murilobotelho.com.br/weighings?user_id=1`,
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(setAutoInputWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
+export function asyncOutputWeighing(output :any) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/weighings`,
+            output, 
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(getMessages({
+                message: "Pesagem de saída salva com sucesso",
+                type: "success",
+            }));
+            dispatch(setOutputWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
+export function asyncSeparateWeighing(separate :any) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.post(`https://remoteapi.murilobotelho.com.br/weighings`,
+            separate, 
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(getMessages({
+                message: "Pesagem avulsa salva com sucesso",
+                type: "success",
+            }));
+            dispatch(setSeparateWeighing(result.data));
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,

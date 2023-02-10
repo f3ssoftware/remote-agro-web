@@ -1,26 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { NewInputWeighing } from './NewInputWeighing'
+import { NewManualInputWeighing } from './NewManualInputWeighing'
 import { ManualInputWeighing } from '../../../../models/ManualInputWeighing'
-import { setManualInputWeighing } from '../../../../stores/commerce.store'
 
 export function InputWeighing() {
-  const [newManualInputWeighing, setNewManualInputWeighing] = useState([
-    new ManualInputWeighing(),
-  ])
+  const [newManualInputWeighing, setNewManualInputWeighing] = useState([new ManualInputWeighing(),])
 
   const onRemoveItem = (index: number) => {
     const mInputArr = [...newManualInputWeighing]
     mInputArr.splice(index, 1)
-    setManualInputWeighing(mInputArr)
+    setNewManualInputWeighing(mInputArr)
   }
 
   const onUpdateItem = (minput: ManualInputWeighing, index: number) => {
     const mInputArr = [...newManualInputWeighing]
     mInputArr.splice(index, 1)
     mInputArr.push(minput)
-    setManualInputWeighing(mInputArr)
+    setNewManualInputWeighing(mInputArr)
   }
 
   return (
@@ -37,12 +33,12 @@ export function InputWeighing() {
           >
             {newManualInputWeighing.map((newMInput, index) => {
               return (
-                <NewInputWeighing
+                <NewManualInputWeighing
                   index={index}
                   key={index}
                   onHandleUpdate={onUpdateItem}
                   onHandleRemove={onRemoveItem}
-                ></NewInputWeighing>
+                ></NewManualInputWeighing>
               )
             })}
           </Row>

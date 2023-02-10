@@ -1,31 +1,30 @@
 import { useEffect, useState } from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../../..'
-import { NewOutputWeighing } from './NewOutputWeighing'
+import { Button, Col, Container, Row } from 'react-bootstrap'
+import { NewManualOutputWeighing } from './NewManualOutputWeighing'
+import { ManualOutputWeighing } from '../../../../models/ManualOutputWeighing'
+import { ManualInputWeighing } from '../../../../models/ManualInputWeighing'
 
 
 export function OutputWeighing() {
-  const dispatch = useDispatch<any>()
-  const { farm, commerce } = useSelector((state: RootState) => state)
+  const [newManualOuputWeighing, setNewManualOutputWeighing] = useState([new ManualOutputWeighing(),])
 
 
 
 
 
-//     const onRemoveItem = (index: number) => {
-//       const inputArr = [...];
-//       planningsArr.splice(index, 1);
-//       setPlannings(planningsArr);
-//   }
+    const onRemoveItem = (index: number) => {
+      const mOutputArr = [...newManualOuputWeighing];
+      mOutputArr.splice(index, 1);
+      setNewManualOutputWeighing(mOutputArr);
+  }
 
-  // const onUpdateItem = (planning: PlanningInput, index: number) => {
-  //   const planningsArr = [...plannings];
-  //   planningsArr.splice(index, 1);
-  //   planningsArr.push(planning);
-  //   setPlannings(planningsArr);
+  const onUpdateItem = (mOutput: ManualOutputWeighing, index: number) => {
+    const mOutputArr = [...newManualOuputWeighing];
+    mOutputArr.splice(index, 1);
+    mOutputArr.push(mOutput);
+    setNewManualOutputWeighing(mOutputArr);
 
-  // }
+  }
 
   return (
     <Container>
@@ -37,12 +36,10 @@ export function OutputWeighing() {
         </Row>
         <div>
           <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
-            <NewOutputWeighing></NewOutputWeighing>
+            {newManualOuputWeighing.map((newMOutput, index) => {
+                return <NewManualOutputWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualOutputWeighing>
+            })}
           </Row>
-          {/* {plannings.map((newPlanning, index) => {
-                return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
-            })} */}
-
           <div
             style={{
               display: 'flex',
@@ -51,7 +48,7 @@ export function OutputWeighing() {
               marginTop: '2%',
             }}
           >
-            {/* <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningInput()])}>Adicionar Linha</Button> */}
+            <Button variant="primary" onClick={() => setNewManualOutputWeighing([...newManualOuputWeighing, new ManualInputWeighing()])}>Adicionar Linha</Button>
           </div>
         </div>
       </div>

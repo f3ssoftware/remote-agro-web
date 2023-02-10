@@ -2,25 +2,24 @@ import { useEffect, useState } from 'react'
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
-import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncManualInputWeighing } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncOutputWeighing } from '../../../../stores/commerce.store'
+import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
+import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
-export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+
+export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
   const dispatch = useDispatch<any>()
-  const { farm, commerce, seasons } = useSelector((state: RootState) => state)
-  const [selectedFarm, setSelectedFarm]: any = useState({})
-  const [selectedPlot, setSelectedPlot]: any = useState({})
+  const { financial, commerce, seasons } = useSelector((state: RootState) => state)
+  const [selectedCultivation, setSelectedCultivation]: any = useState({})
+  const [selectedContract, setSelectedContract]: any = useState({})
   const [selectedSilo, setSelectedSilo]: any = useState({})
-  const [selectedCultivar, setSelectedCultivar]: any = useState({})
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
-  const [grossWeighing, setGrossWeighing] = useState(0)
-  const [tare, setTare] = useState(0)
   const [humidity, setHumidity] = useState(0)
   const [humidityDiscount, setHumidityDiscount] = useState(0)
   const [impurity, setImpurity] = useState(0)
@@ -29,12 +28,13 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
   const [totalWeighning, setTotalWeighning] = useState(0)
   const [observation, setObservation] = useState('')
   const [company, setCompany] = useState('')
+  const [grossWeighing, setGrossWeighing] = useState(0)
+  const [tare, setTare] = useState(0)
 
   useEffect(() => {
-    dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
+    dispatch(asyncFetchContractsData())
     dispatch(asyncFetchSiloData())
-    setSelectedFarm(farm?.farms[0])
-    dispatch(selectAFarm(farm?.farms[0]))
+    dispatch(asyncFetchCultivations())
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
@@ -47,15 +47,12 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivar?.cultivation_id))
+    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation.id))
   }, [humidity])
 
-  useEffect(() => {
-    dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivares' }));
-    setSelectedFarm(null);
-    setSelectedPlot(null);
-    setSelectedCultivar(null);
-  }, [seasons])
+  // useEffect(() => {
+  //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
+  // }, [seasons])
 
   useEffect(()=>{
     setTotalDiscount(discount+humidityDiscount)
@@ -66,11 +63,10 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
   }, [netWeighing, totalDiscount])
 
   const Save = () =>{
-    const manualInput = {
+    const manualOutput = {
       weighings: {
-        farm_id: selectedFarm.id,
-        field_id: selectedPlot.id,
-        cultivar_id: selectedCultivar.id,
+        contract_id: selectedContract.id,
+        cultivation_id: selectedCultivation.id,
         silo_id: selectedSilo.id,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
@@ -78,7 +74,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         impurity: impurity,
         discount: discount,
         final_weight: totalWeighning,
-        type: "Entrada",
+        type: "Saída",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
         total_discount: totalDiscount.toString(),
@@ -88,7 +84,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         car_plate: carPlate
       }
     }
-    dispatch(asyncManualInputWeighing(manualInput))
+    dispatch(asyncOutputWeighing(manualOutput))
   }
 
 
@@ -112,53 +108,39 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         )}
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
+            <Form.Label style={{color:'#fff'}}>Cultura</Form.Label>
             <Typeahead
-              id="farm"
+              id="cultivation"
               onChange={(selected: any) => {
-                setSelectedFarm(selected[0])
+                setSelectedCultivation(selected[0]);
               }}
-              options={farm?.farms?.map((farm: any) => {
-                return { id: farm.id, label: farm.name, ...farm }
+              options={financial.cultivations.map((cultivation: Cultivation) => {
+                return { id: cultivation.id, label: cultivation.name, ...cultivation }
               })}
             />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Talhões</Form.Label>
-            {selectedFarm?.fields?.length > 0 ? <Typeahead
-              id="field"
+            <Form.Label style={{color: '#fff'}}>Contratos</Form.Label>
+            <Typeahead
+              id="contract"
               onChange={(selected: any) => {
-                setSelectedPlot(selected[0])
+                setSelectedContract(selected[0]);
               }}
-              options={selectedFarm?.fields?.map((field: any) => {
-                return { id: field.id, label: field.name, ...field }
-              })}/> : <></>}
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Cultivar</Form.Label>
-            {selectedPlot?.cultivares?.length > 0 ? <Typeahead
-              id="cultivar"
-              onChange={(selected: any) => {
-                setSelectedCultivar(selected[0])
-              }}
-              options={selectedPlot?.cultivares?.map((cultivar: any) => {
-                return { id: cultivar.id, label: cultivar.name, ...cultivar }
+              options={financial?.contracts?.map((contract: any) => {
+                return { id: contract.id, label: contract.name, ...contract }
               })}
-            /> : <></>}
-            
+            />
           </Form.Group>
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
+        <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{color: '#fff'}}>Silo</Form.Label>
             <Typeahead
               id="silo"
               onChange={(selected: any) => {
-                setSelectedSilo(selected[0])
+                setSelectedSilo(selected[0]);
               }}
               options={commerce?.silo?.map((silo: any) => {
                 return { id: silo.id, label: silo.name, ...silo }
@@ -168,7 +150,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Placa</Form.Label>
             <Form.Control
               type="text"
               value={carPlate}
@@ -180,7 +162,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
               value={driver}
@@ -192,7 +174,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
               value={company}
@@ -228,7 +210,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
               value={netWeighing}
@@ -242,7 +224,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
               value={humidity}
@@ -254,7 +236,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
               value={humidityDiscount}
@@ -266,7 +248,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
               value={impurity}
@@ -278,7 +260,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
               value={discount}
@@ -290,9 +272,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>
-              Desconto total (%)
-            </Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Desconto total (%)</Form.Label>
             <Form.Control
               type="number"
               value={totalDiscount}
@@ -304,7 +284,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
               value={totalWeighning}
@@ -316,7 +296,7 @@ export function NewInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandl
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
             <Form.Control
               type="text"
               value={observation}
