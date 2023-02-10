@@ -92,13 +92,16 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
   }
 
   useEffect(()=>{
-    setGrossWeighing(commerce.autoInputWeighing.gross_weight!)
-    setTare(commerce.autoInputWeighing.tare_weight!)
-  }, [commerce])
-
-  useEffect(()=>{
     dispatch(asyncFetchWeighingData())
   }, [])
+
+  const grossResult = () =>{
+    setGrossWeighing(commerce.autoInputWeighing.gross_weight!)
+  }
+
+  const tareResult = () =>{
+    setTare(commerce.autoInputWeighing.tare_weight!)
+  }
 
 
   return (
@@ -214,24 +217,39 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-              <Button
+          {grossWeighing ==0 ? (
+            <Button
             variant="success"
-            onClick={() => {setGrossWeighing(grossWeighing)}}
+            onClick={() => {
+              grossResult()
+            }}
           >
             Receber
           </Button>
+          ): (<Form.Control
+            type="number"
+            disabled
+            value={grossWeighing}
+          />)}
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
-            <Form.Control
-              type="number"
-              value={tare}
-              onChange={(e) => {
-                setTare(Number(e.target.value))
-              }}
-            />
+          {tare ==0 ? (
+            <Button
+            variant="success"
+            onClick={() => {
+              tareResult()
+            }}
+          >
+            Receber
+          </Button>
+          ): (<Form.Control
+            type="number"
+            disabled
+            value={tare}
+          />)}
           </Form.Group>
         </Col>
         <Col>
@@ -239,6 +257,7 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
             <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={netWeighing}
               onChange={(e) => {
                 setNetWeighing(Number(e.target.value))
@@ -265,6 +284,7 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
             <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={humidityDiscount}
               onChange={(e) => {
                 setHumidityDiscount(Number(e.target.value))
@@ -289,6 +309,7 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
             <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={discount}
               onChange={(e) => {
                 setDiscount(Number(e.target.value))
@@ -303,6 +324,7 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
             </Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={totalDiscount}
               onChange={(e) => {
                 setTotalDiscount(Number(e.target.value))
@@ -315,6 +337,7 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
             <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={totalWeighning}
               onChange={(e) => {
                 setTotalWeighning(Number(e.target.value))

@@ -7,7 +7,7 @@ import { ManualSeparateWeighing } from '../../../../models/ManualSepareteWeighin
 
 
 export function SepareteWeighing() {
-  const [newManualSeparateWeighing, setNewManualSeparateWeighing] = useState([new ManualSeparateWeighing(),])
+  const [newManualSeparateWeighing, setNewManualSeparateWeighing] = useState<any[]>([])
 
 
 

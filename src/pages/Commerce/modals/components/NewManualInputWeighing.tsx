@@ -95,21 +95,18 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-      {index !== 0 ? (
-          <Col md={1}>
+          <Col>
             <Button
               variant="danger"
               onClick={() => {
                 onHandleRemove(index)
               }}
-              style={{ marginTop: '45%' }}
+              style={{ marginTop: '40%' }}
             >
               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
             </Button>
           </Col>
-        ) : (
-          <></>
-        )}
+
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
@@ -231,6 +228,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
             <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={netWeighing}
               onChange={(e) => {
                 setNetWeighing(Number(e.target.value))
@@ -257,6 +255,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
             <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={humidityDiscount}
               onChange={(e) => {
                 setHumidityDiscount(Number(e.target.value))
@@ -281,6 +280,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
             <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={discount}
               onChange={(e) => {
                 setDiscount(Number(e.target.value))
@@ -295,6 +295,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
             </Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={totalDiscount}
               onChange={(e) => {
                 setTotalDiscount(Number(e.target.value))
@@ -307,6 +308,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
             <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
+              disabled
               value={totalWeighning}
               onChange={(e) => {
                 setTotalWeighning(Number(e.target.value))

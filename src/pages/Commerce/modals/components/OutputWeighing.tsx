@@ -6,7 +6,7 @@ import { ManualInputWeighing } from '../../../../models/ManualInputWeighing'
 
 
 export function OutputWeighing() {
-  const [newManualOuputWeighing, setNewManualOutputWeighing] = useState([new ManualOutputWeighing(),])
+  const [newManualOuputWeighing, setNewManualOutputWeighing] = useState<any[]>([])
 
 
 

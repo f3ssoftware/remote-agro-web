@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import { NewManualInputWeighing } from './NewManualInputWeighing'
 import { ManualInputWeighing } from '../../../../models/ManualInputWeighing'
+import { NewAutoInputWeighing } from './NewAutoInputWeighing'
 
 export function InputWeighing() {
-  const [newManualInputWeighing, setNewManualInputWeighing] = useState([new ManualInputWeighing(),])
+  const [newManualInputWeighing, setNewManualInputWeighing] = useState<any[]>([])
+  const [newAutoInputWeighing, setNewAutoInputWeighing] = useState([new ManualInputWeighing()])
 
   const onRemoveItem = (index: number) => {
     const mInputArr = [...newManualInputWeighing]
@@ -12,11 +14,23 @@ export function InputWeighing() {
     setNewManualInputWeighing(mInputArr)
   }
 
+  const onRemoveItemA = (index: number) => {
+    const aInputArr = [...newAutoInputWeighing]
+    aInputArr.splice(index, 1)
+    setNewAutoInputWeighing(aInputArr)
+  }
+
   const onUpdateItem = (minput: ManualInputWeighing, index: number) => {
     const mInputArr = [...newManualInputWeighing]
     mInputArr.splice(index, 1)
     mInputArr.push(minput)
     setNewManualInputWeighing(mInputArr)
+  }
+  const onUpdateItemA = (aInput: ManualInputWeighing, index: number) => {
+    const aInputArr = [...newAutoInputWeighing]
+    aInputArr.splice(index, 1)
+    aInputArr.push(aInput)
+    setNewAutoInputWeighing(aInputArr)
   }
 
   return (
@@ -41,6 +55,16 @@ export function InputWeighing() {
                 ></NewManualInputWeighing>
               )
             })}
+            {newAutoInputWeighing.map((newAInput, index) => {
+              return (
+                <NewAutoInputWeighing
+                  index={index}
+                  key={index}
+                  onHandleUpdate={onUpdateItemA}
+                  onHandleRemove={onRemoveItemA}
+                ></NewAutoInputWeighing>
+              )
+            })}
           </Row>
 
           <div
@@ -61,6 +85,18 @@ export function InputWeighing() {
               }
             >
               Adicionar linha manual
+            </Button>
+
+            <Button
+              variant="primary"
+              onClick={() =>
+                setNewAutoInputWeighing([
+                  ...newAutoInputWeighing,
+                  new ManualInputWeighing(),
+                ])
+              }
+            >
+              Adicionar linha automática
             </Button>
           </div>
         </div>
