@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../../..'
-import { NewSeparateWeighing } from './NewSeparateWeighing'
+import { NewManualSeparateWeighing } from './NewManualSeparateWeighing'
 import { ManualSeparateWeighing } from '../../../../models/ManualSepareteWeighing'
+import { NewAutoSeparateWeighing } from './NewAutoSeparateWeighing'
 
 
 export function SepareteWeighing() {
   const [newManualSeparateWeighing, setNewManualSeparateWeighing] = useState<any[]>([])
+  const [newAutoSeparateWeighing, setNewAutoSeparateWeighing] = useState([new ManualSeparateWeighing()])
 
 
 
@@ -18,14 +18,28 @@ export function SepareteWeighing() {
       separateArr.splice(index, 1);
       setNewManualSeparateWeighing(separateArr);
   }
+  const onRemoveItemA = (index: number) => {
+    const aSeparateArr = [...newAutoSeparateWeighing];
+    aSeparateArr.splice(index, 1);
+    setNewAutoSeparateWeighing(aSeparateArr);
+}
 
-  const onUpdateItem = (separate: ManualSeparateWeighing , index: number) => {
+  const onUpdateItem = (mSeparate: ManualSeparateWeighing , index: number) => {
     const separateArr = [...newManualSeparateWeighing];
     separateArr.splice(index, 1);
-    separateArr.push(separate);
+    separateArr.push(mSeparate);
     setNewManualSeparateWeighing(separateArr);
 
   }
+
+  const onUpdateItemA = (aSeparate: ManualSeparateWeighing , index: number) => {
+    const aSeparateArr = [...newAutoSeparateWeighing];
+    aSeparateArr.splice(index, 1);
+    aSeparateArr.push(aSeparate);
+    setNewAutoSeparateWeighing(aSeparateArr);
+
+  }
+
 
   return (
     <Container>
@@ -37,8 +51,11 @@ export function SepareteWeighing() {
         </Row>
         <div>
           <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
-            {newManualSeparateWeighing.map((newSeparate, index) => {
-                return <NewSeparateWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewSeparateWeighing>
+            {newManualSeparateWeighing.map((newMSeparate, index) => {
+                return <NewManualSeparateWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualSeparateWeighing>
+            })}
+            {newAutoSeparateWeighing.map((newASeparate, index) => {
+                return <NewAutoSeparateWeighing onHandleRemove={onRemoveItemA} index={index} key={index} onHandleUpdate={onUpdateItemA}></NewAutoSeparateWeighing>
             })}
           </Row>
 
@@ -50,7 +67,8 @@ export function SepareteWeighing() {
               marginTop: '2%',
             }}
           >
-            <Button variant="primary" onClick={() => setNewManualSeparateWeighing([...newManualSeparateWeighing, new ManualSeparateWeighing()])}>Adicionar Linha</Button>
+            <Button variant="primary" onClick={() => setNewManualSeparateWeighing([...newManualSeparateWeighing, new ManualSeparateWeighing()])}>Adicionar linha manual</Button>
+            <Button variant="primary" onClick={() => setNewAutoSeparateWeighing([...newAutoSeparateWeighing, new ManualSeparateWeighing()])}>Adicionar linha automática</Button>
           </div>
         </div>
       </div>

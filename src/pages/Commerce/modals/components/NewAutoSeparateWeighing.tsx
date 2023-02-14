@@ -6,12 +6,12 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
-import { asyncSeparateWeighing } from '../../../../stores/commerce.store'
+import { asyncFetchWeighingData, asyncSeparateWeighing } from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 
-export function NewSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
@@ -86,10 +86,23 @@ export function NewSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onH
     dispatch(asyncSeparateWeighing(manualSeparate))
   }
 
+  useEffect(()=>{
+    dispatch(asyncFetchWeighingData())
+  }, [])
+
+  const grossResult = () =>{
+    setGrossWeighing(commerce.autoInputWeighing.gross_weight!)
+  }
+
+  const tareResult = () =>{
+    setTare(commerce.autoInputWeighing.tare_weight!)
+  }
+
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
+      {index !== 0 ? (
           <Col md={1}>
             <Button
               variant="danger"
@@ -101,6 +114,9 @@ export function NewSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onH
               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
             </Button>
           </Col>
+        ) : (
+          <></>
+        )}
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{color:'#fff'}}>Referência</Form.Label>
@@ -180,25 +196,39 @@ export function NewSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onH
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-            <Form.Control
-              type="number"
-              value={grossWeighing}
-              onChange={(e) => {
-                setGrossWeighing(Number(e.target.value))
-              }}
-            />
+          {grossWeighing ==0 ? (
+            <Button
+            variant="success"
+            onClick={() => {
+              grossResult()
+            }}
+          >
+            Receber
+          </Button>
+          ): (<Form.Control
+            type="number"
+            disabled
+            value={grossWeighing}
+          />)}
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
-            <Form.Control
-              type="number"
-              value={tare}
-              onChange={(e) => {
-                setTare(Number(e.target.value))
-              }}
-            />
+          {tare ==0 ? (
+            <Button
+            variant="success"
+            onClick={() => {
+              tareResult()
+            }}
+          >
+            Receber
+          </Button>
+          ): (<Form.Control
+            type="number"
+            disabled
+            value={tare}
+          />)}
           </Form.Group>
         </Col>
         <Col>
