@@ -67,7 +67,7 @@ export function SepareteWeighing() {
               marginTop: '2%',
             }}
           >
-            <Button variant="primary" onClick={() => setNewManualSeparateWeighing([...newManualSeparateWeighing, new ManualSeparateWeighing()])}>Adicionar linha manual</Button>
+            <Button variant="secondary" onClick={() => setNewManualSeparateWeighing([...newManualSeparateWeighing, new ManualSeparateWeighing()])}>Adicionar linha manual</Button>
             <Button variant="primary" onClick={() => setNewAutoSeparateWeighing([...newAutoSeparateWeighing, new ManualSeparateWeighing()])}>Adicionar linha automática</Button>
           </div>
         </div>

@@ -92,11 +92,11 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
   }, [])
 
   const grossResult = () =>{
-    setGrossWeighing(commerce.autoInputWeighing.gross_weight!)
+    setGrossWeighing(commerce.autoInputWeighing.Peso!)
   }
 
   const tareResult = () =>{
-    setTare(commerce.autoInputWeighing.tare_weight!)
+    // setTare(commerce.autoInputWeighing.tare_weight!)
   }
 
 
@@ -120,7 +120,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         )}
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color:'#fff'}}>Cultura</Form.Label>
+            <Form.Label style={{color:'#000'}}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
               onChange={(selected: any) => {
@@ -134,7 +134,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#fff'}}>Contratos</Form.Label>
+            <Form.Label style={{color: '#000'}}>Contratos</Form.Label>
             <Typeahead
               id="contract"
               onChange={(selected: any) => {
@@ -148,7 +148,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
         <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#fff'}}>Silo</Form.Label>
+            <Form.Label style={{color: '#000'}}>Silo</Form.Label>
             <Typeahead
               id="silo"
               onChange={(selected: any) => {
@@ -162,7 +162,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Placa</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
               value={carPlate}
@@ -174,7 +174,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Motorista</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
               value={driver}
@@ -186,7 +186,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Transportadora</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
               value={company}
@@ -236,7 +236,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Peso líquido</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -251,7 +251,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>UMID (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
               value={humidity}
@@ -263,7 +263,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Desconto UMID (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -276,7 +276,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Impureza (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
               value={impurity}
@@ -288,7 +288,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Desconto (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -301,7 +301,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Desconto total (%)</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Desconto total (%)</Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -314,7 +314,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Peso final</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -327,7 +327,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
             <Form.Control
               type="text"
               value={observation}

@@ -9,13 +9,14 @@ import { TransferWeighing } from "../models/TransferWeighing";
 import { ManualInputWeighing } from "../models/ManualInputWeighing";
 import { ManualOutputWeighing } from "../models/ManualOutputWeighing";
 import { ManualSeparateWeighing } from "../models/ManualSepareteWeighing";
+import { AutoInputWeighing } from "../models/AutoInputWeighing";
 
 
 const initialSilo: Silo [] = [];
 const initialEditContracts: Contract = {}
 const initialTransferWeighing: TransferWeighing [] = []
 const initialInputWeighing: ManualInputWeighing [] = []
-const initialAutoInputWeighing: ManualInputWeighing = {}
+const initialAutoInputWeighing: AutoInputWeighing = {}
 const initialOutputWeighing: ManualOutputWeighing [] = []
 const initialSeparateWeighing: ManualSeparateWeighing [] = []
 const commerceStore = createSlice({

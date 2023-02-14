@@ -66,7 +66,7 @@ export function OutputWeighing() {
               marginTop: '2%',
             }}
           >
-            <Button variant="primary" onClick={() => setNewManualOutputWeighing([...newManualOutputWeighing, new ManualOutputWeighing()])}>Adicionar linha manual</Button>
+            <Button variant="secondary" onClick={() => setNewManualOutputWeighing([...newManualOutputWeighing, new ManualOutputWeighing()])}>Adicionar linha manual</Button>
             <Button variant="primary" onClick={() => setNewAutoOutputWeighing([...newAutoOutputWeighing, new ManualOutputWeighing()])}>Adicionar linha automática</Button>
           </div>
         </div>

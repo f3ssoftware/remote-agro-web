@@ -96,11 +96,11 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
   }, [])
 
   const grossResult = () =>{
-    setGrossWeighing(commerce.autoInputWeighing.gross_weight!)
+    setGrossWeighing(commerce.autoInputWeighing.Peso!)
   }
 
   const tareResult = () =>{
-    setTare(commerce.autoInputWeighing.tare_weight!)
+    // setTare(commerce.autoInputWeighing.tare_weight!)
   }
 
 

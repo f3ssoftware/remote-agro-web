@@ -76,7 +76,7 @@ export function InputWeighing() {
             }}
           >
             <Button
-              variant="primary"
+              variant="secondary"
               onClick={() =>
                 setNewManualInputWeighing([
                   ...newManualInputWeighing,
