@@ -2,13 +2,10 @@ import { Container, Button, Row, Col } from 'react-bootstrap'
 import '../CommerceWeighing/CommerceWeighing.scss'
 import { useState } from 'react'
 import { TransferWeighingModal } from '../modals/CommerceWeighingModal/TransferWeighingModal'
-import { InputWeighing } from '../modals/components/InputWeighing'
 import { useNavigate } from 'react-router-dom'
+import { WeighingCalendar } from '../modals/components/WeighingCalendar'
 
 export function CommerceWeighing() {
-  const [showInputWheighing, setShowInputWeighing] = useState(false)
-  const [showOutputWheighingModal, setShowOutputWeighingModal] = useState(false)
-  const [showSepareteWeighingModal, setShowSepareteWeighingModal] = useState(false)
   const [showTransferWeighingModal, setShowTransferWeighingModal] = useState(false)
   const navigate = useNavigate()
 
@@ -46,6 +43,9 @@ export function CommerceWeighing() {
               +
             </Button>{' '}
           </Col>
+        </Row>
+        <Row>
+          <WeighingCalendar></WeighingCalendar>
         </Row>
       </div>
       <TransferWeighingModal show={showTransferWeighingModal} handleClose={()=> setShowTransferWeighingModal(false)}></TransferWeighingModal>
