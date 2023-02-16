@@ -21,7 +21,8 @@ export class ManualInputWeighing {
         public gross_weight_date?: string,
         public mode?: string,
         public weighing_date?: string,
-        public car_plate?: string
+        public car_plate?: string,
+        public createdAt?: string
 
     ) { }
 }

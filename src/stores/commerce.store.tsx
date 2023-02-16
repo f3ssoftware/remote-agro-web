@@ -138,6 +138,25 @@ export function asyncInputWeighing(input :any) {
     }
 }
 
+export function asyncFetchInputWeighingData() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(`https://remoteapi.murilobotelho.com.br/weighings?type=Entrada&season_id=1`,
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            });
+            dispatch(setInputWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
 export function asyncFetchWeighingData() {
     return async function (dispatch: AppDispatch) {
         try {
