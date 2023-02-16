@@ -201,11 +201,20 @@ export function Transactions() {
                                     <td>
                                         <div className="flex-space-between">
                                             <FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} onClick={() => {
-                                                setShowDeleteModal(true)
+                                                setShowDeleteModal(true);
                                                 setExpenseId(er.expenses_invoice_id!);
                                                 setDeleteExpense(er.expenses_invoice_id!);
                                                 setDeleteContract(er.contract_id!)
                                             }}></FontAwesomeIcon>
+                                            {/* <FontAwesomeIcon icon={faPencil} style={{ cursor: 'pointer' }} onClick={() => {
+                                                if(er?.contract_id) {
+                                                    console.log(er?.contract);
+                                                }
+                                                // setShowDeleteModal(true)
+                                                // setExpenseId(er.expenses_invoice_id!);
+                                                // setDeleteExpense(er.expenses_invoice_id!);
+                                                // setDeleteContract(er.contract_id!)
+                                            }}></FontAwesomeIcon> */}
                                         </div>
                                     </td>
                                 </tr>
