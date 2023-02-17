@@ -56,11 +56,11 @@ const SidebarItems = [
         title: 'Início',
         url: "home"
     },
-    // {
-    //     icon: faMapLocationDot,
-    //     title: 'Talhões',
-    //     url: "plot"
-    // },
+    {
+        icon: faMapLocationDot,
+        title: 'Talhões',
+        url: "plot"
+    },
     {
         icon: faLeaf,
         title: 'Insumos',
@@ -71,11 +71,11 @@ const SidebarItems = [
         title: 'Financeiro',
         url: "financial"
     },
-    // {
-    //     icon: faBuilding,
-    //     title: 'Comércio',
-    //     url: "commerce"
-    // },
+    {
+        icon: faBuilding,
+        title: 'Comércio',
+        url: "commerce"
+    },
     // {
     //     icon: faTractor,
     //     title: 'Manutenção',
