@@ -22,6 +22,7 @@ const initialPlannings: Planning[] = [];
 const initialCultivations: Cultivation[] = [];
 const initialExternalInvoices: ExternalInvoice[] = [];
 const initialContracts: Contract[] = []
+const initialExpenseInvoiceEdit: ExpenseInvoice = {};
 
 const financialStore = createSlice({
     name: "financial",
@@ -29,6 +30,7 @@ const financialStore = createSlice({
         expensesInvoiceData: initialExpensesInvoiceData,
         bankAccounts: initialBankAccounts,
         expensesRevenue: initialExpensesRevenue,
+        expenseInvoiceEdit: initialExpenseInvoiceEdit,
         chartOrderedPairs: initialOrderedPair,
         plannings: initialPlannings,
         cultivations: initialCultivations,
@@ -74,11 +76,26 @@ const financialStore = createSlice({
         },
         setType(state, action) {
             state.type = action.payload
+        },
+        setExpenseInvoiceEdit(state, action) {
+            state.expenseInvoiceEdit = action.payload
         }
     }
 });
 
-export const { setExpensesInvoiceData, setBankAccounts, setExpensesRevenue, setCashFlowChart, setPlannings, setCultivations, setExternalInvoices, setContracts, setFilterDates, setCardActive, setType } =
+export const {
+    setExpensesInvoiceData,
+    setBankAccounts,
+    setExpensesRevenue,
+    setCashFlowChart,
+    setPlannings,
+    setCultivations,
+    setExternalInvoices,
+    setContracts,
+    setFilterDates,
+    setCardActive,
+    setType,
+    setExpenseInvoiceEdit } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -530,6 +547,7 @@ export function asyncFilterByButton(filter: string, startDate: string, endDate: 
 export function asyncFetchSefaz() {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading({}))
             const result = await axios.get(
                 `https://remoteapi.murilobotelho.com.br/expenses-invoices-external`,
                 {
@@ -575,6 +593,31 @@ export function asyncLinkCertificate(data: any) {
             dispatch(
                 getMessages({
                     message: err.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncFetchExpenseInvoiceById(expense_invoice_id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            dispatch(pushLoading('expenses-invoices'));
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices/${expense_invoice_id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(popLoading('expenses-invoices'));
+            dispatch(setExpenseInvoiceEdit(result.data));
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: err?.result?.data?.error,
                     type: "error",
                 })
             );

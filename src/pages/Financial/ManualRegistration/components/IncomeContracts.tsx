@@ -12,7 +12,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { useNavigate } from "react-router-dom";
 
 
-export function IncomeContracts() {
+export function IncomeContracts({ isUpdate, contract }: { isUpdate?: boolean, contract?: Contract }) {
     const { financial, seasons } = useSelector((state: RootState) => state);
     const [contractName, setContractName] = useState('');
     const [contractId, setContractId] = useState(0);
@@ -27,7 +27,7 @@ export function IncomeContracts() {
 
     const register = async () => {
         const contract: Contract = {
-            amount: contractValue*100,
+            amount: contractValue * 100,
             code: contractId.toString(),
             cultivation_id: cultivation.id,
             cultivation_name: cultivation.name,
@@ -45,6 +45,18 @@ export function IncomeContracts() {
         navigate('/financial/balance');
     }
     useEffect(() => {
+        if (isUpdate) {
+            setContractId(contract?.id!);
+            setContractName(contract?.name!);
+            setContractValue(contract?.amount!);
+            setCultivation(financial.cultivations.filter(c => {
+                return cultivation.id === c.id
+            })[0]);
+            setStartDate(new Date(contract?.start_date!));
+            setPayDate(new Date(contract?.payment_date!));
+            setDescription(contract?.description!);
+            setSacks(Number(contract?.sacks!));
+        }
         dispatch(asyncFetchCultivations());
     }, []);
 

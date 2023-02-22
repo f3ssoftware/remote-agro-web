@@ -11,8 +11,11 @@ const loadingStore = createSlice({
             state.requests.push(action.payload);
         },
         popLoading(state, action) {
-            state.requests.pop();
-        }
+            const index = state.requests.indexOf(action.payload);
+            if(index !== -1) {
+                state.requests.splice(index, 1);
+            }
+        },
     }
 });
 

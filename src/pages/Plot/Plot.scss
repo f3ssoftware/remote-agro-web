@@ -4,7 +4,7 @@
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    width: 286px;
+    // width: 286px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -40,7 +40,7 @@
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    height: 66vh;
+    height: 50vh;
     margin-top: 44px;
     margin-bottom: 30px;
   }
@@ -135,4 +135,12 @@
     position: relative;
     left: 185px;
     bottom: 70px;
+  }
+
+  .plot-card {
+    background-color: #7c542b;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px
   }

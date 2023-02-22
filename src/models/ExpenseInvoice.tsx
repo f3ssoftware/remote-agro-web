@@ -1,5 +1,6 @@
 export class ExpenseInvoice {
     constructor(
+        public id?: number,
         public year?: string,
         public reference?: string,
         public due_date?: string,

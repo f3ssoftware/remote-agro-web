@@ -39,16 +39,16 @@ export function Soil() {
 
   const find = () => {
     const found = soil.soilAnalysis?.filter((soilAnalysis: any) => {
-        const a = soilAnalysis.service_order_farms.filter((sf: any, index: number) => {
-          if (sf.farm_name.toUpperCase().includes(findSoil.toUpperCase())) {
-            return sf
-          }
-        });
-        if(a.length > 0) {
-            return soilAnalysis;
-        } else {
-            return null;
+      const a = soilAnalysis.service_order_farms.filter((sf: any, index: number) => {
+        if (sf.farm_name.toUpperCase().includes(findSoil.toUpperCase())) {
+          return sf
         }
+      });
+      if (a.length > 0) {
+        return soilAnalysis;
+      } else {
+        return null;
+      }
     })
     setSoilAnalysis(found);
     // console.log(found);
@@ -136,10 +136,12 @@ export function Soil() {
                           (sf: any) => `${sf.farm_name}, `,
                         )}
                       </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{soilAnalysis?.service_order_fields?.map((field: any) => {
+                        return field.manual_field_name
+                      })}</td>
+                      <td>{soilAnalysis?.operator?.name}</td>
+                      <td>{soilAnalysis?.service_order_sampling_methods?.map((method: any) => `${method.sampling_method}, `)}</td>
+                      <td>{soilAnalysis?.laboratory?.name}</td>
                       <td></td>
                       <td></td>
                     </tr>

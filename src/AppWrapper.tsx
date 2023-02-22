@@ -8,7 +8,7 @@ import { RootState } from ".";
 import { TopNav } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Commerce } from "./pages/Commerce/Commerce";
-import {Soil} from "./pages/Soil/Soil";
+import { Soil } from "./pages/Soil/Soil";
 import { Financial } from "./pages/Financial/Financial";
 import { Home } from "./pages/Home/Home"
 import { FarmInput } from "./pages/Input/FarmInput";
@@ -59,13 +59,13 @@ export function AppWrapper() {
         case "planning": return <AppStructure loading={loading.requests.length > 0}>
             <PlanningMain></PlanningMain>
         </AppStructure>
-         case "maintenance": return <AppStructure loading={loading.requests.length > 0}>
+        case "maintenance": return <AppStructure loading={loading.requests.length > 0}>
             <Maintenance></Maintenance>
         </AppStructure>
-         case "report": return <AppStructure loading={loading.requests.length > 0}>
+        case "report": return <AppStructure loading={loading.requests.length > 0}>
             <Report></Report>
         </AppStructure>
-        
+
         default: return <div>403 not found</div>
     }
 }
@@ -89,11 +89,17 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
                 </Col>
             </Row>
             <Row>
+                {loading ? <Loading></Loading> : <></>}
+                <Col lg={12} md={12}>
+                    {children}
+                </Col>
+            </Row>
+            {/* <Row>
                 {!loading ? <Col lg={12} md={12}>
                     {children}
                 </Col> : <Loading></Loading>}
 
-            </Row>
+            </Row> */}
         </Col>
         {messages.messages.map((m, index) => {
             return <Modal show={showMessages} onHide={() => { setShowMessages(false); dispatch(popMessages('')) }} key={index}>

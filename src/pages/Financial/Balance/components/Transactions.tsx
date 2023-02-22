@@ -13,6 +13,11 @@ import { TransactionDates } from "../modals/TransactionDates";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
+import { EditContractModal } from "../../../Commerce/modals/NewContractModal/EditContractModal";
+import { Contract } from "../../../../models/Contract";
+import { ExpenseInvoice } from "../../../../models/ExpenseInvoice";
+import { EditExpenseModal } from "../modals/EditExpenseModal";
+
 
 const initialTransactions: ExpensesRevenue[] = []
 export function Transactions() {
@@ -22,6 +27,8 @@ export function Transactions() {
     const [expenseId, setExpenseId] = useState(0);
     const [deleteExpense, setDeleteExpense] = useState(0)
     const [deleteContract, setDeleteContract] = useState(0)
+    const [editContract, setEditContract] = useState<Contract>();
+    const [editExpenseInvoice, setEditExpenseInvoice] = useState<ExpenseInvoice>();
     const [startDate, setStartDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));
     const [endDate, setEndDate] = useState(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0));
     const [showModalDates, setShowModalDates] = useState(false);
@@ -33,7 +40,9 @@ export function Transactions() {
     const [contractId, setContractId] = useState(0);
     const [amount, setAmount] = useState(0);
     const [expenseRevenueId, setExpenseRevenueId] = useState(0);
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showModalEditContract, setShowModalEditContract] = useState(false);
+    const [showModalEditExpense, setShowModalEditExpense] = useState(false);
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
@@ -102,7 +111,7 @@ export function Transactions() {
                                 body: info
                             })
 
-                            switch(financial.activeCard) {
+                            switch (financial.activeCard) {
                                 case 'total': {
                                     doc.save(`TOTAL_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
                                 } break;
@@ -122,7 +131,7 @@ export function Transactions() {
                                     doc.save(`RECEBIDAS_${financial.filterDates.startDate}-${financial.filterDates.endDate}.pdf`);
                                 } break;
                             }
-                            
+
 
                         }}></FontAwesomeIcon>
                     </Col>
@@ -206,15 +215,20 @@ export function Transactions() {
                                                 setDeleteExpense(er.expenses_invoice_id!);
                                                 setDeleteContract(er.contract_id!)
                                             }}></FontAwesomeIcon>
-                                            {/* <FontAwesomeIcon icon={faPencil} style={{ cursor: 'pointer' }} onClick={() => {
-                                                if(er?.contract_id) {
-                                                    console.log(er?.contract);
+                                            <FontAwesomeIcon icon={faPencil} style={{ cursor: 'pointer' }} onClick={() => {
+                                                if (er?.contract_id) {
+                                                    setShowModalEditContract(true);
+                                                    setEditContract(er.contract);
+                                                } else if (er?.expenses_invoice_id) {
+                                                    setEditExpenseInvoice(er.expenses_invoice);
+                                                    console.log(er.expenses_invoice);
+                                                    setShowModalEditExpense(true);
                                                 }
                                                 // setShowDeleteModal(true)
                                                 // setExpenseId(er.expenses_invoice_id!);
                                                 // setDeleteExpense(er.expenses_invoice_id!);
                                                 // setDeleteContract(er.contract_id!)
-                                            }}></FontAwesomeIcon> */}
+                                            }}></FontAwesomeIcon>
                                         </div>
                                     </td>
                                 </tr>
@@ -231,5 +245,8 @@ export function Transactions() {
             setShowModalDates(false);
         }}></TransactionDates>
         <DeleteConfirmationModal show={showDeleteModal} handleClose={() => setShowDeleteModal(false)} id={deleteExpense} id2={deleteContract}></DeleteConfirmationModal>
+        <EditContractModal id={editContract?.id!} show={showModalEditContract} handleClose={() => setShowModalEditContract(false)}></EditContractModal>
+        <EditExpenseModal handleClose={() => setShowModalEditExpense(false)} show={showModalEditExpense} expenseInvoiceId={editExpenseInvoice?.id}></EditExpenseModal>
+        {/* <EditTransactionModal show={showModalEdit} handleClose={() => setShowModalEdit(true)} contract={editContract} expenseInvoice={editExpenseInvoice}></EditTransactionModal> */}
     </div >
 }
