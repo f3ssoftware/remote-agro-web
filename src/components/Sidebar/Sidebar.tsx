@@ -76,12 +76,11 @@ const SidebarItems = [
         title: 'Comércio',
         url: "commerce"
     },
-    {
-        icon: faTractor,
-        title: 'Manutenção',
-        url: "maintenance"
-
-    },
+    // {
+    //     icon: faTractor,
+    //     title: 'Manutenção',
+    //     url: "maintenance"
+    // },
     {
         icon: faClock,
         title: 'Planejamento',

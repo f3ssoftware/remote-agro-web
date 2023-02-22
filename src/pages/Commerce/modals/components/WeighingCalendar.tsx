@@ -30,37 +30,15 @@ export function WeighingCalendar(){
 
   useEffect(() => {
     dispatch(asyncFetchInputWeighingData())
+    console.log(inputEvents)
   }, [])
 
-  const inputEvents: any = []
+  const inputEvents: any[] = commerce.inputWeighing.map((e: ManualInputWeighing) => ({
+    title: e.car_driver,
+    start: new Date(e.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+    end: new Date(e.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+  }));
 
-  commerce.inputWeighing.forEach((e) =>{
-    inputEvents.push([e.car_driver, new Date(e.createdAt!), new Date(e.createdAt!)])
-  })
-
-    inputEvents.map((i: any) =>{
-      title: {i.car_driver}
-      start: new Date(i.createdAt!)
-      end: new Date(i.createdAt!)
-    })
-
-    
-    // {
-    //   title: "teste",
-    //   start: new Date(2023,2,1),
-    //   end: new Date (2023,2,1)
-    // },
-    // {
-    //   title: "teste1",
-    //   start: new Date(2023,2,4),
-    //   end: new Date(2023,2,4)
-    // },
-    // {
-    //   title: "teste2",
-    //   start: new Date(2023,2,3),
-    //   end: new Date(2023,2,3)
-    // }
-  
   
     return (
         <div>
