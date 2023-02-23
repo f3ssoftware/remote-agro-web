@@ -56,11 +56,11 @@ const SidebarItems = [
         title: 'Início',
         url: "home"
     },
-    {
-        icon: faMapLocationDot,
-        title: 'Talhões',
-        url: "plot"
-    },
+    // {
+    //     icon: faMapLocationDot,
+    //     title: 'Talhões',
+    //     url: "plot"
+    // },
     {
         icon: faLeaf,
         title: 'Insumos',
@@ -81,16 +81,16 @@ const SidebarItems = [
     //     title: 'Manutenção',
     //     url: "maintenance"
     // },
-    {
-        icon: faClock,
-        title: 'Planejamento',
-        url: "planning"
-    },
-    {
-        icon: faSeedling,
-        title: 'Solo',
-        url: "soil"
-    },
+    // {
+    //     icon: faClock,
+    //     title: 'Planejamento',
+    //     url: "planning"
+    // },
+    // {
+    //     icon: faSeedling,
+    //     title: 'Solo',
+    //     url: "soil"
+    // },
 
     {
         icon: faFileAlt,
