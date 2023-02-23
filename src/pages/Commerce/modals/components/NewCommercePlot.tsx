@@ -6,7 +6,7 @@ import { asyncCreateCommercePlot } from "../../../../stores/commerce.store";
 
 
 
-export function NewCommercePlot({}){
+export function NewCommercePlot({handleClose}: {handleClose: any}){
     const [siloName,setSiloName] = useState('');
     const [description,setDescription] = useState('');
     const dispatch = useDispatch<any>()
@@ -19,6 +19,7 @@ export function NewCommercePlot({}){
             description: description
         }
         dispatch(asyncCreateCommercePlot(silo))
+        handleClose()
     }
 
     return <Row style={{marginTop: '2%'}}>

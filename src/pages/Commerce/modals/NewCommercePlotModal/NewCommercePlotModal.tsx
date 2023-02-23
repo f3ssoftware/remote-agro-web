@@ -9,7 +9,7 @@ export function NewCommercePlotModal({show, handleClose}: {show: boolean, handle
             <Modal.Title> <span style={{ color: '#fff' }}>Editar Silo</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            <NewCommercePlot></NewCommercePlot>
+            <NewCommercePlot handleClose={handleClose}></NewCommercePlot>
         </Modal.Body>
     </Modal >
 }

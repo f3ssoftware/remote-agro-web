@@ -14,32 +14,11 @@ export function TransferWeighing({
 }) {
   const dispatch = useDispatch<any>()
 
-
-
-
-
-//     const onRemoveItem = (index: number) => {
-//       const inputArr = [...];
-//       planningsArr.splice(index, 1);
-//       setPlannings(planningsArr);
-//   }
-
-  // const onUpdateItem = (planning: PlanningInput, index: number) => {
-  //   const planningsArr = [...plannings];
-  //   planningsArr.splice(index, 1);
-  //   planningsArr.push(planning);
-  //   setPlannings(planningsArr);
-
-  // }
-
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <NewTransferWeighing show={false} handleClose={undefined}></NewTransferWeighing>
+        <NewTransferWeighing show={false} handleClose={handleClose}></NewTransferWeighing>
       </Row>
-      {/* {plannings.map((newPlanning, index) => {
-            return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
-        })} */}
 
       <div
         style={{
@@ -49,7 +28,6 @@ export function TransferWeighing({
           marginTop: '2%',
         }}
       >
-        {/* <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningInput()])}>Adicionar Linha</Button> */}
       </div>
     </div>
   )

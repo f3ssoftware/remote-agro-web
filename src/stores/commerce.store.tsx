@@ -104,7 +104,6 @@ export function asyncTransferWeighing(transfer :any) {
                 message: "Transferência realizada com sucesso",
                 type: "success",
             }));
-            dispatch(setTransferWeighing(result.data));
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
@@ -128,7 +127,6 @@ export function asyncInputWeighing(input :any) {
                 message: "Pesagem de entrada salva com sucesso",
                 type: "success",
             }));
-            dispatch(setInputWeighing(result.data));
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
@@ -190,7 +188,7 @@ export function asyncOutputWeighing(output :any) {
                 message: "Pesagem de saída salva com sucesso",
                 type: "success",
             }));
-            dispatch(setOutputWeighing(result.data));
+            
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
@@ -214,7 +212,7 @@ export function asyncSeparateWeighing(separate :any) {
                 message: "Pesagem avulsa salva com sucesso",
                 type: "success",
             }));
-            dispatch(setSeparateWeighing(result.data));
+            
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
@@ -238,7 +236,7 @@ export function asyncCreateCommercePlot(silo :Silo) {
                 message: "Silo cadastrado com sucesso",
                 type: "success",
             }));
-            dispatch(setSilo(result.data));
+            
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
