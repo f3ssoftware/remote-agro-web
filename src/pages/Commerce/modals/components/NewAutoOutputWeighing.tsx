@@ -96,7 +96,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
   }
 
   const tareResult = () =>{
-    // setTare(commerce.autoInputWeighing.tare_weight!)
+    setTare(commerce.autoInputWeighing.Peso!)
   }
 
 
