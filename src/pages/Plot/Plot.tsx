@@ -173,7 +173,7 @@ export function Plot() {
                 }}
                 localizer={localizer}
                 events={plot?.applications?.map((application: any) => {
-                  return { start: new Date(application.date), end: new Date(application.date), title: application.type, id: application.id }
+                  return { start: new Date(application.date), end: new Date(application.date), title: `${application.number} - ${application.type}`, id: application.id }
                 })}
                 startAccessor="start"
                 endAccessor="end"
