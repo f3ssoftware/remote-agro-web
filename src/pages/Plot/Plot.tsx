@@ -17,6 +17,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 import { asyncFetchApplications } from '../../stores/plot.store'
 import { EventModal } from './Modals/EventModal'
 
+
 const locales = {
   'pt-BR': ptBR,
 }
@@ -51,7 +52,7 @@ export function Plot() {
     dispatch(asyncFetchFarms());
     setSelectedFarm(farm?.farms[0]);
     dispatch(selectAFarm(farm?.farms[0]));
-    dispatch(asyncFetchApplications({ from_date: startDate, until_date: untilDate, order_type: 1, season_id: seasons.selectedSeason.id}));
+    dispatch(asyncFetchApplications({ from_date: startDate, until_date: untilDate, order_type: 1, season_id: seasons.selectedSeason.id }));
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
@@ -146,20 +147,27 @@ export function Plot() {
                 </Dropdown>
               </Card.Text>
               <Calendar
-                onRangeChange={(r) => console.log(r)}
-                selectable={true}
-                onSelectEvent={(e) => {
-                  setServiceOrder(e);
-                  setShowEvent(true);
+                onRangeChange={(r) => {
+                  if (typeof r === 'object') {
+                    
+                  }
+              const dates = r as {start: Date, end: Date };
+              setStartDate(dates.start);
+              setUntilDate(dates.end);
                 }}
-                localizer={localizer}
-                events={plot.serviceOrders.map((so: any) => {
-                  const farms = so?.service_order_farms?.map((sof: any) => sof.farm_name);
-                  return { start: new Date(so.date), end: new Date(so.date), title: farms.join(', '), id: so.id }
-                })}
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 500 }}
+              selectable={true}
+              onSelectEvent={(e) => {
+                setServiceOrder(e);
+                setShowEvent(true);
+              }}
+              localizer={localizer}
+              events={plot.serviceOrders.map((so: any) => {
+                const farms = so?.service_order_farms?.map((sof: any) => sof.farm_name);
+                return { start: new Date(so.date), end: new Date(so.date), title: farms.join(', '), id: so.id }
+              })}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500 }}
               />
             </Card.Body>
             <Card.Footer className="card-footer-plot">

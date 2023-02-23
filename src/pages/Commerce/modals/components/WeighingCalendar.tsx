@@ -24,31 +24,35 @@ const localizer = dateFnsLocalizer({
 })
 
 
-export function WeighingCalendar(){
-  const { commerce } = useSelector((state: RootState) => state)
+export function WeighingCalendar() {
+  const { commerce, seasons } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
+  const [inputEvents, setInputEvents] = useState<any[]>([])
 
   useEffect(() => {
-    dispatch(asyncFetchInputWeighingData())
-    console.log(inputEvents)
-  }, [])
+    dispatch(asyncFetchInputWeighingData(seasons?.selectedSeason?.id))
+  }, []);
 
-  const inputEvents: any[] = commerce.inputWeighing.map((e: ManualInputWeighing) => ({
-    title: e.car_driver,
-    start: new Date(e.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-    end: new Date(e.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
-  }));
+  useEffect(() => {
+    setInputEvents(
+      commerce.inputWeighing.map((e: ManualInputWeighing) => ({
+        title: e.field.name,
+        start: new Date(e.weighing_date!),
+        end: new Date(e.weighing_date!)
+      }))
+    );
+  }, [commerce]);
 
-  
-    return (
-        <div>
-           <Calendar
-            events={inputEvents}
-            startAccessor="start"
-            endAccessor="end"
-            localizer={localizer}
-            style={{height: 450, margin: "50px"}}
-          />
-        </div>
-      )
-    }
+
+  return (
+    <div>
+      <Calendar
+        events={inputEvents}
+        startAccessor="start"
+        endAccessor="end"
+        localizer={localizer}
+        style={{ height: 450, margin: "50px" }}
+      />
+    </div>
+  )
+}

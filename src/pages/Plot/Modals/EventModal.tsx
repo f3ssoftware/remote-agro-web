@@ -13,7 +13,7 @@ export function EventModal({ show, handleClose, serviceOrder }: { show: boolean,
             <Modal.Body style={{ backgroundColor: "#7C5529" }}>
                 <Row>
                     <Col>
-
+                        
                     </Col>
                 </Row>
             </Modal.Body>
