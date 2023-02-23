@@ -14,6 +14,8 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import ptBR from 'date-fns/locale/pt-BR'
+import { asyncFetchApplications } from '../../stores/plot.store'
+import { EventModal } from './Modals/EventModal'
 
 const locales = {
   'pt-BR': ptBR,
@@ -27,13 +29,18 @@ const localizer = dateFnsLocalizer({
   locales,
 })
 export function Plot() {
-  const { farm } = useSelector((state: RootState) => state);
+  const { farm, plot, seasons } = useSelector((state: RootState) => state);
   const dispatch = useDispatch<any>();
   const [showNewPlotModal, setShowNewPlotModal] = useState(false)
   const [showPrescriptionModal, setShowPrescriptionModal] = useState(false)
   const [showNewFarmModal, setShowNewFarmModal] = useState(false)
   const [selectedFarm, setSelectedFarm]: any = useState({});
   const [selectedPlot, setSelectedPlot]: any = useState({});
+  const [plots, setPlots] = useState<any[]>([]);
+  const [showEvent, setShowEvent] = useState(false);
+  const [serviceOrder, setServiceOrder] = useState<any>({})
+  const [startDate, setStartDate] = useState<Date>();
+  const [untilDate, setUntilDate] = useState<Date>();
 
   const selectFarm = (farm: any) => {
     setSelectedFarm(farm);
@@ -44,6 +51,7 @@ export function Plot() {
     dispatch(asyncFetchFarms());
     setSelectedFarm(farm?.farms[0]);
     dispatch(selectAFarm(farm?.farms[0]));
+    dispatch(asyncFetchApplications({ from_date: startDate, until_date: untilDate, order_type: 1, season_id: seasons.selectedSeason.id}));
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
@@ -53,13 +61,13 @@ export function Plot() {
         <Col md={4}>
           <div className="frist-column-plot">
             <div className="frist-card-plot">
+              <span className="frist-card-text-plot">Fazenda</span>
+              <div>
+                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
+                  +
+                </Button>
+              </div>
               <Dropdown className="frist-card-dropdown-plot">
-                <span className="frist-card-text-plot">Fazenda</span>
-                <div>
-                  <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
-                    +
-                  </Button>
-                </div>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
                   {selectedFarm?.name}
                 </Dropdown.Toggle>
@@ -70,6 +78,7 @@ export function Plot() {
                   })}
                 </Dropdown.Menu>
               </Dropdown>
+              {/* <iframe src={selectedFarm?.map_link} width={'360px'} height={'220px'}></iframe> */}
             </div>
           </div>
           <div className="second-card-plot">
@@ -79,7 +88,36 @@ export function Plot() {
                 +
               </Button>
             </div>
-            <iframe src={selectedFarm?.map_link} width={'92%'} height={'75%'}></iframe>
+            <div style={{ overflowY: 'scroll', height: '300px' }}>
+              {farm?.selectedFarm?.fields?.map((field: any) => <div className='plot-card'>
+                <Row>
+                  <Col>
+                    <span>{field.name}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <span>Área Total: {field.total_area}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <span>Cultivo: {field.planting_type}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <span>Cultivar: {field.cultivares.map((c: any) => `${c.name}, `)}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <span>Data de Plantio: {new Date(field.planting_date).toLocaleDateString('pt-BR')}</span>
+                  </Col>
+                </Row>
+              </div>)}
+            </div>
+
           </div>
         </Col>
 
@@ -108,8 +146,17 @@ export function Plot() {
                 </Dropdown>
               </Card.Text>
               <Calendar
+                onRangeChange={(r) => console.log(r)}
+                selectable={true}
+                onSelectEvent={(e) => {
+                  setServiceOrder(e);
+                  setShowEvent(true);
+                }}
                 localizer={localizer}
-                events={[]}
+                events={plot.serviceOrders.map((so: any) => {
+                  const farms = so?.service_order_farms?.map((sof: any) => sof.farm_name);
+                  return { start: new Date(so.date), end: new Date(so.date), title: farms.join(', '), id: so.id }
+                })}
                 startAccessor="start"
                 endAccessor="end"
                 style={{ height: 500 }}
@@ -126,6 +173,7 @@ export function Plot() {
       <PrescriptionModal show={showPrescriptionModal} handleClose={() => setShowPrescriptionModal(false)}></PrescriptionModal>
       <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
       <NewPlotModal show={showNewPlotModal} handleClose={() => setShowNewPlotModal(false)}></NewPlotModal>
+      <EventModal show={showEvent} serviceOrder={serviceOrder} handleClose={() => setShowEvent(false)}></EventModal>
     </Container>
   )
 }

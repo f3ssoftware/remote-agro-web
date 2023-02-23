@@ -97,6 +97,7 @@ export function asyncAddUserProductToStorage(
 ) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('user-products-array'));
             const result = await axios.post(
                 `https://remoteapi.murilobotelho.com.br/user-products-array`,
                 {
@@ -110,6 +111,7 @@ export function asyncAddUserProductToStorage(
                 }
             );
             if (result.status === 200) {
+                dispatch(popLoading('user-products-array'));
                 dispatch(
                     getMessages({
                         message: "Produto Registrado com sucesso!",
@@ -134,6 +136,7 @@ export function asyncWithdrawUserProductToStorage(
 ) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('user-products-array'));
             const result = await axios.put(
                 `https://remoteapi.murilobotelho.com.br/user-products-array`,
                 {
@@ -148,6 +151,7 @@ export function asyncWithdrawUserProductToStorage(
                 }
             );
             if (result.status === 200) {
+                dispatch(popLoading('user-products-array'));
                 dispatch(
                     getMessages({
                         message: "Produto Registrado com sucesso!",
@@ -169,6 +173,7 @@ export function asyncWithdrawUserProductToStorage(
 export function asyncTreatSeeds(body: TreatSeedsDTO) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('user-products-treatment'));
             const result = await axios.put(
                 `https://remoteapi.murilobotelho.com.br/user-products-treatment`,
                 body,
@@ -179,6 +184,7 @@ export function asyncTreatSeeds(body: TreatSeedsDTO) {
                 }
             );
             if (result.status === 200) {
+                dispatch(popLoading('user-products-treatment'));
                 dispatch(
                     getMessages({
                         message: "Tratamento Registrado com sucesso!",
@@ -204,6 +210,7 @@ export function asyncUpdateUserProductOnStorage(
 ) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('user-products-array'));
             const result = await axios.put(
                 `https://remoteapi.murilobotelho.com.br/user-products-array`,
                 {
@@ -218,6 +225,7 @@ export function asyncUpdateUserProductOnStorage(
                 }
             );
             if (result.status === 200) {
+                dispatch(popLoading('user-products-array'));
                 dispatch(
                     getMessages({
                         message: "Produto Atualizado com sucesso!",

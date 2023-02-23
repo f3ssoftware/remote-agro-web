@@ -80,18 +80,17 @@ const SidebarItems = [
     //     icon: faTractor,
     //     title: 'Manutenção',
     //     url: "maintenance"
-
     // },
-    // {
-    //     icon: faClock,
-    //     title: 'Planejamento',
-    //     url: "planning"
-    // },
-    // {
-    //     icon: faSeedling,
-    //     title: 'Solo',
-    //     url: "soil"
-    // },
+    {
+        icon: faClock,
+        title: 'Planejamento',
+        url: "planning"
+    },
+    {
+        icon: faSeedling,
+        title: 'Solo',
+        url: "soil"
+    },
 
     {
         icon: faFileAlt,
