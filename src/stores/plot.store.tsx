@@ -2,22 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "..";
 import axios from "axios";
 
-const initialServiceOrders: [] = [];
+const initialApplications:any[] = [];
 const plotStore = createSlice({
     name: 'plot',
     initialState: {
-        serviceOrders: initialServiceOrders
+        applications: initialApplications,
 
     },
     reducers: {
-        setServiceOrders(state, action) {
-            state.serviceOrders = action.payload;
+        setApplications(state, action) {
+            state.applications = action.payload;
         }
     }
 });
 
 
-export const { setServiceOrders } = plotStore.actions;
+export const { setApplications } = plotStore.actions;
 export default plotStore.reducer;
 
 // export function asyncFetchServiceOrders() {
@@ -52,7 +52,7 @@ export function asyncFetchApplications(params: any) {
                     params,
                 },
             );
-            dispatch(setServiceOrders(results.data))
+            dispatch(setApplications(results.data.list))
         } catch (err) {
             console.error(err);
         }

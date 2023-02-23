@@ -39,7 +39,7 @@ export function Plot() {
   const [selectedPlot, setSelectedPlot]: any = useState({});
   const [plots, setPlots] = useState<any[]>([]);
   const [showEvent, setShowEvent] = useState(false);
-  const [serviceOrder, setServiceOrder] = useState<any>({})
+  const [application, setApplication] = useState<any>();
   const [startDate, setStartDate] = useState<Date>();
   const [untilDate, setUntilDate] = useState<Date>();
 
@@ -147,27 +147,19 @@ export function Plot() {
                 </Dropdown>
               </Card.Text>
               <Calendar
-                onRangeChange={(r) => {
-                  if (typeof r === 'object') {
-                    
-                  }
-              const dates = r as {start: Date, end: Date };
-              setStartDate(dates.start);
-              setUntilDate(dates.end);
+                onRangeChange={(r) => console.log(r)}
+                selectable={true}
+                onSelectEvent={(e) => {
+                  setApplication(e);
+                  setShowEvent(true);
                 }}
-              selectable={true}
-              onSelectEvent={(e) => {
-                setServiceOrder(e);
-                setShowEvent(true);
-              }}
-              localizer={localizer}
-              events={plot.serviceOrders.map((so: any) => {
-                const farms = so?.service_order_farms?.map((sof: any) => sof.farm_name);
-                return { start: new Date(so.date), end: new Date(so.date), title: farms.join(', '), id: so.id }
-              })}
-              startAccessor="start"
-              endAccessor="end"
-              style={{ height: 500 }}
+                localizer={localizer}
+                events={plot?.applications?.map((application: any) => {
+                  return { start: new Date(application.date), end: new Date(application.date), title: application.type, id: application.id }
+                })}
+                startAccessor="start"
+                endAccessor="end"
+                style={{ height: 500 }}
               />
             </Card.Body>
             <Card.Footer className="card-footer-plot">
@@ -181,7 +173,7 @@ export function Plot() {
       <PrescriptionModal show={showPrescriptionModal} handleClose={() => setShowPrescriptionModal(false)}></PrescriptionModal>
       <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
       <NewPlotModal show={showNewPlotModal} handleClose={() => setShowNewPlotModal(false)}></NewPlotModal>
-      <EventModal show={showEvent} serviceOrder={serviceOrder} handleClose={() => setShowEvent(false)}></EventModal>
+      <EventModal show={showEvent} application={application} handleClose={() => setShowEvent(false)}></EventModal>
     </Container>
   )
 }
