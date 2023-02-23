@@ -8,7 +8,7 @@ import { NewFarmModal } from './Modals/NewFarmModal'
 import { NewPlotModal } from './Modals/NewPlotModal'
 import { PrescriptionModal } from './Modals/PrescriptionModal'
 import './Plot.scss'
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
+import { Calendar, dateFnsLocalizer, momentLocalizer } from 'react-big-calendar'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
@@ -16,19 +16,22 @@ import getDay from 'date-fns/getDay'
 import ptBR from 'date-fns/locale/pt-BR'
 import { asyncFetchApplications } from '../../stores/plot.store'
 import { EventModal } from './Modals/EventModal'
+import moment from "moment";
+import 'moment/locale/pt-br';
 
 
 const locales = {
   'pt-BR': ptBR,
 }
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-})
+moment.locale('pt-BR');
+const localizer = momentLocalizer(moment);
+// const localizer = dateFnsLocalizer({
+//   format,
+//   parse,
+//   startOfWeek,
+//   getDay,
+//   locales,
+// })
 export function Plot() {
   const { farm, plot, seasons } = useSelector((state: RootState) => state);
   const dispatch = useDispatch<any>();
@@ -147,8 +150,23 @@ export function Plot() {
                 </Dropdown>
               </Card.Text>
               <Calendar
+                messages={{
+                  allDay: 'Dia Inteiro',
+                  previous: 'Anterior',
+                  next: 'Próximo',
+                  today: 'Hoje',
+                  month: 'Mês',
+                  week: 'Semana',
+                  day: 'Dia',
+                  agenda: 'Agenda',
+                  date: 'Data',
+                  time: 'Hora',
+                  event: 'Evento',
+                  showMore: (total) => `+ (${total}) Eventos`
+                }}
                 onRangeChange={(r) => console.log(r)}
                 selectable={true}
+
                 onSelectEvent={(e) => {
                   setApplication(e);
                   setShowEvent(true);
