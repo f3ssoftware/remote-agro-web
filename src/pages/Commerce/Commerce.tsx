@@ -7,6 +7,7 @@ import { CommerceWeighing } from "./CommerceWeighing/CommerceWeighing";
 import { InputWeighing } from "./modals/components/InputWeighing";
 import { OutputWeighing } from "./modals/components/OutputWeighing";
 import { SepareteWeighing } from "./modals/components/SepareteWeighing";
+import { EditInputWeighing } from "./modals/components/EditInputWeighing";
 
 export function Commerce() {
   const location = useLocation();
@@ -30,6 +31,8 @@ export function Commerce() {
         return <OutputWeighing></OutputWeighing>  
       }if(location.pathname.split('/')[3] === 'separete') {
         return <SepareteWeighing></SepareteWeighing>  
+      }if(location.pathname.split('/')[3] === 'inputEvents') {
+        return <EditInputWeighing></EditInputWeighing>  
       }
       return <CommerceWeighing></CommerceWeighing>
     }

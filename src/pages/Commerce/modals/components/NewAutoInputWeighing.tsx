@@ -8,7 +8,7 @@ import { asyncFetchSiloData, asyncFetchWeighingData, asyncInputWeighing } from '
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { AutoConfirmationModal } from './AutoConfirmationModal'
+import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 
 export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
   const dispatch = useDispatch<any>()

@@ -9,7 +9,7 @@ import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { AutoConfirmationModal } from './AutoConfirmationModal'
+import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 
 
 export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
