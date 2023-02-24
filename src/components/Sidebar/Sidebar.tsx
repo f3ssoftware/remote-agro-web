@@ -56,11 +56,11 @@ const SidebarItems = [
         title: 'Início',
         url: "home"
     },
-    // {
-    //     icon: faMapLocationDot,
-    //     title: 'Talhões',
-    //     url: "plot"
-    // },
+    {
+        icon: faMapLocationDot,
+        title: 'Talhões',
+        url: "plot"
+    },
     {
         icon: faLeaf,
         title: 'Insumos',
