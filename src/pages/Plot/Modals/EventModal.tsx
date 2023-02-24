@@ -1,21 +1,97 @@
-import { useEffect } from "react";
-import { Col, Modal, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Col, Modal, Row, Table } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { RootState } from "../../..";
 
-export function EventModal({ show, handleClose, serviceOrder }: { show: boolean, handleClose: any, serviceOrder: any }) {
+export function EventModal({ show, handleClose, application }: { show: boolean, handleClose: any, application: any }) {
+    const { plot } = useSelector((state: RootState) => state);
+    const [index, setIndex] = useState(0);
+    // useEffect(() => {
+
+    // }, [application]);
     useEffect(() => {
-        console.log(serviceOrder);
-    }, [serviceOrder]);
+        setIndex(plot?.applications?.findIndex(app => application?.id === app?.id));
+    }, [application]);
+
     return (
-        <Modal backdrop={'static'} show={show} onHide={handleClose} size={'sm'}>
+        <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
             <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
-                <Modal.Title> <span style={{ color: '#fff' }}>{serviceOrder.title}</span></Modal.Title>
+                <Modal.Title> <span style={{ color: '#fff' }}>#{plot?.applications[index]?.number} - {plot?.applications[index]?.type}</span></Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ backgroundColor: "#7C5529" }}>
+            <Modal.Body style={{ backgroundColor: "#7C5529", color: '#fff' }}>
+                <h5>{plot?.applications[index]?.was_applied ? 'Aplicação realizada' : 'Aplicação não realizada'}</h5>
                 <Row>
                     <Col>
-
+                        Aplicação: {plot?.applications[index]?.number}
                     </Col>
                 </Row>
+                <Row>
+                    <Col>
+                        Área Aplicada: {plot?.applications[index]?.seed_area}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Tipo: {plot?.applications[index]?.application_type}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Bico: {plot?.applications[index]?.block}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Vazão: {plot?.applications[index]?.flowRateLabel} L/ha
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Área por tanque: {plot?.applications[index]?.area} ha
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Número de tanques: {plot?.applications[index]?.number_of_tanks}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Calda total: {plot?.applications[index]?.flowRateLabel * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Calda/tanque: {plot?.applications[index]?.flowRateLabel * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Pressão: {plot?.applications[index]?.pressure}
+                    </Col>
+                </Row>
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Teste (mL)</th>
+                            <th>Qtd/ha (L)</th>
+                            <th>Tanque (L)</th>
+                            <th>Aplicados Totais (L)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {plot?.applications[index]?.application_tables?.map((applicationTable: any) => {
+                            <tr>
+                            <td>{applicationTable.userProduct?.product?.name}</td>
+                            <td>{applicationTable.test}</td>
+                            <td>{applicationTable.quantity}</td>
+                            <td>{applicationTable.tankLabel}</td>
+                            <td>{applicationTable.totalAppliedLabel}</td> 
+                        </tr>
+                        })}
+                    </tbody>
+                </Table>
             </Modal.Body>
         </Modal >
     )

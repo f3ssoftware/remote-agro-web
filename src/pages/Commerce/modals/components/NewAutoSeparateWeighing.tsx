@@ -6,9 +6,10 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
-import { asyncFetchWeighingData, asyncSeparateWeighing } from '../../../../stores/commerce.store'
+import {  asyncSeparateWeighing } from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 
 
 export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
@@ -30,6 +31,8 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
   const [reference, setReference] = useState('')
   const [grossWeighing, setGrossWeighing] = useState(0)
   const [tare, setTare] = useState(0)
+  const [showWeighingConfirmationModal, setShowWeighingConfirmationModal] = useState(false)
+  const [showTareConfirmationModal, setShowTareConfirmationModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -86,17 +89,6 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
     dispatch(asyncSeparateWeighing(manualSeparate))
   }
 
-  useEffect(()=>{
-    dispatch(asyncFetchWeighingData())
-  }, [])
-
-  const grossResult = () =>{
-    setGrossWeighing(commerce.autoInputWeighing.Peso!)
-  }
-
-  const tareResult = () =>{
-    // setTare(commerce.autoInputWeighing.tare_weight!)
-  }
 
 
   return (
@@ -200,7 +192,7 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
             <Button
             variant="success"
             onClick={() => {
-              grossResult()
+              setShowWeighingConfirmationModal(true)
             }}
           >
             Receber
@@ -219,7 +211,7 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
             <Button
             variant="success"
             onClick={() => {
-              tareResult()
+              setShowTareConfirmationModal(true)
             }}
           >
             Receber
@@ -335,6 +327,8 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
           </Form.Group>
         </Col>
       </Row>
+      <AutoConfirmationModal  setValue={setGrossWeighing}  show={showWeighingConfirmationModal} handleClose={()=> setShowWeighingConfirmationModal(false)} ></AutoConfirmationModal>
+      <AutoConfirmationModal  setValue={setTare}  show={showTareConfirmationModal} handleClose={()=> setShowTareConfirmationModal(false)} ></AutoConfirmationModal>
 
       <div
         style={{

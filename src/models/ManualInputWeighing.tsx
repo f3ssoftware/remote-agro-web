@@ -2,6 +2,7 @@ export class ManualInputWeighing {
     constructor(
         public farm_id?: number,
         public field_id?:number,
+        public field?: any,
         public cultivar_id?: number,
         public silo_id?: number,
         public gross_weight?: number,

@@ -1,54 +1,71 @@
 import { useEffect, useState } from 'react';
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { Calendar, dateFnsLocalizer, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import parse from "date-fns/parse";
-import format from "date-fns/format";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from 'date-fns/getDay';
-import Datepicker from "react-datepicker";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../..';
 import { asyncFetchInputWeighingData } from '../../../../stores/commerce.store';
 import { ManualInputWeighing } from '../../../../models/ManualInputWeighing';
-
-const locales = {
-  "pt-BR": require("date-fns/locale/pt-BR")
-}
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales
-})
+import moment from 'moment';
+import { Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 
-export function WeighingCalendar(){
-  const { commerce } = useSelector((state: RootState) => state)
+
+moment.locale('pt-BR');
+const localizer = momentLocalizer(moment);
+
+
+export function WeighingCalendar() {
+  const { commerce, seasons } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
+  const [inputEvents, setInputEvents] = useState<any[]>([])
+  const [showInputEventsModal, setShowInputEventsModal] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(asyncFetchInputWeighingData())
-    console.log(inputEvents)
-  }, [])
+    dispatch(asyncFetchInputWeighingData(seasons?.selectedSeason?.id))
+  }, []);
 
-  const inputEvents: any[] = commerce.inputWeighing.map((e: ManualInputWeighing) => ({
-    title: e.car_driver,
-    start: new Date(e.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-    end: new Date(e.createdAt!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
-  }));
+  useEffect(() => {
+    setInputEvents(
+      commerce?.inputWeighing?.map((e: ManualInputWeighing) => ({
+        title: e.field.name,
+        start: new Date(e.weighing_date!),
+        end: new Date(e.weighing_date!)
+      }))
+    );
+  }, [commerce]);
 
-  
-    return (
-        <div>
-           <Calendar
-            events={inputEvents}
-            startAccessor="start"
-            endAccessor="end"
-            localizer={localizer}
-            style={{height: 450, margin: "50px"}}
-          />
-        </div>
-      )
-    }
+
+  return (
+    <Container>
+    <div>
+      <Calendar
+      messages={{
+        allDay: 'Dia Inteiro',
+        previous: 'Anterior',
+        next: 'Próximo',
+        today: 'Hoje',
+        month: 'Mês',
+        week: 'Semana',
+        day: 'Dia',
+        agenda: 'Agenda',
+        date: 'Data',
+        time: 'Hora',
+        event: 'Evento',
+        showMore: (total) => `+ (${total}) Eventos`
+      }}
+        events={inputEvents}
+        startAccessor="start"
+        endAccessor="end"
+        localizer={localizer}
+        style={{ height: 450, margin: "50px" }}
+        selectable={true}
+        onSelectEvent={() => {
+          navigate("commerce/weighing/inputEvents");
+        }}
+      />
+    </div>
+    </Container>
+  )
+}

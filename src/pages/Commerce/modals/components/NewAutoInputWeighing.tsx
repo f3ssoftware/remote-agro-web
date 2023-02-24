@@ -8,6 +8,7 @@ import { asyncFetchSiloData, asyncFetchWeighingData, asyncInputWeighing } from '
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 
 export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
   const dispatch = useDispatch<any>()
@@ -29,6 +30,8 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
   const [totalWeighning, setTotalWeighning] = useState(0)
   const [observation, setObservation] = useState('')
   const [company, setCompany] = useState('')
+  const [showWeighingConfirmationModal, setShowWeighingConfirmationModal] = useState(false)
+  const [showTareConfirmationModal, setShowTareConfirmationModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
@@ -89,18 +92,6 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
       }
     }
     dispatch(asyncInputWeighing(autoInput))
-  }
-
-  useEffect(()=>{
-    dispatch(asyncFetchWeighingData())
-  }, [])
-
-  const grossResult = () =>{
-    setGrossWeighing(commerce.autoInputWeighing.Peso!)
-  }
-
-  const tareResult = () =>{
-    // setTare(commerce.autoInputWeighing.tare_weight!)
   }
 
 
@@ -217,11 +208,11 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-          {grossWeighing ==0 ? (
+          {grossWeighing == 0 ? (
             <Button
             variant="success"
             onClick={() => {
-              grossResult()
+              setShowWeighingConfirmationModal(true)
             }}
           >
             Receber
@@ -240,7 +231,7 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
             <Button
             variant="success"
             onClick={() => {
-              tareResult()
+              setShowTareConfirmationModal(true)
             }}
           >
             Receber
@@ -358,6 +349,8 @@ export function NewAutoInputWeighing({onHandleRemove, onHandleUpdate,index}:{onH
           </Form.Group>
         </Col>
       </Row>
+      <AutoConfirmationModal  setValue={setGrossWeighing}  show={showWeighingConfirmationModal} handleClose={()=> setShowWeighingConfirmationModal(false)} ></AutoConfirmationModal>
+      <AutoConfirmationModal  setValue={setTare}  show={showTareConfirmationModal} handleClose={()=> setShowTareConfirmationModal(false)} ></AutoConfirmationModal>
 
       <div
         style={{
