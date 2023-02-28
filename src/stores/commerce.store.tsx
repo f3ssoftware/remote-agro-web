@@ -10,6 +10,7 @@ import { ManualInputWeighing } from "../models/ManualInputWeighing";
 import { ManualOutputWeighing } from "../models/ManualOutputWeighing";
 import { ManualSeparateWeighing } from "../models/ManualSepareteWeighing";
 import { AutoInputWeighing } from "../models/AutoInputWeighing";
+import { InputWeighing } from "../pages/Commerce/modals/components/InputWeighing";
 
 
 const initialSilo: Silo[] = [];
@@ -19,6 +20,7 @@ const initialInputWeighing: ManualInputWeighing[] = []
 const initialAutoInputWeighing: AutoInputWeighing = {}
 const initialOutputWeighing: ManualOutputWeighing[] = []
 const initialSeparateWeighing: ManualSeparateWeighing[] = []
+const initialInputWeighingData: ManualInputWeighing = {}
 const commerceStore = createSlice({
     name: "commerce",
     initialState: {
@@ -29,7 +31,8 @@ const commerceStore = createSlice({
         inputWeighing: initialInputWeighing,
         autoInputWeighing: initialAutoInputWeighing,
         outputWeighing: initialOutputWeighing,
-        separateWeighing: initialSeparateWeighing
+        separateWeighing: initialSeparateWeighing,
+        inputWeighingData: initialInputWeighingData
     },
     reducers: {
         setPlots(state, action) {
@@ -127,6 +130,7 @@ export function asyncInputWeighing(input: any) {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                     }
                 });
+            dispatch(setInputWeighing(result.data));
             dispatch(getMessages({
                 message: "Pesagem de entrada salva com sucesso",
                 type: "success",
@@ -341,6 +345,35 @@ export function asyncDeleteContract(id: number) {
             dispatch(
                 getMessages({
                     message: "Contrato excluído com sucesso",
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
+
+export function asyncDeleteInputWeighing(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.delete(
+                `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: "Pesagem excluída com sucesso",
                     type: "success",
                 })
             );

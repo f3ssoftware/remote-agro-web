@@ -1,5 +1,6 @@
 export class ManualInputWeighing {
     constructor(
+        public id?: number,
         public farm_id?: number,
         public field_id?:number,
         public field?: any,
