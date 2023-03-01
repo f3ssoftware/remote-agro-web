@@ -160,6 +160,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                             <Form.Label style={{ color: '#fff' }}>Tratamento</Form.Label>
                             <Form.Select
                                 aria-label=""
+                                value={treatment}
                                 onChange={(e) => {
                                     return setTreatment(e.target.value)
                                 }}
