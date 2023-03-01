@@ -63,7 +63,15 @@ const financialStore = createSlice({
             state.cultivations = action.payload;
         },
         setExternalInvoices(state, action) {
-            state.externalInvoices = action.payload;
+            state.externalInvoices = action.payload.sort((a: ExternalInvoice, b: ExternalInvoice) => {
+                if (a.id! < b.id!) {
+                  return -1;
+                }
+                if (a.id! > b.id!) {
+                  return 1;
+                }
+                return 0;
+              });
         },
         setContracts(state, action) {
             state.contracts = action.payload
