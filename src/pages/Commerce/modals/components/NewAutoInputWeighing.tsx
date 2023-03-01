@@ -53,6 +53,8 @@ export function NewAutoInputWeighing({
     useState(false)
   const [autoInputId, setAutoInputId] = useState(0)
   const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
+  const [grossWeightDate, setGrossWeightDate] = useState("")
+  const [tareWeightDate, setTareWeightDate] = useState("")
 
   useEffect(() => {
     dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
@@ -117,6 +119,10 @@ export function NewAutoInputWeighing({
         tare_weight: tare,
         mode: 'Automático',
         car_plate: carPlate,
+        car_driver: driver,
+        gross_weight_date: grossWeightDate,
+        tare_weight_date: tareWeightDate,
+        weight_date: new Date().toISOString()
       },
     }
     dispatch(asyncInputWeighing(autoInput))
@@ -129,6 +135,7 @@ export function NewAutoInputWeighing({
           <Button
             variant="danger"
             onClick={() => {
+              console.log(autoInputId)
               setAutoInputId(commerce?.inputWeighingData?.id!)
               setShowAutoInputDeleteModal(true)
             }}
@@ -379,11 +386,13 @@ export function NewAutoInputWeighing({
       </Row>
       <AutoConfirmationModal
         setValue={setGrossWeighing}
+        setWeightDate={setGrossWeightDate}
         show={showWeighingConfirmationModal}
         handleClose={() => setShowWeighingConfirmationModal(false)}
       ></AutoConfirmationModal>
       <AutoConfirmationModal
         setValue={setTare}
+        setWeightDate={setTareWeightDate}
         show={showTareConfirmationModal}
         handleClose={() => setShowTareConfirmationModal(false)}
       ></AutoConfirmationModal>
@@ -405,7 +414,7 @@ export function NewAutoInputWeighing({
           Salvar
         </Button>
       </div>
-      <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false) } id={autoInputId} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
+      <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false) } id={commerce?.inputWeighingData?.id!} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
     </div>
   )
 }

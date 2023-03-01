@@ -33,6 +33,8 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
   const [tare, setTare] = useState(0)
   const [showWeighingConfirmationModal, setShowWeighingConfirmationModal] = useState(false)
   const [showTareConfirmationModal, setShowTareConfirmationModal] = useState(false)
+  const [grossWeightDate, setGrossWeightDate] = useState("")
+  const [tareWeightDate, setTareWeightDate] = useState("")
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -83,7 +85,11 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
         observations: observation,
         tare_weight: tare,
         mode: "Manual",
-        car_plate: carPlate
+        car_plate: carPlate,
+        car_driver: driver,
+        gross_weight_date: grossWeightDate,
+        tare_weight_date: tareWeightDate,
+        weight_date: new Date().toISOString()
       }
     }
     dispatch(asyncSeparateWeighing(manualSeparate))
@@ -327,8 +333,8 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
           </Form.Group>
         </Col>
       </Row>
-      <AutoConfirmationModal  setValue={setGrossWeighing}  show={showWeighingConfirmationModal} handleClose={()=> setShowWeighingConfirmationModal(false)} ></AutoConfirmationModal>
-      <AutoConfirmationModal  setValue={setTare}  show={showTareConfirmationModal} handleClose={()=> setShowTareConfirmationModal(false)} ></AutoConfirmationModal>
+      <AutoConfirmationModal  setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal>
+      <AutoConfirmationModal  setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal>
 
       <div
         style={{

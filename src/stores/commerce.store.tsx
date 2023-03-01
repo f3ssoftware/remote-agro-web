@@ -62,12 +62,15 @@ const commerceStore = createSlice({
         },
         setSeparateWeighing(state, action) {
             state.separateWeighing = action.payload
+        },
+        setInputWeighingData(state, action) {
+            state.inputWeighingData = action.payload;
         }
 
     },
 });
 
-export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing, setInputWeighingData } =
     commerceStore.actions;
 export default commerceStore.reducer;
 
@@ -131,6 +134,7 @@ export function asyncInputWeighing(input: any) {
                     }
                 });
             dispatch(setInputWeighing(result.data));
+            dispatch(setInputWeighingData(result.data[0]))
             dispatch(getMessages({
                 message: "Pesagem de entrada salva com sucesso",
                 type: "success",
