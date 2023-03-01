@@ -1,4 +1,4 @@
-import { Card, Dropdown } from 'react-bootstrap'
+import { Card, Dropdown, Tab, Tabs } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../..';
 import { useEffect, useState } from 'react';
@@ -44,7 +44,7 @@ export function PlanningPlotCard() {
             </Dropdown>
           </Card.Title>
           <Card.Text>
-            
+    
           </Card.Text>
         </Card.Body>
         <Card.Footer className="card-footer">

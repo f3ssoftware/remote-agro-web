@@ -2,53 +2,58 @@ $sidebar-beige: #7c542b;
 $sidebar-selected-item: #44433f;
 
 @media screen and (min-width: 800px) {
-  .sidebar {
+  .ra-sidebar {
     background-color: $sidebar-beige;
-    height: 135vh;
+      height: 135vh;
+    .sidebar {
+      background-color: $sidebar-beige;
+      height: 135vh;
+    }
+  
+    .sidebar-logo {
+      width: 80%;
+    }
+  
+    .sidebar-items {
+      margin-top: 20%;
+      cursor: pointer;
+    }
+  
+    .sidebar-row {
+      height: 50px;
+      color: #fff;
+      // border-top-left-radius: 30%;
+      // border-bottom-left-radius: 30%;
+    }
+  
+    .sidebar-row:hover {
+      height: 50px;
+      background-color: $sidebar-selected-item;
+    }
+  
+    .sidebar-nav-item {
+      height: 50px;
+      color: #fff;
+    }
+  
+    .sidebar-nav-item:hover {
+      height: 50px;
+      color: #fff;
+      background-color: $sidebar-selected-item;
+      border-top-left-radius: 100px;
+      border-bottom-left-radius: 100px;
+      border-top-right-radius: -100px;
+    }
+  
+    .active {
+      height: 50px;
+      color: #fff;
+      background-color: $sidebar-selected-item;
+      border-top-left-radius: 100px;
+      border-bottom-left-radius: 100px;
+    }
   }
-
-  .sidebar-logo {
-    width: 80%;
-  }
-
-  .sidebar-items {
-    margin-top: 20%;
-    cursor: pointer;
-  }
-
-  .sidebar-row {
-    height: 50px;
-    color: #fff;
-    // border-top-left-radius: 30%;
-    // border-bottom-left-radius: 30%;
-  }
-
-  .sidebar-row:hover {
-    height: 50px;
-    background-color: $sidebar-selected-item;
-  }
-
-  .sidebar-nav-item {
-    height: 50px;
-    color: #fff;
-  }
-
-  .sidebar-nav-item:hover {
-    height: 50px;
-    color: #fff;
-    background-color: $sidebar-selected-item;
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
-    border-top-right-radius: -100px;
-  }
-
-  .active {
-    height: 50px;
-    color: #fff;
-    background-color: $sidebar-selected-item;
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
-  }
+  
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px) {

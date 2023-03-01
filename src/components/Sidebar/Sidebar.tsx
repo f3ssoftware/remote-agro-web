@@ -13,7 +13,7 @@ export function Sidebar() {
     }
 
     return (
-        <div className="sidebar">
+        <div className="ra-sidebar">
             <Container>
                 <Row>
                     <Col><img src={logo} className="sidebar-logo" alt="Remote Agro" /></Col>
@@ -81,11 +81,11 @@ const SidebarItems = [
     //     title: 'Manutenção',
     //     url: "maintenance"
     // },
-    // {
-    //     icon: faClock,
-    //     title: 'Planejamento',
-    //     url: "planning"
-    // },
+    {
+        icon: faClock,
+        title: 'Planejamento',
+        url: "planning"
+    },
     // {
     //     icon: faSeedling,
     //     title: 'Solo',

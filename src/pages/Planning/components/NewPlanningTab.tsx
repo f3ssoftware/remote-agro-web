@@ -57,10 +57,20 @@ export function NewPlanningTab({
                         Manutenção
                       </Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setMaintenance(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setMaintenance(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -68,10 +78,20 @@ export function NewPlanningTab({
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>Diesel</Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setDiesel(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setDiesel(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -82,9 +102,19 @@ export function NewPlanningTab({
                       </Form.Label>
                       <Form.Control
                         type="number"
-                        onChange={(e) => {
-                          setGas(Number(e.target.value))
-                        }}
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setGas(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -92,10 +122,20 @@ export function NewPlanningTab({
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>Arla</Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setArla(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setArla(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -107,10 +147,20 @@ export function NewPlanningTab({
                         Administrativo
                       </Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setAdministrative(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setAdministrative(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -120,10 +170,20 @@ export function NewPlanningTab({
                         Conservação
                       </Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setConservation(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setConservation(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -133,10 +193,20 @@ export function NewPlanningTab({
                         Mão-de-obra
                       </Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setLabor(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setLabor(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -146,10 +216,20 @@ export function NewPlanningTab({
                         Armazenagem
                       </Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setStorage(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setStorage(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -159,10 +239,20 @@ export function NewPlanningTab({
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>Cantina</Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setRestaurant(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setRestaurant(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -170,10 +260,20 @@ export function NewPlanningTab({
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>Diversos</Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setDiverse(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setDiverse(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -181,10 +281,20 @@ export function NewPlanningTab({
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>Arrendo</Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setRent(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setRent(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -194,10 +304,20 @@ export function NewPlanningTab({
                         Terceirizados
                       </Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setOutsourced(Number(e.target.value))
-                        }}
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setOutsourced(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}
                       />
                     </Form.Group>
                   </Col>
@@ -205,11 +325,20 @@ export function NewPlanningTab({
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>Outros</Form.Label>
                       <Form.Control
-                        type="number"
-                        onChange={(e) => {
-                          setOthers(Number(e.target.value))
-                        }}
-                      />
+                        type="text"
+                        onBlur={(e) => {
+                          if (isNaN(Number(e.currentTarget.value))) {
+                              e.currentTarget.value = '';
+                          } else {
+                              setOthers(Number(e.currentTarget.value));
+                              e.currentTarget.value = Number(e.currentTarget.value).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })
+                          }
+  
+                      }} onKeyUp={(e) => {
+                          if (e.key === 'Backspace') {
+                              e.currentTarget.value = '';
+                          }
+                      }}/>
                     </Form.Group>
                   </Col>
                 </Row>
