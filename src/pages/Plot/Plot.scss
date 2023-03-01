@@ -5,7 +5,6 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     // width: 286px;
-    display: flex;
     flex-direction: row;
     justify-content: center;
     margin-left: 50px;
@@ -133,8 +132,8 @@
     text-align: center;
     font-size: xx-large;
     position: relative;
-    left: 185px;
-    bottom: 70px;
+    left: 300px;
+    bottom: 25px;
   }
 
   .plot-card {

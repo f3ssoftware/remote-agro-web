@@ -65,24 +65,32 @@ export function Plot() {
         <Col md={4}>
           <div className="frist-column-plot">
             <div className="frist-card-plot">
-              <span className="frist-card-text-plot">Fazenda</span>
               <div>
                 <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
                   +
                 </Button>
               </div>
-              <Dropdown className="frist-card-dropdown-plot">
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  {selectedFarm?.name}
-                </Dropdown.Toggle>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <h4 style={{
+                  position: 'relative',
+                  bottom: '40px',
+                }}><b>Fazenda</b></h4>
+              </div>
 
-                <Dropdown.Menu>
-                  {farm?.farms?.map((farm: any, index) => {
-                    return <Dropdown.Item key={index} onClick={() => selectFarm(farm)}>{farm.name}</Dropdown.Item>
-                  })}
-                </Dropdown.Menu>
-              </Dropdown>
-              {/* <iframe src={selectedFarm?.map_link} width={'360px'} height={'220px'}></iframe> */}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Dropdown className="frist-card-dropdown-plot">
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    {selectedFarm?.name}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    {farm?.farms?.map((farm: any, index) => {
+                      return <Dropdown.Item key={index} onClick={() => selectFarm(farm)}>{farm.name}</Dropdown.Item>
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+              <iframe src={selectedFarm?.map_link} width={'360px'} height={'220px'} style={{ margin: '10px' }}></iframe>
             </div>
           </div>
           <div className="second-card-plot">
@@ -123,7 +131,7 @@ export function Plot() {
             </div>
 
           </div>
-        </Col>
+        </Col >
 
         <Col md={8} sm={8}>
           <Card className="second-col-card-plot">
@@ -187,11 +195,11 @@ export function Plot() {
             </Card.Footer>
           </Card>
         </Col>
-      </Row>
+      </Row >
       <PrescriptionModal show={showPrescriptionModal} handleClose={() => setShowPrescriptionModal(false)}></PrescriptionModal>
       <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
       <NewPlotModal show={showNewPlotModal} handleClose={() => setShowNewPlotModal(false)}></NewPlotModal>
       <EventModal show={showEvent} application={application} handleClose={() => setShowEvent(false)}></EventModal>
-    </Container>
+    </Container >
   )
 }
