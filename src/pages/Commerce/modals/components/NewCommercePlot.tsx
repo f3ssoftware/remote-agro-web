@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { useDispatch} from "react-redux";
 import { Silo } from "../../../../models/Silo";
-import { asyncCreateCommercePlot } from "../../../../stores/commerce.store";
+import { asyncCreateCommercePlot, asyncFetchSiloData } from "../../../../stores/commerce.store";
 
 
 
@@ -13,12 +13,13 @@ export function NewCommercePlot({handleClose}: {handleClose: any}){
 
 
 
-    const register = () => {
+    const register = async () => {
         const silo: Silo = {
             name: siloName,
             description: description
         }
-        dispatch(asyncCreateCommercePlot(silo))
+        await dispatch(asyncCreateCommercePlot(silo))
+        dispatch(asyncFetchSiloData())
         handleClose()
     }
 

@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Button, Card, Col, Container, Dropdown, Form, Row } from 'react-bootstrap'
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Dropdown,
+  Form,
+  Row,
+} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from '../..'
@@ -16,15 +24,14 @@ import getDay from 'date-fns/getDay'
 import ptBR from 'date-fns/locale/pt-BR'
 import { asyncFetchApplications } from '../../stores/plot.store'
 import { EventModal } from './Modals/EventModal'
-import moment from "moment";
-import 'moment/locale/pt-br';
-
+import moment from 'moment'
+import 'moment/locale/pt-br'
 
 const locales = {
   'pt-BR': ptBR,
 }
-moment.locale('pt-BR');
-const localizer = momentLocalizer(moment);
+moment.locale('pt-BR')
+const localizer = momentLocalizer(moment)
 // const localizer = dateFnsLocalizer({
 //   format,
 //   parse,
@@ -33,29 +40,36 @@ const localizer = momentLocalizer(moment);
 //   locales,
 // })
 export function Plot() {
-  const { farm, plot, seasons } = useSelector((state: RootState) => state);
-  const dispatch = useDispatch<any>();
+  const { farm, plot, seasons } = useSelector((state: RootState) => state)
+  const dispatch = useDispatch<any>()
   const [showNewPlotModal, setShowNewPlotModal] = useState(false)
   const [showPrescriptionModal, setShowPrescriptionModal] = useState(false)
   const [showNewFarmModal, setShowNewFarmModal] = useState(false)
-  const [selectedFarm, setSelectedFarm]: any = useState({});
-  const [selectedPlot, setSelectedPlot]: any = useState({});
-  const [plots, setPlots] = useState<any[]>([]);
-  const [showEvent, setShowEvent] = useState(false);
-  const [application, setApplication] = useState<any>();
-  const [startDate, setStartDate] = useState<Date>();
-  const [untilDate, setUntilDate] = useState<Date>();
+  const [selectedFarm, setSelectedFarm]: any = useState({})
+  const [selectedPlot, setSelectedPlot]: any = useState({})
+  const [plots, setPlots] = useState<any[]>([])
+  const [showEvent, setShowEvent] = useState(false)
+  const [application, setApplication] = useState<any>()
+  const [startDate, setStartDate] = useState<Date>()
+  const [untilDate, setUntilDate] = useState<Date>()
 
   const selectFarm = (farm: any) => {
-    setSelectedFarm(farm);
-    dispatch(selectAFarm(farm));
+    setSelectedFarm(farm)
+    dispatch(selectAFarm(farm))
   }
 
   useEffect(() => {
-    dispatch(asyncFetchFarms());
-    setSelectedFarm(farm?.farms[0]);
-    dispatch(selectAFarm(farm?.farms[0]));
-    dispatch(asyncFetchApplications({ from_date: startDate, until_date: untilDate, order_type: 1, season_id: seasons.selectedSeason.id }));
+    dispatch(asyncFetchFarms())
+    setSelectedFarm(farm?.farms[0])
+    dispatch(selectAFarm(farm?.farms[0]))
+    dispatch(
+      asyncFetchApplications({
+        from_date: startDate,
+        until_date: untilDate,
+        order_type: 1,
+        season_id: seasons.selectedSeason.id,
+      }),
+    )
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
@@ -66,15 +80,23 @@ export function Plot() {
           <div className="frist-column-plot">
             <div className="frist-card-plot">
               <div>
-                <Button variant="success" className="frist-card-button-plot" onClick={() => setShowNewFarmModal(true)}>
+                <Button
+                  variant="success"
+                  className="frist-card-button-plot"
+                  onClick={() => setShowNewFarmModal(true)}
+                >
                   +
                 </Button>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <h4 style={{
-                  position: 'relative',
-                  bottom: '40px',
-                }}><b>Fazenda</b></h4>
+                <h4
+                  style={{
+                    position: 'relative',
+                    bottom: '40px',
+                  }}
+                >
+                  <b>Fazenda</b>
+                </h4>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -85,60 +107,99 @@ export function Plot() {
 
                   <Dropdown.Menu>
                     {farm?.farms?.map((farm: any, index) => {
-                      return <Dropdown.Item key={index} onClick={() => selectFarm(farm)}>{farm.name}</Dropdown.Item>
+                      return (
+                        <Dropdown.Item
+                          key={index}
+                          onClick={() => selectFarm(farm)}
+                        >
+                          {farm.name}
+                        </Dropdown.Item>
+                      )
                     })}
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-              <iframe src={selectedFarm?.map_link} width={'360px'} height={'220px'} style={{ margin: '10px' }}></iframe>
+              <iframe
+                src={selectedFarm?.map_link}
+                width={'360px'}
+                height={'220px'}
+                style={{ margin: '10px', display: 'flex', justifyContent: 'center' }}
+              ></iframe>
             </div>
           </div>
           <div className="second-card-plot">
-            <span className="second-card-text-plot">Talhões </span>
-            <div>
-              <Button variant="success" className="second-card-button-plot" onClick={() => setShowNewPlotModal(true)}>
-                +
-              </Button>
-            </div>
+          <div>
+                <Button
+                  variant="success"
+                  className="second-card-button-plot"
+                  onClick={() => setShowNewPlotModal(true)}
+                >
+                  +
+                </Button>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <h4
+                  style={{
+                    position: 'relative',
+                    bottom: '40px',
+                  }}
+                >
+                  <b>Talhões</b>
+                </h4>
+              </div>
             <div style={{ overflowY: 'scroll', height: '300px' }}>
-              {farm?.selectedFarm?.fields?.map((field: any) => <div className='plot-card'>
-                <Row>
-                  <Col>
-                    <span>{field.name}</span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <span>Área Total: {field.total_area}</span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <span>Cultivo: {field.planting_type}</span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <span>Cultivar: {field.cultivares.map((c: any) => `${c.name}, `)}</span>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <span>Data de Plantio: {new Date(field.planting_date).toLocaleDateString('pt-BR')}</span>
-                  </Col>
-                </Row>
-              </div>)}
+              {farm?.selectedFarm?.fields?.map((field: any) => (
+                <div className="plot-card">
+                  <Row>
+                    <Col>
+                      <span>{field.name}</span>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <span>Área Total: {field.total_area}</span>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <span>Cultivo: {field.planting_type}</span>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <span>
+                        Cultivar:{' '}
+                        {field.cultivares.map((c: any) => `${c.name}, `)}
+                      </span>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <span>
+                        Data de Plantio:{' '}
+                        {new Date(field.planting_date).toLocaleDateString(
+                          'pt-BR',
+                        )}
+                      </span>
+                    </Col>
+                  </Row>
+                </div>
+              ))}
             </div>
-
           </div>
-        </Col >
+        </Col>
 
         <Col md={8} sm={8}>
           <Card className="second-col-card-plot">
             <Card.Body>
               <Card.Title className="second-col-text-plot">
                 Aplicações
-                <Button className="inputs-btn-plot" onClick={() => setShowPrescriptionModal(true)}>Gerar Receituário</Button>
+                <Button
+                  className="inputs-btn-plot"
+                  onClick={() => setShowPrescriptionModal(true)}
+                >
+                  Gerar Receituário
+                </Button>
               </Card.Title>
               <Card.Text>
                 <Dropdown>
@@ -152,7 +213,11 @@ export function Plot() {
 
                   <Dropdown.Menu>
                     {selectedFarm?.fields?.map((field: any) => {
-                      return <Dropdown.Item onClick={() => setSelectedPlot(field)}>{field.name}</Dropdown.Item>
+                      return (
+                        <Dropdown.Item onClick={() => setSelectedPlot(field)}>
+                          {field.name}
+                        </Dropdown.Item>
+                      )
                     })}
                   </Dropdown.Menu>
                 </Dropdown>
@@ -170,18 +235,22 @@ export function Plot() {
                   date: 'Data',
                   time: 'Hora',
                   event: 'Evento',
-                  showMore: (total) => `+ (${total}) Eventos`
+                  showMore: (total) => `+ (${total}) Eventos`,
                 }}
                 onRangeChange={(r) => console.log(r)}
                 selectable={true}
-
                 onSelectEvent={(e) => {
-                  setApplication(e);
-                  setShowEvent(true);
+                  setApplication(e)
+                  setShowEvent(true)
                 }}
                 localizer={localizer}
                 events={plot?.applications?.map((application: any) => {
-                  return { start: new Date(application.date), end: new Date(application.date), title: `${application.number} - ${application.type}`, id: application.id }
+                  return {
+                    start: new Date(application.date),
+                    end: new Date(application.date),
+                    title: `${application.number} - ${application.type}`,
+                    id: application.id,
+                  }
                 })}
                 startAccessor="start"
                 endAccessor="end"
@@ -195,11 +264,24 @@ export function Plot() {
             </Card.Footer>
           </Card>
         </Col>
-      </Row >
-      <PrescriptionModal show={showPrescriptionModal} handleClose={() => setShowPrescriptionModal(false)}></PrescriptionModal>
-      <NewFarmModal show={showNewFarmModal} handleClose={() => setShowNewFarmModal(false)}></NewFarmModal>
-      <NewPlotModal show={showNewPlotModal} handleClose={() => setShowNewPlotModal(false)}></NewPlotModal>
-      <EventModal show={showEvent} application={application} handleClose={() => setShowEvent(false)}></EventModal>
-    </Container >
+      </Row>
+      <PrescriptionModal
+        show={showPrescriptionModal}
+        handleClose={() => setShowPrescriptionModal(false)}
+      ></PrescriptionModal>
+      <NewFarmModal
+        show={showNewFarmModal}
+        handleClose={() => setShowNewFarmModal(false)}
+      ></NewFarmModal>
+      <NewPlotModal
+        show={showNewPlotModal}
+        handleClose={() => setShowNewPlotModal(false)}
+      ></NewPlotModal>
+      <EventModal
+        show={showEvent}
+        application={application}
+        handleClose={() => setShowEvent(false)}
+      ></EventModal>
+    </Container>
   )
 }

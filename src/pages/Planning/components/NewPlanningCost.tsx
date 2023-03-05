@@ -16,7 +16,7 @@ export function NewPlanningCost({
   handleClose: any
 }) {
   const [referenceName, setReferenceName] = useState('')
-  const [key, setKey] = useState('')
+  const [key, setKey] = useState(0)
   const [plannings, setPlannings] = useState([new PlanningCost()])
   const dispatch = useDispatch<any>()
   const { seasons } = useSelector((state: RootState) => state)
@@ -67,7 +67,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
 }
 
   return (
-    <div>
+    <>
       <Row style={{ marginTop: '2%' }}>
         <Col>
           <Form.Group className="mb-3" controlId="">
@@ -82,7 +82,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label>Ano agrícola</Form.Label>
+            <Form.Label style={{color: "#fff"}}>Ano agrícola</Form.Label>
             <Form.Select
               value={outcomeYear}
               aria-label=""
@@ -102,7 +102,8 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
           </Form.Group>
         </Col>
       </Row>
-        <Tabs
+      <div style={{backgroundColor: '#7C5529'}}>
+      <Tabs
           id="controlled-tab"
           activeKey={key}
           onSelect={(k: any) => setKey(k)}
@@ -117,6 +118,8 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
           })}
         </Tabs>
 
+      </div>
+        
       <div
         style={{
           display: 'flex',
@@ -134,7 +137,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
           Registrar
         </Button>
       </div>
-    </div>
+    </>
   )
 }
 

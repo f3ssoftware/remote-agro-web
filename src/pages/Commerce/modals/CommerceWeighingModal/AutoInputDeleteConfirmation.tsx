@@ -1,6 +1,6 @@
 import { Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { asyncDeleteInputWeighing } from '../../../../stores/commerce.store'
+import { asyncDeleteInputWeighing, removeInputWeighRow } from '../../../../stores/commerce.store'
 
 
 export function AutoInputDeleteConfirmation({
@@ -17,11 +17,16 @@ export function AutoInputDeleteConfirmation({
   index: number
   onHandleRemove: any
 }) {
-    const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<any>();
 
-    const deleteAutoInputWeighing = (id: number) => {
-      dispatch(asyncDeleteInputWeighing(id)) 
-       }
+  const deleteAutoInputWeighing = (id: number) => {
+    if (id) {
+      dispatch(asyncDeleteInputWeighing(id))
+    } else {
+      dispatch(removeInputWeighRow({ index }));
+    }
+
+  }
 
   return (
     <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>
@@ -39,16 +44,16 @@ export function AutoInputDeleteConfirmation({
       </Modal.Body>
       <Modal.Footer style={{ backgroundColor: '#7C5529', border: 'none' }}>
         {' '}
-            <Button
-              variant="success"
-              onClick={() => {
-                handleClose()
-                onHandleRemove(index)
-                deleteAutoInputWeighing(id)
-              }}
-            >
-              Confirmar
-            </Button>
+        <Button
+          variant="success"
+          onClick={() => {
+            handleClose()
+            onHandleRemove(index)
+            deleteAutoInputWeighing(id)
+          }}
+        >
+          Confirmar
+        </Button>
         <Button variant="danger" onClick={handleClose}>
           Cancelar
         </Button>

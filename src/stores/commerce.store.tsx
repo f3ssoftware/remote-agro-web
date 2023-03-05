@@ -6,21 +6,27 @@ import { getMessages } from "./messaging.store";
 import { asyncFetchContractsData } from "./financial.store";
 import { Contract } from "../models/Contract";
 import { TransferWeighing } from "../models/TransferWeighing";
-import { ManualInputWeighing } from "../models/ManualInputWeighing";
+import { InputWeighingRow } from "../models/InputWeighingRow";
 import { ManualOutputWeighing } from "../models/ManualOutputWeighing";
 import { ManualSeparateWeighing } from "../models/ManualSepareteWeighing";
 import { AutoInputWeighing } from "../models/AutoInputWeighing";
 import { InputWeighing } from "../pages/Commerce/modals/components/InputWeighing";
+import { WeighingRow } from "../models/WeighingRow";
+import { WeighingRowType } from "../utils/WeighingRowType.enum";
 
 
 const initialSilo: Silo[] = [];
 const initialEditContracts: Contract = {}
+const initialRowsInputW: WeighingRow[] = [{
+    rowType: WeighingRowType.AUTOMATIC
+}];
 const initialTransferWeighing: TransferWeighing[] = []
-const initialInputWeighing: ManualInputWeighing[] = []
+const initialInputWeighing: InputWeighingRow[][] = [];
 const initialAutoInputWeighing: AutoInputWeighing = {}
 const initialOutputWeighing: ManualOutputWeighing[] = []
 const initialSeparateWeighing: ManualSeparateWeighing[] = []
-const initialInputWeighingData: ManualInputWeighing = {}
+const initialInputWeighingData: InputWeighingRow = {}
+
 const commerceStore = createSlice({
     name: "commerce",
     initialState: {
@@ -29,6 +35,7 @@ const commerceStore = createSlice({
         editContracts: initialEditContracts,
         transferWeighing: initialTransferWeighing,
         inputWeighing: initialInputWeighing,
+        inputWeighingRows: initialRowsInputW,
         autoInputWeighing: initialAutoInputWeighing,
         outputWeighing: initialOutputWeighing,
         separateWeighing: initialSeparateWeighing,
@@ -48,10 +55,10 @@ const commerceStore = createSlice({
             state.transferWeighing = action.payload
         },
         setInputWeighing(state, action) {
-            state.inputWeighing = [];
-            action.payload.map((arr: any) => {
-                state.inputWeighing = state.inputWeighing.concat(arr);
-            });
+            state.inputWeighing = action.payload;
+            // action.payload.map((arr: any) => {
+            //     state.inputWeighing = state.inputWeighing.concat(arr);
+            // });
             // state.inputWeighing = action.payload;
         },
         setAutoInputWeighing(state, action) {
@@ -62,12 +69,41 @@ const commerceStore = createSlice({
         },
         setSeparateWeighing(state, action) {
             state.separateWeighing = action.payload
+        },
+        setInputWeighingData(state, action) {
+            state.inputWeighingData = action.payload;
+        },
+        addInputWeighRow(state, action) {
+            const inputWeighingRows = [...state.inputWeighingRows].concat(action.payload);
+            state.inputWeighingRows = inputWeighingRows;
+        },
+        removeInputWeighRow(state, action) {
+            const inputWeighingRows = [...state.inputWeighingRows];
+            inputWeighingRows.splice(action.payload.index);
+            state.inputWeighingRows = inputWeighingRows;
+        },
+        updateInputWeighRow(state, action) {
+            const { index, inputWeighRow } = action.payload;
+            const inputWeighingRows = [...state.inputWeighingRows];
+            inputWeighingRows[index] = inputWeighRow;
+            state.inputWeighingRows = inputWeighingRows;
+        },
+        setInputWeighingRows(state,action) {
+            state.inputWeighingRows = action.payload.map((row: InputWeighingRow, index: number) => {
+                const rowData: InputWeighingRow = { ...row };
+                if (row.id && row.mode === 'Manual') {
+                  rowData.rowType = WeighingRowType.MANUAL;
+                } else if(!row.id){
+                  rowData.rowType = WeighingRowType.AUTOMATIC;
+                }
+                return rowData;
+              });
         }
 
     },
 });
 
-export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing, setInputWeighingData, addInputWeighRow, removeInputWeighRow, updateInputWeighRow, setInputWeighingRows } =
     commerceStore.actions;
 export default commerceStore.reducer;
 
@@ -120,7 +156,7 @@ export function asyncTransferWeighing(transfer: any) {
     }
 }
 
-export function asyncInputWeighing(input: any) {
+export function asyncInputWeighing(input: any, index: number, rowType: WeighingRowType) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.post(`https://remoteapi.murilobotelho.com.br/weighings`,
@@ -131,6 +167,34 @@ export function asyncInputWeighing(input: any) {
                     }
                 });
             dispatch(setInputWeighing(result.data));
+            dispatch(updateInputWeighRow({ index, inputWeighRow: { ...result.data[0], rowType } }));
+            // dispatch(setInputWeighingData(result.data[0]))
+            dispatch(getMessages({
+                message: "Pesagem de entrada salva com sucesso",
+                type: "success",
+            }));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
+export function asyncUpdateInputWeighing(input: any, index: number, rowType: WeighingRowType) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.put(`https://remoteapi.murilobotelho.com.br/weighings`,
+                input,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    }
+                });
+            dispatch(setInputWeighing(result.data));
+            dispatch(updateInputWeighRow({ index, inputWeighRow: { ...result.data[0], rowType } }));
+            // dispatch(setInputWeighingData(result.data[0]))
             dispatch(getMessages({
                 message: "Pesagem de entrada salva com sucesso",
                 type: "success",

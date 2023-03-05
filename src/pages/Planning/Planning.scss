@@ -12,6 +12,15 @@
   padding-bottom: 10px;
 }
 
+.nav-tabs .nav-item.show, .nav-tabs .nav-link.active {
+  color: #000000;
+  background-color: #fff;
+  border-color: none;
+}
+.nav-link{
+  color: #000000
+}
+
 .frist-card-text {
   display: flex;
   flex-direction: row;

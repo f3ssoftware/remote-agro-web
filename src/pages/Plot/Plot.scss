@@ -4,11 +4,10 @@
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    // width: 286px;
-    flex-direction: row;
-    justify-content: center;
-    margin-left: 50px;
-    padding-bottom: 10px;
+    min-height: 45vh;
+    min-width: 43vh;
+    margin-top: 44px;
+    margin-bottom: 30px;
   }
   
   .frist-card-text-plot {
@@ -39,9 +38,10 @@
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    height: 50vh;
+    min-height: 45vh;
     margin-top: 44px;
     margin-bottom: 30px;
+    min-width: 43vh;
   }
   
   .second-card-button-plot {
@@ -52,16 +52,14 @@
     color: #ffffff;
     text-align: center;
     font-size: xx-large;
-    position: relative;
-    left: 300px;
-    bottom: 60px;
+    margin-left: 88%;
   }
   
   .second-card-text-plot {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    padding-top: 10px;
+    padding-bottom: 10px;
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
@@ -72,6 +70,8 @@
     background: #ece4b4;
     border-radius: 20px;
     height: 96%;
+    min-width: 50vh;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
   }
@@ -114,13 +114,12 @@
   .inputs-btn-plot {
     background-color: #4c9626;
     border: none;
-    margin-top: 20px;
+    margin-left: 20px;
   }
   
   .inputs-btn-plot:hover {
     background-color: #65ca33;
     border: none;
-    margin-top: 20px;
   }
 
   .frist-card-button-plot {
@@ -131,9 +130,7 @@
     color: #ffffff;
     text-align: center;
     font-size: xx-large;
-    position: relative;
-    left: 300px;
-    bottom: 25px;
+    margin-left: 88%;
   }
 
   .plot-card {

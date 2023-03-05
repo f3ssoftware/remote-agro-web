@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap'
 import { NewPlanning } from '../components/NewPlanning'
-import { NewPlanningCost } from '../components/NewPlanningCost';
+import { NewPlanningCost } from '../components/NewPlanningCost'
 
 export function NewPlanningModal({
   show,
@@ -9,10 +9,8 @@ export function NewPlanningModal({
 }: {
   show: boolean
   handleClose: any
-
 }) {
-    const [registrationType, setRegistrationType] = useState(1);
-
+  const [registrationType, setRegistrationType] = useState(1)
 
   return (
     <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>
@@ -41,15 +39,19 @@ export function NewPlanningModal({
             </Form.Group>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            {registrationType === 1 ? (
-              <NewPlanning show={false} handleClose={() => handleClose()} index={0} onHandleRemove={undefined}></NewPlanning>
-            ) : (
-              <NewPlanningCost show={false} handleClose={() => handleClose()}></NewPlanningCost>
-            )}
-          </Col>
-        </Row>
+        {registrationType === 1 ? (
+          <NewPlanning
+            show={false}
+            handleClose={() => handleClose()}
+            index={0}
+            onHandleRemove={undefined}
+          ></NewPlanning>
+        ) : (
+          <NewPlanningCost
+            show={false}
+            handleClose={() => handleClose()}
+          ></NewPlanningCost>
+        )}
       </Modal.Body>
     </Modal>
   )

@@ -7,17 +7,21 @@ import { RootState } from '../../../..'
 export function AutoConfirmationModal({
   show,
   handleClose,
-  setValue
+  setValue,
+  setWeightDate
 }: {
   show: boolean
   handleClose: any
   setValue: any
+  setWeightDate: any
 }) {
   const dispatch = useDispatch<any>()
   const { commerce } = useSelector((state: RootState) => state)
 
   const confirmation = () =>{
     setValue(commerce?.autoInputWeighing?.Peso!)
+    setWeightDate(commerce?.autoInputWeighing?.Horario!)
+
   }
 
   useEffect(()=>{

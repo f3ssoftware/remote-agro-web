@@ -81,7 +81,8 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
         observations: observation,
         tare_weight: tare,
         mode: "Manual",
-        car_plate: carPlate
+        car_plate: carPlate,
+        car_driver: driver
       }
     }
     dispatch(asyncOutputWeighing(manualOutput))
