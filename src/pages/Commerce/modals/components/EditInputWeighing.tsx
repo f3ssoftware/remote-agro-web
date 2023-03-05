@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import { NewManualInputWeighing } from './NewManualInputWeighing'
-import { ManualInputWeighing } from '../../../../models/ManualInputWeighing'
+
 import { NewAutoInputWeighing } from './NewAutoInputWeighing'
+import { InputWeighingRow } from '../../../../models/InputWeighingRow'
 
 export function EditInputWeighing() {
   const [newManualInputWeighing, setNewManualInputWeighing] = useState<any[]>([])
-  const [newAutoInputWeighing, setNewAutoInputWeighing] = useState([new ManualInputWeighing()])
+  const [newAutoInputWeighing, setNewAutoInputWeighing] = useState([new InputWeighingRow()])
 
   const onRemoveItem = (index: number) => {
     const mInputArr = [...newManualInputWeighing]
@@ -20,13 +21,13 @@ export function EditInputWeighing() {
     setNewAutoInputWeighing(aInputArr)
   }
 
-  const onUpdateItem = (minput: ManualInputWeighing, index: number) => {
+  const onUpdateItem = (minput: InputWeighingRow, index: number) => {
     const mInputArr = [...newManualInputWeighing]
     mInputArr.splice(index, 1)
     mInputArr.push(minput)
     setNewManualInputWeighing(mInputArr)
   }
-  const onUpdateItemA = (aInput: ManualInputWeighing, index: number) => {
+  const onUpdateItemA = (aInput: InputWeighingRow, index: number) => {
     const aInputArr = [...newAutoInputWeighing]
     aInputArr.splice(index, 1)
     aInputArr.push(aInput)
@@ -45,26 +46,28 @@ export function EditInputWeighing() {
           <Row
             style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}
           >
-            {newManualInputWeighing.map((newMInput, index) => {
+            {/* {newManualInputWeighing.map((newMInput, index) => {
               return (
                 <NewManualInputWeighing
                   index={index}
                   key={index}
+
                   onHandleUpdate={onUpdateItem}
                   onHandleRemove={onRemoveItem}
                 ></NewManualInputWeighing>
               )
-            })}
-            {newAutoInputWeighing.map((newAInput, index) => {
+            })} */}
+            {/* {newAutoInputWeighing.map((newAInput, index) => {
               return (
                 <NewAutoInputWeighing
                   index={index}
                   key={index}
                   onHandleUpdate={onUpdateItemA}
                   onHandleRemove={onRemoveItemA}
+                  autoInputWeighing={}
                 ></NewAutoInputWeighing>
               )
-            })}
+            })} */}
           </Row>
 
           <div
@@ -80,7 +83,7 @@ export function EditInputWeighing() {
               onClick={() =>
                 setNewManualInputWeighing([
                   ...newManualInputWeighing,
-                  new ManualInputWeighing(),
+                  new InputWeighingRow(),
                 ])
               }
             >
@@ -92,7 +95,7 @@ export function EditInputWeighing() {
               onClick={() =>
                 setNewAutoInputWeighing([
                   ...newAutoInputWeighing,
-                  new ManualInputWeighing(),
+                  new InputWeighingRow(),
                 ])
               }
             >

@@ -4,12 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncInputWeighing } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncInputWeighing, asyncUpdateInputWeighing, removeInputWeighRow } from '../../../../stores/commerce.store'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { InputWeighingRow } from '../../../../models/InputWeighingRow'
+import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
+import { Cultivar } from '../../../../models/Cultivar'
 
-export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove, onHandleUpdate }: { index: number, manualInputWeigh: InputWeighingRow, onHandleRemove: any, onHandleUpdate: any }) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState({})
@@ -29,6 +33,8 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
   const [totalWeighning, setTotalWeighning] = useState(0)
   const [observation, setObservation] = useState('')
   const [company, setCompany] = useState('')
+  const [id, setId] = useState<number>();
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
@@ -39,11 +45,11 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
   }, [])
 
   useEffect(() => {
-    setNetWeighing(grossWeighing-tare)
+    setNetWeighing(grossWeighing - tare)
   }, [grossWeighing, tare])
 
   useEffect(() => {
-    setDiscount(impurity==0? 0: impurity-1)
+    setDiscount(impurity == 0 ? 0 : impurity - 1)
   }, [impurity])
 
   useEffect(() => {
@@ -57,15 +63,21 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
     setSelectedCultivar(null);
   }, [seasons])
 
-  useEffect(()=>{
-    setTotalDiscount(discount+humidityDiscount)
-  }, [discount,humidityDiscount])
+  useEffect(() => {
+    setTotalDiscount(discount + humidityDiscount)
+  }, [discount, humidityDiscount])
 
-  useEffect(()=>{
-    setTotalWeighning(netWeighing*((100-totalDiscount)/100))
+  useEffect(() => {
+    setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
 
-  const Save = () =>{
+  useEffect(() => {
+    setSelectedFarm(farm?.farms.filter((farm: any) => farm.id === manualInputWeigh.farm_id)[0]);
+    setSelectedPlot(selectedFarm?.fields?.filter((plot: any) => plot.id === manualInputWeigh.field_id)[0]);
+    setSelectedCultivar(selectedPlot?.cultivares?.filter((cultivar: Cultivar) => cultivar.id === manualInputWeigh.cultivar_id)[0]);
+  }, [manualInputWeigh]);
+
+  const Save = () => {
     const manualInput = {
       weighings: {
         farm_id: selectedFarm.id,
@@ -74,10 +86,10 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
         silo_id: selectedSilo.id,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity*100,
-        impurity: impurity*100,
-        discount: discount*100,
-        final_weight: totalWeighning*1000,
+        humidity: humidity * 100,
+        impurity: impurity * 100,
+        discount: discount * 100,
+        final_weight: totalWeighning * 1000,
         type: "Entrada",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
@@ -89,33 +101,31 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
         car_driver: driver
       }
     }
-    dispatch(asyncInputWeighing(manualInput))
+    if(!manualInputWeigh.id) {
+      dispatch(asyncInputWeighing(manualInput, index, WeighingRowType.MANUAL));
+    } else {
+      dispatch(asyncUpdateInputWeighing(manualInput, index, WeighingRowType.MANUAL));
+    }
+    
   }
 
 
   return (
-    <div>
+    <div style={{ backgroundColor: (index % 2) > 0 ? '#f6eec1' : '#ebde90', paddingTop: '1%', paddingBottom: '1%' }}>
       <Row style={{ marginTop: '2%' }}>
-          <Col>
-            <Button
-              variant="danger"
-              onClick={() => {
-                onHandleRemove(index)
-              }}
-              style={{ marginTop: '40%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
-          </Col>
-
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
             <Typeahead
               id="farm"
+              clearButton={true}
+              labelKey="label"
+              defaultSelected={farm?.farms.filter((option: any) => option.label === selectedFarm?.label)}
               onChange={(selected: any) => {
+                console.log(selected[0]);
                 setSelectedFarm(selected[0])
               }}
+              
               options={farm?.farms?.map((farm: any) => {
                 return { id: farm.id, label: farm.name, ...farm }
               })}
@@ -132,7 +142,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
               }}
               options={selectedFarm?.fields?.map((field: any) => {
                 return { id: field.id, label: field.name, ...field }
-              })}/> : <></>}
+              })} /> : <></>}
           </Form.Group>
         </Col>
         <Col>
@@ -147,7 +157,7 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
                 return { id: cultivar.id, label: cultivar.name, ...cultivar }
               })}
             /> : <></>}
-            
+
           </Form.Group>
         </Col>
         <Col>
@@ -340,13 +350,23 @@ export function NewManualInputWeighing({onHandleRemove, onHandleUpdate,index}:{o
         }}
       >
         <Button
+          variant="danger"
+          onClick={() => {
+            setId(manualInputWeigh.id!);
+            setShowAutoInputDeleteModal(true);
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+        </Button>
+        <Button
           variant="success"
           onClick={() => {
             Save()
           }}
         >
-          Salvar
+          {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
+        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
       </div>
     </div>
   )

@@ -12,21 +12,26 @@ import {
   asyncFetchSiloData,
   asyncFetchWeighingData,
   asyncInputWeighing,
+  asyncUpdateInputWeighing,
 } from '../../../../stores/commerce.store'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
+import { InputWeighingRow } from '../../../../models/InputWeighingRow'
 
 export function NewAutoInputWeighing({
   onHandleRemove,
   onHandleUpdate,
   index,
+  autoInputWeighing,
 }: {
   onHandleRemove: any
   onHandleUpdate: any
-  index: number
+  index: number,
+  autoInputWeighing: InputWeighingRow
 }) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
@@ -51,7 +56,7 @@ export function NewAutoInputWeighing({
     useState(false)
   const [showTareConfirmationModal, setShowTareConfirmationModal] =
     useState(false)
-  const [autoInputId, setAutoInputId] = useState(0)
+  const [id, setId] = useState(0)
   const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
   const [grossWeightDate, setGrossWeightDate] = useState("")
   const [tareWeightDate, setTareWeightDate] = useState("")
@@ -101,6 +106,7 @@ export function NewAutoInputWeighing({
   const Save = () => {
     const autoInput = {
       weighings: {
+        id,
         farm_id: selectedFarm.id,
         field_id: selectedPlot.id,
         cultivar_id: selectedCultivar.id,
@@ -125,25 +131,17 @@ export function NewAutoInputWeighing({
         weight_date: new Date().toISOString()
       },
     }
-    dispatch(asyncInputWeighing(autoInput))
+    if(!autoInputWeighing?.id) {
+      dispatch(asyncInputWeighing(autoInput, index, WeighingRowType.AUTOMATIC));
+    } else {
+      dispatch(asyncUpdateInputWeighing(autoInput, index, WeighingRowType.AUTOMATIC));
+    }
+    
   }
 
   return (
-    <div>
-      <Row style={{ marginTop: '2%' }}>
-        <Col md={1}>
-          <Button
-            variant="danger"
-            onClick={() => {
-              console.log(autoInputId)
-              setAutoInputId(commerce?.inputWeighingData?.id!)
-              setShowAutoInputDeleteModal(true)
-            }}
-            style={{ marginTop: '45%' }}
-          >
-            <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-          </Button>
-        </Col>
+    <div style={{ backgroundColor: (index % 2) > 0 ? '#f6eec1' : '#ebde90', paddingTop: '1%', paddingBottom: '1%' }}>
+      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
@@ -406,15 +404,24 @@ export function NewAutoInputWeighing({
         }}
       >
         <Button
+          variant="danger"
+          onClick={() => {
+            setId(autoInputWeighing?.id!)
+            setShowAutoInputDeleteModal(true)
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+        </Button>
+        <Button
           variant="success"
           onClick={() => {
             Save()
           }}
         >
-          Salvar
+          {autoInputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
       </div>
-      <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false) } id={commerce?.inputWeighingData?.id!} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
+      <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={commerce?.inputWeighingData?.id!} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
     </div>
   )
 }
