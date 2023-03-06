@@ -3,8 +3,8 @@ import { Button, Col, Container, Row } from 'react-bootstrap'
 import { NewManualOutputWeighing } from './NewManualOutputWeighing'
 import { ManualOutputWeighing } from '../../../../models/ManualOutputWeighing'
 import { NewAutoOutputWeighing } from './NewAutoOutputWeighing'
-import { setOutputWeighing } from '../../../../stores/commerce.store'
-import { useSelector } from 'react-redux'
+import { addOutputWeighRow, setOutputWeighing } from '../../../../stores/commerce.store'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
@@ -16,6 +16,7 @@ export function OutputWeighing() {
   const [weighingDate, setWeighingDate] = useState<Date>();
   const { commerce } = useSelector((state: RootState) => state);
   const [outputWeighingRows, setOutputWeighingRows] = useState<OutputWeighingRow[]>();
+  const dispatch = useDispatch<any>();
 
   const onRemoveItem = (index: number) => {
     const mOutputArr = [...newManualOutputWeighing];
@@ -46,6 +47,12 @@ export function OutputWeighing() {
   }
 
   useEffect(() => {
+    const weighing = commerce?.outputWeighingRows[0] as OutputWeighingRow;
+    if (weighing?.weighing_date) {
+      setWeighingDate(new Date(weighing?.weighing_date)!);
+    } else {
+      setWeighingDate(new Date());
+    }
     setOutputWeighingRows(commerce?.outputWeighingRows);
   }, [commerce]);
 
@@ -62,7 +69,7 @@ export function OutputWeighing() {
             {outputWeighingRows?.map((row: OutputWeighingRow, index: number) => {
               switch (row.rowType) {
                 case WeighingRowType.MANUAL: {
-                  return <NewManualOutputWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualOutputWeighing>
+                  return <NewManualOutputWeighing manualOutputWeigh={row} onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualOutputWeighing>
                 }
                 case WeighingRowType.AUTOMATIC: {
                   return (
@@ -89,8 +96,18 @@ export function OutputWeighing() {
               marginTop: '2%',
             }}
           >
-            <Button variant="secondary" onClick={() => setNewManualOutputWeighing([...newManualOutputWeighing, new ManualOutputWeighing()])}>Adicionar linha manual</Button>
-            <Button variant="primary" onClick={() => setNewAutoOutputWeighing([...newAutoOutputWeighing, new ManualOutputWeighing()])}>Adicionar linha automática</Button>
+            <Button variant="secondary" onClick={() => {
+              const outputWeighRow: OutputWeighingRow = {
+                rowType: WeighingRowType.MANUAL
+              };
+              dispatch(addOutputWeighRow(outputWeighRow));
+            }}>Adicionar linha manual</Button>
+            <Button variant="primary" onClick={() => {
+              const outputWeighRow: OutputWeighingRow = {
+                rowType: WeighingRowType.AUTOMATIC
+              };
+              dispatch(addOutputWeighRow(outputWeighRow));
+            }}>Adicionar linha automática</Button>
           </div>
         </div>
       </div>

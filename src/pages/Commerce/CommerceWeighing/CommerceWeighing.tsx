@@ -5,13 +5,13 @@ import { TransferWeighingModal } from '../modals/CommerceWeighingModal/TransferW
 import { useNavigate } from 'react-router-dom'
 import { WeighingCalendar } from '../modals/components/WeighingCalendar'
 import { useDispatch } from 'react-redux'
-import { resetInputWeighingRows, setInputWeighingRows } from '../../../stores/commerce.store'
+import { resetInputWeighingRows, resetOutputWeighingRows, setInputWeighingRows } from '../../../stores/commerce.store'
 
 export function CommerceWeighing() {
   const [showTransferWeighingModal, setShowTransferWeighingModal] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch<any>();
-  
+
   return (
     <Container>
       <div className="main-boxW">
@@ -32,7 +32,10 @@ export function CommerceWeighing() {
           </Col>
           <Col md={1}>
             <Button className="inputs-btnW"
-              onClick={() => navigate("commerce/weighing/output")}
+              onClick={() => {
+                dispatch(resetOutputWeighingRows(null));
+                navigate("commerce/weighing/output");
+              }}
             >Saída</Button>
           </Col>
           <Col md={1}>

@@ -131,12 +131,12 @@ const commerceStore = createSlice({
             });
         },
         resetOutputWeighingRows(state, action) {
-            state.inputWeighingRows = initialRowsInputW;
+            state.outputWeighingRows = initialRowsInputW;
         }
     },
 });
 
-export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing, addInputWeighRow, removeInputWeighRow, updateInputWeighRow, setInputWeighingRows, resetInputWeighingRows } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing, addOutputWeighRow, removeOutputWeighRow, updateOutputWeighRow, setOutputWeighingRows, resetOutputWeighingRows, addInputWeighRow, removeInputWeighRow, updateInputWeighRow, setInputWeighingRows, resetInputWeighingRows } =
     commerceStore.actions;
 export default commerceStore.reducer;
 

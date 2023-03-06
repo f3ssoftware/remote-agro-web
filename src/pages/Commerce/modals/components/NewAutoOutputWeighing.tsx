@@ -10,9 +10,10 @@ import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
+import { Silo } from '../../../../models/Silo'
 
 
-export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index }: { onHandleRemove: any, onHandleUpdate: any, index: number }) {
   const dispatch = useDispatch<any>()
   const { financial, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
@@ -44,11 +45,11 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
   }, [])
 
   useEffect(() => {
-    setNetWeighing(grossWeighing-tare)
+    setNetWeighing(grossWeighing - tare)
   }, [grossWeighing, tare])
 
   useEffect(() => {
-    setDiscount(impurity==0? 0: impurity-1)
+    setDiscount(impurity == 0 ? 0 : impurity - 1)
   }, [impurity])
 
   useEffect(() => {
@@ -59,15 +60,15 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
   //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
   // }, [seasons])
 
-  useEffect(()=>{
-    setTotalDiscount(discount+humidityDiscount)
-  }, [discount,humidityDiscount])
+  useEffect(() => {
+    setTotalDiscount(discount + humidityDiscount)
+  }, [discount, humidityDiscount])
 
-  useEffect(()=>{
-    setTotalWeighning(netWeighing*((100-totalDiscount)/100))
+  useEffect(() => {
+    setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
 
-  const Save = () =>{
+  const Save = () => {
     const manualOutput = {
       weighings: {
         contract_id: selectedContract.id,
@@ -75,10 +76,10 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         silo_id: selectedSilo.id,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity*100,
-        impurity: impurity*100,
-        discount: discount*100,
-        final_weight: totalWeighning*1000,
+        humidity: humidity * 100,
+        impurity: impurity * 100,
+        discount: discount * 100,
+        final_weight: totalWeighning * 1000,
         type: "Saída",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
@@ -100,7 +101,7 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-      {index !== 0 ? (
+        {index !== 0 ? (
           <Col md={1}>
             <Button
               variant="danger"
@@ -117,9 +118,14 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         )}
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color:'#000'}}>Cultura</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
+              selected={financial?.cultivations.filter((cultivation: Cultivation) => cultivation?.id === selectedCultivation?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedCultivation?.id}
               onChange={(selected: any) => {
                 setSelectedCultivation(selected[0]);
               }}
@@ -131,9 +137,14 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Contratos</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Contratos</Form.Label>
             <Typeahead
               id="contract"
+              selected={financial?.contracts.filter((contract: any) => contract?.id === selectedContract?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedContract?.id}
               onChange={(selected: any) => {
                 setSelectedContract(selected[0]);
               }}
@@ -144,10 +155,15 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
           </Form.Group>
         </Col>
         <Col>
-        <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Silo</Form.Label>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
+              selected={commerce?.silo.filter((silo: Silo) => silo?.id === selectedSilo?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
                 setSelectedSilo(selected[0]);
               }}
@@ -196,39 +212,39 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-          {grossWeighing ==0 ? (
-            <Button
-            variant="success"
-            onClick={() => {
-              setShowWeighingConfirmationModal(true)
-            }}
-          >
-            Receber
-          </Button>
-          ): (<Form.Control
-            type="number"
-            disabled
-            value={grossWeighing}
-          />)}
+            {grossWeighing == 0 ? (
+              <Button
+                variant="success"
+                onClick={() => {
+                  setShowWeighingConfirmationModal(true)
+                }}
+              >
+                Receber
+              </Button>
+            ) : (<Form.Control
+              type="number"
+              disabled
+              value={grossWeighing}
+            />)}
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
-          {tare ==0 ? (
-            <Button
-            variant="success"
-            onClick={() => {
-              setShowTareConfirmationModal(true)
-            }}
-          >
-            Receber
-          </Button>
-          ): (<Form.Control
-            type="number"
-            disabled
-            value={tare}
-          />)}
+            {tare == 0 ? (
+              <Button
+                variant="success"
+                onClick={() => {
+                  setShowTareConfirmationModal(true)
+                }}
+              >
+                Receber
+              </Button>
+            ) : (<Form.Control
+              type="number"
+              disabled
+              value={tare}
+            />)}
           </Form.Group>
         </Col>
         <Col>
@@ -335,8 +351,8 @@ export function NewAutoOutputWeighing({onHandleRemove, onHandleUpdate, index}:{o
           </Form.Group>
         </Col>
       </Row>
-      <AutoConfirmationModal  setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal>
-      <AutoConfirmationModal  setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal>
+      <AutoConfirmationModal setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal>
+      <AutoConfirmationModal setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal>
 
       <div
         style={{

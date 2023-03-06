@@ -3,7 +3,7 @@ import { Calendar, dateFnsLocalizer, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../..';
-import { asyncFetchInputWeighingData, asyncFetchOutputWeighingData, setInputWeighingRows, setOutputWeighing } from '../../../../stores/commerce.store';
+import { asyncFetchInputWeighingData, asyncFetchOutputWeighingData, setInputWeighingRows, setOutputWeighing, setOutputWeighingRows } from '../../../../stores/commerce.store';
 
 import moment from 'moment';
 import { Container } from 'react-bootstrap';
@@ -87,6 +87,7 @@ export function WeighingCalendar() {
                 navigate("commerce/weighing/input");
               } break;
               case 'OUTPUT': {
+                dispatch(setOutputWeighingRows(e.weighings));
                 navigate("commerce/weighing/output");
             } break;
           }}}

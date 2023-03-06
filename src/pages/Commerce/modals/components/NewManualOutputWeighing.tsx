@@ -9,9 +9,13 @@ import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { ManualOutputWeighing } from '../../../../models/ManualOutputWeighing'
+import { Silo } from '../../../../models/Silo'
+import { Contract } from '../../../../models/Contract'
+import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
 
 
-export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index, manualOutputWeigh }: { onHandleRemove: any, onHandleUpdate: any, index: number, manualOutputWeigh: OutputWeighingRow }) {
   const dispatch = useDispatch<any>()
   const { financial, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
@@ -39,11 +43,11 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
   }, [])
 
   useEffect(() => {
-    setNetWeighing(grossWeighing-tare)
+    setNetWeighing(grossWeighing - tare)
   }, [grossWeighing, tare])
 
   useEffect(() => {
-    setDiscount(impurity==0? 0: impurity-1)
+    setDiscount(impurity == 0 ? 0 : impurity - 1)
   }, [impurity])
 
   useEffect(() => {
@@ -54,15 +58,36 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
   //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
   // }, [seasons])
 
-  useEffect(()=>{
-    setTotalDiscount(discount+humidityDiscount)
-  }, [discount,humidityDiscount])
+  useEffect(() => {
+    if (manualOutputWeigh?.id) {
+      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === manualOutputWeigh?.cultivation_id))
+      const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualOutputWeigh.silo_id)[0];
+      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === manualOutputWeigh?.contract_id))
+      setSelectedSilo(silum);
+      setCarPlate(manualOutputWeigh?.car_plate!);
+      setDriver(manualOutputWeigh?.car_driver!);
+      setCompany(manualOutputWeigh?.shipping_company!);
+      setGrossWeighing(manualOutputWeigh?.gross_weight!);
+      setNetWeighing(manualOutputWeigh?.net_weight!);
+      setHumidity(manualOutputWeigh?.humidity! / 100);
+      setImpurity(manualOutputWeigh?.impurity! / 100);
+      setDiscount(manualOutputWeigh?.discount! / 100);
+      setTotalWeighning(manualOutputWeigh?.final_weight!);
+      setHumidityDiscount(Number(manualOutputWeigh?.humidity_discount!));
+      setTare(manualOutputWeigh?.tare_weight!);
+      setObservation(manualOutputWeigh?.observations!);
+    }
+  }, [manualOutputWeigh]);
 
-  useEffect(()=>{
-    setTotalWeighning(netWeighing*((100-totalDiscount)/100))
+  useEffect(() => {
+    setTotalDiscount(discount + humidityDiscount)
+  }, [discount, humidityDiscount])
+
+  useEffect(() => {
+    setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
 
-  const Save = () =>{
+  const Save = () => {
     const manualOutput = {
       weighings: {
         contract_id: selectedContract.id,
@@ -70,10 +95,10 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
         silo_id: selectedSilo.id,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity*100,
-        impurity: impurity*100,
-        discount: discount*100,
-        final_weight: totalWeighning*1000,
+        humidity: humidity * 100,
+        impurity: impurity * 100,
+        discount: discount * 100,
+        final_weight: totalWeighning * 1000,
         type: "Saída",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
@@ -92,26 +117,31 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-          <Col md={1}>
-            <Button
-              variant="danger"
-              onClick={() => {
-                onHandleRemove(index)
-              }}
-              style={{ marginTop: '45%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
-          </Col>
+        <Col md={1}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              onHandleRemove(index)
+            }}
+            style={{ marginTop: '45%' }}
+          >
+            <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+          </Button>
+        </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color:'#000'}}>Cultura</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
+              selected={financial?.cultivations.filter((cultivation: Cultivation) => cultivation?.id === selectedCultivation?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedCultivation?.id}
               onChange={(selected: any) => {
                 setSelectedCultivation(selected[0]);
               }}
-              options={financial.cultivations.map((cultivation: Cultivation) => {
+              options={financial?.cultivations.map((cultivation: Cultivation) => {
                 return { id: cultivation.id, label: cultivation.name, ...cultivation }
               })}
             />
@@ -119,9 +149,14 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Contratos</Form.Label>
+            <Form.Label style={{ color: '#000' }}>Contratos</Form.Label>
             <Typeahead
               id="contract"
+              selected={financial?.contracts.filter((contract: any) => contract?.id === selectedContract?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedContract?.id}
               onChange={(selected: any) => {
                 setSelectedContract(selected[0]);
               }}
@@ -132,10 +167,15 @@ export function NewManualOutputWeighing({onHandleRemove, onHandleUpdate, index}:
           </Form.Group>
         </Col>
         <Col>
-        <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Silo</Form.Label>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
+              selected={commerce?.silo.filter((silo: Silo) => silo?.id === selectedSilo?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
                 setSelectedSilo(selected[0]);
               }}
