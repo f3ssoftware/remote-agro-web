@@ -12,8 +12,8 @@ import { ManualSeparateWeighing } from "../models/ManualSepareteWeighing";
 import { AutoInputWeighing } from "../models/AutoInputWeighing";
 import { InputWeighing } from "../pages/Commerce/modals/components/InputWeighing";
 import { WeighingRow } from "../models/WeighingRow";
-import { WeighingRowType } from "../utils/WeighingRowType.enum";
 import { OutputWeighingRow } from "../models/OutputWeighingRow";
+import { WeighingRowType } from "../utils/WeighingRowType.enum";
 
 
 const initialSilo: Silo[] = [];
@@ -388,6 +388,7 @@ export function asyncFetchSiloData() {
                     }
                 });
             dispatch(setSilo(result.data));
+            return 0;
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,
@@ -480,7 +481,7 @@ export function asyncDeleteContract(id: number) {
     };
 }
 
-export function asyncDeleteInputWeighing(id: number) {
+export function asyncDeleteInputWeighing(id: number, index: number) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.delete(
@@ -491,6 +492,7 @@ export function asyncDeleteInputWeighing(id: number) {
                     },
                 }
             );
+            dispatch(removeInputWeighRow({ index }));
             dispatch(
                 getMessages({
                     message: "Pesagem excluída com sucesso",

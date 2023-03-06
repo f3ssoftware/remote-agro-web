@@ -13,6 +13,7 @@ import { OutputWeighingRow } from '../../../../models/OutputWeighingRow';
 
 
 
+
 moment.locale('pt-BR');
 const localizer = momentLocalizer(moment);
 
@@ -35,8 +36,8 @@ export function WeighingCalendar() {
       commerce?.inputWeighing?.map((e: InputWeighingRow[]) => {
         return {
           title: `ENTRADA: ${e?.length} ${e?.length > 1 ? 'pesagens' : 'pesagem'}`,
-          start: new Date(e[0].weighing_date!),
-          end: new Date(e[0].weighing_date!),
+          start: new Date(e[0]?.weighing_date!),
+          end: new Date(e[0]?.weighing_date!),
           weighings: e,
           type: 'INPUT'
         }

@@ -21,7 +21,7 @@ export function AutoInputDeleteConfirmation({
 
   const deleteAutoInputWeighing = (id: number) => {
     if (id) {
-      dispatch(asyncDeleteInputWeighing(id))
+      dispatch(asyncDeleteInputWeighing(id, index));
     } else {
       dispatch(removeInputWeighRow({ index }));
     }

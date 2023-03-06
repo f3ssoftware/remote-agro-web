@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Modal, Button, Row, Col, Form, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../..'
 import { selectSeason } from '../../stores/seasons.store'
 import { SeasonsSelectionModal } from './Modals/SeasonsSelectionModal'
+import { asyncFetchInputWeighingData, asyncFetchOutputWeighingData, asyncFetchWeighingData } from '../../stores/commerce.store'
 
 export function SeasonSelection({ show, handleClose }: any) {
   const { seasons } = useSelector((state: RootState) => state)
@@ -16,9 +17,14 @@ export function SeasonSelection({ show, handleClose }: any) {
   }
   const [showSeasonsSelectionModal, setShowSeasonsSelectionModal] = useState(false)
 
+
+  useEffect(() => {
+    dispatch(asyncFetchInputWeighingData(seasons?.selectedSeason?.id));
+    dispatch(asyncFetchOutputWeighingData(seasons?.selectedSeason?.id));
+  }, [seasons])
   return (
     <Container>
-      <Modal backdrop = {'static'} show={show} onHide={handleClose}>
+      <Modal backdrop={'static'} show={show} onHide={handleClose}>
         <Modal.Header
           closeButton
           style={{ backgroundColor: '#7C5529', border: 'none' }}
@@ -33,6 +39,7 @@ export function SeasonSelection({ show, handleClose }: any) {
                   Selecione a temporada
                 </Form.Label>
                 <Form.Select
+                  value={JSON.stringify(seasons.selectedSeason)}
                   aria-label=""
                   onChange={(e) => {
                     // dispatch(selectSeason(e.target.value))

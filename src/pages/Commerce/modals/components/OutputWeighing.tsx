@@ -9,7 +9,6 @@ import { RootState } from '../../../..'
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 
-
 export function OutputWeighing() {
   const [newManualOutputWeighing, setNewManualOutputWeighing] = useState<any[]>([])
   const [newAutoOutputWeighing, setNewAutoOutputWeighing] = useState([new ManualOutputWeighing()])
@@ -73,7 +72,7 @@ export function OutputWeighing() {
                 }
                 case WeighingRowType.AUTOMATIC: {
                   return (
-                    <NewAutoOutputWeighing onHandleRemove={onRemoveItemA} index={index} key={index} onHandleUpdate={onUpdateItemA}></NewAutoOutputWeighing>
+                    <NewAutoOutputWeighing autoOutputWeighing={row} onHandleRemove={onRemoveItemA} index={index} key={index} onHandleUpdate={onUpdateItemA}></NewAutoOutputWeighing>
                   )
                 }
                 default: {

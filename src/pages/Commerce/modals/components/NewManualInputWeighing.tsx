@@ -38,11 +38,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
   const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
 
   useEffect(() => {
-    dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
-    dispatch(asyncFetchSiloData())
-    setSelectedFarm(farm?.farms[0])
-    dispatch(selectAFarm(farm?.farms[0]))
-    // setSelectedPlot(farm?.farms[0].fields[0]);
+    fetchData();
   }, [])
 
   useEffect(() => {
@@ -59,9 +55,6 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
 
   useEffect(() => {
     dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivares' }));
-    // setSelectedFarm(null);
-    // setSelectedPlot(null);
-    // setSelectedCultivar(null);
   }, [seasons])
 
   useEffect(() => {
@@ -72,31 +65,52 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
     setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
 
-  useEffect(() => {
-    if (manualInputWeigh?.id) {
-      const f: any = farm?.farms.filter((farm: any) => farm.id === manualInputWeigh?.farm_id)[0];
-      setSelectedFarm(f);
-      const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
-      setSelectedPlot(p);
-      const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
-      setSelectedCultivar(c);
-      const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualInputWeigh.silo_id)[0];
-      setSilo(silum);
-      setCarPlate(manualInputWeigh?.car_plate!);
-      setDriver(manualInputWeigh?.car_driver!);
-      setCompany(manualInputWeigh?.shipping_company!);
-      setGrossWeighing(manualInputWeigh?.gross_weight!);
-      setNetWeighing(manualInputWeigh?.net_weight!);
-      setHumidity(manualInputWeigh?.humidity! / 100);
-      setImpurity(manualInputWeigh?.impurity! / 100);
-      setDiscount(manualInputWeigh?.discount! / 100);
-      setTotalWeighning(manualInputWeigh?.final_weight!);
-      setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
-      setTare(manualInputWeigh?.tare_weight!);
-      setObservation(manualInputWeigh?.observations!);
-    }
-  }, [manualInputWeigh]);
+  // useEffect(() => {
+  //   if (manualInputWeigh?.id) {
+  //     fillFormEdit();
+  //   }
+  // }, [manualInputWeigh]);
 
+  const fetchData = async () => {
+    await dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
+    await dispatch(asyncFetchSiloData());
+    if (!manualInputWeigh?.id) {
+      setSelectedFarm(farm?.farms[0])
+      dispatch(selectAFarm(farm?.farms[0]));
+    }
+  }
+
+  const fillFormEdit = () => {
+    const f: any = farm?.farms.filter((farm: any) => farm.id === manualInputWeigh?.farm_id)[0];
+    setSelectedFarm(f);
+    const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
+    setSelectedPlot(p);
+    const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
+    setSelectedCultivar(c);
+    setCarPlate(manualInputWeigh?.car_plate!);
+    setDriver(manualInputWeigh?.car_driver!);
+    setCompany(manualInputWeigh?.shipping_company!);
+    setGrossWeighing(manualInputWeigh?.gross_weight!);
+    setNetWeighing(manualInputWeigh?.net_weight!);
+    setHumidity(manualInputWeigh?.humidity! / 100);
+    setImpurity(manualInputWeigh?.impurity! / 100);
+    setDiscount(manualInputWeigh?.discount! / 100);
+    setTotalWeighning(manualInputWeigh?.final_weight!);
+    setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
+    setTare(manualInputWeigh?.tare_weight!);
+    setObservation(manualInputWeigh?.observations!);
+  }
+
+  useEffect(() => {
+    fillFormEdit();
+  }, [farm]);
+
+  useEffect(() => {
+    const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
+    if(silum) {
+      setSilo(silum);
+    }
+  }, [commerce]);
   const Save = () => {
     const manualInput = {
       weighings: {

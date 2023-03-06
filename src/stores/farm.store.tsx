@@ -42,6 +42,8 @@ export function asyncFetchFarms(params?: any) {
             dispatch(
                 setFarms(result.data)
             );
+
+            return 0;
         } catch (err: any) {
             dispatch(
                 getMessages({

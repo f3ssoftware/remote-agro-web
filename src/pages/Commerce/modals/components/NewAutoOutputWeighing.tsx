@@ -11,9 +11,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 import { Silo } from '../../../../models/Silo'
+import { OutputWeighingRow } from '../../../../models/OutputWeighingRow';
 
 
-export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index }: { onHandleRemove: any, onHandleUpdate: any, index: number }) {
+export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, autoOutputWeighing }: { onHandleRemove: any, onHandleUpdate: any, index: number, autoOutputWeighing: OutputWeighingRow }) {
   const dispatch = useDispatch<any>()
   const { financial, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
