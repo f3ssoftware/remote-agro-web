@@ -13,6 +13,7 @@ import { AutoInputWeighing } from "../models/AutoInputWeighing";
 import { InputWeighing } from "../pages/Commerce/modals/components/InputWeighing";
 import { WeighingRow } from "../models/WeighingRow";
 import { WeighingRowType } from "../utils/WeighingRowType.enum";
+import { OutputWeighingRow } from "../models/OutputWeighingRow";
 
 
 const initialSilo: Silo[] = [];
@@ -20,10 +21,13 @@ const initialEditContracts: Contract = {}
 const initialRowsInputW: WeighingRow[] = [{
     rowType: WeighingRowType.AUTOMATIC
 }];
+const initialRowsOutputW: WeighingRow[] = [{
+    rowType: WeighingRowType.AUTOMATIC
+}];
 const initialTransferWeighing: TransferWeighing[] = []
 const initialInputWeighing: InputWeighingRow[][] = [];
 const initialAutoInputWeighing: AutoInputWeighing = {}
-const initialOutputWeighing: ManualOutputWeighing[] = []
+const initialOutputWeighing: OutputWeighingRow[][] = []
 const initialSeparateWeighing: ManualSeparateWeighing[] = []
 const initialInputWeighingData: InputWeighingRow = {}
 
@@ -38,6 +42,7 @@ const commerceStore = createSlice({
         inputWeighingRows: initialRowsInputW,
         autoInputWeighing: initialAutoInputWeighing,
         outputWeighing: initialOutputWeighing,
+        outputWeighingRows: initialRowsOutputW,
         separateWeighing: initialSeparateWeighing,
         inputWeighingData: initialInputWeighingData
     },
@@ -70,9 +75,6 @@ const commerceStore = createSlice({
         setSeparateWeighing(state, action) {
             state.separateWeighing = action.payload
         },
-        setInputWeighingData(state, action) {
-            state.inputWeighingData = action.payload;
-        },
         addInputWeighRow(state, action) {
             const inputWeighingRows = [...state.inputWeighingRows].concat(action.payload);
             state.inputWeighingRows = inputWeighingRows;
@@ -98,12 +100,43 @@ const commerceStore = createSlice({
                 }
                 return rowData;
             });
+        },
+        resetInputWeighingRows(state, action) {
+            state.inputWeighingRows = initialRowsInputW;
+        },
+        addOutputWeighRow(state, action) {
+            const outputWeighingRows = [...state.outputWeighingRows].concat(action.payload);
+            state.outputWeighingRows = outputWeighingRows;
+        },
+        removeOutputWeighRow(state, action) {
+            const outputWeighingRows = [...state.outputWeighingRows];
+            outputWeighingRows.splice(action.payload.index, 1);
+            state.outputWeighingRows = outputWeighingRows;
+        },
+        updateOutputWeighRow(state, action) {
+            const { index, outputWeighRow } = action.payload;
+            const outputWeighingRows = [...state.outputWeighingRows];
+            outputWeighingRows[index] = outputWeighRow;
+            state.outputWeighingRows = outputWeighingRows;
+        },
+        setOutputWeighingRows(state, action) {
+            state.outputWeighingRows = action.payload.map((row: OutputWeighingRow, index: number) => {
+                const rowData: OutputWeighingRow = { ...row };
+                if (row.id && row.mode === 'Manual') {
+                    rowData.rowType = WeighingRowType.MANUAL;
+                } else if (!row.id) {
+                    rowData.rowType = WeighingRowType.AUTOMATIC;
+                }
+                return rowData;
+            });
+        },
+        resetOutputWeighingRows(state, action) {
+            state.inputWeighingRows = initialRowsInputW;
         }
-
     },
 });
 
-export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing, setInputWeighingData, addInputWeighRow, removeInputWeighRow, updateInputWeighRow, setInputWeighingRows } =
+export const { setPlots, setSilo, setEditContracts, setTransferWeighing, setInputWeighing, setAutoInputWeighing, setOutputWeighing, setSeparateWeighing, addInputWeighRow, removeInputWeighRow, updateInputWeighRow, setInputWeighingRows, resetInputWeighingRows } =
     commerceStore.actions;
 export default commerceStore.reducer;
 
@@ -222,6 +255,29 @@ export function asyncFetchInputWeighingData(seasonId: number) {
                     }
                 });
             dispatch(setInputWeighing(result.data));
+        } catch (err: any) {
+            dispatch(getMessages({
+                message: err.response.data.message,
+                type: "error",
+            }));
+        }
+    }
+}
+
+export function asyncFetchOutputWeighingData(seasonId: number) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const result = await axios.get(`https://remoteapi.murilobotelho.com.br/weighings`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                    params: {
+                        type: 'Saída',
+                        season_id: seasonId
+                    }
+                });
+            dispatch(setOutputWeighing(result.data));
         } catch (err: any) {
             dispatch(getMessages({
                 message: err.response.data.message,

@@ -3,27 +3,31 @@ import { Button, Col, Container, Row } from 'react-bootstrap'
 import { NewManualOutputWeighing } from './NewManualOutputWeighing'
 import { ManualOutputWeighing } from '../../../../models/ManualOutputWeighing'
 import { NewAutoOutputWeighing } from './NewAutoOutputWeighing'
+import { setOutputWeighing } from '../../../../stores/commerce.store'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../..'
+import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 
 
 export function OutputWeighing() {
   const [newManualOutputWeighing, setNewManualOutputWeighing] = useState<any[]>([])
   const [newAutoOutputWeighing, setNewAutoOutputWeighing] = useState([new ManualOutputWeighing()])
+  const [weighingDate, setWeighingDate] = useState<Date>();
+  const { commerce } = useSelector((state: RootState) => state);
+  const [outputWeighingRows, setOutputWeighingRows] = useState<OutputWeighingRow[]>();
 
-
-
-
-
-    const onRemoveItem = (index: number) => {
-      const mOutputArr = [...newManualOutputWeighing];
-      mOutputArr.splice(index, 1);
-      setNewManualOutputWeighing(mOutputArr);
+  const onRemoveItem = (index: number) => {
+    const mOutputArr = [...newManualOutputWeighing];
+    mOutputArr.splice(index, 1);
+    setNewManualOutputWeighing(mOutputArr);
   }
 
   const onRemoveItemA = (index: number) => {
     const aOutputArr = [...newAutoOutputWeighing];
     aOutputArr.splice(index, 1);
     setNewAutoOutputWeighing(aOutputArr);
-}
+  }
 
   const onUpdateItem = (mOutput: ManualOutputWeighing, index: number) => {
     const mOutputArr = [...newManualOutputWeighing];
@@ -41,22 +45,41 @@ export function OutputWeighing() {
 
   }
 
+  useEffect(() => {
+    setOutputWeighingRows(commerce?.outputWeighingRows);
+  }, [commerce]);
+
   return (
     <Container>
       <div className="main-boxW">
         <Row>
           <Col md={4} className="title-boxW">
-            <span>Pesagens de Saída</span>
+            <span>Pesagens de Saída - {weighingDate?.toLocaleDateString('pt-BR')}</span>
           </Col>
         </Row>
         <div>
           <Row style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}>
-            {newManualOutputWeighing.map((newMOutput, index) => {
-                return <NewManualOutputWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualOutputWeighing>
+            {outputWeighingRows?.map((row: OutputWeighingRow, index: number) => {
+              switch (row.rowType) {
+                case WeighingRowType.MANUAL: {
+                  return <NewManualOutputWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualOutputWeighing>
+                }
+                case WeighingRowType.AUTOMATIC: {
+                  return (
+                    <NewAutoOutputWeighing onHandleRemove={onRemoveItemA} index={index} key={index} onHandleUpdate={onUpdateItemA}></NewAutoOutputWeighing>
+                  )
+                }
+                default: {
+
+                }
+              }
+            })}
+            {/* {newManualOutputWeighing.map((newMOutput, index) => {
+              return <NewManualOutputWeighing onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewManualOutputWeighing>
             })}
             {newAutoOutputWeighing.map((newAOutput, index) => {
-                return <NewAutoOutputWeighing onHandleRemove={onRemoveItemA} index={index} key={index} onHandleUpdate={onUpdateItemA}></NewAutoOutputWeighing>
-            })}
+              return <NewAutoOutputWeighing onHandleRemove={onRemoveItemA} index={index} key={index} onHandleUpdate={onUpdateItemA}></NewAutoOutputWeighing>
+            })} */}
           </Row>
           <div
             style={{

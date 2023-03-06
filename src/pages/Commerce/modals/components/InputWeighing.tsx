@@ -26,7 +26,7 @@ export function InputWeighing() {
 
   useEffect(() => {
     const firstWeighing = commerce?.inputWeighingRows[0] as InputWeighingRow;
-    if (firstWeighing) {
+    if (firstWeighing?.weighing_date) {
       setWeighingDate(new Date(firstWeighing.weighing_date!));
     } else {
       setWeighingDate(new Date());

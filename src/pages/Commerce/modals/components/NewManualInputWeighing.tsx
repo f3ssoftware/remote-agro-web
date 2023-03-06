@@ -73,26 +73,28 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
   }, [netWeighing, totalDiscount])
 
   useEffect(() => {
-    const f: any = farm?.farms.filter((farm: any) => farm.id === manualInputWeigh?.farm_id)[0];
-    setSelectedFarm(f);
-    const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
-    setSelectedPlot(p);
-    const c: any = p.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
-    setSelectedCultivar(c);
-    const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualInputWeigh.silo_id)[0];
-    setSilo(silum);
-    setCarPlate(manualInputWeigh?.car_plate!);
-    setDriver(manualInputWeigh?.car_driver!);
-    setCompany(manualInputWeigh?.shipping_company!);
-    setGrossWeighing(manualInputWeigh?.gross_weight!);
-    setNetWeighing(manualInputWeigh?.net_weight!);
-    setHumidity(manualInputWeigh?.humidity! / 100);
-    setImpurity(manualInputWeigh?.impurity! / 100);
-    setDiscount(manualInputWeigh?.discount! / 100);
-    setTotalWeighning(manualInputWeigh?.final_weight!);
-    setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
-    setTare(manualInputWeigh?.tare_weight!);
-    setObservation(manualInputWeigh?.observations!);
+    if (manualInputWeigh?.id) {
+      const f: any = farm?.farms.filter((farm: any) => farm.id === manualInputWeigh?.farm_id)[0];
+      setSelectedFarm(f);
+      const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
+      setSelectedPlot(p);
+      const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
+      setSelectedCultivar(c);
+      const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualInputWeigh.silo_id)[0];
+      setSilo(silum);
+      setCarPlate(manualInputWeigh?.car_plate!);
+      setDriver(manualInputWeigh?.car_driver!);
+      setCompany(manualInputWeigh?.shipping_company!);
+      setGrossWeighing(manualInputWeigh?.gross_weight!);
+      setNetWeighing(manualInputWeigh?.net_weight!);
+      setHumidity(manualInputWeigh?.humidity! / 100);
+      setImpurity(manualInputWeigh?.impurity! / 100);
+      setDiscount(manualInputWeigh?.discount! / 100);
+      setTotalWeighning(manualInputWeigh?.final_weight!);
+      setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
+      setTare(manualInputWeigh?.tare_weight!);
+      setObservation(manualInputWeigh?.observations!);
+    }
   }, [manualInputWeigh]);
 
   const Save = () => {
