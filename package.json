@@ -27,7 +27,7 @@
     "react-big-calendar": "^1.6.5",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-sidebar-menu": "^2.0.3",
-    "react-bootstrap-typeahead": "^6.0.0",
+    "react-bootstrap-typeahead": "^6.0.2",
     "react-chartjs-2": "^4.3.1",
     "react-currency-input-field": "^3.6.9",
     "react-datepicker": "^4.8.0",

@@ -131,12 +131,12 @@ export function NewAutoInputWeighing({
         weight_date: new Date().toISOString()
       },
     }
-    if(!autoInputWeighing?.id) {
+    if (!autoInputWeighing?.id) {
       dispatch(asyncInputWeighing(autoInput, index, WeighingRowType.AUTOMATIC));
     } else {
-      dispatch(asyncUpdateInputWeighing(autoInput, index, WeighingRowType.AUTOMATIC));
+      dispatch(asyncUpdateInputWeighing(autoInputWeighing.id, autoInput, index, WeighingRowType.AUTOMATIC));
     }
-    
+
   }
 
   return (

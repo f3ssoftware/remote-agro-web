@@ -79,7 +79,7 @@ const commerceStore = createSlice({
         },
         removeInputWeighRow(state, action) {
             const inputWeighingRows = [...state.inputWeighingRows];
-            inputWeighingRows.splice(action.payload.index);
+            inputWeighingRows.splice(action.payload.index, 1);
             state.inputWeighingRows = inputWeighingRows;
         },
         updateInputWeighRow(state, action) {
@@ -88,16 +88,16 @@ const commerceStore = createSlice({
             inputWeighingRows[index] = inputWeighRow;
             state.inputWeighingRows = inputWeighingRows;
         },
-        setInputWeighingRows(state,action) {
+        setInputWeighingRows(state, action) {
             state.inputWeighingRows = action.payload.map((row: InputWeighingRow, index: number) => {
                 const rowData: InputWeighingRow = { ...row };
                 if (row.id && row.mode === 'Manual') {
-                  rowData.rowType = WeighingRowType.MANUAL;
-                } else if(!row.id){
-                  rowData.rowType = WeighingRowType.AUTOMATIC;
+                    rowData.rowType = WeighingRowType.MANUAL;
+                } else if (!row.id) {
+                    rowData.rowType = WeighingRowType.AUTOMATIC;
                 }
                 return rowData;
-              });
+            });
         }
 
     },
@@ -182,10 +182,10 @@ export function asyncInputWeighing(input: any, index: number, rowType: WeighingR
     }
 }
 
-export function asyncUpdateInputWeighing(input: any, index: number, rowType: WeighingRowType) {
+export function asyncUpdateInputWeighing(id: number, input: any, index: number, rowType: WeighingRowType) {
     return async function (dispatch: AppDispatch) {
         try {
-            const result = await axios.put(`https://remoteapi.murilobotelho.com.br/weighings`,
+            const result = await axios.put(`https://remoteapi.murilobotelho.com.br/weighings/${id}`,
                 input,
                 {
                     headers: {
