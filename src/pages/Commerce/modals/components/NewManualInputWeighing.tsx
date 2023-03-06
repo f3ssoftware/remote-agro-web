@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncInputWeighing, asyncUpdateInputWeighing, removeInputWeighRow } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncInputWeighing, asyncUpdateInputWeighing, removeInputWeighRow, setSilo } from '../../../../stores/commerce.store'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -12,13 +12,14 @@ import { InputWeighingRow } from '../../../../models/InputWeighingRow'
 import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Cultivar } from '../../../../models/Cultivar'
+import { Silo } from '../../../../models/Silo'
 
 export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove, onHandleUpdate }: { index: number, manualInputWeigh: InputWeighingRow, onHandleRemove: any, onHandleUpdate: any }) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
-  const [selectedFarm, setSelectedFarm]: any = useState({})
-  const [selectedPlot, setSelectedPlot]: any = useState({})
-  const [selectedSilo, setSelectedSilo]: any = useState({})
+  const [selectedFarm, setSelectedFarm]: any = useState<any>({})
+  const [selectedPlot, setSelectedPlot]: any = useState<any>({})
+  const [selectedSilo, setSelectedSilo]: any = useState<any>({})
   const [selectedCultivar, setSelectedCultivar]: any = useState({})
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
@@ -58,9 +59,9 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
 
   useEffect(() => {
     dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivares' }));
-    setSelectedFarm(null);
-    setSelectedPlot(null);
-    setSelectedCultivar(null);
+    // setSelectedFarm(null);
+    // setSelectedPlot(null);
+    // setSelectedCultivar(null);
   }, [seasons])
 
   useEffect(() => {
@@ -72,9 +73,26 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
   }, [netWeighing, totalDiscount])
 
   useEffect(() => {
-    setSelectedFarm(farm?.farms.filter((farm: any) => farm.id === manualInputWeigh.farm_id)[0]);
-    setSelectedPlot(selectedFarm?.fields?.filter((plot: any) => plot.id === manualInputWeigh.field_id)[0]);
-    setSelectedCultivar(selectedPlot?.cultivares?.filter((cultivar: Cultivar) => cultivar.id === manualInputWeigh.cultivar_id)[0]);
+    const f: any = farm?.farms.filter((farm: any) => farm.id === manualInputWeigh?.farm_id)[0];
+    setSelectedFarm(f);
+    const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
+    setSelectedPlot(p);
+    const c: any = p.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
+    setSelectedCultivar(c);
+    const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualInputWeigh.silo_id)[0];
+    setSilo(silum);
+    setCarPlate(manualInputWeigh?.car_plate!);
+    setDriver(manualInputWeigh?.car_driver!);
+    setCompany(manualInputWeigh?.shipping_company!);
+    setGrossWeighing(manualInputWeigh?.gross_weight!);
+    setNetWeighing(manualInputWeigh?.net_weight!);
+    setHumidity(manualInputWeigh?.humidity! / 100);
+    setImpurity(manualInputWeigh?.impurity! / 100);
+    setDiscount(manualInputWeigh?.discount! / 100);
+    setTotalWeighning(manualInputWeigh?.final_weight!);
+    setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
+    setTare(manualInputWeigh?.tare_weight!);
+    setObservation(manualInputWeigh?.observations!);
   }, [manualInputWeigh]);
 
   const Save = () => {
@@ -101,12 +119,12 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
         car_driver: driver
       }
     }
-    if(!manualInputWeigh.id) {
+    if (!manualInputWeigh.id) {
       dispatch(asyncInputWeighing(manualInput, index, WeighingRowType.MANUAL));
     } else {
-      dispatch(asyncUpdateInputWeighing(manualInput, index, WeighingRowType.MANUAL));
+      dispatch(asyncUpdateInputWeighing(manualInputWeigh.id, manualInput, index, WeighingRowType.MANUAL));
     }
-    
+
   }
 
 
@@ -118,16 +136,16 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
             <Typeahead
               id="farm"
-              clearButton={true}
-              labelKey="label"
-              defaultSelected={farm?.farms.filter((option: any) => option.label === selectedFarm?.label)}
+              selected={farm?.farms.filter((farm: any) => farm?.id === selectedFarm?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedFarm?.id}
               onChange={(selected: any) => {
-                console.log(selected[0]);
                 setSelectedFarm(selected[0])
               }}
-              
               options={farm?.farms?.map((farm: any) => {
-                return { id: farm.id, label: farm.name, ...farm }
+                return { ...farm, label: farm.label }
               })}
             />
           </Form.Group>
@@ -137,6 +155,9 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
             <Form.Label style={{ color: '#000' }}>Talhões</Form.Label>
             {selectedFarm?.fields?.length > 0 ? <Typeahead
               id="field"
+              selected={selectedFarm?.fields.filter((field: any) => field?.id === selectedPlot?.id)}
+              labelKey={(selected: any) => selected.name}
+              isInvalid={!selectedPlot?.id}
               onChange={(selected: any) => {
                 setSelectedPlot(selected[0])
               }}
@@ -150,6 +171,9 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
             <Form.Label style={{ color: '#000' }}>Cultivar</Form.Label>
             {selectedPlot?.cultivares?.length > 0 ? <Typeahead
               id="cultivar"
+              selected={selectedPlot?.cultivares?.filter((c: any) => c?.id === selectedCultivar?.id)}
+              labelKey={(selected: any) => selected.name}
+              isInvalid={!selectedCultivar?.id}
               onChange={(selected: any) => {
                 setSelectedCultivar(selected[0])
               }}

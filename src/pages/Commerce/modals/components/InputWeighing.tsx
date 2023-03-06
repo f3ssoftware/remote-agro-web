@@ -32,18 +32,18 @@ export function InputWeighing() {
       setWeighingDate(new Date());
     }
 
-    const weighingRows = commerce?.inputWeighingRows.map((row: InputWeighingRow, index: number) => {
-      const rowData: InputWeighingRow = { ...row };
-      if (row.id && row.mode === 'Manual') {
-        rowData.rowType = WeighingRowType.MANUAL;
-      } else {
-        rowData.rowType = WeighingRowType.AUTOMATIC;
-      }
-      return rowData;
-    });
+    // const weighingRows = commerce?.inputWeighingRows.map((row: InputWeighingRow, index: number) => {
+    //   const rowData: InputWeighingRow = { ...row };
+    //   if (row.id && row.mode === 'Manual') {
+    //     rowData.rowType = WeighingRowType.MANUAL;
+    //   } else if(!row.id){
+    //     rowData.rowType = WeighingRowType.AUTOMATIC;
+    //   }
+    //   return rowData;
+    // });
 
     setInputWeighingRows(
-      weighingRows
+      commerce?.inputWeighingRows
     );
   }, [commerce]);
 
