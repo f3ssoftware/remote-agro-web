@@ -294,7 +294,7 @@ export function NewAutoInputWeighing({
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-            {grossWeighing == 0 ? (
+            {grossWeighing == null ? (
               <Button
                 variant="success"
                 onClick={() => {
@@ -311,7 +311,7 @@ export function NewAutoInputWeighing({
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
-            {tare == 0 ? (
+            {tare == null ? (
               <Button
                 variant="success"
                 onClick={() => {
