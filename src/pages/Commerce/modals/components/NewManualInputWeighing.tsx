@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncInputWeighing, asyncUpdateInputWeighing, removeInputWeighRow, setSilo } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncInputWeighing, asyncUpdateInputWeighing, removeInputWeighRow } from '../../../../stores/commerce.store'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -86,6 +86,10 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
     const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
     setSelectedPlot(p);
     const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
+    const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
+    if (silum) {
+      setSelectedSilo(silum);
+    }
     setSelectedCultivar(c);
     setCarPlate(manualInputWeigh?.car_plate!);
     setDriver(manualInputWeigh?.car_driver!);
@@ -95,7 +99,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
     setHumidity(manualInputWeigh?.humidity! / 100);
     setImpurity(manualInputWeigh?.impurity! / 100);
     setDiscount(manualInputWeigh?.discount! / 100);
-    setTotalWeighning(manualInputWeigh?.final_weight!);
+    setTotalWeighning(manualInputWeigh?.final_weight! / 1000);
     setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
     setTare(manualInputWeigh?.tare_weight!);
     setObservation(manualInputWeigh?.observations!);
@@ -105,12 +109,12 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
     fillFormEdit();
   }, [farm]);
 
-  useEffect(() => {
-    const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
-    if (silum) {
-      setSilo(silum);
-    }
-  }, [commerce]);
+  // useEffect(() => {
+  //   const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
+  //   if (silum) {
+  //     setSilo(silum);
+  //   }
+  // }, [commerce]);
   const Save = () => {
     const manualInput = {
       weighings: {
