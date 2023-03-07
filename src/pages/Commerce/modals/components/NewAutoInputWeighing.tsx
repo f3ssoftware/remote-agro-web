@@ -21,6 +21,8 @@ import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmation
 import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { InputWeighingRow } from '../../../../models/InputWeighingRow'
+import { Cultivar } from '../../../../models/Cultivar'
+import { Silo } from '../../../../models/Silo'
 
 export function NewAutoInputWeighing({
   onHandleRemove,
@@ -103,6 +105,39 @@ export function NewAutoInputWeighing({
     setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
 
+  useEffect(() => {
+    fillFormEdit();
+  }, [farm]);
+
+  useEffect(() => {
+    const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === autoInputWeighing?.silo_id)[0];
+    if (silum) {
+      setSelectedSilo(silum);
+    }
+  }, [commerce]);
+
+  const fillFormEdit = () => {
+    const f: any = farm?.farms.filter((farm: any) => farm.id === autoInputWeighing?.farm_id)[0];
+    setSelectedFarm(f);
+    const p: any = f?.fields?.filter((plot: any) => plot.id === autoInputWeighing?.field_id)[0]
+    setSelectedPlot(p);
+    const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === autoInputWeighing?.cultivar_id)[0]
+    setSelectedCultivar(c);
+    setCarPlate(autoInputWeighing?.car_plate!);
+    setDriver(autoInputWeighing?.car_driver!);
+    setCompany(autoInputWeighing?.shipping_company!);
+    setGrossWeighing(autoInputWeighing?.gross_weight!);
+    setNetWeighing(autoInputWeighing?.net_weight!);
+    setHumidity(autoInputWeighing?.humidity! / 100);
+    setImpurity(autoInputWeighing?.impurity! / 100);
+    setDiscount(autoInputWeighing?.discount! / 100);
+    setTotalWeighning(autoInputWeighing?.final_weight!);
+    setHumidityDiscount(Number(autoInputWeighing?.humidity_discount!));
+    setTare(autoInputWeighing?.tare_weight!);
+    setObservation(autoInputWeighing?.observations!);
+  }
+
+
   const Save = () => {
     const autoInput = {
       weighings: {
@@ -128,7 +163,7 @@ export function NewAutoInputWeighing({
         car_driver: driver,
         gross_weight_date: grossWeightDate,
         tare_weight_date: tareWeightDate,
-        weight_date: new Date().toISOString()
+        weighing_date: new Date().toISOString()
       },
     }
     if (!autoInputWeighing?.id) {
@@ -147,6 +182,11 @@ export function NewAutoInputWeighing({
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
             <Typeahead
               id="farm"
+              selected={farm?.farms.filter((farm: any) => farm?.id === selectedFarm?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedFarm?.id}
               onChange={(selected: any) => {
                 setSelectedFarm(selected[0])
               }}
@@ -162,6 +202,9 @@ export function NewAutoInputWeighing({
             {selectedFarm?.fields?.length > 0 ? (
               <Typeahead
                 id="field"
+                selected={selectedFarm?.fields.filter((field: any) => field?.id === selectedPlot?.id)}
+                labelKey={(selected: any) => selected.name}
+                isInvalid={!selectedPlot?.id}
                 onChange={(selected: any) => {
                   setSelectedPlot(selected[0])
                 }}
@@ -180,6 +223,9 @@ export function NewAutoInputWeighing({
             {selectedPlot?.cultivares?.length > 0 ? (
               <Typeahead
                 id="cultivar"
+                selected={selectedPlot?.cultivares?.filter((c: any) => c?.id === selectedCultivar?.id)}
+                labelKey={(selected: any) => selected.name}
+                isInvalid={!selectedCultivar?.id}
                 onChange={(selected: any) => {
                   setSelectedCultivar(selected[0])
                 }}
@@ -197,6 +243,9 @@ export function NewAutoInputWeighing({
             <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
+              selected={commerce?.silo?.filter((s: any) => s?.id === selectedSilo?.id)}
+              labelKey={(selected: any) => selected.name}
+              isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
                 setSelectedSilo(selected[0])
               }}

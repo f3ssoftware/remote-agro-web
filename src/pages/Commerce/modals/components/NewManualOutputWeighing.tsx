@@ -107,7 +107,8 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         tare_weight: tare,
         mode: "Manual",
         car_plate: carPlate,
-        car_driver: driver
+        car_driver: driver,
+        weighing_date: new Date().toISOString()
       }
     }
     dispatch(asyncOutputWeighing(manualOutput))

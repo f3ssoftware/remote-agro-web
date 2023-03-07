@@ -107,7 +107,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
 
   useEffect(() => {
     const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
-    if(silum) {
+    if (silum) {
       setSilo(silum);
     }
   }, [commerce]);
@@ -132,7 +132,8 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
         tare_weight: tare,
         mode: "Manual",
         car_plate: carPlate,
-        car_driver: driver
+        car_driver: driver,
+        weighing_date: new Date().toISOString()
       }
     }
     if (!manualInputWeigh.id) {
@@ -205,6 +206,9 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
             <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
+              selected={commerce?.silo?.filter((s: any) => s?.id === selectedSilo?.id)}
+              labelKey={(selected: any) => selected.name}
+              isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
                 setSelectedSilo(selected[0])
               }}

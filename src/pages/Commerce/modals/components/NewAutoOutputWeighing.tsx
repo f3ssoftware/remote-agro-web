@@ -92,7 +92,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         car_driver: driver,
         gross_weight_date: grossWeightDate,
         tare_weight_date: tareWeightDate,
-        weight_date: new Date().toISOString()
+        weighing_date: new Date().toISOString()
       }
     }
     dispatch(asyncOutputWeighing(manualOutput))

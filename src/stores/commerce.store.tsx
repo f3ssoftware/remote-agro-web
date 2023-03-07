@@ -93,10 +93,24 @@ const commerceStore = createSlice({
         setInputWeighingRows(state, action) {
             state.inputWeighingRows = action.payload.map((row: InputWeighingRow, index: number) => {
                 const rowData: InputWeighingRow = { ...row };
-                if (row.id && row.mode === 'Manual') {
-                    rowData.rowType = WeighingRowType.MANUAL;
+                if (row.id) {
+                    switch (row.mode) {
+                        case 'Manual': {
+                            rowData.rowType = WeighingRowType.MANUAL;
+                        } break;
+                        case 'Automático': {
+                            rowData.rowType = WeighingRowType.AUTOMATIC;
+                        }
+                    }
                 } else if (!row.id) {
-                    rowData.rowType = WeighingRowType.AUTOMATIC;
+                    switch (row.mode) {
+                        case 'Manual': {
+                            rowData.rowType = WeighingRowType.MANUAL;
+                        } break;
+                        case 'Automático': {
+                            rowData.rowType = WeighingRowType.AUTOMATIC;
+                        }
+                    }
                 }
                 return rowData;
             });
