@@ -131,7 +131,7 @@ export function NewAutoInputWeighing({
     setHumidity(autoInputWeighing?.humidity! / 100);
     setImpurity(autoInputWeighing?.impurity! / 100);
     setDiscount(autoInputWeighing?.discount! / 100);
-    setTotalWeighning(autoInputWeighing?.final_weight!);
+    setTotalWeighning(autoInputWeighing?.final_weight! / 1000);
     setHumidityDiscount(Number(autoInputWeighing?.humidity_discount!));
     setTare(autoInputWeighing?.tare_weight!);
     setObservation(autoInputWeighing?.observations!);
