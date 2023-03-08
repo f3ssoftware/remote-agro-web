@@ -3,13 +3,14 @@ import { Calendar, dateFnsLocalizer, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../..';
-import { asyncFetchInputWeighingData, asyncFetchOutputWeighingData, setInputWeighingRows, setOutputWeighing, setOutputWeighingRows } from '../../../../stores/commerce.store';
+import { asyncFetchInputWeighingData, asyncFetchOutputWeighingData, setInputWeighingRows, setSeparateWeighingRows, setOutputWeighingRows, asyncFetchSeparateWeighingData } from '../../../../stores/commerce.store';
 
 import moment from 'moment';
 import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { InputWeighingRow } from '../../../../models/InputWeighingRow';
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow';
+import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow';
 
 
 
@@ -23,12 +24,14 @@ export function WeighingCalendar() {
   const dispatch = useDispatch<any>()
   const [inputEvents, setInputEvents] = useState<any[]>([]);
   const [outputEvents, setOutputEvents] = useState<any[]>([]);
+  const [separateEvents, setSeparateEvents] = useState<any[]>([]);
   const [showInputEventsModal, setShowInputEventsModal] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(asyncFetchInputWeighingData(seasons?.selectedSeason?.id));
     dispatch(asyncFetchOutputWeighingData(seasons?.selectedSeason?.id));
+    dispatch(asyncFetchSeparateWeighingData(seasons?.selectedSeason?.id))
   }, []);
 
   useEffect(() => {
@@ -54,7 +57,19 @@ export function WeighingCalendar() {
         }
       })
     )
+    setSeparateEvents(
+      commerce?.separateWeighing?.map((e: SeparateWeighingRow[]) => {
+        return {
+          title: `Avulsa: ${e?.length} ${e?.length > 1 ? 'pesagens' : 'pesagem'}`,
+          start: new Date(e[0].weighing_date!),
+          end: new Date(e[0].weighing_date!),
+          weighings: e,
+          type: 'SEPARATE'
+        }
+      })
+    )
   }, [commerce]);
+
 
 
   return (
@@ -75,7 +90,7 @@ export function WeighingCalendar() {
             event: 'Evento',
             showMore: (total) => `+ (${total}) Eventos`
           }}
-          events={inputEvents.concat(outputEvents)}
+          events={inputEvents.concat(outputEvents).concat(separateEvents)}
           startAccessor="start"
           endAccessor="end"
           localizer={localizer}
@@ -91,6 +106,10 @@ export function WeighingCalendar() {
                 dispatch(setOutputWeighingRows(e.weighings));
                 navigate("commerce/weighing/output");
             } break;
+            case 'SEPARATE': {
+              dispatch(setSeparateWeighingRows(e.weighings));
+              navigate("commerce/weighing/separate");
+          } break;
           }}}
         />
       </div>

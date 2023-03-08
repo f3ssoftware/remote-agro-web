@@ -1,6 +1,10 @@
-export class ManualSeparateWeighing {
+import { WeighingRow } from "./WeighingRow";
+
+export class SeparateWeighingRow extends WeighingRow {
     constructor(
+        public id?: number,
         public cultivation_id?: number,
+        public cultivar_id?: number,
         public contract_id?: number,
         public reference?: string,
         public gross_weight?: number,
@@ -18,6 +22,7 @@ export class ManualSeparateWeighing {
         public observations?: string,
         public mode?: string,
         public weighing_date?: string,
-        public car_plate?: string
-    ) { }
+        public car_plate?: string,
+        public createdAt?: string
+    ) { super ()}
 }

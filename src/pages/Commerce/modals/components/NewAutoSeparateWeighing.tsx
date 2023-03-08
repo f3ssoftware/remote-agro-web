@@ -10,9 +10,10 @@ import {  asyncSeparateWeighing } from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
+import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
 
 
-export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSeparateWeighing: SeparateWeighingRow, index: number}) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
@@ -105,7 +106,7 @@ export function NewAutoSeparateWeighing({onHandleRemove, onHandleUpdate, index}:
             <Button
               variant="danger"
               onClick={() => {
-                onHandleRemove(index)
+                // onHandleRemove(index)
               }}
               style={{ marginTop: '45%' }}
             >

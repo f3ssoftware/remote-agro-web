@@ -6,7 +6,7 @@ import React from "react";
 import { CommerceWeighing } from "./CommerceWeighing/CommerceWeighing";
 import { InputWeighing } from "./modals/components/InputWeighing";
 import { OutputWeighing } from "./modals/components/OutputWeighing";
-import { SepareteWeighing } from "./modals/components/SepareteWeighing";
+import { SeparateWeighing } from "./modals/components/SeparateWeighing";
 import { EditInputWeighing } from "./modals/components/EditInputWeighing";
 
 export function Commerce() {
@@ -30,7 +30,7 @@ export function Commerce() {
       if(location.pathname.split('/')[3] === 'output') {
         return <OutputWeighing></OutputWeighing>  
       }if(location.pathname.split('/')[3] === 'separete') {
-        return <SepareteWeighing></SepareteWeighing>  
+        return <SeparateWeighing></SeparateWeighing>  
       }if(location.pathname.split('/')[3] === 'inputEvents') {
         return <EditInputWeighing></EditInputWeighing>  
       }

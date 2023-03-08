@@ -7,7 +7,6 @@ export function AutoInputDeleteConfirmation({
   show,
   handleClose,
   id,
-  onHandleRemove,
   index
 }: {
 
@@ -15,7 +14,6 @@ export function AutoInputDeleteConfirmation({
   handleClose: any
   id: number
   index: number
-  onHandleRemove: any
 }) {
   const dispatch = useDispatch<any>();
 
@@ -48,7 +46,6 @@ export function AutoInputDeleteConfirmation({
           variant="success"
           onClick={() => {
             handleClose()
-            onHandleRemove(index)
             deleteAutoInputWeighing(id)
           }}
         >

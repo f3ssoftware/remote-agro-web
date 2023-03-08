@@ -14,7 +14,7 @@ import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
 
-export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove, onHandleUpdate }: { index: number, manualInputWeigh: InputWeighingRow, onHandleRemove: any, onHandleUpdate: any }) {
+export function NewManualInputWeighing({ index, manualInputWeigh }: { index: number, manualInputWeigh: InputWeighingRow }) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState<any>({})
@@ -414,7 +414,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh, onHandleRemove
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
+        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} ></AutoInputDeleteConfirmation>
       </div>
     </div>
   )

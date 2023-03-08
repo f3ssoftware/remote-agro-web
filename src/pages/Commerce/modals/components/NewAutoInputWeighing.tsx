@@ -25,13 +25,9 @@ import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
 
 export function NewAutoInputWeighing({
-  onHandleRemove,
-  onHandleUpdate,
   index,
   autoInputWeighing,
 }: {
-  onHandleRemove: any
-  onHandleUpdate: any
   index: number,
   autoInputWeighing: InputWeighingRow
 }) {
@@ -470,7 +466,7 @@ export function NewAutoInputWeighing({
           {autoInputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
       </div>
-      <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={commerce?.inputWeighingData?.id!} index={index} onHandleRemove={onHandleRemove}></AutoInputDeleteConfirmation>
+      <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={commerce?.inputWeighingData?.id!} index={index}></AutoInputDeleteConfirmation>
     </div>
   )
 }

@@ -9,9 +9,10 @@ import { calculateHumidityDiscount } from './weighingsHelpers'
 import { asyncSeparateWeighing } from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
 
 
-export function NewManualSeparateWeighing({onHandleRemove, onHandleUpdate, index}:{onHandleRemove: any, onHandleUpdate: any, index: number}) {
+export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: number, manualSeparateWeigh: SeparateWeighingRow}) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
@@ -95,7 +96,7 @@ export function NewManualSeparateWeighing({onHandleRemove, onHandleUpdate, index
             <Button
               variant="danger"
               onClick={() => {
-                onHandleRemove(index)
+                // onHandleRemove(index)
               }}
               style={{ marginTop: '45%' }}
             >

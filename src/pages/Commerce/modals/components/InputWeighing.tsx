@@ -16,13 +16,7 @@ export function InputWeighing() {
   const { commerce } = useSelector((state: RootState) => state);
   const [weighingDate, setWeighingDate] = useState<Date>();
 
-  const onRemoveItem = (index: number) => {
 
-  }
-
-  const onUpdateItem = (minput: InputWeighingRow, index: number) => {
-
-  }
 
   useEffect(() => {
     const firstWeighing = commerce?.inputWeighingRows[0] as InputWeighingRow;
@@ -32,15 +26,6 @@ export function InputWeighing() {
       setWeighingDate(new Date());
     }
 
-    // const weighingRows = commerce?.inputWeighingRows.map((row: InputWeighingRow, index: number) => {
-    //   const rowData: InputWeighingRow = { ...row };
-    //   if (row.id && row.mode === 'Manual') {
-    //     rowData.rowType = WeighingRowType.MANUAL;
-    //   } else if(!row.id){
-    //     rowData.rowType = WeighingRowType.AUTOMATIC;
-    //   }
-    //   return rowData;
-    // });
 
     setInputWeighingRows(
       commerce?.inputWeighingRows
@@ -66,8 +51,6 @@ export function InputWeighing() {
                     index={index}
                     key={index}
                     manualInputWeigh={commerce.inputWeighingRows[index]}
-                    onHandleUpdate={onUpdateItem}
-                    onHandleRemove={onRemoveItem}
                   ></NewManualInputWeighing>
                 }
                 case WeighingRowType.AUTOMATIC: {
@@ -75,8 +58,6 @@ export function InputWeighing() {
                     <NewAutoInputWeighing
                       index={index}
                       key={index}
-                      onHandleUpdate={onUpdateItem}
-                      onHandleRemove={onRemoveItem}
                       autoInputWeighing={commerce.inputWeighingRows[index]}
                     ></NewAutoInputWeighing>
                   )
