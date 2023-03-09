@@ -62,7 +62,7 @@ export function SeparateWeighing() {
                       <NewAutoSeparateWeighing
                         index={index}
                         key={index}
-                        autoSeparateWeighing={commerce.inputWeighingRows[index]}
+                        autoSeparateWeighing={commerce.separateWeighingRows[index]}
                       ></NewAutoSeparateWeighing>
                     )
                   }

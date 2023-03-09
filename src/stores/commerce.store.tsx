@@ -486,7 +486,7 @@ export function asyncOutputWeighing(output: any) {
   }
 }
 
-export function asyncSeparateWeighing(separate: any) {
+export function asyncSeparateWeighing(separate: any, index: number, rowType: WeighingRowType) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.post(
@@ -499,12 +499,12 @@ export function asyncSeparateWeighing(separate: any) {
         },
       )
       dispatch(setSeparateWeighing(result.data))
-    //   dispatch(
-    //     updateSeparateRow({
-    //       index,
-    //       inputWeighRow: { ...result.data[0], rowType },
-    //     }),
-    //   )
+      dispatch(
+        updateSeparateRow({
+          index,
+          inputWeighRow: { ...result.data[0], rowType },
+        }),
+      )
       dispatch(
         getMessages({
           message: 'Pesagem avulsa salva com sucesso',

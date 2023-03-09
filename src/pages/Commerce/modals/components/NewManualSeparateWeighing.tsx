@@ -6,10 +6,13 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
-import { asyncSeparateWeighing } from '../../../../stores/commerce.store'
+import { asyncSeparateWeighing, asyncUpdateSeparateWeighing } from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
+import { Contract } from '../../../../models/Contract'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
+import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
 
 
 export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: number, manualSeparateWeigh: SeparateWeighingRow}) {
@@ -31,6 +34,8 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
   const [reference, setReference] = useState('')
   const [grossWeighing, setGrossWeighing] = useState(0)
   const [tare, setTare] = useState(0)
+  const [id, setId] = useState<number>();
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -62,6 +67,26 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
     setTotalWeighning(netWeighing*((100-totalDiscount)/100))
   }, [netWeighing, totalDiscount])
 
+  useEffect(() => {
+    if (manualSeparateWeigh?.id) {
+      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === manualSeparateWeigh?.cultivation_id))
+      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === manualSeparateWeigh?.contract_id))
+      setReference(manualSeparateWeigh?.reference!);
+      setCarPlate(manualSeparateWeigh?.car_plate!);
+      setDriver(manualSeparateWeigh?.car_driver!);
+      setCompany(manualSeparateWeigh?.shipping_company!);
+      setGrossWeighing(manualSeparateWeigh?.gross_weight!);
+      setNetWeighing(manualSeparateWeigh?.net_weight!);
+      setHumidity(manualSeparateWeigh?.humidity! / 100);
+      setImpurity(manualSeparateWeigh?.impurity! / 100);
+      setDiscount(manualSeparateWeigh?.discount! / 100);
+      setTotalWeighning(manualSeparateWeigh?.final_weight!);
+      setHumidityDiscount(Number(manualSeparateWeigh?.humidity_discount!));
+      setTare(manualSeparateWeigh?.tare_weight!);
+      setObservation(manualSeparateWeigh?.observations!);
+    }
+  }, [manualSeparateWeigh]);
+
   const Save = () =>{
     const manualSeparate = {
       weighings: {
@@ -85,7 +110,11 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         car_driver: driver
       }
     }
-    dispatch(asyncSeparateWeighing(manualSeparate))
+    if(!manualSeparateWeigh.id){
+      dispatch(asyncSeparateWeighing(manualSeparate, index, WeighingRowType.MANUAL))
+    }else{
+      dispatch(asyncUpdateSeparateWeighing(manualSeparateWeigh.id, manualSeparate, index, WeighingRowType.MANUAL))
+    }
   }
 
 
@@ -96,7 +125,8 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
             <Button
               variant="danger"
               onClick={() => {
-                // onHandleRemove(index)
+                setId(manualSeparateWeigh.id!)
+                setShowAutoInputDeleteModal(true)
               }}
               style={{ marginTop: '45%' }}
             >
@@ -322,8 +352,9 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
             Save()
           }}
         >
-          Salvar
+          {manualSeparateWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
+        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} ></AutoInputDeleteConfirmation>
       </div>
     </div>
   )

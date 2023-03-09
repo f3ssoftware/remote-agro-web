@@ -29,7 +29,7 @@ export function Commerce() {
       }
       if(location.pathname.split('/')[3] === 'output') {
         return <OutputWeighing></OutputWeighing>  
-      }if(location.pathname.split('/')[3] === 'separete') {
+      }if(location.pathname.split('/')[3] === 'separate') {
         return <SeparateWeighing></SeparateWeighing>  
       }if(location.pathname.split('/')[3] === 'inputEvents') {
         return <EditInputWeighing></EditInputWeighing>  

@@ -6,11 +6,14 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
-import {  asyncSeparateWeighing } from '../../../../stores/commerce.store'
+import {  asyncSeparateWeighing, asyncUpdateSeparateWeighing } from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
+import { Contract } from '../../../../models/Contract'
+import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
 
 
 export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSeparateWeighing: SeparateWeighingRow, index: number}) {
@@ -36,6 +39,8 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
   const [showTareConfirmationModal, setShowTareConfirmationModal] = useState(false)
   const [grossWeightDate, setGrossWeightDate] = useState("")
   const [tareWeightDate, setTareWeightDate] = useState("")
+  const [id, setId] = useState<number>();
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -67,8 +72,28 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
     setTotalWeighning(netWeighing*((100-totalDiscount)/100))
   }, [netWeighing, totalDiscount])
 
+  useEffect(() => {
+    if (autoSeparateWeighing?.id) {
+      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === autoSeparateWeighing?.cultivation_id))
+      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === autoSeparateWeighing?.contract_id))
+      setReference(autoSeparateWeighing?.reference!);
+      setCarPlate(autoSeparateWeighing?.car_plate!);
+      setDriver(autoSeparateWeighing?.car_driver!);
+      setCompany(autoSeparateWeighing?.shipping_company!);
+      setGrossWeighing(autoSeparateWeighing?.gross_weight!);
+      setNetWeighing(autoSeparateWeighing?.net_weight!);
+      setHumidity(autoSeparateWeighing?.humidity! / 100);
+      setImpurity(autoSeparateWeighing?.impurity! / 100);
+      setDiscount(autoSeparateWeighing?.discount! / 100);
+      setTotalWeighning(autoSeparateWeighing?.final_weight!);
+      setHumidityDiscount(Number(autoSeparateWeighing?.humidity_discount!));
+      setTare(autoSeparateWeighing?.tare_weight!);
+      setObservation(autoSeparateWeighing?.observations!);
+    }
+  }, [autoSeparateWeighing]);
+
   const Save = () =>{
-    const manualSeparate = {
+    const autoSeparate = {
       weighings: {
         contract_id: selectedContract.id,
         cultivation_id: selectedCultivation.id,
@@ -85,7 +110,7 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
         total_discount: totalDiscount.toString(),
         observations: observation,
         tare_weight: tare,
-        mode: "Manual",
+        mode: "Automático",
         car_plate: carPlate,
         car_driver: driver,
         gross_weight_date: grossWeightDate,
@@ -93,29 +118,30 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
         weight_date: new Date().toISOString()
       }
     }
-    dispatch(asyncSeparateWeighing(manualSeparate))
+    if(!autoSeparateWeighing.id){
+      dispatch(asyncSeparateWeighing(autoSeparate, index, WeighingRowType.AUTOMATIC))
+  }else{
+    dispatch(asyncUpdateSeparateWeighing(autoSeparateWeighing.id, autoSeparate, index, WeighingRowType.AUTOMATIC))
   }
+}
 
 
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-      {index !== 0 ? (
           <Col md={1}>
             <Button
               variant="danger"
               onClick={() => {
-                // onHandleRemove(index)
+                setId(autoSeparateWeighing.id!)
+                setShowAutoInputDeleteModal(true)
               }}
               style={{ marginTop: '45%' }}
             >
               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
             </Button>
           </Col>
-        ) : (
-          <></>
-        )}
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{color:'#000'}}>Referência</Form.Label>
@@ -351,8 +377,9 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
             Save()
           }}
         >
-          Salvar
+          {autoSeparateWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
+        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} ></AutoInputDeleteConfirmation>
       </div>
     </div>
   )
