@@ -12,6 +12,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
 import { Silo } from '../../../../models/Silo'
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow';
+import { Contract } from '../../../../models/Contract'
 
 
 export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, autoOutputWeighing }: { onHandleRemove: any, onHandleUpdate: any, index: number, autoOutputWeighing: OutputWeighingRow }) {
@@ -69,6 +70,10 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
     setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
 
+  useEffect(() => {
+    fillFormEdit();
+  }, [financial]);
+
   const Save = () => {
     const manualOutput = {
       weighings: {
@@ -98,25 +103,30 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
     dispatch(asyncOutputWeighing(manualOutput))
   }
 
+  const fillFormEdit = () => {
+    if (autoOutputWeighing?.id) {
+      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === autoOutputWeighing?.cultivation_id)[0])
+      const silum = commerce?.silo.filter((silo: Silo) => silo.id === autoOutputWeighing.silo_id)[0];
+      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === autoOutputWeighing?.contract_id)[0])
+      setSelectedSilo(silum);
+      setCarPlate(autoOutputWeighing?.car_plate!);
+      setDriver(autoOutputWeighing?.car_driver!);
+      setCompany(autoOutputWeighing?.shipping_company!);
+      setGrossWeighing(autoOutputWeighing?.gross_weight!);
+      setNetWeighing(autoOutputWeighing?.net_weight!);
+      setHumidity(autoOutputWeighing?.humidity! / 100);
+      setImpurity(autoOutputWeighing?.impurity! / 100);
+      setDiscount(autoOutputWeighing?.discount! / 100);
+      setTotalWeighning(autoOutputWeighing?.final_weight!);
+      setHumidityDiscount(Number(autoOutputWeighing?.humidity_discount!));
+      setTare(autoOutputWeighing?.tare_weight!);
+      setObservation(autoOutputWeighing?.observations!);
+    }
+  }
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        {index !== 0 ? (
-          <Col md={1}>
-            <Button
-              variant="danger"
-              onClick={() => {
-                onHandleRemove(index)
-              }}
-              style={{ marginTop: '45%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
-          </Col>
-        ) : (
-          <></>
-        )}
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Cultura</Form.Label>
@@ -363,6 +373,14 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
           marginTop: '2%',
         }}
       >
+        <Button
+          variant="danger"
+          onClick={() => {
+            onHandleRemove(index)
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+        </Button>
         <Button
           variant="success"
           onClick={() => {

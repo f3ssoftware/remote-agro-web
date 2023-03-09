@@ -17,23 +17,23 @@ import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
 
 export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index, manualOutputWeigh }: { onHandleRemove: any, onHandleUpdate: any, index: number, manualOutputWeigh: OutputWeighingRow }) {
   const dispatch = useDispatch<any>()
-  const { financial, commerce, seasons } = useSelector((state: RootState) => state)
-  const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [selectedContract, setSelectedContract]: any = useState({})
-  const [selectedSilo, setSelectedSilo]: any = useState({})
-  const [carPlate, setCarPlate] = useState('')
-  const [driver, setDriver] = useState('')
-  const [netWeighing, setNetWeighing] = useState(0)
-  const [humidity, setHumidity] = useState(0)
-  const [humidityDiscount, setHumidityDiscount] = useState(0)
-  const [impurity, setImpurity] = useState(0)
-  const [discount, setDiscount] = useState(0)
-  const [totalDiscount, setTotalDiscount] = useState(0)
-  const [totalWeighning, setTotalWeighning] = useState(0)
-  const [observation, setObservation] = useState('')
-  const [company, setCompany] = useState('')
-  const [grossWeighing, setGrossWeighing] = useState(0)
-  const [tare, setTare] = useState(0)
+  const { financial, commerce, seasons } = useSelector((state: RootState) => state);
+  const [selectedCultivation, setSelectedCultivation]: any = useState({});
+  const [selectedContract, setSelectedContract]: any = useState({});
+  const [selectedSilo, setSelectedSilo]: any = useState({});
+  const [carPlate, setCarPlate] = useState('');
+  const [driver, setDriver] = useState('');
+  const [netWeighing, setNetWeighing] = useState(0);
+  const [humidity, setHumidity] = useState(0);
+  const [humidityDiscount, setHumidityDiscount] = useState(0);
+  const [impurity, setImpurity] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalWeighning, setTotalWeighning] = useState(0);
+  const [observation, setObservation] = useState('');
+  const [company, setCompany] = useState('');
+  const [grossWeighing, setGrossWeighing] = useState(0);
+  const [tare, setTare] = useState(0);
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -59,25 +59,8 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
   // }, [seasons])
 
   useEffect(() => {
-    if (manualOutputWeigh?.id) {
-      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === manualOutputWeigh?.cultivation_id))
-      const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualOutputWeigh.silo_id)[0];
-      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === manualOutputWeigh?.contract_id))
-      setSelectedSilo(silum);
-      setCarPlate(manualOutputWeigh?.car_plate!);
-      setDriver(manualOutputWeigh?.car_driver!);
-      setCompany(manualOutputWeigh?.shipping_company!);
-      setGrossWeighing(manualOutputWeigh?.gross_weight!);
-      setNetWeighing(manualOutputWeigh?.net_weight!);
-      setHumidity(manualOutputWeigh?.humidity! / 100);
-      setImpurity(manualOutputWeigh?.impurity! / 100);
-      setDiscount(manualOutputWeigh?.discount! / 100);
-      setTotalWeighning(manualOutputWeigh?.final_weight!);
-      setHumidityDiscount(Number(manualOutputWeigh?.humidity_discount!));
-      setTare(manualOutputWeigh?.tare_weight!);
-      setObservation(manualOutputWeigh?.observations!);
-    }
-  }, [manualOutputWeigh]);
+    fillFormEdit();
+  }, [financial]);
 
   useEffect(() => {
     setTotalDiscount(discount + humidityDiscount)
@@ -114,21 +97,31 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
     dispatch(asyncOutputWeighing(manualOutput))
   }
 
+  const fillFormEdit = () => {
+    if (manualOutputWeigh?.id) {
+      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === manualOutputWeigh?.cultivation_id)[0])
+      const silum = commerce?.silo.filter((silo: Silo) => silo.id === manualOutputWeigh.silo_id)[0];
+      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === manualOutputWeigh?.contract_id)[0])
+      setSelectedSilo(silum);
+      setCarPlate(manualOutputWeigh?.car_plate!);
+      setDriver(manualOutputWeigh?.car_driver!);
+      setCompany(manualOutputWeigh?.shipping_company!);
+      setGrossWeighing(manualOutputWeigh?.gross_weight!);
+      setNetWeighing(manualOutputWeigh?.net_weight!);
+      setHumidity(manualOutputWeigh?.humidity! / 100);
+      setImpurity(manualOutputWeigh?.impurity! / 100);
+      setDiscount(manualOutputWeigh?.discount! / 100);
+      setTotalWeighning(manualOutputWeigh?.final_weight!);
+      setHumidityDiscount(Number(manualOutputWeigh?.humidity_discount!));
+      setTare(manualOutputWeigh?.tare_weight!);
+      setObservation(manualOutputWeigh?.observations!);
+    }
+  }
+
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col md={1}>
-          <Button
-            variant="danger"
-            onClick={() => {
-              onHandleRemove(index)
-            }}
-            style={{ marginTop: '45%' }}
-          >
-            <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-          </Button>
-        </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Cultura</Form.Label>
@@ -359,6 +352,14 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
           marginTop: '2%',
         }}
       >
+        <Button
+          variant="danger"
+          onClick={() => {
+            onHandleRemove(index)
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+        </Button>
         <Button
           variant="success"
           onClick={() => {
