@@ -355,7 +355,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         >
           {manualSeparateWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh?.type!}></DeleteConfirmationModal>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

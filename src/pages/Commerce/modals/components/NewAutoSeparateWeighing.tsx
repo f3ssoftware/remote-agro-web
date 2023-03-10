@@ -17,7 +17,7 @@ import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirma
 
 
 
-export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSeparateWeighing: SeparateWeighingRow, index: number}) {
+export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:number, autoSeparateWeighing: SeparateWeighingRow}) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})

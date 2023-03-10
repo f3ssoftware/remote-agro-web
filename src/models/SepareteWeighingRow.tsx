@@ -4,7 +4,6 @@ export class SeparateWeighingRow extends WeighingRow {
     constructor(
         public id?: number,
         public cultivation_id?: number,
-        public cultivar_id?: number,
         public contract_id?: number,
         public reference?: string,
         public gross_weight?: number,
