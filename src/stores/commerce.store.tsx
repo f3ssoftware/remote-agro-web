@@ -175,10 +175,28 @@ const commerceStore = createSlice({
       state.separateWeighingRows = action.payload.map(
         (row: SeparateWeighingRow, index: number) => {
           const rowData: SeparateWeighingRow = { ...row }
-          if (row.id && row.mode === 'Manual') {
-            rowData.rowType = WeighingRowType.MANUAL
+          if (row.id) {
+            switch (row.mode) {
+              case 'Manual':
+                {
+                  rowData.rowType = WeighingRowType.MANUAL
+                }
+                break
+              case 'Automático': {
+                rowData.rowType = WeighingRowType.AUTOMATIC
+              }
+            }
           } else if (!row.id) {
-            rowData.rowType = WeighingRowType.AUTOMATIC
+            switch (row.mode) {
+              case 'Manual':
+                {
+                  rowData.rowType = WeighingRowType.MANUAL
+                }
+                break
+              case 'Automático': {
+                rowData.rowType = WeighingRowType.AUTOMATIC
+              }
+            }
           }
           return rowData
         },
@@ -495,7 +513,7 @@ export function asyncUpdateOutputWeighing(
       dispatch(
         updateOutputWeighRow({
           index,
-          inputWeighRow: { ...result.data, rowType },
+          outputWeighRow: { ...result.data, rowType },
         }),
       )
       dispatch(
@@ -564,7 +582,7 @@ export function asyncUpdateSeparateWeighing(
         dispatch(
           updateSeparateRow({
             index,
-            inputWeighRow: { ...result.data, rowType },
+            separateWeighRow: { ...result.data, rowType },
           }),
         )
         // dispatch(setInputWeighingData(result.data[0]))

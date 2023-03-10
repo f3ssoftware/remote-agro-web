@@ -86,11 +86,11 @@ const SidebarItems = [
         title: 'Planejamento',
         url: "planning"
     },
-    // {
-    //     icon: faSeedling,
-    //     title: 'Solo',
-    //     url: "soil"
-    // },
+    {
+        icon: faSeedling,
+        title: 'Solo',
+        url: "soil"
+    },
 
     {
         icon: faFileAlt,

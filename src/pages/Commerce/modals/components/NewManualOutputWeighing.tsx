@@ -99,7 +99,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         weighing_date: new Date().toISOString()
       }
     }
-    if (manualOutputWeigh.id) {
+    if (!manualOutputWeigh.id) {
       dispatch(asyncOutputWeighing(manualOutput))
     } else {
       dispatch(asyncUpdateOutputWeighing(manualOutputWeigh?.id!, manualOutput, index, WeighingRowType.MANUAL));

@@ -105,7 +105,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         weighing_date: new Date().toISOString()
       }
     }
-    if (autoOutputWeighing.id) {
+    if (!autoOutputWeighing.id) {
       dispatch(asyncOutputWeighing(autoOutput))
     } else {
       dispatch(asyncUpdateOutputWeighing(autoOutputWeighing?.id!, autoOutput, index, WeighingRowType.AUTOMATIC));

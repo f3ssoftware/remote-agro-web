@@ -35,8 +35,7 @@ export function DeleteConfirmationModal({
           dispatch(removeOutputWeighRow({ index }));
         }
       } break; 
-      case 'Única':
-      case 'Avulsa': {
+      case 'Única': {
         if (id) {
           dispatch(asyncDeleteSeparateWeighing(id, index));
         } else {
