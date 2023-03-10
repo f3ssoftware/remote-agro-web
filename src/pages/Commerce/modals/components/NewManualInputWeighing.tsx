@@ -9,10 +9,11 @@ import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { InputWeighingRow } from '../../../../models/InputWeighingRow'
-import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
+
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
+import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
 
 export function NewManualInputWeighing({ index, manualInputWeigh }: { index: number, manualInputWeigh: InputWeighingRow }) {
   const dispatch = useDispatch<any>()
@@ -414,7 +415,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} ></AutoInputDeleteConfirmation>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualInputWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

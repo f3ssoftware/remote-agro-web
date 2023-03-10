@@ -81,7 +81,8 @@ export function InputWeighing() {
               variant="secondary"
               onClick={() => {
                 const inputWeighRow: InputWeighingRow = {
-                  rowType: WeighingRowType.MANUAL
+                  rowType: WeighingRowType.MANUAL,
+                  type: 'Entrada'
                 };
                 dispatch(addInputWeighRow(inputWeighRow));
               }}
@@ -93,7 +94,8 @@ export function InputWeighing() {
               variant="primary"
               onClick={() => {
                 const inputWeighRow: InputWeighingRow = {
-                  rowType: WeighingRowType.AUTOMATIC
+                  rowType: WeighingRowType.AUTOMATIC,
+                  type: 'Entrada'
                 };
                 dispatch(addInputWeighRow(inputWeighRow));
               }}

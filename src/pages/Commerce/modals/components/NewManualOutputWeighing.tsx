@@ -13,11 +13,14 @@ import { ManualOutputWeighing } from '../../../../models/ManualOutputWeighing'
 import { Silo } from '../../../../models/Silo'
 import { Contract } from '../../../../models/Contract'
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
+import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+
 
 
 export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index, manualOutputWeigh }: { onHandleRemove: any, onHandleUpdate: any, index: number, manualOutputWeigh: OutputWeighingRow }) {
   const dispatch = useDispatch<any>()
   const { financial, commerce, seasons } = useSelector((state: RootState) => state);
+  const [id, setId] = useState<number>();
   const [selectedCultivation, setSelectedCultivation]: any = useState({});
   const [selectedContract, setSelectedContract]: any = useState({});
   const [selectedSilo, setSelectedSilo]: any = useState({});
@@ -34,6 +37,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
   const [company, setCompany] = useState('');
   const [grossWeighing, setGrossWeighing] = useState(0);
   const [tare, setTare] = useState(0);
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -51,7 +55,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation.id))
+    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation?.id))
   }, [humidity])
 
   // useEffect(() => {
@@ -355,7 +359,8 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         <Button
           variant="danger"
           onClick={() => {
-            onHandleRemove(index)
+            setId(manualOutputWeigh?.id!)
+            setShowAutoInputDeleteModal(true);
           }}
         >
           <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
@@ -368,6 +373,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         >
           Salvar
         </Button>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualOutputWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

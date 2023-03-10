@@ -86,6 +86,7 @@ export function SeparateWeighing() {
               onClick={() => {
                 const separateWeighRow: SeparateWeighingRow = {
                   rowType: WeighingRowType.MANUAL,
+                  type: 'Única'
                 }
                 dispatch(addSeparateWeighRow(separateWeighRow))
               }}
@@ -97,6 +98,7 @@ export function SeparateWeighing() {
               onClick={() =>{
                 const separateWeighRow: SeparateWeighingRow = {
                   rowType: WeighingRowType.AUTOMATIC,
+                  type: 'Única'
                 }
                 dispatch(addSeparateWeighRow(separateWeighRow))
               }}
