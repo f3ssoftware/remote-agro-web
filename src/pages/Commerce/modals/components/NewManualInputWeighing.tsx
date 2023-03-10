@@ -410,6 +410,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
           variant="success"
           onClick={() => {
             Save()
+            console.log(manualInputWeigh?.id)
           }}
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}

@@ -337,7 +337,7 @@ export function asyncUpdateInputWeighing(
       // dispatch(setInputWeighingData(result.data[0]))
       dispatch(
         getMessages({
-          message: 'Pesagem de entrada salva com sucesso',
+          message: 'Pesagem de entrada atualizada com sucesso',
           type: 'success',
         }),
       )
@@ -549,7 +549,7 @@ export function asyncUpdateSeparateWeighing(
         // dispatch(setInputWeighingData(result.data[0]))
         dispatch(
           getMessages({
-            message: 'Pesagem avulsa salva com sucesso',
+            message: 'Pesagem avulsa atualizada com sucesso',
             type: 'success',
           }),
         )
