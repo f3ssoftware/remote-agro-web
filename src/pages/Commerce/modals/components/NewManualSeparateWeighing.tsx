@@ -12,7 +12,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
 import { Contract } from '../../../../models/Contract'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
-import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
+import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+
 
 
 export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: number, manualSeparateWeigh: SeparateWeighingRow}) {
@@ -354,7 +355,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         >
           {manualSeparateWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} ></AutoInputDeleteConfirmation>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

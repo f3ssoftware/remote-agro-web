@@ -13,7 +13,8 @@ import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmation
 import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Contract } from '../../../../models/Contract'
-import { AutoInputDeleteConfirmation } from '../CommerceWeighingModal/AutoInputDeleteConfirmation'
+import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+
 
 
 export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSeparateWeighing: SeparateWeighingRow, index: number}) {
@@ -379,7 +380,7 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
         >
           {autoSeparateWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <AutoInputDeleteConfirmation show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} ></AutoInputDeleteConfirmation>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={autoSeparateWeighing.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

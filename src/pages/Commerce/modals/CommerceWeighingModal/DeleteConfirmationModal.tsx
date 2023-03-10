@@ -1,28 +1,50 @@
 import { Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { asyncDeleteInputWeighing, removeInputWeighRow } from '../../../../stores/commerce.store'
+import { asyncDeleteInputWeighing, asyncDeleteOutputWeighing, asyncDeleteSeparateWeighing, removeInputWeighRow, removeOutputWeighRow, removeSeparateWeighRow } from '../../../../stores/commerce.store'
 
 
-export function AutoInputDeleteConfirmation({
+export function DeleteConfirmationModal({
   show,
   handleClose,
   id,
-  index
+  index,
+  weighingType
 }: {
 
   show: boolean
   handleClose: any
   id: number
-  index: number
+  index: number,
+  weighingType: string
 }) {
   const dispatch = useDispatch<any>();
 
   const deleteAutoInputWeighing = (id: number) => {
-    if (id) {
-      dispatch(asyncDeleteInputWeighing(id, index));
-    } else {
-      dispatch(removeInputWeighRow({ index }));
+    switch(weighingType) {
+      case 'Entrada': {
+        if (id) {
+          dispatch(asyncDeleteInputWeighing(id, index));
+        } else {
+          dispatch(removeInputWeighRow({ index }));
+        }
+      } break;
+      case 'Saída': {
+        if (id) {
+          dispatch(asyncDeleteOutputWeighing(id, index));
+        } else {
+          dispatch(removeOutputWeighRow({ index }));
+        }
+      } break; 
+      case 'Única':
+      case 'Avulsa': {
+        if (id) {
+          dispatch(asyncDeleteSeparateWeighing(id, index));
+        } else {
+          dispatch(removeSeparateWeighRow({ index }));
+        }
+      }
     }
+    
 
   }
 

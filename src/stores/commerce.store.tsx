@@ -331,7 +331,7 @@ export function asyncUpdateInputWeighing(
       dispatch(
         updateInputWeighRow({
           index,
-          inputWeighRow: { ...result.data[0], rowType },
+          inputWeighRow: { ...result.data, rowType },
         }),
       )
       // dispatch(setInputWeighingData(result.data[0]))
@@ -457,7 +457,7 @@ export function asyncFetchWeighingData() {
   }
 }
 
-export function asyncOutputWeighing(output: any) {
+export function  asyncOutputWeighing(output: any) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.post(
@@ -468,6 +468,46 @@ export function asyncOutputWeighing(output: any) {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         },
+      )
+      dispatch(
+        getMessages({
+          message: 'Pesagem de saída salva com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
+export function asyncUpdateOutputWeighing(
+  id: number,
+  outputWeighing: any,
+  index: number,
+  rowType: WeighingRowType,
+) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.put(
+        `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
+        outputWeighing,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(
+        updateOutputWeighRow({
+          index,
+          inputWeighRow: { ...result.data, rowType },
+        }),
       )
       dispatch(
         getMessages({
@@ -712,6 +752,36 @@ export function asyncDeleteInputWeighing(id: number, index: number) {
         },
       )
       dispatch(removeInputWeighRow({ index }))
+      dispatch(
+        getMessages({
+          message: 'Pesagem excluída com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      console.log(err)
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
+export function asyncDeleteOutputWeighing(id: number, index: number) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.delete(
+        `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(removeOutputWeighRow({ index }))
       dispatch(
         getMessages({
           message: 'Pesagem excluída com sucesso',

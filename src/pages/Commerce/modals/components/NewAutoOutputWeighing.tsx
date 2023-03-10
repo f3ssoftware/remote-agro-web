@@ -3,7 +3,7 @@ import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncFetchWeighingData, asyncOutputWeighing } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncFetchWeighingData, asyncOutputWeighing, asyncUpdateOutputWeighing } from '../../../../stores/commerce.store'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
@@ -13,6 +13,9 @@ import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmation
 import { Silo } from '../../../../models/Silo'
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow';
 import { Contract } from '../../../../models/Contract'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
+import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+
 
 
 export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, autoOutputWeighing }: { onHandleRemove: any, onHandleUpdate: any, index: number, autoOutputWeighing: OutputWeighingRow }) {
@@ -20,6 +23,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
   const { financial, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
   const [selectedContract, setSelectedContract]: any = useState({})
+  const [id, setId] = useState<number>();
   const [selectedSilo, setSelectedSilo]: any = useState({})
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
@@ -38,6 +42,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
   const [showTareConfirmationModal, setShowTareConfirmationModal] = useState(false)
   const [grossWeightDate, setGrossWeightDate] = useState("")
   const [tareWeightDate, setTareWeightDate] = useState("")
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -100,7 +105,12 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         weighing_date: new Date().toISOString()
       }
     }
-    dispatch(asyncOutputWeighing(manualOutput))
+    if (autoOutputWeighing.id) {
+      dispatch(asyncOutputWeighing(autoOutputWeighing))
+    } else {
+      dispatch(asyncUpdateOutputWeighing(autoOutputWeighing?.id!, autoOutputWeighing, index, WeighingRowType.AUTOMATIC));
+    }
+
   }
 
   const fillFormEdit = () => {
@@ -376,7 +386,8 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         <Button
           variant="danger"
           onClick={() => {
-            onHandleRemove(index)
+            setId(autoOutputWeighing?.id!)
+            setShowAutoInputDeleteModal(true)
           }}
         >
           <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
@@ -389,6 +400,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         >
           Salvar
         </Button>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={autoOutputWeighing.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

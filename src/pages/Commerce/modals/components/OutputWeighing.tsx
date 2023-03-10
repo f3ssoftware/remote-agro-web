@@ -97,13 +97,15 @@ export function OutputWeighing() {
           >
             <Button variant="secondary" onClick={() => {
               const outputWeighRow: OutputWeighingRow = {
-                rowType: WeighingRowType.MANUAL
+                rowType: WeighingRowType.MANUAL,
+                type: 'Saída'
               };
               dispatch(addOutputWeighRow(outputWeighRow));
             }}>Adicionar linha manual</Button>
             <Button variant="primary" onClick={() => {
               const outputWeighRow: OutputWeighingRow = {
-                rowType: WeighingRowType.AUTOMATIC
+                rowType: WeighingRowType.AUTOMATIC,
+                type: 'Saída'
               };
               dispatch(addOutputWeighRow(outputWeighRow));
             }}>Adicionar linha automática</Button>
