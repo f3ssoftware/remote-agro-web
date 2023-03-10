@@ -53,7 +53,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation.id))
+    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation?.id))
   }, [humidity])
 
   // useEffect(() => {
@@ -112,9 +112,9 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
       }
     }
     if(!manualSeparateWeigh.id){
-      dispatch(asyncSeparateWeighing(manualSeparate, index, WeighingRowType.MANUAL))
+      dispatch(asyncSeparateWeighing(manualSeparate))
     }else{
-      dispatch(asyncUpdateSeparateWeighing(manualSeparateWeigh.id, manualSeparate, index, WeighingRowType.MANUAL))
+      dispatch(asyncUpdateSeparateWeighing(manualSeparateWeigh?.id!, manualSeparate, index, WeighingRowType.MANUAL))
     }
   }
 
@@ -126,7 +126,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
             <Button
               variant="danger"
               onClick={() => {
-                setId(manualSeparateWeigh.id!)
+                setId(manualSeparateWeigh?.id!)
                 setShowAutoInputDeleteModal(true)
               }}
               style={{ marginTop: '45%' }}
@@ -355,7 +355,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         >
           {manualSeparateWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh.type!}></DeleteConfirmationModal>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh?.type!}></DeleteConfirmationModal>
       </div>
     </div>
   )

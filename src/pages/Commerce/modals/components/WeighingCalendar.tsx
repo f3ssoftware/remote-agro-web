@@ -50,8 +50,8 @@ export function WeighingCalendar() {
       commerce?.outputWeighing?.map((e: OutputWeighingRow[]) => {
         return {
           title: `SAÍDA: ${e?.length} ${e?.length > 1 ? 'pesagens' : 'pesagem'}`,
-          start: new Date(e[0].weighing_date!),
-          end: new Date(e[0].weighing_date!),
+          start: new Date(e[0]?.weighing_date!),
+          end: new Date(e[0]?.weighing_date!),
           weighings: e,
           type: 'OUTPUT'
         }
@@ -61,8 +61,8 @@ export function WeighingCalendar() {
       commerce?.separateWeighing?.map((e: SeparateWeighingRow[]) => {
         return {
           title: `Avulsa: ${e?.length} ${e?.length > 1 ? 'pesagens' : 'pesagem'}`,
-          start: new Date(e[0].weighing_date!),
-          end: new Date(e[0].weighing_date!),
+          start: new Date(e[0]?.weighing_date!),
+          end: new Date(e[0]?.weighing_date!),
           weighings: e,
           type: 'SEPARATE'
         }

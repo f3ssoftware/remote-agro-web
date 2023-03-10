@@ -58,7 +58,7 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation.id))
+    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation?.id))
   }, [humidity])
 
   // useEffect(() => {
@@ -120,9 +120,9 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
       }
     }
     if(!autoSeparateWeighing.id){
-      dispatch(asyncSeparateWeighing(autoSeparate, index, WeighingRowType.AUTOMATIC))
+      dispatch(asyncSeparateWeighing(autoSeparate))
   }else{
-    dispatch(asyncUpdateSeparateWeighing(autoSeparateWeighing.id, autoSeparate, index, WeighingRowType.AUTOMATIC))
+    dispatch(asyncUpdateSeparateWeighing(autoSeparateWeighing?.id!, autoSeparate, index, WeighingRowType.AUTOMATIC))
   }
 }
 
@@ -135,7 +135,7 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
             <Button
               variant="danger"
               onClick={() => {
-                setId(autoSeparateWeighing.id!)
+                setId(autoSeparateWeighing?.id!)
                 setShowAutoInputDeleteModal(true)
               }}
               style={{ marginTop: '45%' }}

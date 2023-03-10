@@ -21,7 +21,7 @@ export function InputWeighing() {
   useEffect(() => {
     const firstWeighing = commerce?.inputWeighingRows[0] as InputWeighingRow;
     if (firstWeighing?.weighing_date) {
-      setWeighingDate(new Date(firstWeighing.weighing_date!));
+      setWeighingDate(new Date(firstWeighing?.weighing_date!));
     } else {
       setWeighingDate(new Date());
     }
@@ -44,13 +44,13 @@ export function InputWeighing() {
           <Row
             style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}
           >
-            {inputWeighingRows.map((row: InputWeighingRow, index: number) => {
+            {inputWeighingRows?.map((row: InputWeighingRow, index: number) => {
               switch (row.rowType) {
                 case WeighingRowType.MANUAL: {
                   return <NewManualInputWeighing
                     index={index}
                     key={index}
-                    manualInputWeigh={commerce.inputWeighingRows[index]}
+                    manualInputWeigh={commerce?.inputWeighingRows[index]}
                   ></NewManualInputWeighing>
                 }
                 case WeighingRowType.AUTOMATIC: {
@@ -58,7 +58,7 @@ export function InputWeighing() {
                     <NewAutoInputWeighing
                       index={index}
                       key={index}
-                      autoInputWeighing={commerce.inputWeighingRows[index]}
+                      autoInputWeighing={commerce?.inputWeighingRows[index]}
                     ></NewAutoInputWeighing>
                   )
                 }

@@ -80,7 +80,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
   }, [financial]);
 
   const Save = () => {
-    const manualOutput = {
+    const autoOutput = {
       weighings: {
         contract_id: selectedContract.id,
         cultivation_id: selectedCultivation.id,
@@ -106,9 +106,9 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
       }
     }
     if (autoOutputWeighing.id) {
-      dispatch(asyncOutputWeighing(autoOutputWeighing))
+      dispatch(asyncOutputWeighing(autoOutput))
     } else {
-      dispatch(asyncUpdateOutputWeighing(autoOutputWeighing?.id!, autoOutputWeighing, index, WeighingRowType.AUTOMATIC));
+      dispatch(asyncUpdateOutputWeighing(autoOutputWeighing?.id!, autoOutput, index, WeighingRowType.AUTOMATIC));
     }
 
   }
@@ -398,7 +398,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
             Save()
           }}
         >
-          Salvar
+          {autoOutputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={autoOutputWeighing.type!}></DeleteConfirmationModal>
       </div>

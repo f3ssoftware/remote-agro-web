@@ -164,9 +164,9 @@ export function NewAutoInputWeighing({
       },
     }
     if (!autoInputWeighing?.id) {
-      dispatch(asyncInputWeighing(autoInput, index, WeighingRowType.AUTOMATIC));
+      dispatch(asyncInputWeighing(autoInput));
     } else {
-      dispatch(asyncUpdateInputWeighing(autoInputWeighing.id, autoInput, index, WeighingRowType.AUTOMATIC));
+      dispatch(asyncUpdateInputWeighing(autoInputWeighing?.id!, autoInput, index, WeighingRowType.AUTOMATIC));
     }
 
   }
@@ -200,7 +200,7 @@ export function NewAutoInputWeighing({
               <Typeahead
                 id="field"
                 selected={selectedFarm?.fields.filter((field: any) => field?.id === selectedPlot?.id)}
-                labelKey={(selected: any) => selected.name}
+                labelKey={(selected: any) => selected?.name}
                 isInvalid={!selectedPlot?.id}
                 onChange={(selected: any) => {
                   setSelectedPlot(selected[0])
@@ -221,7 +221,7 @@ export function NewAutoInputWeighing({
               <Typeahead
                 id="cultivar"
                 selected={selectedPlot?.cultivares?.filter((c: any) => c?.id === selectedCultivar?.id)}
-                labelKey={(selected: any) => selected.name}
+                labelKey={(selected: any) => selected?.name}
                 isInvalid={!selectedCultivar?.id}
                 onChange={(selected: any) => {
                   setSelectedCultivar(selected[0])
@@ -241,7 +241,7 @@ export function NewAutoInputWeighing({
             <Typeahead
               id="silo"
               selected={commerce?.silo?.filter((s: any) => s?.id === selectedSilo?.id)}
-              labelKey={(selected: any) => selected.name}
+              labelKey={(selected: any) => selected?.name}
               isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
                 setSelectedSilo(selected[0])

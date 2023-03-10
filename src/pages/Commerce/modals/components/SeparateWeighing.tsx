@@ -21,7 +21,7 @@ export function SeparateWeighing() {
     const firstWeighing = commerce
       ?.separateWeighingRows[0] as SeparateWeighingRow
     if (firstWeighing?.weighing_date) {
-      setWeighingDate(new Date(firstWeighing.weighing_date!))
+      setWeighingDate(new Date(firstWeighing?.weighing_date!))
     } else {
       setWeighingDate(new Date())
     }
@@ -43,7 +43,7 @@ export function SeparateWeighing() {
           <Row
             style={{ marginTop: '2%', paddingLeft: '1%', paddingRight: '1%' }}
           >
-            {separateWeighingRows.map(
+            {separateWeighingRows?.map(
               (row: SeparateWeighingRow, index: number) => {
                 switch (row.rowType) {
                   case WeighingRowType.MANUAL: {
@@ -52,7 +52,7 @@ export function SeparateWeighing() {
                         index={index}
                         key={index}
                         manualSeparateWeigh={
-                          commerce.separateWeighingRows[index]
+                          commerce?.separateWeighingRows[index]
                         }
                       ></NewManualSeparateWeighing>
                     )
@@ -62,7 +62,7 @@ export function SeparateWeighing() {
                       <NewAutoSeparateWeighing
                         index={index}
                         key={index}
-                        autoSeparateWeighing={commerce.separateWeighingRows[index]}
+                        autoSeparateWeighing={commerce?.separateWeighingRows[index]}
                       ></NewAutoSeparateWeighing>
                     )
                   }
@@ -86,7 +86,7 @@ export function SeparateWeighing() {
               onClick={() => {
                 const separateWeighRow: SeparateWeighingRow = {
                   rowType: WeighingRowType.MANUAL,
-                  type: 'Única'
+                  type: 'Avulsa'
                 }
                 dispatch(addSeparateWeighRow(separateWeighRow))
               }}
@@ -98,7 +98,7 @@ export function SeparateWeighing() {
               onClick={() =>{
                 const separateWeighRow: SeparateWeighingRow = {
                   rowType: WeighingRowType.AUTOMATIC,
-                  type: 'Única'
+                  type: 'Avulsa'
                 }
                 dispatch(addSeparateWeighRow(separateWeighRow))
               }}

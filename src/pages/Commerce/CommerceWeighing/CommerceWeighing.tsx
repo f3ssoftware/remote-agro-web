@@ -40,7 +40,7 @@ export function CommerceWeighing() {
           </Col>
           <Col md={1}>
             <Button className="inputs-btnW"
-              onClick={() => navigate("commerce/weighing/separete")}>Avulsa</Button>
+              onClick={() => navigate("commerce/weighing/separate")}>Avulsa</Button>
           </Col>
           <Col md={2}>
             <Button className="inputs-btnW"

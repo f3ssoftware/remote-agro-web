@@ -270,9 +270,7 @@ export function asyncTransferWeighing(transfer: any) {
 }
 
 export function asyncInputWeighing(
-  input: any,
-  index: number,
-  rowType: WeighingRowType,
+  input: any
 ) {
   return async function (dispatch: AppDispatch) {
     try {
@@ -285,14 +283,6 @@ export function asyncInputWeighing(
           },
         },
       )
-      dispatch(setInputWeighing(result.data))
-      dispatch(
-        updateInputWeighRow({
-          index,
-          inputWeighRow: { ...result.data[0], rowType },
-        }),
-      )
-      // dispatch(setInputWeighingData(result.data[0]))
       dispatch(
         getMessages({
           message: 'Pesagem de entrada salva com sucesso',
@@ -327,7 +317,6 @@ export function asyncUpdateInputWeighing(
           },
         },
       )
-      dispatch(setInputWeighing(result.data))
       dispatch(
         updateInputWeighRow({
           index,
@@ -526,7 +515,7 @@ export function asyncUpdateOutputWeighing(
   }
 }
 
-export function asyncSeparateWeighing(separate: any, index: number, rowType: WeighingRowType) {
+export function asyncSeparateWeighing(separate: any) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.post(
@@ -537,13 +526,6 @@ export function asyncSeparateWeighing(separate: any, index: number, rowType: Wei
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         },
-      )
-      dispatch(setSeparateWeighing(result.data))
-      dispatch(
-        updateSeparateRow({
-          index,
-          inputWeighRow: { ...result.data[0], rowType },
-        }),
       )
       dispatch(
         getMessages({
@@ -579,11 +561,10 @@ export function asyncUpdateSeparateWeighing(
             },
           },
         )
-        dispatch(setSeparateWeighing(result.data))
         dispatch(
           updateSeparateRow({
             index,
-            inputWeighRow: { ...result.data[0], rowType },
+            inputWeighRow: { ...result.data, rowType },
           }),
         )
         // dispatch(setInputWeighingData(result.data[0]))

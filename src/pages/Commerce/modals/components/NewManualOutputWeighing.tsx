@@ -3,7 +3,7 @@ import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncOutputWeighing } from '../../../../stores/commerce.store'
+import { asyncFetchSiloData, asyncOutputWeighing, asyncUpdateOutputWeighing } from '../../../../stores/commerce.store'
 import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
@@ -14,6 +14,7 @@ import { Silo } from '../../../../models/Silo'
 import { Contract } from '../../../../models/Contract'
 import { OutputWeighingRow } from '../../../../models/OutputWeighingRow'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 
 
 
@@ -98,7 +99,11 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         weighing_date: new Date().toISOString()
       }
     }
-    dispatch(asyncOutputWeighing(manualOutput))
+    if (manualOutputWeigh.id) {
+      dispatch(asyncOutputWeighing(manualOutput))
+    } else {
+      dispatch(asyncUpdateOutputWeighing(manualOutputWeigh?.id!, manualOutput, index, WeighingRowType.MANUAL));
+    }
   }
 
   const fillFormEdit = () => {
@@ -371,7 +376,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
             Save()
           }}
         >
-          Salvar
+          {manualOutputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualOutputWeigh.type!}></DeleteConfirmationModal>
       </div>

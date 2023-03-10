@@ -9,11 +9,10 @@ import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { InputWeighingRow } from '../../../../models/InputWeighingRow'
-
+import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
-import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
 
 export function NewManualInputWeighing({ index, manualInputWeigh }: { index: number, manualInputWeigh: InputWeighingRow }) {
   const dispatch = useDispatch<any>()
@@ -82,9 +81,9 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
   }
 
   const fillFormEdit = () => {
-    const f: any = farm?.farms.filter((farm: any) => farm.id === manualInputWeigh?.farm_id)[0];
+    const f: any = farm?.farms?.filter((farm: any) => farm?.id === manualInputWeigh?.farm_id)[0];
     setSelectedFarm(f);
-    const p: any = f?.fields?.filter((plot: any) => plot.id === manualInputWeigh?.field_id)[0]
+    const p: any = f?.fields?.filter((plot: any) => plot?.id === manualInputWeigh?.field_id)[0]
     setSelectedPlot(p);
     const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
     const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
@@ -142,9 +141,9 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
       }
     }
     if (!manualInputWeigh.id) {
-      dispatch(asyncInputWeighing(manualInput, index, WeighingRowType.MANUAL));
+      dispatch(asyncInputWeighing(manualInput));
     } else {
-      dispatch(asyncUpdateInputWeighing(manualInputWeigh.id, manualInput, index, WeighingRowType.MANUAL));
+      dispatch(asyncUpdateInputWeighing(manualInputWeigh?.id!, manualInput, index, WeighingRowType.MANUAL));
     }
 
   }
@@ -178,7 +177,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
             {selectedFarm?.fields?.length > 0 ? <Typeahead
               id="field"
               selected={selectedFarm?.fields.filter((field: any) => field?.id === selectedPlot?.id)}
-              labelKey={(selected: any) => selected.name}
+              labelKey={(selected: any) => selected?.name}
               isInvalid={!selectedPlot?.id}
               onChange={(selected: any) => {
                 setSelectedPlot(selected[0])
@@ -194,7 +193,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
             {selectedPlot?.cultivares?.length > 0 ? <Typeahead
               id="cultivar"
               selected={selectedPlot?.cultivares?.filter((c: any) => c?.id === selectedCultivar?.id)}
-              labelKey={(selected: any) => selected.name}
+              labelKey={(selected: any) => selected?.name}
               isInvalid={!selectedCultivar?.id}
               onChange={(selected: any) => {
                 setSelectedCultivar(selected[0])
@@ -212,7 +211,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
             <Typeahead
               id="silo"
               selected={commerce?.silo?.filter((s: any) => s?.id === selectedSilo?.id)}
-              labelKey={(selected: any) => selected.name}
+              labelKey={(selected: any) => selected?.name}
               isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
                 setSelectedSilo(selected[0])
@@ -401,7 +400,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         <Button
           variant="danger"
           onClick={() => {
-            setId(manualInputWeigh.id!);
+            setId(manualInputWeigh?.id!);
             setShowAutoInputDeleteModal(true);
           }}
         >
@@ -411,12 +410,11 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
           variant="success"
           onClick={() => {
             Save()
-            console.log(manualInputWeigh?.id)
           }}
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualInputWeigh.type!}></DeleteConfirmationModal>
+        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualInputWeigh.type!} ></DeleteConfirmationModal>
       </div>
     </div>
   )
