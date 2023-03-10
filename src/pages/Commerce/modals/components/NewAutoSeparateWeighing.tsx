@@ -105,7 +105,7 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{autoSepar
         impurity: impurity*100,
         discount: discount*100,
         final_weight: totalWeighning*1000,
-        type: "Avulsa",
+        type: "Única",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
         total_discount: totalDiscount.toString(),
