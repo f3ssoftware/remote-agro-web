@@ -3,8 +3,7 @@ import { Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
 
-export function Prescription(handleClose: any) {
-  const [type, setType] = useState(0)
+export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: any, selectedFarm: string}) {
   const [plot, setPlot] = useState(0)
   const [accountable, setAccountable] = useState('')
   const [dateTime, setDateTime] = useState(new Date())
@@ -17,40 +16,9 @@ export function Prescription(handleClose: any) {
   const [tankNumbers,setTankNumbers] = useState(0)
   const [tankSyrup,setTankSyrup] = useState(0)
 
-  useEffect(() => {
-    console.log(dateTime)
-  }, [
-    type,
-    plot,
-    accountable,
-    dateTime,
-    applicator,
-    nozzle,
-    applicationType,
-    flowRate,
-    pressure,
-    fullSyrup,
-    tankNumbers,
-    tankSyrup,
-  ])
-
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Selecione um tipo</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setType(Number(e.target.value))
-              }}
-            >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>

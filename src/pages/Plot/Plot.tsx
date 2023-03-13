@@ -268,6 +268,7 @@ export function Plot() {
       <PrescriptionModal
         show={showPrescriptionModal}
         handleClose={() => setShowPrescriptionModal(false)}
+        selectedFarm={selectedFarm}
       ></PrescriptionModal>
       <NewFarmModal
         show={showNewFarmModal}
