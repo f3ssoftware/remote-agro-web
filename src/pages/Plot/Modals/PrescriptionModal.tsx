@@ -12,7 +12,7 @@ export function PrescriptionModal({
 }: {
   show: boolean
   handleClose: any
-  selectedFarm: string
+  selectedFarm: any
 }) {
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
@@ -52,9 +52,9 @@ export function PrescriptionModal({
             </Row>
             <Row>
               <Col>
-                {prescriptionType === 1 ? (
+                {prescriptionType === 0 ? (
                   <PrescriptionDefensive selectedFarm={selectedFarm} handleClose={handleClose}></PrescriptionDefensive>
-                ) : prescriptionType == 2 ? (
+                ) : prescriptionType == 1 ? (
                   <PrescriptionFertilizers></PrescriptionFertilizers>
                 ) : (
                   <PrescriptionSeeding></PrescriptionSeeding>

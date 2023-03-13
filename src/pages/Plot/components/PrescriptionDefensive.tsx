@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
+import { Typeahead } from 'react-bootstrap-typeahead'
 
-export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: any, selectedFarm: string}) {
+export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: any, selectedFarm: any}) {
   const [plot, setPlot] = useState(0)
   const [accountable, setAccountable] = useState('')
   const [dateTime, setDateTime] = useState(new Date())
@@ -15,22 +16,25 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
   const [fullSyrup, setFullSyrup] = useState(0)
   const [tankNumbers,setTankNumbers] = useState(0)
   const [tankSyrup,setTankSyrup] = useState(0)
+  const [selectedPlot, setSelectedPlot]: any = useState<any>({})
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
+      <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setPlot(Number(e.target.value))
+            {selectedFarm?.fields?.length > 0 ? <Typeahead
+              id="field"
+              selected={selectedFarm?.fields.filter((field: any) => field?.id === selectedPlot?.id)}
+              labelKey={(selected: any) => selected?.name}
+              isInvalid={!selectedPlot?.id}
+              onChange={(selected: any) => {
+                setSelectedPlot(selected[0])
               }}
-            >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
-            </Form.Select>
+              options={selectedFarm?.fields?.map((field: any) => {
+                return { id: field.id, label: field.name, ...field }
+              })} /> : <></>}
           </Form.Group>
         </Col>
       </Row>
