@@ -202,7 +202,7 @@ const commerceStore = createSlice({
         },
       )
     },
-    resetSeparatetWeighingRows(state, action) {
+    resetSeparateWeighingRows(state, action) {
       state.separateWeighingRows = initialRowsSeparateW
     },
   },
@@ -231,7 +231,7 @@ export const {
   removeSeparateWeighRow,
   updateSeparateRow,
   setSeparateWeighingRows,
-  resetSeparatetWeighingRows,
+  resetSeparateWeighingRows,
 } = commerceStore.actions
 export default commerceStore.reducer
 
