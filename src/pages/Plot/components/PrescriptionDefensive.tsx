@@ -3,9 +3,11 @@ import { Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../..'
+import { asyncFetchAppliers } from '../../../stores/plot.store'
 
 export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: any, selectedFarm: any}) {
-  const [plot, setPlot] = useState(0)
   const [accountable, setAccountable] = useState('')
   const [dateTime, setDateTime] = useState(new Date())
   const [applicator, setApplicator] = useState(0)
@@ -17,6 +19,13 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
   const [tankNumbers,setTankNumbers] = useState(0)
   const [tankSyrup,setTankSyrup] = useState(0)
   const [selectedPlot, setSelectedPlot]: any = useState<any>({})
+  const [selectedApplier, setSelectedApplier]: any = useState<any>({})
+  const { plot } = useSelector((state: RootState) => state);
+  const dispatch = useDispatch<any>()
+
+  useEffect(() => {
+    dispatch(asyncFetchAppliers);
+  }, []);
 
   return (
     <div>
@@ -66,18 +75,23 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
         </Col>
       </Row>
       <Row>
-        <Col>
+      <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setApplicator(Number(e.target.value))
+            <Typeahead
+              id="farm"
+              selected={plot?.appliers.filter((applier: any) => applier?.id === selectedApplier?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
               }}
-            >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
-            </Form.Select>
+              isInvalid={!selectedApplier?.id}
+              onChange={(selected: any) => {
+                setSelectedApplier(selected[0])
+              }}
+              options={plot?.appliers?.map((applier: any) => {
+                return { ...applier, label: applier.name }
+              })}
+            />
           </Form.Group>
         </Col>
         <Col>

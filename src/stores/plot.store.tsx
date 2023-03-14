@@ -3,21 +3,27 @@ import { AppDispatch } from "..";
 import axios from "axios";
 
 const initialApplications:any[] = [];
+const initialAppliers: any[] = []
 const plotStore = createSlice({
     name: 'plot',
     initialState: {
         applications: initialApplications,
+        appliers: initialAppliers
 
     },
     reducers: {
         setApplications(state, action) {
             state.applications = action.payload;
+        },
+        setAppliers(state, action){
+            state.appliers = action.payload;
         }
+            
     }
 });
 
 
-export const { setApplications } = plotStore.actions;
+export const { setApplications, setAppliers } = plotStore.actions;
 export default plotStore.reducer;
 
 // export function asyncFetchServiceOrders() {
@@ -53,6 +59,26 @@ export function asyncFetchApplications(params: any) {
                 },
             );
             dispatch(setApplications(results.data.list))
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
+}
+
+export function asyncFetchAppliers(params: any) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const results = await axios.get(
+                "https://remoteapi.murilobotelho.com.br/appliers",
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                    params,
+                },
+            );
+            dispatch(setAppliers(results.data.list))
         } catch (err) {
             console.error(err);
         }
