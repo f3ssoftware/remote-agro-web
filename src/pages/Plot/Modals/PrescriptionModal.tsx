@@ -16,7 +16,7 @@ export function PrescriptionModal({
 }) {
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
-  const [prescriptionType, setPrescriptionType] = useState(0)
+  const [prescriptionType, setPrescriptionType] = useState('Defensivos')
   return (
     <Container>
       <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
@@ -40,22 +40,22 @@ export function PrescriptionModal({
                   <Form.Select
                     aria-label=""
                     onChange={(e) => {
-                      return setPrescriptionType(Number(e.target.value))
+                      return setPrescriptionType((e.target.value))
                     }}
                   >
-                    <option value={0}>Defensivos</option>
-                    <option value={1}>Fertilizantes</option>
-                    <option value={2}>Semeadura</option>
+                    <option value={'Defensivos'}>Defensivos</option>
+                    <option value={'Fertilizantes'}>Fertilizantes</option>
+                    <option value={'Semeadura'}>Semeadura</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                {prescriptionType === 0 ? (
+                {prescriptionType === 'Defensivos' ? (
                   <PrescriptionDefensive selectedFarm={selectedFarm} handleClose={handleClose}></PrescriptionDefensive>
-                ) : prescriptionType == 1 ? (
-                  <PrescriptionFertilizers></PrescriptionFertilizers>
+                ) : prescriptionType == 'Fertilizantes' ? (
+                  <PrescriptionFertilizers selectedFarm={selectedFarm} handleClose={handleClose}></PrescriptionFertilizers>
                 ) : (
                   <PrescriptionSeeding></PrescriptionSeeding>
                 )}

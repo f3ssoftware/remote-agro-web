@@ -10,17 +10,23 @@ import { useEffect, useState } from "react";
 import { SeasonSelection } from "./SeasonsSelection";
 import { asyncFetchSeasons } from "../../stores/seasons.store";
 import { RootState } from "../..";
+import { UserInfo } from "os";
 
 export function TopNav() {
-    const { user, seasons } = useSelector((state: RootState) => state);
+    const { seasons } = useSelector((state: RootState) => state);
     const [showModalSeasons, setShowModalSeasons] = useState(false);
     const handleClose = () => setShowModalSeasons(false);
     const dispatch = useDispatch<any>();
     const navigator = useNavigate();
+    const [user, setUser] = useState<any>();
 
     useEffect(() => {
         dispatch(asyncFetchSeasons());
     }, [dispatch]);
+
+    useEffect(() => {
+        setUser(JSON.parse(sessionStorage.getItem('user')!));
+    }, []);
 
     let location = useLocation();
     return (
@@ -50,17 +56,17 @@ export function TopNav() {
                 <Col md={3}>
                     <Row>
                         <Col md={3}>
-                            <Avatar name={user.name} round={true} size="50"></Avatar>
+                            <Avatar name={user?.name} round={true} size="50"></Avatar>
                         </Col>
                         <Col md={9}>
                             <Row>
                                 <Col>
-                                    <span style={{ color: '#fff', fontWeight: 'bold' }}>{user.name}</span>
+                                    <span style={{ color: '#fff', fontWeight: 'bold' }}>{user?.name}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <span style={{ color: '#968E8E' }}>{user.role}</span>
+                                    <span style={{ color: '#968E8E' }}>{user?.role}</span>
                                 </Col>
                             </Row>
                         </Col>

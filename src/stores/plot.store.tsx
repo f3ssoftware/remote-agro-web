@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "..";
 import axios from "axios";
+import { Applier } from "../models/Applier";
+import { Application } from "../models/Application";
 
 const initialApplications:any[] = [];
-const initialAppliers: any[] = []
+const initialAppliers: Applier[] = []
+const initialApplicationData: Application[]=[]
 const plotStore = createSlice({
     name: 'plot',
     initialState: {
         applications: initialApplications,
-        appliers: initialAppliers
+        appliers: initialAppliers,
+        applicationData: initialApplicationData
 
     },
     reducers: {
@@ -17,13 +21,16 @@ const plotStore = createSlice({
         },
         setAppliers(state, action){
             state.appliers = action.payload;
+        },
+        setApplicationData(state,action){
+            state.applicationData = action.payload
         }
             
     }
 });
 
 
-export const { setApplications, setAppliers } = plotStore.actions;
+export const { setApplications, setAppliers, setApplicationData } = plotStore.actions;
 export default plotStore.reducer;
 
 // export function asyncFetchServiceOrders() {
@@ -75,10 +82,28 @@ export function asyncFetchAppliers(params: any) {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                     },
-                    params,
+                    params
                 },
             );
-            dispatch(setAppliers(results.data.list))
+            dispatch(setAppliers(results.data))
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
+}
+export function asyncFetchApplicationData() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const results = await axios.get(
+                "https://remoteapi.murilobotelho.com.br/applications",
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                },
+            );
+            dispatch(setApplicationData(results.data))
         } catch (err) {
             console.error(err);
         }

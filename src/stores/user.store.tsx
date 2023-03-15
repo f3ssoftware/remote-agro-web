@@ -9,6 +9,7 @@ const userStore = createSlice({
     name: "",
     role: "",
     reportUrl: "",
+    user_id: 0
   },
   reducers: {
     fetchUser(state: any, action) {
@@ -16,6 +17,7 @@ const userStore = createSlice({
       state.name = action.payload.user.name;
       state.role = action.payload.user.role;
       state.reportUrl = action.payload.user.web_reports_url;
+      state.user_id = action.payload.user.user_id
     },
   },
 });
@@ -36,6 +38,7 @@ export function asyncFetchUser(username: string, password: string) {
       );
       sessionStorage.setItem("token", results.data.token);
       dispatch(fetchUser(results.data));
+      sessionStorage.setItem('user', JSON.stringify(results.data.user));
       dispatch(popLoading('sessions'));
     } catch(err) {
       console.error(err);
