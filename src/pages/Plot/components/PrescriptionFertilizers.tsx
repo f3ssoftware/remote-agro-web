@@ -58,17 +58,6 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
         {' '}
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => {
-                setAccountable(e.target.value)
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
               Aplicador
             </Form.Label>
@@ -88,8 +77,6 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
             />
           </Form.Group>
         </Col>
-      </Row>
-      <Row>
       <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>

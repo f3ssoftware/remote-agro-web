@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap'
 import { PrescriptionDefensive } from '../components/PrescriptionDefensive'
 import { NewPrescriptionModal } from './NewPrescriptionModal'
@@ -16,7 +16,12 @@ export function PrescriptionModal({
 }) {
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
-  const [prescriptionType, setPrescriptionType] = useState('Defensivos')
+  const [prescriptionType, setPrescriptionType] = useState('')
+
+  useEffect(() => {
+    setPrescriptionType((''))
+  }, []);
+  
   return (
     <Container>
       <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
@@ -43,6 +48,7 @@ export function PrescriptionModal({
                       return setPrescriptionType((e.target.value))
                     }}
                   >
+                    <option value={''}></option>
                     <option value={'Defensivos'}>Defensivos</option>
                     <option value={'Fertilizantes'}>Fertilizantes</option>
                     <option value={'Semeadura'}>Semeadura</option>
@@ -56,9 +62,9 @@ export function PrescriptionModal({
                   <PrescriptionDefensive selectedFarm={selectedFarm} handleClose={handleClose}></PrescriptionDefensive>
                 ) : prescriptionType == 'Fertilizantes' ? (
                   <PrescriptionFertilizers selectedFarm={selectedFarm} handleClose={handleClose}></PrescriptionFertilizers>
-                ) : (
-                  <PrescriptionSeeding></PrescriptionSeeding>
-                )}
+                ) : prescriptionType == 'Semeadura' ? (
+                  <PrescriptionSeeding selectedFarm={selectedFarm} handleClose={handleClose}></PrescriptionSeeding>
+                ): <div></div>}
               </Col>
             </Row>
           </div>

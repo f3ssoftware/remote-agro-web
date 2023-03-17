@@ -2,72 +2,45 @@ import { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
+import { Typeahead } from 'react-bootstrap-typeahead'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../..'
+import { Applier } from '../../../models/Applier'
+import { Product } from '../../../models/Product'
+import { asyncFetchApplicationData, asyncFetchAppliers } from '../../../stores/plot.store'
+import { asyncFetchInput } from '../../../stores/input.store'
 
-export function PrescriptionSeeding(handleClose: any) {
-  const [type, setType] = useState(0)
-  const [plot, setPlot] = useState(0)
+export function PrescriptionSeeding({
+  handleClose,
+  selectedFarm,
+}: {
+  handleClose: any
+  selectedFarm: any
+}) {
   const [accountable, setAccountable] = useState('')
   const [dateTime, setDateTime] = useState(new Date())
-  const [applicator, setApplicator] = useState(0)
-  const [nozzle, setNozzle] = useState(0)
-  const [applicationType, setApplicationType] = useState(0)
+  const [fertilizing, setFertilizing] = useState('')
+  const [seedQuantity, setSeedQuantity] = useState(0)
+  const [lineSpacing, setLineSpacing] = useState(0)
+  const [jet, setJet] = useState('')
+  const [selectedPlot, setSelectedPlot]: any = useState<any>({})
+  const [selectedApplier, setSelectedApplier]: any = useState<any>({})
+  const { plot, input } = useSelector((state: RootState) => state)
+  const dispatch = useDispatch<any>()
+  const [seed, setSeed] = useState({ id: 0 });
   const [flowRate, setFlowRate] = useState(0)
-  const [pressure, setPressure] = useState(0)
-  const [fullSyrup, setFullSyrup] = useState(0)
-  const [tankNumbers,setTankNumbers] = useState(0)
-  const [tankSyrup,setTankSyrup] = useState(0)
+  const [product, setProduct] = useState({id: 0})
 
   useEffect(() => {
-    console.log(dateTime)
-  }, [
-    type,
-    plot,
-    accountable,
-    dateTime,
-    applicator,
-    nozzle,
-    applicationType,
-    flowRate,
-    pressure,
-    fullSyrup,
-    tankNumbers,
-    tankSyrup,
-  ])
-
+    dispatch(asyncFetchAppliers({user_id: JSON.parse(sessionStorage.getItem('user')!).user_id}));
+    dispatch(asyncFetchApplicationData())
+    dispatch(asyncFetchInput())
+  }, []);
+  
+  
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Selecione um tipo</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setType(Number(e.target.value))
-              }}
-            >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setPlot(Number(e.target.value))
-              }}
-            >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        {' '}
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
@@ -81,9 +54,57 @@ export function PrescriptionSeeding(handleClose: any) {
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Inicio do contrato
-            </Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
+            {selectedFarm?.fields?.length > 0 ? (
+              <Typeahead
+                id="field"
+                multiple
+                selected={selectedFarm?.fields?.filter(
+                  (field: any) => field?.id === selectedPlot?.id,
+                )}
+                labelKey={(selected: any) => selected?.name}
+                isInvalid={!selectedPlot?.id}
+                onChange={(selected: any) => {
+                  setSelectedPlot(selected[0])
+                }}
+                options={selectedFarm?.fields?.map((field: any) => {
+                  return { id: field.id, label: field.name, ...field }
+                })}
+              />
+            ) : (
+              <></>
+            )}
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        {' '}
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
+            <Typeahead
+              id="applier"
+              onChange={(selected: any) => {
+                setSelectedApplier(selected[0])
+              }}
+              selected={plot?.appliers?.filter(
+                (applier: any) => applier?.id === selectedApplier?.id,
+              )}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
+              isInvalid={!selectedApplier?.id}
+              options={plot?.appliers?.map((applier: Applier) => {
+                return { id: applier.id, label: applier.name, ...applier }
+              })}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
             <DatePicker
               locale={pt}
               dateFormat="dd/MM/yyyy"
@@ -92,111 +113,118 @@ export function PrescriptionSeeding(handleClose: any) {
             />
           </Form.Group>
         </Col>
-      </Row>
-      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Possui adubação?</Form.Label>
             <Form.Select
               aria-label=""
+              placeholder='selecione'
               onChange={(e) => {
-                return setApplicator(Number(e.target.value))
+                return setFertilizing(e.target.value)
               }}
             >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
+              <option value={''}></option>
+              <option value={'Sim'}>Sim</option>
+              <option value={'Não'}>Não</option>
             </Form.Select>
           </Form.Group>
         </Col>
+        {fertilizing=='Sim' ?(
+            <Col>
+            <Form.Group className="mb-3" controlId="">
+              <Form.Label style={{ color: '#fff' }}>Produtos</Form.Label>
+              <Typeahead
+                      id="product_input"
+                          onChange={(selected: any) => {
+                              if (selected.length > 0) {
+                                  setProduct({ id: selected[0].id });
+                              }
+                          }}
+                          options={input.inputs.filter(i => i.product?.class !== 'SEMENTE').map((input) => { return { id: input.id, label: `${input?.product?.name}` } })}
+                      />
+            </Form.Group>
+          </Col>
+          ):(<div></div>)}
+      </Row>
+      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Bico</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Semente/Cultivar</Form.Label>
+            <Typeahead
+              id="seed"
+              onChange={(selected: any) => {
+                if (selected.length > 0) {
+                  setSeed({ id: selected[0].id })
+                }
+              }}
+              options={input.inputs
+                .filter((product: Product) => {
+                  return (
+                    product.product?.class === 'SEMENTE' &&
+                    product.treatment !== 'EXTERNO'
+                  )
+                })
+                .map((input) => {
+                  return {
+                    id: input.id,
+                    label: `${input?.product?.name} - ${input.treatment}`,
+                  }
+                })}
+            />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>População (sementes/ha)</Form.Label>
+            <Form.Control
+              type="number"
+              onChange={(e) => {
+                return setSeedQuantity(Number(e.target.value))
+              }}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>Espaçamento entre linhas</Form.Label>
+            <Form.Control
+              type="number"
+              onChange={(e) => {
+                return setLineSpacing(Number(e.target.value))
+              }}
+            />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>Possui jato dirigido?</Form.Label>
             <Form.Select
               aria-label=""
               onChange={(e) => {
-                return setNozzle(Number(e.target.value))
+                return setJet(e.target.value)
               }}
             >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
+              <option value={''}></option>
+              <option value={'Sim'}>Sim</option>
+              <option value={'Não'}>Não</option>
             </Form.Select>
           </Form.Group>
         </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Tipo de aplicação</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setApplicationType(Number(e.target.value))
-              }}
-            >
-              <option value={0}>selecione</option>
-              <option value={1}>teste</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Vazão (L/ha)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setFlowRate(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Pressão (Pa)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setPressure(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Calda total (L)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setFullSyrup(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Nª de tanques</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setTankNumbers(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Calda/tanque (L)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setTankSyrup(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
+      {jet=='Sim' ?(
+            <Col>
+            <Form.Group className="mb-3" controlId="">
+              <Form.Label style={{ color: '#fff' }}>Vazão (L/ha)</Form.Label>
+              <Form.Control
+                type="number"
+                onChange={(e) => {
+                  return setFlowRate(Number(e.target.value))
+                }}
+              />
+            </Form.Group>
+          </Col>
+          ):(<div></div>)}
       </Row>
     </div>
   )
