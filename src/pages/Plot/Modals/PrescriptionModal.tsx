@@ -68,30 +68,8 @@ export function PrescriptionModal({
               </Col>
             </Row>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: '2%',
-            }}
-          >
-            <Button
-              style={{ backgroundColor: '#A5CD33', color: '#000' }}
-              variant="success"
-              onClick={() => {
-                handleClose(), setShowNewPrescriptionModal(true)
-              }}
-            >
-              Avançar
-            </Button>
-          </div>
         </Modal.Body>
       </Modal>
-      <NewPrescriptionModal
-        show={showNewPrescriptionModal}
-        handleClose={() => setShowNewPrescriptionModal(false)}
-      ></NewPrescriptionModal>
     </Container>
   )
 }

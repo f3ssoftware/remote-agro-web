@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
-import { Col, Form, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
 import { Typeahead } from 'react-bootstrap-typeahead'
@@ -9,6 +9,7 @@ import { asyncFetchApplicationData, asyncFetchAppliers } from '../../../stores/p
 import { Applier } from '../../../models/Applier'
 import { Application } from '../../../models/Application'
 import userStore from '../../../stores/user.store'
+import { NewPrescriptionModal } from '../Modals/NewPrescriptionModal'
 
 export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: any, selectedFarm: any}) {
   const [accountable, setAccountable] = useState('')
@@ -22,6 +23,9 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
   const [tankSyrup,setTankSyrup] = useState(0)
   const [selectedPlot, setSelectedPlot]: any = useState<any>({})
   const [selectedApplier, setSelectedApplier]: any = useState<any>({})
+  const [area, setArea]  = useState(0)
+  const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
+    useState(false)
   
 
   const { plot, user } = useSelector((state: RootState) => state);
@@ -52,19 +56,29 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-            {selectedFarm?.fields?.length > 0 ? <Typeahead
-              id="field"
-              multiple
-              selected={selectedFarm?.fields?.filter((field: any) => field?.id === selectedPlot?.id)}
-              labelKey={(selected: any) => selected?.name}
-              isInvalid={!selectedPlot?.id}
-              onChange={(selected: any) => {
-                setSelectedPlot(selected[0])
-              }}
-              options={selectedFarm?.fields?.map((field: any) => {
-                return { id: field.id, label: field.name, ...field }
-              })} /> : <></>}
+            {selectedFarm?.fields?.length > 0 ? (
+              <Typeahead
+                id="field"
+                selected={selectedFarm?.fields?.filter(
+                  (field: any) => field?.id === selectedPlot?.id,
+                )}
+                labelKey={(selected: any) => selected?.name}
+                isInvalid={!selectedPlot?.id}
+                onChange={(selected: any) => {
+                  setSelectedPlot(selected[0])
+                }}
+                options={selectedFarm?.fields?.map((field: any) => {
+                  return { id: field.id, label: field.name, ...field }
+                })}
+              />
+              
+            ) : (
+              <></>
+            )}
           </Form.Group>
+          {selectedPlot?.total_area > 0 ?(<><Form.Range min={0} max={selectedPlot?.total_area} value={area} onChange={(e) => {
+            return setArea(Number(e.target.value))
+          } } /><Form.Label>Área aplicada: {area}</Form.Label></>):(<></>)}
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
@@ -208,6 +222,28 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
           </Form.Group>
         </Col>
       </Row>
+      <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: '2%',
+            }}
+          >
+            <Button
+              style={{ backgroundColor: '#A5CD33', color: '#000' }}
+              variant="success"
+              onClick={() => {
+                handleClose(), setShowNewPrescriptionModal(true)
+              }}
+            >
+              Avançar
+            </Button>
+          </div>
+          <NewPrescriptionModal
+        show={showNewPrescriptionModal}
+        handleClose={() => setShowNewPrescriptionModal(false)}
+      ></NewPrescriptionModal>
     </div>
   )
 }

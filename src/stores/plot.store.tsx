@@ -3,6 +3,7 @@ import { AppDispatch } from "..";
 import axios from "axios";
 import { Applier } from "../models/Applier";
 import { Application } from "../models/Application";
+import { getMessages } from './messaging.store'
 
 const initialApplications:any[] = [];
 const initialAppliers: Applier[] = []
@@ -32,25 +33,6 @@ const plotStore = createSlice({
 
 export const { setApplications, setAppliers, setApplicationData } = plotStore.actions;
 export default plotStore.reducer;
-
-// export function asyncFetchServiceOrders() {
-//     return async function (dispatch: AppDispatch) {
-//         try {
-//             const results = await axios.get(
-//                 "https://remoteapi.murilobotelho.com.br/service-orders",
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-//                     },
-//                 }
-//             );
-//             dispatch(setServiceOrders(results.data))
-//         } catch (err) {
-//             console.error(err);
-//         }
-
-//     };
-// }
 
 
 export function asyncFetchApplications(params: any) {
@@ -110,3 +92,32 @@ export function asyncFetchApplicationData() {
 
     };
 }
+
+export function asyncPrescription(prescription: any) {
+    return async function (dispatch: AppDispatch) {
+      try {
+        const result = await axios.post(
+          `https://remoteapi.murilobotelho.com.br/applications`,
+          prescription,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          },
+        )
+        dispatch(
+          getMessages({
+            message: 'Receituário  salvo com sucesso',
+            type: 'success',
+          }),
+        )
+      } catch (err: any) {
+        dispatch(
+          getMessages({
+            message: err.response.data.message,
+            type: 'error',
+          }),
+        )
+      }
+    }
+  }

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Col, Form, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
-import { asyncFetchApplicationData, asyncFetchAppliers } from '../../../stores/plot.store'
+import { asyncFetchApplicationData, asyncFetchAppliers, asyncPrescription } from '../../../stores/plot.store'
 import { Applier } from '../../../models/Applier'
+import { NewPrescriptionModal } from '../Modals/NewPrescriptionModal'
+import { Application } from '../../../models/Application'
 
 export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose: any, selectedFarm: any}) {
   const [accountable, setAccountable] = useState('')
@@ -16,11 +18,26 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
   const [selectedApplier, setSelectedApplier]: any = useState<any>({})
   const { plot, user } = useSelector((state: RootState) => state);
   const dispatch = useDispatch<any>()
+  const [area, setArea] = useState(0)
+  const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
+    useState(false)
 
   useEffect(() => {
     dispatch(asyncFetchAppliers({user_id: JSON.parse(sessionStorage.getItem('user')!).user_id}));
     dispatch(asyncFetchApplicationData())
   }, []);
+
+  const next = () =>{
+    const defensive: Application = {
+      type:'Fertilizantes',
+      accountable: accountable,
+      area: area,
+      applier_id: selectedApplier.id,
+      date: dateTime.toISOString(),
+      application_type: applicationType,
+    }
+    dispatch(asyncPrescription(defensive))
+  }
 
   return (
     <div>
@@ -39,19 +56,29 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-            {selectedFarm?.fields?.length > 0 ? <Typeahead
-              id="field"
-              multiple
-              selected={selectedFarm?.fields?.filter((field: any) => field?.id === selectedPlot?.id)}
-              labelKey={(selected: any) => selected?.name}
-              isInvalid={!selectedPlot?.id}
-              onChange={(selected: any) => {
-                setSelectedPlot(selected[0])
-              }}
-              options={selectedFarm?.fields?.map((field: any) => {
-                return { id: field.id, label: field.name, ...field }
-              })} /> : <></>}
+            {selectedFarm?.fields?.length > 0 ? (
+              <Typeahead
+                id="field"
+                selected={selectedFarm?.fields?.filter(
+                  (field: any) => field?.id === selectedPlot?.id,
+                )}
+                labelKey={(selected: any) => selected?.name}
+                isInvalid={!selectedPlot?.id}
+                onChange={(selected: any) => {
+                  setSelectedPlot(selected[0])
+                }}
+                options={selectedFarm?.fields?.map((field: any) => {
+                  return { id: field.id, label: field.name, ...field }
+                })}
+              />
+              
+            ) : (
+              <></>
+            )}
           </Form.Group>
+          {selectedPlot?.total_area > 0 ?(<><Form.Range min={0} max={selectedPlot?.total_area} value={area} onChange={(e) => {
+            return setArea(Number(e.target.value))
+          } } /><Form.Label>Área aplicada: {area}</Form.Label></>):(<></>)}
         </Col>
       </Row>
       <Row>
@@ -109,6 +136,28 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
                 </Form.Group>
               </Col>
       </Row>
+      <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: '2%',
+            }}
+          >
+            <Button
+              style={{ backgroundColor: '#A5CD33', color: '#000' }}
+              variant="success"
+              onClick={() => {
+                handleClose(), setShowNewPrescriptionModal(true), next()
+              }}
+            >
+              Avançar
+            </Button>
+          </div>
+          <NewPrescriptionModal
+        show={showNewPrescriptionModal}
+        handleClose={() => setShowNewPrescriptionModal(false)}
+      ></NewPrescriptionModal>
     </div>
   )
 }
