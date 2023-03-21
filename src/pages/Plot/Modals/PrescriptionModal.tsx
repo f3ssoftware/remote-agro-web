@@ -14,8 +14,6 @@ export function PrescriptionModal({
   handleClose: any
   selectedFarm: any
 }) {
-  const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
-    useState(false)
   const [prescriptionType, setPrescriptionType] = useState('')
 
   useEffect(() => {
