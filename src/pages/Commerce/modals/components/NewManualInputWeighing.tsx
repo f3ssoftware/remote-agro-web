@@ -141,7 +141,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
       }
     }
     if (!manualInputWeigh.id) {
-      dispatch(asyncInputWeighing(manualInput));
+      dispatch(asyncInputWeighing(manualInput, index));
     } else {
       dispatch(asyncUpdateInputWeighing(manualInputWeigh?.id!, manualInput, index, WeighingRowType.MANUAL));
     }

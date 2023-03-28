@@ -1,7 +1,7 @@
 import { faCalendar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useState } from 'react'
-import { Card, Col, Form, Row, Table } from 'react-bootstrap'
+import { Button, Card, Col, Form, Row, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../..'
 import { asyncFetchSoil } from '../../stores/soil.store'
@@ -61,6 +61,9 @@ export function Soil() {
           <Row>
             <Col>
               <h4>Análises de solo</h4>
+            </Col>
+            <Col>
+              <Button variant='success'>Solicite já sua amostra</Button>
             </Col>
             <Col>
               <Form>

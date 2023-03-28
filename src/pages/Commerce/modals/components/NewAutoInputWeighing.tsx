@@ -164,7 +164,7 @@ export function NewAutoInputWeighing({
       },
     }
     if (!autoInputWeighing?.id) {
-      dispatch(asyncInputWeighing(autoInput));
+      dispatch(asyncInputWeighing(autoInput, index));
     } else {
       dispatch(asyncUpdateInputWeighing(autoInputWeighing?.id!, autoInput, index, WeighingRowType.AUTOMATIC));
     }

@@ -121,7 +121,7 @@ export function Plot() {
               </div>
               <iframe
                 src={selectedFarm?.map_link}
-                width={'360px'}
+                width={'300px'}
                 height={'220px'}
                 style={{ margin: '10px', display: 'flex', justifyContent: 'center' }}
               ></iframe>
