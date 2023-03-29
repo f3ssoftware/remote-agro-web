@@ -155,7 +155,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
               onChange={(selected: any) => {
                 setSelectedCultivation(selected[0]);
               }}
-              options={financial.cultivations.map((cultivation: Cultivation) => {
+              options={financial?.cultivations.map((cultivation: Cultivation) => {
                 return { id: cultivation.id, label: cultivation.name, ...cultivation }
               })}
             />

@@ -51,9 +51,7 @@ export function SeparateWeighing() {
                       <NewManualSeparateWeighing
                         index={index}
                         key={index}
-                        manualSeparateWeigh={
-                          commerce?.separateWeighingRows[index]
-                        }
+                        manualSeparateWeigh={row}
                       ></NewManualSeparateWeighing>
                     )
                   }
@@ -62,7 +60,7 @@ export function SeparateWeighing() {
                       <NewAutoSeparateWeighing
                         index={index}
                         key={index}
-                        autoSeparateWeighing={commerce?.separateWeighingRows[index]}
+                        autoSeparateWeighing={row}
                       ></NewAutoSeparateWeighing>
                     )
                   }
@@ -86,7 +84,7 @@ export function SeparateWeighing() {
               onClick={() => {
                 const separateWeighRow: SeparateWeighingRow = {
                   rowType: WeighingRowType.MANUAL,
-                  type: 'Única'
+                  type: 'Única',
                 }
                 dispatch(addSeparateWeighRow(separateWeighRow))
               }}
@@ -95,10 +93,10 @@ export function SeparateWeighing() {
             </Button>
             <Button
               variant="primary"
-              onClick={() =>{
+              onClick={() => {
                 const separateWeighRow: SeparateWeighingRow = {
                   rowType: WeighingRowType.AUTOMATIC,
-                  type: 'Única'
+                  type: 'Única',
                 }
                 dispatch(addSeparateWeighRow(separateWeighRow))
               }}

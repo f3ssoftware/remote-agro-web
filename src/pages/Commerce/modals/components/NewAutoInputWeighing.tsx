@@ -30,7 +30,7 @@ export function NewAutoInputWeighing({
   autoInputWeighing,
 }: {
   index: number,
-  autoInputWeighing: InputWeighingRow
+  autoInputWeighing: InputWeighingRow,
 }) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
@@ -164,7 +164,7 @@ export function NewAutoInputWeighing({
       },
     }
     if (!autoInputWeighing?.id) {
-      dispatch(asyncInputWeighing(autoInput, index));
+      dispatch(asyncInputWeighing(autoInput));
     } else {
       dispatch(asyncUpdateInputWeighing(autoInputWeighing?.id!, autoInput, index, WeighingRowType.AUTOMATIC));
     }

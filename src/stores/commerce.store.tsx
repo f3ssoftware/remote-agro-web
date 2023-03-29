@@ -288,8 +288,7 @@ export function asyncTransferWeighing(transfer: any) {
 }
 
 export function asyncInputWeighing(
-  input: any,
-  index: number
+  input: any
 ) {
   return async function (dispatch: AppDispatch) {
     try {
@@ -302,7 +301,6 @@ export function asyncInputWeighing(
           },
         },
       )
-      dispatch(updateInputWeighRow({inputWeighingRow: result.data[0], index}))
       dispatch(
         getMessages({
           message: 'Pesagem de entrada salva com sucesso',

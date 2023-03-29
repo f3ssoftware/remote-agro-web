@@ -74,7 +74,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
   const fetchData = async () => {
     await dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
     await dispatch(asyncFetchSiloData());
-    if (!manualInputWeigh?.id) {
+    if (!manualInputWeigh.id) {
       setSelectedFarm(farm?.farms[0])
       dispatch(selectAFarm(farm?.farms[0]));
     }
@@ -141,7 +141,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
       }
     }
     if (!manualInputWeigh.id) {
-      dispatch(asyncInputWeighing(manualInput, index));
+      dispatch(asyncInputWeighing(manualInput));
     } else {
       dispatch(asyncUpdateInputWeighing(manualInputWeigh?.id!, manualInput, index, WeighingRowType.MANUAL));
     }
