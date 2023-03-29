@@ -274,7 +274,7 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
           </div>
           <NewPrescriptionModal
         show={showNewPrescriptionModal}
-        handleClose={() => setShowNewPrescriptionModal(false)}
+        handleClose={handleClose}
       ></NewPrescriptionModal>
     </div>
   )
