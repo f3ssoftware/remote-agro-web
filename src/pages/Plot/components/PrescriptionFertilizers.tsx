@@ -28,15 +28,18 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
   }, []);
 
   const next = () =>{
-    const defensive: Application = {
+    const fertilizer: Application = {
       type:'Fertilizantes',
       accountable: accountable,
       area: area,
       applier_id: selectedApplier.id,
       date: dateTime.toISOString(),
       application_type: applicationType,
+      correct_decimals: true,
+      farm_id: selectedFarm.id,
+      fields: [{id: selectedPlot.id, area: area}]
     }
-    dispatch(asyncPrescription(defensive))
+    dispatch(asyncPrescription(fertilizer))
   }
 
   return (

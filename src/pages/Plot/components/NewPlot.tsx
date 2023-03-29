@@ -232,6 +232,7 @@ export function NewPlot() {
             expected_unit_price: value,
             cultivation_id: cultivation.id,
             expenses_weight: weigh,
+            cultivation_name: cultivation.name
           }
           dispatch(asyncRegisterField(requestBody));
         }}>Registrar</Button>

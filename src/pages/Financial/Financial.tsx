@@ -14,9 +14,9 @@ export function Financial() {
         case "balance": {
           return <Balance></Balance>
         }
-        case "invoice": {
-            return <Invoice></Invoice>
-        }
+        // case "invoice": {
+        //     return <Invoice></Invoice>
+        // }
         case "manual-registration": {
           return <ManualRegistration></ManualRegistration>;
         }

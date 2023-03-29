@@ -56,7 +56,9 @@ export function PrescriptionSeeding({
       seed_quantity: seedQuantity,
       lines_spacing: lineSpacing,
       flow_rate: flowRate,
-      farm_id: selectedFarm
+      farm_id: selectedFarm.id,
+      correct_decimals: true,
+      fields: [{id: selectedPlot.id, area: area}]
     }
     dispatch(asyncPrescription(seeding))
   }

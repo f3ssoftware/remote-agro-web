@@ -99,7 +99,7 @@ export function Plot() {
                 </h4>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2%' }}>
                 <Dropdown className="frist-card-dropdown-plot">
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
                     {selectedFarm?.name}
@@ -121,9 +121,9 @@ export function Plot() {
               </div>
               <iframe
                 src={selectedFarm?.map_link}
-                width={'300px'}
-                height={'220px'}
-                style={{ margin: '10px', display: 'flex', justifyContent: 'center' }}
+                width={'400vw'}
+                height={'400vh'}
+                style={{ marginBottom: '10%', marginLeft: '11%', display: 'flex', justifyContent: 'center' }}
               ></iframe>
             </div>
           </div>
@@ -162,7 +162,7 @@ export function Plot() {
                   </Row>
                   <Row>
                     <Col>
-                      <span>Cultivo: {field.planting_type}</span>
+                      <span>Cultivo: {field.cultivation_name}</span>
                     </Col>
                   </Row>
                   <Row>

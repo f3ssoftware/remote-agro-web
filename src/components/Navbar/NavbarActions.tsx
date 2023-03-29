@@ -4,11 +4,11 @@ export const NavbarActions = [
         title: "Balanço",
         navigation: "/financial/balance"
     },
-    {
-        pathname: "financial",
-        title: "Emitir Nota",
-        navigation: "/financial/invoice"
-    },
+    // {
+    //     pathname: "financial",
+    //     title: "Emitir Nota",
+    //     navigation: "/financial/invoice"
+    // },
     {
         pathname: "financial",
         title: "Notas Sefaz",

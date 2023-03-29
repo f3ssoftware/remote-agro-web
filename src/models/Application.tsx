@@ -1,3 +1,5 @@
+import {Fields} from './Fields'
+
 export class Application {
   accountable?: string
   application_type?: string
@@ -26,4 +28,6 @@ export class Application {
   user_fertilizer_id?: number
   user_id?: number
   user_seed_id?: number
+  correct_decimals?: boolean
+  fields?: Fields[]
 }

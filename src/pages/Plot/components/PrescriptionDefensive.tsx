@@ -5,7 +5,7 @@ import pt from 'date-fns/locale/pt-BR'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
-import { asyncFetchApplicationData, asyncFetchAppliers } from '../../../stores/plot.store'
+import { asyncFetchApplicationData, asyncFetchAppliers, asyncPrescription } from '../../../stores/plot.store'
 import { Applier } from '../../../models/Applier'
 import { Application } from '../../../models/Application'
 import userStore from '../../../stores/user.store'
@@ -35,6 +35,34 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
     dispatch(asyncFetchAppliers({user_id: JSON.parse(sessionStorage.getItem('user')!).user_id}));
     dispatch(asyncFetchApplicationData())
   }, []);
+
+  useEffect(() => {
+    setFullSyrup(flowRate*2.35)
+  }, [flowRate])
+
+  useEffect(() => {
+    setTankSyrup(fullSyrup/tankNumbers)
+  }, [fullSyrup,tankNumbers])
+
+  const next = () =>{
+    const defensive: Application = {
+      type:'Fertilizantes',
+      accountable: accountable,
+      area: area,
+      applier_id: selectedApplier.id,
+      date: dateTime.toISOString(),
+      application_type: applicationType,
+      block: block,
+      flow_rate: flowRate,
+      pressure: pressure,
+      number_of_tanks: tankNumbers,
+      correct_decimals: true,
+      farm_id: selectedFarm.id,
+      fields: [{id: selectedPlot.id, area: area}]
+    }
+    dispatch(asyncPrescription(defensive))
+  }
+
 
   return (
     <div>
@@ -191,6 +219,8 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
             <Form.Label style={{ color: '#fff' }}>Calda total (L)</Form.Label>
             <Form.Control
               type="number"
+              disabled
+              value={fullSyrup}
               onChange={(e) => {
                 return setFullSyrup(Number(e.target.value))
               }}
@@ -215,6 +245,8 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
             <Form.Label style={{ color: '#fff' }}>Calda/tanque (L)</Form.Label>
             <Form.Control
               type="number"
+              disabled
+              value={tankSyrup}
               onChange={(e) => {
                 return setTankSyrup(Number(e.target.value))
               }}
@@ -234,7 +266,7 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
               style={{ backgroundColor: '#A5CD33', color: '#000' }}
               variant="success"
               onClick={() => {
-                handleClose(), setShowNewPrescriptionModal(true)
+                handleClose(), setShowNewPrescriptionModal(true), next()
               }}
             >
               Avançar

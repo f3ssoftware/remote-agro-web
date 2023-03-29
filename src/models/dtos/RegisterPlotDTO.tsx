@@ -9,6 +9,7 @@ export class RegisterPlotDTO {
     productivity?: number;
     season_id?: number;
     is_active?: boolean;
+    cultivation_name?:string;
     name?: string;
     expected_unit_price?: number;
     cultivation_id?: number;
