@@ -37,7 +37,7 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
   }, []);
 
   useEffect(() => {
-    setFullSyrup(flowRate*2.35)
+    setFullSyrup(flowRate*area)
   }, [flowRate])
 
   useEffect(() => {
