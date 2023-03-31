@@ -63,10 +63,10 @@ export function NewPrescriptionModal({
       <Modal.Body style={{ backgroundColor: '#7C5529' }}>
       <Row>
           <Col>
-          <Row><span style={{ color: '#fff' }}>Fazenda: {selectedFarm.name}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Talhões: {selectedPlot.name}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Fazenda: {selectedFarm?.name}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Talhões: {selectedPlot?.name}</span></Row>
           <Row><span style={{ color: '#fff' }}>Data: {date}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Aplicador: {applier.name}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Aplicador: {applier?.name}</span></Row>
           </Col>
           <Col>
           <Row><span style={{ color: '#fff' }}>Aplicação: {applicationType}</span></Row>
