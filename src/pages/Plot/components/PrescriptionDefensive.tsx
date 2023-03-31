@@ -266,16 +266,16 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
               style={{ backgroundColor: '#A5CD33', color: '#000' }}
               variant="success"
               onClick={() => {
-                handleClose(), setShowNewPrescriptionModal(true), next()
+                 setShowNewPrescriptionModal(true), next()
               }}
             >
               Avançar
             </Button>
           </div>
-          <NewPrescriptionModal
+          {/* <NewPrescriptionModal
         show={showNewPrescriptionModal}
         handleClose={handleClose}
-      ></NewPrescriptionModal>
+      ></NewPrescriptionModal> */}
     </div>
   )
 }

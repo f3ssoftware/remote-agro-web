@@ -27,20 +27,20 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
     dispatch(asyncFetchApplicationData())
   }, []);
 
-  const next = () =>{
-    const fertilizer: Application = {
-      type:'Fertilizantes',
-      accountable: accountable,
-      area: area,
-      applier_id: selectedApplier.id,
-      date: dateTime.toISOString(),
-      application_type: applicationType,
-      correct_decimals: true,
-      farm_id: selectedFarm.id,
-      fields: [{id: selectedPlot.id, area: area}]
-    }
-    dispatch(asyncPrescription(fertilizer))
-  }
+  // const next = () =>{
+  //   const fertilizer: Application = {
+  //     type:'Fertilizantes',
+  //     accountable: accountable,
+  //     area: area,
+  //     applier_id: selectedApplier.id,
+  //     date: dateTime.toISOString(),
+  //     application_type: applicationType,
+  //     correct_decimals: true,
+  //     farm_id: selectedFarm.id,
+  //     fields: [{id: selectedPlot.id, area: area}]
+  //   }
+  //   dispatch(asyncPrescription(fertilizer))
+  // }
 
   return (
     <div>
@@ -134,7 +134,7 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
                     <option value={'A lanço'}>A lanço</option>
                     <option value={'Aéreo'}>Incorporado</option>
                     <option value={'Fertirrigação'}>Fertirrigação</option>
-                    <option value={'Cocho'}>Fertirrigação</option>
+                    <option value={'Cocho'}>Cocho</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -151,7 +151,7 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
               style={{ backgroundColor: '#A5CD33', color: '#000' }}
               variant="success"
               onClick={() => {
-                handleClose(), setShowNewPrescriptionModal(true), next()
+                setShowNewPrescriptionModal(true)
               }}
             >
               Avançar
@@ -159,7 +159,14 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
           </div>
           <NewPrescriptionModal
         show={showNewPrescriptionModal}
-        handleClose={() => setShowNewPrescriptionModal(false)}
+        handleClose={handleClose}
+        accountable={accountable}
+        area={area}
+        applier={selectedApplier}
+        date={dateTime.toISOString()}
+        applicationType={applicationType}
+        selectedFarm={selectedFarm}
+        selectedPlot={selectedPlot}
       ></NewPrescriptionModal>
     </div>
   )

@@ -7,9 +7,23 @@ import { NewPrescription } from '../components/NewPrescription'
 export function NewPrescriptionModal({
   show,
   handleClose,
+  accountable,
+  area,
+  applier,
+  date,
+  applicationType,
+  selectedFarm,
+  selectedPlot,
 }: {
   show: boolean
   handleClose: any
+  accountable: string
+  area: number
+  applier: any
+  date: string
+  applicationType: string
+  selectedFarm: any
+  selectedPlot: any
 }) {
   const [applicationTables, setApplicationTables]: any[] = useState([])
 
@@ -19,7 +33,10 @@ export function NewPrescriptionModal({
     setApplicationTables(newApplicationTable)
   }
 
-  const onHandleUpdate = (index: number, applicationTable: ApplicationTable) => {
+  const onHandleUpdate = (
+    index: number,
+    applicationTable: ApplicationTable,
+  ) => {
     const newApplicationTables = [...applicationTables]
     newApplicationTables.splice(index, 1)
     newApplicationTables.push(applicationTable)
@@ -33,7 +50,7 @@ export function NewPrescriptionModal({
     setApplicationTables(newApplicationTable)
   }
   return (
-    <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
+    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
       <Modal.Header
         closeButton
         style={{ backgroundColor: '#7C5529', border: 'none' }}
@@ -41,10 +58,22 @@ export function NewPrescriptionModal({
         <Modal.Title>
           {' '}
           <span style={{ color: '#fff' }}>Receituário</span>
-          <div>Info receituario anterior</div>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+      <Row>
+          <Col>
+          <Row><span style={{ color: '#fff' }}>Fazenda: {selectedFarm.name}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Talhões: {selectedPlot.name}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Data: {date}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Aplicador: {applier.name}</span></Row>
+          </Col>
+          <Col>
+          <Row><span style={{ color: '#fff' }}>Aplicação: {applicationType}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Área aplicada: {area}</span></Row>
+          <Row><span style={{ color: '#fff' }}>Responsável: {accountable}</span></Row>
+          </Col>
+        </Row>
         {applicationTables?.map((p: Product, index: number) => {
           return (
             <NewPrescription
@@ -65,7 +94,9 @@ export function NewPrescriptionModal({
         >
           <Row>
             <Col>
-              <Button variant="success" onClick={() => addLine()}>Adicionar linha</Button>
+              <Button variant="success" onClick={() => addLine()}>
+                Adicionar linha
+              </Button>
             </Col>
             <Col>
               <Button

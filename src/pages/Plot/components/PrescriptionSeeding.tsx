@@ -275,16 +275,16 @@ export function PrescriptionSeeding({
               style={{ backgroundColor: '#A5CD33', color: '#000' }}
               variant="success"
               onClick={() => {
-                handleClose(), setShowNewPrescriptionModal(true), next()
+                setShowNewPrescriptionModal(true), next()
               }}
             >
               Avançar
             </Button>
           </div>
-          <NewPrescriptionModal
+          {/* <NewPrescriptionModal
         show={showNewPrescriptionModal}
-        handleClose={() => setShowNewPrescriptionModal(false)}
-      ></NewPrescriptionModal>
+        handleClose={handleClose}
+      ></NewPrescriptionModal> */}
     </div>
   )
 }
