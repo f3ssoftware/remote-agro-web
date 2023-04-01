@@ -121,3 +121,31 @@ export function asyncPrescription(prescription: any) {
       }
     }
   }
+  export function asyncPrescriptionTable(prescription: any) {
+    return async function (dispatch: AppDispatch) {
+      try {
+        const result = await axios.post(
+          `https://remoteapi.murilobotelho.com.br/application-tables`,
+          prescription,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          },
+        )
+        // dispatch(
+        //   getMessages({
+        //     message: 'Receituário  salvo com sucesso',
+        //     type: 'success',
+        //   }),
+        // )
+      } catch (err: any) {
+        dispatch(
+          getMessages({
+            message: err.response.data.message,
+            type: 'error',
+          }),
+        )
+      }
+    }
+  }

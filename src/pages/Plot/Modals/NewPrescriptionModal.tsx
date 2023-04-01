@@ -3,6 +3,9 @@ import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { ApplicationTable } from '../../../models/ApplicationTable'
 import { Product } from '../../../models/Product'
 import { NewPrescription } from '../components/NewPrescription'
+import { Application } from '../../../models/Application'
+import { asyncPrescription, asyncPrescriptionTable } from '../../../stores/plot.store'
+import { useDispatch } from 'react-redux'
 
 export function NewPrescriptionModal({
   show,
@@ -26,6 +29,7 @@ export function NewPrescriptionModal({
   selectedPlot: any
 }) {
   const [applicationTables, setApplicationTables]: any[] = useState([])
+  const dispatch = useDispatch<any>()
 
   const onHandleRemove = (index: number) => {
     const newApplicationTable = [...applicationTables]
@@ -49,6 +53,26 @@ export function NewPrescriptionModal({
     newApplicationTable.push({ product_id: 0, quantity: 0 })
     setApplicationTables(newApplicationTable)
   }
+  const next = () =>{
+      const fertilizer: Application = {
+        type:'Fertilizantes',
+        accountable: accountable,
+        area: area,
+        applier_id: applier.id,
+        date: date,
+        application_type: applicationType,
+        correct_decimals: true,
+        farm_id: selectedFarm.id,
+        fields: [{id: selectedPlot.id, area: area}]
+      }
+      dispatch(asyncPrescription(fertilizer))
+    }
+    const confirm = () => {
+      const request: ApplicationTable = {
+          application_tables: applicationTables
+      }
+          dispatch(asyncPrescriptionTable(request));
+  }
   return (
     <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
       <Modal.Header
@@ -61,17 +85,37 @@ export function NewPrescriptionModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ backgroundColor: '#7C5529' }}>
-      <Row>
+        <Row>
           <Col>
-          <Row><span style={{ color: '#fff' }}>Fazenda: {selectedFarm?.name}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Talhões: {selectedPlot?.name}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Data: {date}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Aplicador: {applier?.name}</span></Row>
+            <Row>
+              <span style={{ color: '#fff' }}>
+                Fazenda: {selectedFarm?.name}
+              </span>
+            </Row>
+            <Row>
+              <span style={{ color: '#fff' }}>
+                Talhões: {selectedPlot?.name}
+              </span>
+            </Row>
+            <Row>
+              <span style={{ color: '#fff' }}>Data: {date}</span>
+            </Row>
+            <Row>
+              <span style={{ color: '#fff' }}>Aplicador: {applier?.name}</span>
+            </Row>
           </Col>
           <Col>
-          <Row><span style={{ color: '#fff' }}>Aplicação: {applicationType}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Área aplicada: {area}</span></Row>
-          <Row><span style={{ color: '#fff' }}>Responsável: {accountable}</span></Row>
+            <Row>
+              <span style={{ color: '#fff' }}>
+                Aplicação: {applicationType}
+              </span>
+            </Row>
+            <Row>
+              <span style={{ color: '#fff' }}>Área aplicada: {area}</span>
+            </Row>
+            <Row>
+              <span style={{ color: '#fff' }}>Responsável: {accountable}</span>
+            </Row>
           </Col>
         </Row>
         {applicationTables?.map((p: Product, index: number) => {
@@ -104,6 +148,8 @@ export function NewPrescriptionModal({
                 variant="success"
                 onClick={() => {
                   handleClose()
+                  next()
+                  confirm()
                 }}
               >
                 Confirmar

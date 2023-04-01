@@ -9,17 +9,15 @@ export function NewPrescription({ index, onHandleRemove, onHandleUpdate }: { ind
   const [product, setProduct] = useState({id: 0})
   const [quantity, setQuantity] = useState(0)
   const { input } = useSelector((state: RootState) => state)
-  const [test, setTest] = useState(0)
-  const [tank, setTank] = useState(0)
   const dispatch = useDispatch<any>()
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product.id, total_quantity: quantity, test,tank})
-}, [product, quantity,test,tank]);
+    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity})
+}, [product, quantity]);
 
   useEffect(()=>{
       dispatch(asyncFetchInput())
-  })
+  },[])
 
   return (
     <div>
@@ -45,28 +43,6 @@ export function NewPrescription({ index, onHandleRemove, onHandleUpdate }: { ind
               type="number"
               onChange={(e) => {
                 return setQuantity(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Teste (ml)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setTest(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Tanque</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setTank(Number(e.target.value))
               }}
             />
           </Form.Group>
