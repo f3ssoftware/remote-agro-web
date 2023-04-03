@@ -57,12 +57,12 @@ export function EventModal({ show, handleClose, application }: { show: boolean, 
                 </Row>
                 <Row>
                     <Col>
-                        Calda total: {plot?.applications[index]?.flowRateLabel * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
+                        Calda total: {plot?.applications[index]?.flow_rate * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        Calda/tanque: {plot?.applications[index]?.flowRateLabel * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
+                        Calda/tanque: {plot?.applications[index]?.flow_rate * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
                     </Col>
                 </Row>
                 <Row>
@@ -83,10 +83,10 @@ export function EventModal({ show, handleClose, application }: { show: boolean, 
                     <tbody>
                         {plot?.applications[index]?.application_tables?.map((applicationTable: any) => {
                             <tr>
-                            <td>{applicationTable.userProduct?.product?.name}</td>
+                            <td>{applicationTable.product_name}</td>
                             <td>{applicationTable.test}</td>
                             <td>{applicationTable.quantity}</td>
-                            <td>{applicationTable.tankLabel}</td>
+                            <td>{applicationTable.tank}</td>
                             <td>{applicationTable.totalAppliedLabel}</td> 
                         </tr>
                         })}
