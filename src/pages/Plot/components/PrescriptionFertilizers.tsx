@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { asyncFetchApplicationData, asyncFetchAppliers, asyncPrescription } from '../../../stores/plot.store'
 import { Applier } from '../../../models/Applier'
-import { NewPrescriptionModal } from '../Modals/NewPrescriptionModal'
+import { FertilizerPrescriptionModal } from '../Modals/FertilizerPrescriptionModal'
 import { Application } from '../../../models/Application'
 
 export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose: any, selectedFarm: any}) {
@@ -26,21 +26,6 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
     dispatch(asyncFetchAppliers({user_id: JSON.parse(sessionStorage.getItem('user')!).user_id}));
     dispatch(asyncFetchApplicationData())
   }, []);
-
-  // const next = () =>{
-  //   const fertilizer: Application = {
-  //     type:'Fertilizantes',
-  //     accountable: accountable,
-  //     area: area,
-  //     applier_id: selectedApplier.id,
-  //     date: dateTime.toISOString(),
-  //     application_type: applicationType,
-  //     correct_decimals: true,
-  //     farm_id: selectedFarm.id,
-  //     fields: [{id: selectedPlot.id, area: area}]
-  //   }
-  //   dispatch(asyncPrescription(fertilizer))
-  // }
 
   return (
     <div>
@@ -157,7 +142,7 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
               Avançar
             </Button>
           </div>
-          <NewPrescriptionModal
+          <FertilizerPrescriptionModal
         show={showNewPrescriptionModal}
         handleClose={handleClose}
         accountable={accountable}
@@ -167,7 +152,7 @@ export function PrescriptionFertilizers({handleClose, selectedFarm}:{handleClose
         applicationType={applicationType}
         selectedFarm={selectedFarm}
         selectedPlot={selectedPlot}
-      ></NewPrescriptionModal>
+      ></FertilizerPrescriptionModal>
     </div>
   )
 }

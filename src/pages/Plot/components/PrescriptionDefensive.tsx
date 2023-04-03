@@ -5,64 +5,76 @@ import pt from 'date-fns/locale/pt-BR'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
-import { asyncFetchApplicationData, asyncFetchAppliers, asyncPrescription } from '../../../stores/plot.store'
+import {
+  asyncFetchApplicationData,
+  asyncFetchAppliers,
+  asyncPrescription,
+} from '../../../stores/plot.store'
 import { Applier } from '../../../models/Applier'
 import { Application } from '../../../models/Application'
 import userStore from '../../../stores/user.store'
-import { NewPrescriptionModal } from '../Modals/NewPrescriptionModal'
+import { DefensivePrescriptionModal } from '../Modals/DefensivePrescriptionModal'
 
-export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: any, selectedFarm: any}) {
+export function PrescriptionDefensive({
+  handleClose,
+  selectedFarm,
+}: {
+  handleClose: any
+  selectedFarm: any
+}) {
   const [accountable, setAccountable] = useState('')
   const [dateTime, setDateTime] = useState(new Date())
-  const [block, setBlock] : any = useState<any>({})
+  const [block, setBlock]: any = useState('')
   const [applicationType, setApplicationType] = useState('Terrestre')
   const [flowRate, setFlowRate] = useState(0)
   const [pressure, setPressure] = useState(0)
   const [fullSyrup, setFullSyrup] = useState(0)
-  const [tankNumbers,setTankNumbers] = useState(0)
-  const [tankSyrup,setTankSyrup] = useState(0)
+  const [tankNumbers, setTankNumbers] = useState(0)
+  const [tankSyrup, setTankSyrup] = useState(0)
   const [selectedPlot, setSelectedPlot]: any = useState<any>({})
   const [selectedApplier, setSelectedApplier]: any = useState<any>({})
-  const [area, setArea]  = useState(0)
+  const [area, setArea] = useState(0)
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
-  
 
-  const { plot, user } = useSelector((state: RootState) => state);
+  const { plot, user } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
 
   useEffect(() => {
-    dispatch(asyncFetchAppliers({user_id: JSON.parse(sessionStorage.getItem('user')!).user_id}));
+    dispatch(
+      asyncFetchAppliers({
+        user_id: JSON.parse(sessionStorage.getItem('user')!).user_id,
+      }),
+    )
     dispatch(asyncFetchApplicationData())
-  }, []);
+  }, [])
 
   useEffect(() => {
-    setFullSyrup(flowRate*area)
-  }, [flowRate])
+    setFullSyrup(flowRate * area)
+  }, [flowRate, area])
 
   useEffect(() => {
-    setTankSyrup(fullSyrup/tankNumbers)
-  }, [fullSyrup,tankNumbers])
+    setTankSyrup(fullSyrup / tankNumbers)
+  }, [fullSyrup, tankNumbers])
 
-  const next = () =>{
-    const defensive: Application = {
-      type:'Fertilizantes',
-      accountable: accountable,
-      area: area,
-      applier_id: selectedApplier.id,
-      date: dateTime.toISOString(),
-      application_type: applicationType,
-      block: block,
-      flow_rate: flowRate,
-      pressure: pressure,
-      number_of_tanks: tankNumbers,
-      correct_decimals: true,
-      farm_id: selectedFarm.id,
-      fields: [{id: selectedPlot.id, area: area}]
-    }
-    dispatch(asyncPrescription(defensive))
-  }
-
+  // const next = () => {
+  //   const defensive: Application = {
+  //     type: 'Defensivos',
+  //     accountable: accountable,
+  //     area: area,
+  //     applier_id: selectedApplier.id,
+  //     date: dateTime.toISOString(),
+  //     application_type: applicationType,
+  //     block: block,
+  //     flow_rate: flowRate,
+  //     pressure: pressure,
+  //     number_of_tanks: tankNumbers,
+  //     correct_decimals: true,
+  //     farm_id: selectedFarm.id,
+  //     fields: [{ id: selectedPlot.id, area: area }],
+  //   }
+  //   dispatch(asyncPrescription(defensive))
+  // }
 
   return (
     <div>
@@ -99,26 +111,37 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
                   return { id: field.id, label: field.name, ...field }
                 })}
               />
-              
             ) : (
               <></>
             )}
           </Form.Group>
-          {selectedPlot?.total_area > 0 ?(<><Form.Range min={0} max={selectedPlot?.total_area} value={area} onChange={(e) => {
-            return setArea(Number(e.target.value))
-          } } /><Form.Label>Área aplicada: {area}</Form.Label></>):(<></>)}
+          {selectedPlot?.total_area > 0 ? (
+            <>
+              <Form.Range
+                min={0}
+                max={selectedPlot?.total_area}
+                value={area}
+                onChange={(e) => {
+                  return setArea(Number(e.target.value))
+                }}
+              />
+              <Form.Label>Área aplicada: {area}</Form.Label>
+            </>
+          ) : (
+            <></>
+          )}
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Aplicador
-            </Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
             <Typeahead
               id="applier"
               onChange={(selected: any) => {
-                setSelectedApplier(selected[0]);
+                setSelectedApplier(selected[0])
               }}
-              selected={plot?.appliers?.filter((applier: any) => applier?.id === selectedApplier?.id)}
+              selected={plot?.appliers?.filter(
+                (applier: any) => applier?.id === selectedApplier?.id,
+              )}
               labelKey={(selected: any) => {
                 return `${selected?.name}`
               }}
@@ -131,11 +154,9 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
         </Col>
       </Row>
       <Row>
-      <Col>
+        <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Data
-            </Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
             <DatePicker
               locale={pt}
               dateFormat="dd/MM/yyyy"
@@ -145,27 +166,25 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
           </Form.Group>
         </Col>
         <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Selecione um tipo
-                  </Form.Label>
-                  <Form.Select
-                    aria-label=""
-                    onChange={(e) => {
-                      return setApplicationType((e.target.value))
-                    }}
-                  >
-                    <option value={'Terrestre'}>Terrestre</option>
-                    <option value={'Aéreo'}>Aéreo</option>
-                    <option value={'Fertirrigação'}>Fertirrigação</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#fff' }}>Selecione um tipo</Form.Label>
+            <Form.Select
+              aria-label=""
+              onChange={(e) => {
+                return setApplicationType(e.target.value)
+              }}
+            >
+              <option value={'Terrestre'}>Terrestre</option>
+              <option value={'Aéreo'}>Aéreo</option>
+              <option value={'Fertirrigação'}>Fertirrigação</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
       </Row>
       <Row>
-        <Col>
-          {applicationType=='Terrestre' || applicationType=='Fertirrigação' ?(
-            <Col>
+        {applicationType == 'Terrestre' ||
+        applicationType == 'Fertirrigação' ? (
+          <Col>
             <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>
                 Selecione um tipo
@@ -173,9 +192,10 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
               <Form.Select
                 aria-label=""
                 onChange={(e) => {
-                  return setBlock((e.target.value))
+                  return setBlock(e.target.value)
                 }}
               >
+                <option value={''}>Selecione um bico</option>
                 <option value={'DL015'}>DL015</option>
                 <option value={'LS015'}>LS015</option>
                 <option value={'CN015'}>CN015</option>
@@ -188,8 +208,27 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
               </Form.Select>
             </Form.Group>
           </Col>
-          ):(<div></div>)}
-        </Col>
+        ) : (
+          <div></div>
+        )}
+        {applicationType == 'Terrestre' ||
+        applicationType == 'Fertirrigação' ? (
+          <Col>
+            <Form.Group className="mb-3" controlId="">
+              <Form.Label style={{ color: '#fff' }}>Pressão (Pa)</Form.Label>
+              <Form.Control
+                type="number"
+                onChange={(e) => {
+                  return setPressure(Number(e.target.value))
+                }}
+              />
+            </Form.Group>
+          </Col>
+        ) : (
+          <div></div>
+        )}
+      </Row>
+      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Vazão (L/ha)</Form.Label>
@@ -197,19 +236,6 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
               type="number"
               onChange={(e) => {
                 return setFlowRate(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Pressão (Pa)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setPressure(Number(e.target.value))
               }}
             />
           </Form.Group>
@@ -255,27 +281,40 @@ export function PrescriptionDefensive({handleClose, selectedFarm}:{handleClose: 
         </Col>
       </Row>
       <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: '2%',
-            }}
-          >
-            <Button
-              style={{ backgroundColor: '#A5CD33', color: '#000' }}
-              variant="success"
-              onClick={() => {
-                 setShowNewPrescriptionModal(true), next()
-              }}
-            >
-              Avançar
-            </Button>
-          </div>
-          {/* <NewPrescriptionModal
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginTop: '2%',
+        }}
+      >
+        <Button
+          style={{ backgroundColor: '#A5CD33', color: '#000' }}
+          variant="success"
+          onClick={() => {
+            setShowNewPrescriptionModal(true)
+          }}
+        >
+          Avançar
+        </Button>
+      </div>
+      <DefensivePrescriptionModal
         show={showNewPrescriptionModal}
         handleClose={handleClose}
-      ></NewPrescriptionModal> */}
+        accountable={accountable}
+        area={area}
+        applier={selectedApplier}
+        date={dateTime.toISOString()}
+        applicationType={applicationType}
+        selectedFarm={selectedFarm}
+        selectedPlot={selectedPlot}
+        flowRate={flowRate}
+        block={block}
+        pressure={pressure}
+        tankNumbers={tankNumbers}
+        tankSyrup={tankSyrup}
+        fullSyrup={fullSyrup}
+      ></DefensivePrescriptionModal>
     </div>
   )
 }

@@ -7,10 +7,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Applier } from '../../../models/Applier'
 import { Product } from '../../../models/Product'
-import { asyncFetchApplicationData, asyncFetchAppliers, asyncPrescription } from '../../../stores/plot.store'
+import {
+  asyncFetchApplicationData,
+  asyncFetchAppliers,
+  asyncPrescription,
+} from '../../../stores/plot.store'
 import { asyncFetchInput } from '../../../stores/input.store'
-import { NewPrescriptionModal } from '../Modals/NewPrescriptionModal'
 import { Application } from '../../../models/Application'
+import { SeedingPrescriptionModal } from '../Modals/SeedingPrescriptionModal'
 
 export function PrescriptionSeeding({
   handleClose,
@@ -29,41 +33,44 @@ export function PrescriptionSeeding({
   const [selectedApplier, setSelectedApplier]: any = useState<any>({})
   const { plot, input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
-  const [seed, setSeed] = useState({ id: 0 });
+  const [seed, setSeed] = useState({ id: 0 })
   const [flowRate, setFlowRate] = useState(0)
-  const [product, setProduct] = useState({id: 0})
+  const [product, setProduct] = useState({ id: 0 })
   const [area, setArea] = useState(0)
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
   const [productQuantity, setProductQuantity] = useState(0)
 
   useEffect(() => {
-    dispatch(asyncFetchAppliers({user_id: JSON.parse(sessionStorage.getItem('user')!).user_id}));
+    dispatch(
+      asyncFetchAppliers({
+        user_id: JSON.parse(sessionStorage.getItem('user')!).user_id,
+      }),
+    )
     dispatch(asyncFetchApplicationData())
     dispatch(asyncFetchInput())
-  }, []);
+  }, [])
 
-  const next = () =>{
-    const seeding: Application = {
-      type:'Semeadura',
-      accountable: accountable,
-      area: area,
-      applier_id: selectedApplier.id,
-      date: dateTime.toISOString(),
-      fertilizer_id: product.id,
-      fertilizer_quantity: productQuantity,
-      seed_id: seed.id,
-      seed_quantity: seedQuantity,
-      lines_spacing: lineSpacing,
-      flow_rate: flowRate,
-      farm_id: selectedFarm.id,
-      correct_decimals: true,
-      fields: [{id: selectedPlot.id, area: area}]
-    }
-    dispatch(asyncPrescription(seeding))
-  }
-  
-  
+  // const next = () => {
+  //   const seeding: Application = {
+  //     type: 'Semeadura',
+  //     accountable: accountable,
+  //     area: area,
+  //     applier_id: selectedApplier.id,
+  //     date: dateTime.toISOString(),
+  //     fertilizer_id: product.id,
+  //     fertilizer_quantity: productQuantity,
+  //     seed_id: seed.id,
+  //     seed_quantity: seedQuantity,
+  //     lines_spacing: lineSpacing,
+  //     flow_rate: flowRate,
+  //     farm_id: selectedFarm.id,
+  //     correct_decimals: true,
+  //     fields: [{ id: selectedPlot.id, area: area }],
+  //   }
+  //   dispatch(asyncPrescription(seeding))
+  // }
+
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
@@ -96,14 +103,25 @@ export function PrescriptionSeeding({
                   return { id: field.id, label: field.name, ...field }
                 })}
               />
-              
             ) : (
               <></>
             )}
           </Form.Group>
-          {selectedPlot?.total_area > 0 ?(<><Form.Range min={0} max={selectedPlot?.total_area} value={area} onChange={(e) => {
-            return setArea(Number(e.target.value))
-          } } /><Form.Label>Área aplicada: {area}</Form.Label></>):(<></>)}
+          {selectedPlot?.total_area > 0 ? (
+            <>
+              <Form.Range
+                min={0}
+                max={selectedPlot?.total_area}
+                value={area}
+                onChange={(e) => {
+                  return setArea(Number(e.target.value))
+                }}
+              />
+              <Form.Label>Área aplicada: {area}</Form.Label>
+            </>
+          ) : (
+            <></>
+          )}
         </Col>
       </Row>
       <Row>
@@ -147,7 +165,7 @@ export function PrescriptionSeeding({
             <Form.Label style={{ color: '#fff' }}>Possui adubação?</Form.Label>
             <Form.Select
               aria-label=""
-              placeholder='selecione'
+              placeholder="selecione"
               onChange={(e) => {
                 return setFertilizing(e.target.value)
               }}
@@ -158,30 +176,41 @@ export function PrescriptionSeeding({
             </Form.Select>
           </Form.Group>
         </Col>
-        {fertilizing=='Sim' ?(
-            <><Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>Produtos</Form.Label>
-              <Typeahead
-                id="product_input"
-                onChange={(selected: any) => {
-                  if (selected.length > 0) {
-                    setProduct({ id: selected[0].id })
-                  }
-                } }
-                options={input.inputs.filter(i => i.product?.class !== 'SEMENTE').map((input) => { return { id: input.id, label: `${input?.product?.name}` } })} />
-            </Form.Group>
-          </Col><Col>
+        {fertilizing == 'Sim' ? (
+          <>
+            <Col>
+              <Form.Group className="mb-3" controlId="">
+                <Form.Label style={{ color: '#fff' }}>Produtos</Form.Label>
+                <Typeahead
+                  id="product_input"
+                  onChange={(selected: any) => {
+                    if (selected.length > 0) {
+                      setProduct({ id: selected[0].id })
+                    }
+                  }}
+                  options={input.inputs
+                    .filter((i) => i.product?.class !== 'SEMENTE')
+                    .map((input) => {
+                      return { id: input.id, label: `${input?.product?.name}` }
+                    })}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
               <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Dose/ha (Kg)</Form.Label>
                 <Form.Control
                   type="number"
                   onChange={(e) => {
                     return setProductQuantity(Number(e.target.value))
-                  } } />
+                  }}
+                />
               </Form.Group>
-            </Col></>
-          ):(<div></div>)}
+            </Col>
+          </>
+        ) : (
+          <div></div>
+        )}
       </Row>
       <Row>
         <Col>
@@ -212,7 +241,9 @@ export function PrescriptionSeeding({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>População (sementes/ha)</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>
+              População (sementes/ha)
+            </Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {
@@ -225,7 +256,9 @@ export function PrescriptionSeeding({
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Espaçamento entre linhas</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>
+              Espaçamento entre linhas
+            </Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {
@@ -236,7 +269,9 @@ export function PrescriptionSeeding({
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Possui jato dirigido?</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>
+              Possui jato dirigido?
+            </Form.Label>
             <Form.Select
               aria-label=""
               onChange={(e) => {
@@ -249,8 +284,8 @@ export function PrescriptionSeeding({
             </Form.Select>
           </Form.Group>
         </Col>
-      {jet=='Sim' ?(
-            <Col>
+        {jet == 'Sim' ? (
+          <Col>
             <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>Vazão (L/ha)</Form.Label>
               <Form.Control
@@ -261,30 +296,46 @@ export function PrescriptionSeeding({
               />
             </Form.Group>
           </Col>
-          ):(<div></div>)}
+        ) : (
+          <div></div>
+        )}
       </Row>
       <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: '2%',
-            }}
-          >
-            <Button
-              style={{ backgroundColor: '#A5CD33', color: '#000' }}
-              variant="success"
-              onClick={() => {
-                setShowNewPrescriptionModal(true), next()
-              }}
-            >
-              Avançar
-            </Button>
-          </div>
-          {/* <NewPrescriptionModal
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginTop: '2%',
+        }}
+      >
+        <Button
+          style={{ backgroundColor: '#A5CD33', color: '#000' }}
+          variant="success"
+          onClick={() => {
+            setShowNewPrescriptionModal(true)
+          }}
+        >
+          Avançar
+        </Button>
+      </div>
+      <SeedingPrescriptionModal
         show={showNewPrescriptionModal}
         handleClose={handleClose}
-      ></NewPrescriptionModal> */}
+        accountable={accountable}
+        area={area}
+        applier={selectedApplier}
+        date={dateTime.toISOString()}
+        selectedFarm={selectedFarm}
+        selectedPlot={selectedPlot}
+        fertilizing={fertilizing}
+        seedQuantity={seedQuantity}
+        lineSpacing={lineSpacing}
+        jet={jet}
+        seed={seed}
+        flowRate={flowRate}
+        product={product}
+        productQuantity={productQuantity}
+      ></SeedingPrescriptionModal>
     </div>
   )
 }

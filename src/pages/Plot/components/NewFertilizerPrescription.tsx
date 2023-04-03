@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
 
-export function NewPrescription({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
+export function NewFertilizerPrescription({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
   const [product, setProduct] = useState({id: 0})
   const [quantity, setQuantity] = useState(0)
   const { input } = useSelector((state: RootState) => state)
@@ -38,7 +38,7 @@ export function NewPrescription({ index, onHandleRemove, onHandleUpdate }: { ind
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Qtd/ha (L)</Form.Label>
+            <Form.Label style={{ color: '#fff' }}>Qtd/ha (kg)</Form.Label>
             <Form.Control
               type="number"
               onChange={(e) => {

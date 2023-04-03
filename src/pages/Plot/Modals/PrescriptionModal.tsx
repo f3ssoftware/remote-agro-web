@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap'
 import { PrescriptionDefensive } from '../components/PrescriptionDefensive'
-import { NewPrescriptionModal } from './NewPrescriptionModal'
 import { PrescriptionFertilizers } from '../components/PrescriptionFertilizers'
 import { PrescriptionSeeding } from '../components/PrescriptionSeeding'
 

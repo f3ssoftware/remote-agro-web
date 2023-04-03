@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { ApplicationTable } from '../../../models/ApplicationTable'
 import { Product } from '../../../models/Product'
-import { NewPrescription } from '../components/NewPrescription'
+import { NewFertilizerPrescription } from '../components/NewFertilizerPrescription'
 import { Application } from '../../../models/Application'
 import { asyncPrescription, asyncPrescriptionTable } from '../../../stores/plot.store'
 import { useDispatch } from 'react-redux'
 
-export function NewPrescriptionModal({
+export function FertilizerPrescriptionModal({
   show,
   handleClose,
   accountable,
@@ -120,12 +120,12 @@ export function NewPrescriptionModal({
         </Row>
         {applicationTables?.map((p: Product, index: number) => {
           return (
-            <NewPrescription
+            <NewFertilizerPrescription
               index={index}
               key={index}
               onHandleRemove={onHandleRemove}
               onHandleUpdate={onHandleUpdate}
-            ></NewPrescription>
+            ></NewFertilizerPrescription>
           )
         })}
         <div
