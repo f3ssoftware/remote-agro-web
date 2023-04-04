@@ -8,11 +8,8 @@ import { RootState } from '../../..'
 import {
   asyncFetchApplicationData,
   asyncFetchAppliers,
-  asyncPrescription,
 } from '../../../stores/plot.store'
 import { Applier } from '../../../models/Applier'
-import { Application } from '../../../models/Application'
-import userStore from '../../../stores/user.store'
 import { DefensivePrescriptionModal } from '../Modals/DefensivePrescriptionModal'
 
 export function PrescriptionDefensive({
@@ -57,24 +54,6 @@ export function PrescriptionDefensive({
     setTankSyrup(fullSyrup / tankNumbers)
   }, [fullSyrup, tankNumbers])
 
-  // const next = () => {
-  //   const defensive: Application = {
-  //     type: 'Defensivos',
-  //     accountable: accountable,
-  //     area: area,
-  //     applier_id: selectedApplier.id,
-  //     date: dateTime.toISOString(),
-  //     application_type: applicationType,
-  //     block: block,
-  //     flow_rate: flowRate,
-  //     pressure: pressure,
-  //     number_of_tanks: tankNumbers,
-  //     correct_decimals: true,
-  //     farm_id: selectedFarm.id,
-  //     fields: [{ id: selectedPlot.id, area: area }],
-  //   }
-  //   dispatch(asyncPrescription(defensive))
-  // }
 
   return (
     <div>

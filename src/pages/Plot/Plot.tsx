@@ -23,9 +23,11 @@ import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import ptBR from 'date-fns/locale/pt-BR'
 import { asyncFetchApplications } from '../../stores/plot.store'
-import { EventModal } from './Modals/EventModal'
+import { FertilizerEventModal } from './Modals/FertilizerEventModal'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import { DefensiveEventModal } from './Modals/DefensiveEventModal'
+import { SeedingEventModal } from './Modals/SeedingEventModal'
 
 const locales = {
   'pt-BR': ptBR,
@@ -48,7 +50,9 @@ export function Plot() {
   const [selectedFarm, setSelectedFarm]: any = useState({})
   const [selectedPlot, setSelectedPlot]: any = useState({})
   const [plots, setPlots] = useState<any[]>([])
-  const [showEvent, setShowEvent] = useState(false)
+  const [showDefensive, setShowDefensive] = useState(false)
+  const [showFertilizer, setShowFertilizer] = useState(false)
+  const [showSeeding, setShowSeeding] = useState(false)
   const [application, setApplication] = useState<any>()
   const [startDate, setStartDate] = useState<Date>()
   const [untilDate, setUntilDate] = useState<Date>()
@@ -240,8 +244,20 @@ export function Plot() {
                 onRangeChange={(r) => console.log(r)}
                 selectable={true}
                 onSelectEvent={(e) => {
-                  setApplication(e)
-                  setShowEvent(true)
+                  switch (e.type){
+                    case 'Defensivos':{
+                      setApplication(e)
+                      setShowDefensive(true)
+                    }break;
+                    case 'Fertilizantes':{
+                      setApplication(e)
+                      setShowFertilizer(true)
+                    }break;
+                    case 'Semeadura':{
+                      setApplication(e)
+                      setShowSeeding(true)
+                    }break;
+                  }
                 }}
                 localizer={localizer}
                 events={plot?.applications?.map((application: any) => {
@@ -250,6 +266,7 @@ export function Plot() {
                     end: new Date(application.date),
                     title: `${application.number} - ${application.type}`,
                     id: application.id,
+                    type: application.type
                   }
                 })}
                 startAccessor="start"
@@ -278,11 +295,21 @@ export function Plot() {
         show={showNewPlotModal}
         handleClose={() => setShowNewPlotModal(false)}
       ></NewPlotModal>
-      <EventModal
-        show={showEvent}
+      <DefensiveEventModal
+        show={showDefensive}
         application={application}
-        handleClose={() => setShowEvent(false)}
-      ></EventModal>
+        handleClose={() => setShowDefensive(false)}
+      ></DefensiveEventModal>
+      <FertilizerEventModal
+        show={showFertilizer}
+        application={application}
+        handleClose={() => setShowFertilizer(false)}
+      ></FertilizerEventModal>
+      <SeedingEventModal
+        show={showSeeding}
+        application={application}
+        handleClose={() => setShowSeeding(false)}
+      ></SeedingEventModal>
     </Container>
   )
 }

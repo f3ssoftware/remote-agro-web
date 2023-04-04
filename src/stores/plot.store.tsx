@@ -4,16 +4,19 @@ import axios from "axios";
 import { Applier } from "../models/Applier";
 import { Application } from "../models/Application";
 import { getMessages } from './messaging.store'
+import { ApplicationTable } from "../models/ApplicationTable";
 
 const initialApplications:any[] = [];
 const initialAppliers: Applier[] = []
 const initialApplicationData: Application[]=[]
+const initialApplicationTables: ApplicationTable = {}
 const plotStore = createSlice({
     name: 'plot',
     initialState: {
         applications: initialApplications,
         appliers: initialAppliers,
-        applicationData: initialApplicationData
+        applicationData: initialApplicationData,
+        applicationTables: initialApplicationTables
 
     },
     reducers: {
@@ -25,13 +28,16 @@ const plotStore = createSlice({
         },
         setApplicationData(state,action){
             state.applicationData = action.payload
-        }
+        },
+        setApplicationTables(state,action){
+          state.applicationData = action.payload
+      }
             
     }
 });
 
 
-export const { setApplications, setAppliers, setApplicationData } = plotStore.actions;
+export const { setApplications, setAppliers, setApplicationData, setApplicationTables } = plotStore.actions;
 export default plotStore.reducer;
 
 
@@ -149,3 +155,21 @@ export function asyncPrescription(prescription: any) {
       }
     }
   }
+  export function asyncFetchApplicationTables() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            const results = await axios.get(
+                "https://remoteapi.murilobotelho.com.br/applications-tables",
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                },
+            );
+            dispatch(setApplicationTables(results.data))
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
+}

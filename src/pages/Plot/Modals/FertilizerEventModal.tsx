@@ -3,7 +3,7 @@ import { Col, Modal, Row, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { RootState } from "../../..";
 
-export function EventModal({ show, handleClose, application }: { show: boolean, handleClose: any, application: any }) {
+export function FertilizerEventModal({ show, handleClose, application }: { show: boolean, handleClose: any, application: any }) {
     const { plot } = useSelector((state: RootState) => state);
     const [index, setIndex] = useState(0);
     // useEffect(() => {
@@ -53,21 +53,6 @@ export function EventModal({ show, handleClose, application }: { show: boolean, 
                 <Row>
                     <Col>
                         Número de tanques: {plot?.applications[index]?.number_of_tanks}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        Calda total: {plot?.applications[index]?.flow_rate * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        Calda/tanque: {plot?.applications[index]?.flow_rate * plot?.applications[index]?.area * plot?.applications[index]?.number_of_tanks!}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        Pressão: {plot?.applications[index]?.pressure}
                     </Col>
                 </Row>
                 <Table>

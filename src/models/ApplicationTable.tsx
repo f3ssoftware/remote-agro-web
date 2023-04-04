@@ -5,5 +5,6 @@ export class ApplicationTable {
   tank: number,
   applied: number,
   application_id: number,
-  total_quantity: number}[]
+  total_quantity: number,
+}[]
 }
