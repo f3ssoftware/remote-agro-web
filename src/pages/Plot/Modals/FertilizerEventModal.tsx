@@ -27,6 +27,18 @@ export function FertilizerEventModal({ show, handleClose, application }: { show:
                 </Row>
                 <Row>
                     <Col>
+                        Talhão: {plot?.applications[index]?.fields.map((f: any)=>{
+                            f.name
+                        })}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        Aplicador: {plot?.applications[index]?.applier.name}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
                         Área Aplicada: {plot?.applications[index]?.seed_area}
                     </Col>
                 </Row>
@@ -35,26 +47,7 @@ export function FertilizerEventModal({ show, handleClose, application }: { show:
                         Tipo: {plot?.applications[index]?.application_type}
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
-                        Bico: {plot?.applications[index]?.block}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        Vazão: {plot?.applications[index]?.flowRateLabel} L/ha
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        Área por tanque: {plot?.applications[index]?.area} ha
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        Número de tanques: {plot?.applications[index]?.number_of_tanks}
-                    </Col>
-                </Row>
+
                 <Table>
                     <thead>
                         <tr>

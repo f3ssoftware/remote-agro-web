@@ -27,29 +27,42 @@ export function SeedingEventModal({ show, handleClose, application }: { show: bo
                 </Row>
                 <Row>
                     <Col>
+                        Talhão: {plot?.applications[index]?.fields.map((f: any)=>{
+                            f.name
+                        })}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
                         Área Aplicada: {plot?.applications[index]?.seed_area}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        Tipo: {plot?.applications[index]?.application_type}
+                        Aplicador: {plot?.applications[index]?.applier.name}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        Bico: {plot?.applications[index]?.block}
+                        Dose/ha(kg): {plot?.applications[index]?.fertilizer_quantity}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        Vazão: {plot?.applications[index]?.flowRateLabel} L/ha
+                        População(sementes/ha): {plot?.applications[index]?.seed_quantity}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        Área por tanque: {plot?.applications[index]?.area} ha
+                        Espaçamento entre linhas: {plot?.applications[index]?.lines_spacing}
                     </Col>
                 </Row>
+                <Row>
+                    <Col>
+                        Vazão(L/ha): {plot?.applications[index]?.flow_rate}
+                    </Col>
+                </Row>
+                
                 <Table>
                     <thead>
                         <tr>
