@@ -98,7 +98,7 @@ export function PrescriptionDefensive({
             <>
               <Form.Range
                 min={0}
-                max={selectedPlot?.total_area}
+                max={selectedPlot?.total_area*100}
                 value={area}
                 onChange={(e) => {
                   return setArea(Number(e.target.value))
