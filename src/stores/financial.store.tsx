@@ -541,7 +541,7 @@ export function asyncFilterByButton(filter: string, startDate: string, endDate: 
             } break;
             case 'due_dated': {
                 paymentStatus = 'expired';
-                type = 'expenses_invoice'
+                type = 'expenses_invoices'
             } break;
             case 'received': {
                 paymentStatus = 'paid'
