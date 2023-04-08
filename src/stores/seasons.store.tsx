@@ -39,6 +39,6 @@ export function asyncFetchSeasons() {
             }
         });
         dispatch(getSeasons(results.data));
-        dispatch(selectSeason(results.data[0]));
+        dispatch(selectSeason(results.data[results.data.length - 1]));
     }
 }
