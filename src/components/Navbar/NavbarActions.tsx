@@ -34,4 +34,19 @@ export const NavbarActions = [
         title: "Pesagem",
         navigation: "/commerce/weighing"
     },
+    {
+        pathname: "maintenance",
+        title: "Bens",
+        navigation: "/maintenance/riches"
+    },
+    {
+        pathname: "maintenance",
+        title: "Almoxarifado",
+        navigation: "/maintenance/warehouse"
+    },
+    {
+        pathname: "maintenance",
+        title: "Abastecimento",
+        navigation: "/maintenance/fuel"
+    },
 ]

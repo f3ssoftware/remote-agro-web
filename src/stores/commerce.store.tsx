@@ -414,32 +414,32 @@ export function asyncFetchOutputWeighingData(seasonId: number) {
 }
 
 export function asyncFetchSeparateWeighingData(seasonId: number) {
-    return async function (dispatch: AppDispatch) {
-      try {
-        const result = await axios.get(
-          `https://remoteapi.murilobotelho.com.br/weighings`,
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            },
-            params: {
-              type: 'Única',
-              season_id: seasonId,
-            },
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.get(
+        `https://remoteapi.murilobotelho.com.br/weighings`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
-        )
-        dispatch(setSeparateWeighing(result.data))
-      } catch (err: any) {
-        dispatch(
-          getMessages({
-            message: err.response.data.message,
-            type: 'error',
-          }),
-        )
-      }
+          params: {
+            type: 'Única',
+            season_id: seasonId,
+          },
+        },
+      )
+      dispatch(setSeparateWeighing(result.data))
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
     }
   }
-  
+}
+
 
 export function asyncFetchWeighingData() {
   return async function (dispatch: AppDispatch) {
@@ -464,7 +464,7 @@ export function asyncFetchWeighingData() {
   }
 }
 
-export function  asyncOutputWeighing(output: any) {
+export function asyncOutputWeighing(output: any) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.post(
@@ -563,45 +563,45 @@ export function asyncSeparateWeighing(separate: any) {
 }
 
 export function asyncUpdateSeparateWeighing(
-    id: number,
-    separate: any,
-    index: number,
-    rowType: WeighingRowType,
-  ) {
-    return async function (dispatch: AppDispatch) {
-      try {
-        const result = await axios.put(
-          `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
-          separate,
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            },
+  id: number,
+  separate: any,
+  index: number,
+  rowType: WeighingRowType,
+) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.put(
+        `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
+        separate,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
-        )
-        dispatch(
-          updateSeparateRow({
-            index,
-            separateWeighRow: { ...result.data, rowType },
-          }),
-        )
-        // dispatch(setInputWeighingData(result.data[0]))
-        dispatch(
-          getMessages({
-            message: 'Pesagem avulsa atualizada com sucesso',
-            type: 'success',
-          }),
-        )
-      } catch (err: any) {
-        dispatch(
-          getMessages({
-            message: err.response.data.message,
-            type: 'error',
-          }),
-        )
-      }
+        },
+      )
+      dispatch(
+        updateSeparateRow({
+          index,
+          separateWeighRow: { ...result.data, rowType },
+        }),
+      )
+      // dispatch(setInputWeighingData(result.data[0]))
+      dispatch(
+        getMessages({
+          message: 'Pesagem avulsa atualizada com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
     }
   }
+}
 
 export function asyncCreateCommercePlot(silo: Silo) {
   return async function (dispatch: AppDispatch) {
@@ -800,34 +800,34 @@ export function asyncDeleteOutputWeighing(id: number, index: number) {
 }
 
 export function asyncDeleteSeparateWeighing(id: number, index: number) {
-    return async function (dispatch: AppDispatch) {
-      try {
-        const result = await axios.delete(
-          `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            },
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.delete(
+        `https://remoteapi.murilobotelho.com.br/weighings/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
-        )
-        dispatch(removeSeparateWeighRow({ index }))
-        dispatch(
-          getMessages({
-            message: 'Pesagem excluída com sucesso',
-            type: 'success',
-          }),
-        )
-      } catch (err: any) {
-        console.log(err)
-        dispatch(
-          getMessages({
-            message: err.response.data.message,
-            type: 'error',
-          }),
-        )
-      }
+        },
+      )
+      dispatch(removeSeparateWeighRow({ index }))
+      dispatch(
+        getMessages({
+          message: 'Pesagem excluída com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      console.log(err)
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
     }
   }
+}
 
 export function asyncDeleteSilo(id: number) {
   return async function (dispatch: AppDispatch) {
@@ -849,6 +849,37 @@ export function asyncDeleteSilo(id: number) {
       )
     } catch (err: any) {
       console.log(err)
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
+export function asyncGeneratePdf(
+  html: string
+) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.post(
+        `https://remoteapi.murilobotelho.com.br/weighings/generate-pdf`,
+        { html },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(
+        getMessages({
+          message: 'PDF Gerado com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
       dispatch(
         getMessages({
           message: err.response.data.message,

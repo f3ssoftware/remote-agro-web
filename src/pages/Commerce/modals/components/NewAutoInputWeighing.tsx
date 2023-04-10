@@ -24,6 +24,7 @@ import { InputWeighingRow } from '../../../../models/InputWeighingRow'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+import { GeneratePdf } from './GeneratePdf'
 
 export function NewAutoInputWeighing({
   index,
@@ -466,6 +467,28 @@ export function NewAutoInputWeighing({
         >
           {autoInputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
+        <GeneratePdf weighing={{
+          farm_id: selectedFarm.id,
+          field_id: selectedPlot.id,
+          cultivar_id: selectedCultivar.id,
+          silo_id: selectedSilo.id,
+          gross_weight: grossWeighing,
+          net_weight: netWeighing,
+          humidity: humidity * 100,
+          impurity: impurity * 100,
+          discount: discount * 100,
+          final_weight: totalWeighning * 1000,
+          type: "Entrada",
+          shipping_company: company,
+          humidity_discount: humidityDiscount.toString(),
+          total_discount: totalDiscount.toString(),
+          observations: observation,
+          tare_weight: tare,
+          mode: "Manual",
+          car_plate: carPlate,
+          car_driver: driver,
+          weighing_date: new Date().toISOString()
+        }} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={sessionStorage.getItem('user')}></GeneratePdf>
       </div>
       <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={commerce?.inputWeighingData?.id!} index={index} weighingType={autoInputWeighing.type!}></DeleteConfirmationModal>
     </div>

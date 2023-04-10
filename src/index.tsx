@@ -17,6 +17,7 @@ import soilStore from './stores/soil.store';
 import commerceStore from './stores/commerce.store';
 import planningStore from './stores/planning.store';
 import plotStore from './stores/plot.store';
+import maintenanceStore from './stores/maintenance.store';
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ const store = configureStore({
     commerce: commerceStore,
     planning: planningStore,
     plot: plotStore,
+    maintenance: maintenanceStore
   },
 });
 
