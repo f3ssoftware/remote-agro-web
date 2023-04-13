@@ -36,7 +36,7 @@ export function ContractLoad() {
               variant="success"
               id="dropdown-basic"
             >
-              {selectedContract?.name ? selectedContract?.name : 'Contratos'}
+              {selectedContract?.name ? `${selectedContract?.code} - ${selectedContract?.name}` : 'Contratos'}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
@@ -47,7 +47,7 @@ export function ContractLoad() {
                     setSelectedContract(contract);
                   }}
                 >
-                  {contract.name}
+                  {contract?.code} - {contract?.name}
                 </Dropdown.Item>
               })}
 
@@ -86,9 +86,9 @@ export function ContractLoad() {
                   'pt-BR',
                   { timeZone: 'UTC' },
                 )}</td>
-                <td>{selectedContract?.amount?.toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                <td>{(selectedContract?.amount/100).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                 <td>{selectedContract?.sacks}</td>
-                <td>{selectedContract?.sacks_delivered}</td>
+                <td>{selectedContract?.sacks_delivered/1000}</td>
               </tr> : <></>}
             </tbody>
           </Table>
