@@ -72,10 +72,23 @@ export function Plot() {
         until_date: untilDate,
         order_type: 1,
         season_id: seasons.selectedSeason.id,
+        field_id: selectedPlot.id,
       }),
     )
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
+
+  const filter = () => {
+    dispatch(
+      asyncFetchApplications({
+        from_date: startDate,
+        until_date: untilDate,
+        order_type: 1,
+        season_id: seasons.selectedSeason.id,
+        field_id: selectedPlot.id,
+      }),
+    )
+  }
 
   return (
     <Container>
@@ -103,7 +116,13 @@ export function Plot() {
                 </h4>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginBottom: '2%',
+                }}
+              >
                 <Dropdown className="frist-card-dropdown-plot">
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
                     {selectedFarm?.name}
@@ -127,30 +146,35 @@ export function Plot() {
                 src={selectedFarm?.map_link}
                 width={'400vw'}
                 height={'400vh'}
-                style={{ marginBottom: '10%', marginLeft: '11%', display: 'flex', justifyContent: 'center' }}
+                style={{
+                  marginBottom: '10%',
+                  marginLeft: '11%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
               ></iframe>
             </div>
           </div>
           <div className="second-card-plot">
-          <div>
-                <Button
-                  variant="success"
-                  className="second-card-button-plot"
-                  onClick={() => setShowNewPlotModal(true)}
-                >
-                  +
-                </Button>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <h4
-                  style={{
-                    position: 'relative',
-                    bottom: '40px',
-                  }}
-                >
-                  <b>Talhões</b>
-                </h4>
-              </div>
+            <div>
+              <Button
+                variant="success"
+                className="second-card-button-plot"
+                onClick={() => setShowNewPlotModal(true)}
+              >
+                +
+              </Button>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <h4
+                style={{
+                  position: 'relative',
+                  bottom: '40px',
+                }}
+              >
+                <b>Talhões</b>
+              </h4>
+            </div>
             <div style={{ overflowY: 'scroll', height: '300px' }}>
               {farm?.selectedFarm?.fields?.map((field: any) => (
                 <div className="plot-card">
@@ -218,7 +242,12 @@ export function Plot() {
                   <Dropdown.Menu>
                     {selectedFarm?.fields?.map((field: any) => {
                       return (
-                        <Dropdown.Item onClick={() => setSelectedPlot(field)}>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedPlot(field)
+                            filter()
+                          }}
+                        >
                           {field.name}
                         </Dropdown.Item>
                       )
@@ -244,19 +273,25 @@ export function Plot() {
                 onRangeChange={(r) => console.log(r)}
                 selectable={true}
                 onSelectEvent={(e) => {
-                  switch (e.type){
-                    case 'Defensivos':{
-                      setApplication(e)
-                      setShowDefensive(true)
-                    }break;
-                    case 'Fertilizantes':{
-                      setApplication(e)
-                      setShowFertilizer(true)
-                    }break;
-                    case 'Semeadura':{
-                      setApplication(e)
-                      setShowSeeding(true)
-                    }break;
+                  switch (e.type) {
+                    case 'Defensivos':
+                      {
+                        setApplication(e)
+                        setShowDefensive(true)
+                      }
+                      break
+                    case 'Fertilizantes':
+                      {
+                        setApplication(e)
+                        setShowFertilizer(true)
+                      }
+                      break
+                    case 'Semeadura':
+                      {
+                        setApplication(e)
+                        setShowSeeding(true)
+                      }
+                      break
                   }
                 }}
                 localizer={localizer}
@@ -266,7 +301,7 @@ export function Plot() {
                     end: new Date(application.date),
                     title: `${application.number} - ${application.type}`,
                     id: application.id,
-                    type: application.type
+                    type: application.type,
                   }
                 })}
                 startAccessor="start"

@@ -50,7 +50,7 @@ export function asyncFetchApplications(params: any) {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                     },
-                    params,
+                    params
                 },
             );
             dispatch(setApplications(results.data.list))
