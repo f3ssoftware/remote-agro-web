@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { ManualRegistration } from "../Financial/ManualRegistration/ManualRegistration";
 import { SefazInvoice } from "../Financial/Sefaz/SefazInvoice";
 import { Riches } from "./Riches/Riches";
+import { Warehouse } from "./Warehouse/Warehouse";
 
 export function Maintenance() {
     const location = useLocation();
@@ -10,6 +11,9 @@ export function Maintenance() {
         case undefined:
         case "riches": {
             return <Riches></Riches>
+        }
+        case "warehouse": {
+            return <Warehouse></Warehouse>
         }
         default: {
             return <div>Not found</div>
