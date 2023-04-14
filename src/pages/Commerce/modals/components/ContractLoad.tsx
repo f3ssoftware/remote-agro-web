@@ -54,7 +54,7 @@ export function ContractLoad() {
             </Dropdown.Menu>
           </Dropdown>
         </Card.Text>
-        <div style={{ width: '100%', overflowX: 'scroll' }}>
+        <div style={{ width: '100%', overflowX: 'auto' }}>
           <Table striped hover>
             <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
               <tr>

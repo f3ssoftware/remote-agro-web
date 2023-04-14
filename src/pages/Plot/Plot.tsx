@@ -72,20 +72,20 @@ export function Plot() {
         until_date: untilDate,
         order_type: 1,
         season_id: seasons.selectedSeason.id,
-        field_id: selectedPlot.id,
+        field_name: selectedPlot.name,
       }),
     )
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
-  const filter = () => {
+  const filter = (field: string) => {
     dispatch(
       asyncFetchApplications({
         from_date: startDate,
         until_date: untilDate,
         order_type: 1,
         season_id: seasons.selectedSeason.id,
-        field_id: selectedPlot.id,
+        field_name: field,
       }),
     )
   }
@@ -245,7 +245,7 @@ export function Plot() {
                         <Dropdown.Item
                           onClick={() => {
                             setSelectedPlot(field)
-                            filter()
+                            filter(field.name)
                           }}
                         >
                           {field.name}
