@@ -75,12 +75,12 @@ export function SeedingEventModal({ show, handleClose, application }: { show: bo
                     </thead>
                     <tbody>
                         {plot?.applications[index]?.application_tables?.map((applicationTable: any) => {
-                            <tr>
+                            return <tr>
                             <td>{applicationTable.product_name}</td>
                             <td>{applicationTable.test}</td>
                             <td>{applicationTable.quantity}</td>
                             <td>{applicationTable.tank}</td>
-                            <td>{applicationTable.totalAppliedLabel}</td> 
+                            <td>{applicationTable.totalAppliedLabel/1000}</td> 
                         </tr>
                         })}
                     </tbody>
