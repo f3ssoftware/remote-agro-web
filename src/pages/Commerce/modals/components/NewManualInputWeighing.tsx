@@ -416,10 +416,10 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
         <GeneratePdf weighing={{
-          farm_id: selectedFarm.id,
-          field_id: selectedPlot.id,
-          cultivar_id: selectedCultivar.id,
-          silo_id: selectedSilo.id,
+          farm_id: selectedFarm?.id,
+          field_id: selectedPlot?.id,
+          cultivar_id: selectedCultivar?.id,
+          silo_id: selectedSilo?.id,
           gross_weight: grossWeighing,
           net_weight: netWeighing,
           humidity: humidity * 100,
