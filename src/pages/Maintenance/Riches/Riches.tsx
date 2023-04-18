@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
 import { Good } from "../../../models/Good";
 import { useEffect } from "react";
-import { asyncFetchGoods } from "../../../stores/maintenance.store";
+import { asyncFetchGoods, asyncFetchParts } from "../../../stores/maintenance.store";
 import { tr } from "date-fns/locale";
 
 export function Riches() {
@@ -25,16 +25,32 @@ export function Riches() {
                     <Card className="ra-card">
                         <Card.Body>
                             <Card.Title>Histórico</Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on the card title and make up the
-                                bulk of the card's content.
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
+                            <Table striped hover>
+                                <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Maquinário</th>
+                                        <th>Quantidade</th>
+                                        <th>Tanque</th>
+                                    </tr>
+                                </thead>
+                                <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
+                                    {/* {maintenance?.parts?.map(part => {
+                                        return <tr>
+                                            <td>{part?.createdAt}</td>
+                                            <td>{part?.name}</td>
+                                            <td>{part?.quantity}</td>
+                                            <td>{part?.}</td>
+                                        </tr>
+                                    })} */}
+
+                                </tbody>
+                            </Table>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
-            <Row style={{marginTop: '2%'}}>
+            <Row style={{ marginTop: '2%' }}>
                 <Col md={4}>
                     <Card className="ra-card">
                         <Card.Body>
