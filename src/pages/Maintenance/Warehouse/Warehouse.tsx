@@ -74,7 +74,7 @@ export function Warehouse() {
                                 <td>{part?.code}</td>
                                 <td>{part?.quantity}</td>
                                 <td>{part?.unit_price}</td>
-                                <td>{part?.quantity * part?.unit_price}</td>
+                                <td>{part?.quantity! * part?.unit_price!}</td>
                                 <td>{part?.position}</td>
                             </tr>
                         })}

@@ -10,10 +10,9 @@ import { asyncAddUserProductToStorage, asyncFetchInvoices, asyncUpdateUserProduc
 import { RootState } from "../../../..";
 import { Invoice } from "../../../../models/Invoice";
 import { Typeahead } from "react-bootstrap-typeahead";
-import { UserProduct } from "../../../../models/UserProduct";
+import { Part } from "../../../../models/Part";
 
 let emptyDate: Date;
-const emptyProductList: UserProduct[] = [];
 export function InputPartsModal({ show, handleClose }: { show: boolean, handleClose: any }) {
 
     const { input } = useSelector((state: RootState) => state);
@@ -24,29 +23,17 @@ export function InputPartsModal({ show, handleClose }: { show: boolean, handleCl
     const dispatch = useDispatch<any>();
     const [invoices, setInvoices] = useState(input.invoices);
     const [selectedInvoice, setSelectedInvoice] = useState(new Invoice());
-    const [products, setProducts] = useState([new UserProduct()]);
-    const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
-    const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
+    const [products, setProducts] = useState([new Part()]);
+    // const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
+    // const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
 
-    // const onUpdateItem = (product: UserProduct, index: number, userHasProduct: boolean) => {
-    //     const productsArr = [...products];
-    //     productsArr.splice(index, 1);
-    //     productsArr.push(product);
-    //     setProducts(productsArr);
+    const onUpdateItem = (product: Part, index: number) => {
+        const productsArr = [...products];
+        productsArr.splice(index, 1);
+        productsArr.push(product);
+        setProducts(productsArr);
 
-    //     if (userHasProduct && validateUserProduct(product, 'PUT')) {
-    //         const toUpdtArr = [...productsToUpdate];
-    //         toUpdtArr.splice(index, 1);
-    //         setProductsToUpdate(toUpdtArr.concat(product))
-    //     } else if (!userHasProduct && validateUserProduct(product, 'POST')) {
-    //         const toAddArr = [...productsToAdd];
-    //         toAddArr.splice(index, 1);
-    //         setProductsToAdd(toAddArr.concat(product));
-    //     }
-    //     console.log('add', productsToAdd);
-    //     console.log('update', productsToUpdate);
-
-    // }
+    }
 
     const onRemoveItem = (index: number) => {
         const productsArr = [...products];
@@ -62,13 +49,13 @@ export function InputPartsModal({ show, handleClose }: { show: boolean, handleCl
     }
 
     const register = () => {
-        if (productsToAdd.length > 0) {
-            dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
-        }
+        // if (productsToAdd.length > 0) {
+        //     dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
+        // }
 
-        if (productsToUpdate.length > 0) {
-            dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
-        }
+        // if (productsToUpdate.length > 0) {
+        //     dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
+        // }
         
         handleClose();
 
@@ -147,11 +134,11 @@ export function InputPartsModal({ show, handleClose }: { show: boolean, handleCl
             </Row>
             <hr />
         </div> : <></>}
-        {/* {products.map((newUserProduct, index) => {
-            return <NewInputParts index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={undefined}></NewInputParts>
-        })} */}
+        {products.map((p, index) => {
+            return <NewInputParts index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></NewInputParts>
+        })}
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-            <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
+            <Button variant="primary" onClick={() => setProducts([...products, new Part()])}>Adicionar Linha</Button>
             <Button variant="success" onClick={() => register()}>Registrar</Button>
         </div>
 

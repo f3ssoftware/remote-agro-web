@@ -3,6 +3,7 @@ import { Good } from '../models/Good'
 import { AppDispatch } from "..";
 import axios from "axios";
 import { Part } from "../models/Part";
+import { getMessages } from './messaging.store'
 
 const initialGoods: Good[] = [];
 const initialParts: Part[] = [];
@@ -46,3 +47,32 @@ export function asyncFetchParts() {
         dispatch(setParts(results.data))
     }
 }
+
+export function asyncInputParts(input: any) {
+    return async function (dispatch: AppDispatch) {
+      try {
+        const result = await axios.post(
+          `https://remoteapi.murilobotelho.com.br/parts`,
+          input,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          },
+        )
+        dispatch(
+          getMessages({
+            message: 'Entrada de peça salva com sucesso',
+            type: 'success',
+          }),
+        )
+      } catch (err: any) {
+        dispatch(
+          getMessages({
+            message: err.response.data.message,
+            type: 'error',
+          }),
+        )
+      }
+    }
+  }
