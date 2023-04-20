@@ -415,7 +415,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        <GeneratePdf weighing={{
+        {manualInputWeigh?.id ? <GeneratePdf weighing={{
           farm_id: selectedFarm?.id,
           field_id: selectedPlot?.id,
           cultivar_id: selectedCultivar?.id,
@@ -425,7 +425,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
           humidity: humidity * 100,
           impurity: impurity * 100,
           discount: discount * 100,
-          final_weight: totalWeighning * 1000,
+          final_weight: (totalWeighning * 1000).toString(),
           type: "Entrada",
           shipping_company: company,
           humidity_discount: humidityDiscount.toString(),
@@ -436,7 +436,8 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
           car_plate: carPlate,
           car_driver: driver,
           weighing_date: new Date().toISOString()
-        }} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={sessionStorage.getItem('user')}></GeneratePdf>
+        }} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualInputWeigh.type!} ></DeleteConfirmationModal>
       </div>
     </div>

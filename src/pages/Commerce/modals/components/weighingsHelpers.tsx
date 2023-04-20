@@ -1016,7 +1016,7 @@ export function calculateHumidityDiscount(humidity: number, cultivationId: numbe
   return 0;
 }
 
-export function _generatePDF(weighing: any, cultivationsList: any[], silosList: any[], farmsList: any[], profile: any, contractsList?: any[]): string {
+export function _generatePDF(weighing: any, cultivationsList: any[], silosList: any[], profile: any, contractsList?: any[], farmsList?: any[]): string {
   const {
     createdAt,
     id,
@@ -1123,7 +1123,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
     let selectedCultivar: any;
 
     cultivationsList.forEach((cultivationItem: any) => {
-      const tempSelectedCultivar = cultivationItem.cultivares.find(
+      const tempSelectedCultivar = cultivationItem?.cultivares?.find(
         (cultivarItem: any) => cultivarItem.id === parseInt(cultivar_id)
       );
       if (tempSelectedCultivar) {
@@ -1135,24 +1135,24 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       cultivationId = selectedCultivar.cultivation_id;
     }
 
-    const cultivation = cultivationsList.find(
+    const cultivation = cultivationsList?.find(
       (item: any) => parseInt(cultivationId) === item.id
     );
-    cultivationName = cultivation ? cultivation.name : 'SEM INFORMACAO';
+    cultivationName = cultivation ? cultivation?.name : 'SEM INFORMACAO';
 
-    const silo = silosList.find((item: any) => parseInt(silo_id) === item.id);
+    const silo = silosList?.find((item: any) => parseInt(silo_id) === item.id);
     siloName = silo ? silo.name : 'SEM INFORMACAO';
 
-    const fieldsList = farmsList.find(
+    const fieldsList = farmsList?.find(
       (farmItem: any) => parseInt(farmItem.id) === farm_id
     ).fields;
 
-    const field = fieldsList.find((item: any) => parseInt(field_id) === item.id);
+    const field = fieldsList?.find((item: any) => parseInt(field_id) === item.id);
     fieldName = field ? field.name : 'SEM INFORMACAO';
 
-    const cultivaresList = farmsList
+    const cultivaresList = farmsList!
       .find((farmItem: any) => parseInt(farmItem.id) === farm_id)
-      .fields.find((fieldItem: any) => parseInt(fieldItem.id) === field_id)
+      .fields?.find((fieldItem: any) => parseInt(fieldItem.id) === field_id)
       .cultivares;
 
     const cultivar = cultivaresList.find(
