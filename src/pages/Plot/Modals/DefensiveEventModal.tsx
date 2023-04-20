@@ -85,8 +85,8 @@ export function DefensiveEventModal({
         <Row>
           <Col>Pressão: {plot?.applications[index]?.pressure}</Col>
         </Row>
-        <Table>
-          <thead>
+        <Table striped hover>
+          <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
             <tr>
               <th>Produto</th>
               <th>Teste (mL)</th>
@@ -95,7 +95,7 @@ export function DefensiveEventModal({
               <th>Aplicados Totais (L)</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
             {plot?.applications[index]?.application_tables?.map(
               (applicationTable: any) => {
                 return <tr>
@@ -103,7 +103,7 @@ export function DefensiveEventModal({
                   <td>{applicationTable.test}</td>
                   <td>{applicationTable.quantity}</td>
                   <td>{applicationTable.tank}</td>
-                  <td>{applicationTable.total_quantity}</td>
+                  <td>{applicationTable.total_quantity/1000}</td>
                 </tr>
               },
             )}

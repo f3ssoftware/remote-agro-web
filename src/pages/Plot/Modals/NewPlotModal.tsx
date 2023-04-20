@@ -3,9 +3,7 @@ import { NewPlot } from "../components/NewPlot";
 
 export function NewPlotModal({show, handleClose}: {show: boolean, handleClose: any}){
 
-    const register = () => {
-        console.log('teste botão')
-    }
+
 
     return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>

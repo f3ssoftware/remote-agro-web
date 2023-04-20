@@ -1,17 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
 import { asyncFetchParts } from "../../../stores/maintenance.store";
+import { Part } from "../../../models/Part";
+import { InputPartsModal } from "./modals/InputPartsModal";
 
 
 export function Warehouse() {
     const dispatch = useDispatch<any>();
     const { maintenance } = useSelector((state: RootState) => state);
+    const initialParts: Part[]=[]
+    const [findParts, setFindParts] = useState('')
+    const [parts, setParts] = useState(initialParts)
+    const [showInputPartsModal, setShowInputPartsModal] = useState(false)
+
+    const find = () =>{
+        setParts(maintenance?.parts?.filter((parts: Part)=>{
+            if(parts!.name?.toUpperCase().includes(findParts.toUpperCase())){
+                return parts;
+            }
+            return null;
+
+        }))
+    }
 
     useEffect(() => {
         dispatch(asyncFetchParts());
     }, []);
+
+    useEffect(() =>{
+        find()
+    },[findParts])
+
+    useEffect(() =>{
+        setParts(maintenance.parts)
+    },[maintenance])
+
     return <div>
         <Card className="ra-card">
             <Card.Body>
@@ -20,16 +45,14 @@ export function Warehouse() {
                         <h3>Almoxarifado</h3>
                     </Col>
                     <Col md={2}>
-                        <Button>Entrada</Button>
+                        <Button className="inputs-btn" onClick={() => setShowInputPartsModal(true)}>Entrada</Button>
                     </Col>
                     <Col md={2}>
                         <Button>Saída</Button>
                     </Col>
                     <Col md={6}>
                         <Form>
-                            <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px', height: '30px' }} placeholder="Pesquisar" onChange={(e) => {
-
-                            }}></Form.Control>
+                            <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px', height: '30px' }} placeholder="Pesquisar" onChange={(e) =>{setFindParts(e.target.value)}}></Form.Control>
                         </Form>
                     </Col>
                 </Row>
@@ -45,13 +68,13 @@ export function Warehouse() {
                         </tr>
                     </thead>
                     <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                        {maintenance.parts.map(part => {
+                        {parts.map(part => {
                             return <tr>
                                 <td>{part?.name}</td>
                                 <td>{part?.code}</td>
                                 <td>{part?.quantity}</td>
                                 <td>{part?.unit_price}</td>
-                                <td>{part?.quantity * part?.unit_price}</td>
+                                <td>{part?.quantity! * part?.unit_price!}</td>
                                 <td>{part?.position}</td>
                             </tr>
                         })}
@@ -66,5 +89,6 @@ export function Warehouse() {
                 <Button variant="primary">Go somewhere</Button> */}
             </Card.Body>
         </Card>
+        <InputPartsModal show={showInputPartsModal} handleClose={() => setShowInputPartsModal(false)}></InputPartsModal>
     </div>
 }
