@@ -484,7 +484,7 @@ export function NewAutoInputWeighing({
           total_discount: totalDiscount.toString(),
           observations: observation,
           tare_weight: tare,
-          mode: "Manual",
+          mode: "Automático",
           car_plate: carPlate,
           car_driver: driver,
           weighing_date: new Date().toISOString()
