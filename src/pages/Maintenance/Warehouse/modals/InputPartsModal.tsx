@@ -11,6 +11,7 @@ import { RootState } from "../../../..";
 import { Invoice } from "../../../../models/Invoice";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { Part } from "../../../../models/Part";
+import { asyncInputParts } from "../../../../stores/maintenance.store";
 
 let emptyDate: Date;
 export function InputPartsModal({ show, handleClose }: { show: boolean, handleClose: any }) {
@@ -49,13 +50,7 @@ export function InputPartsModal({ show, handleClose }: { show: boolean, handleCl
     }
 
     const register = () => {
-        // if (productsToAdd.length > 0) {
-        //     dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
-        // }
-
-        // if (productsToUpdate.length > 0) {
-        //     dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
-        // }
+        dispatch(asyncInputParts(selectedInvoice.id!,products))
         
         handleClose();
 

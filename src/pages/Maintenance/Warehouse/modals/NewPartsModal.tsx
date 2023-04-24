@@ -12,6 +12,7 @@ import { Invoice } from "../../../../models/Invoice";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { Part } from "../../../../models/Part";
 import { NewParts } from "../components/NewParts";
+import { asyncNewParts } from "../../../../stores/maintenance.store";
 
 let emptyDate: Date;
 export function NewPartsModal({ show, handleClose }: { show: boolean, handleClose: any }) {
@@ -51,7 +52,7 @@ export function NewPartsModal({ show, handleClose }: { show: boolean, handleClos
 
     const register = () => {
 
-            // dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
+        dispatch(asyncNewParts(selectedInvoice.id!, products));
         handleClose();
 
     }
