@@ -9,6 +9,7 @@ import { Tank } from "../models/Tank";
 const initialGoods: Good[] = [];
 const initialParts: Part[] = [];
 const initialTanks: Tank[] = [];
+
 const maintenanceStore = createSlice({
   name: "maintenance",
   initialState: {
@@ -54,64 +55,51 @@ export function asyncFetchParts() {
   }
 }
 
-<<<<<<< HEAD
-export function asyncInputParts(input: any) {
+export function asyncNewParts(invoiceId: number, input: Part[]) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.post(
         `https://remoteapi.murilobotelho.com.br/parts`,
-        input,
+        {
+          expenses_invoice_id: invoiceId,
+          parts: input,
+        },
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-=======
-export function asyncNewParts(invoiceId: number, input: Part[]) {
-    return async function (dispatch: AppDispatch) {
-      try {
-        const result = await axios.post(
-          `https://remoteapi.murilobotelho.com.br/parts`,
-          {
-            expenses_invoice_id: invoiceId,
-            parts: input,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            },
-          },
-        )
-        dispatch(
-          getMessages({
-            message: 'Entrada de peça salva com sucesso',
-            type: 'success',
-          }),
-        )
-      } catch (err: any) {
-        dispatch(
-          getMessages({
-            message: err.response.data.message,
-            type: 'error',
-          }),
-        )
-      }
+        },
+      )
+      dispatch(
+        getMessages({
+          message: 'Entrada de peça salva com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
     }
   }
+}
 
-  export function asyncInputParts(invoiceId: number, input: Part[]) {
-    return async function (dispatch: AppDispatch) {
-      try {
-        const result = await axios.put(
-          `https://remoteapi.murilobotelho.com.br/parts`,
-          {
-            expenses_invoice_id: invoiceId,
-            parts: input,
-            type: 'Entrada'
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            },
->>>>>>> 9d0aa2cef8bc7e37f272f6f6c1ab3039444ab8d8
+export function asyncInputParts(invoiceId: number, input: Part[]) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.put(
+        `https://remoteapi.murilobotelho.com.br/parts`,
+        {
+          expenses_invoice_id: invoiceId,
+          parts: input,
+          type: 'Entrada'
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         },
       )
