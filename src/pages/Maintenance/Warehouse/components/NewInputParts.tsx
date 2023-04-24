@@ -15,7 +15,7 @@ import { Part } from "../../../../models/Part";
 
 export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
     const { maintenance } = useSelector((state: RootState) => state);
-    const [productId, setProductId] = useState(0);
+    const [productId, setProductId] = useState({id:0});
     const [initialQuantity, setInitialQuantity] = useState(0);
     const [initialCost, setInitialCost] = useState(0);
     const [observation, setObservation] = useState("");
@@ -23,14 +23,12 @@ export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index
 
     useEffect(() => {
         const p: Part = {
-            part_id: productId,
+            id: productId.id,
             unit_price: initialCost,
-            quantity: initialQuantity*1000,
+            quantity: initialQuantity,
             accountable: accountable,
             observations: observation,
-            name: '',
-            position: 0,
-            code: 0
+
         };
         console.log('p do lado do component:', p);
         onHandleUpdate(p, index);
@@ -41,13 +39,12 @@ export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index
                 <Form.Label style={{ color: '#fff' }}>Peça</Form.Label>
                 <Typeahead
                 id="part"
-                    onChange={(selected) => {
+                    onChange={(selected: any) => {
                         if (selected.length > 0) {
-                            const p = selected[0] as Part;
-                            setProductId(p.part_id!);
-                        }
+                            setProductId({ id: selected[0].id })
+                          }
                     }}
-                    options={maintenance.parts.map(input => { return { id: input.part_id, label: input?.name } })}
+                    options={maintenance.parts.map(input => { return { id: input.id, label: input?.name } })}
                 />
             </Form.Group>
 

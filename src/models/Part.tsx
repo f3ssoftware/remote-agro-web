@@ -1,6 +1,6 @@
 export class Part {
     constructor(
-        public part_id?: number,
+        public id?: number,
         public name?: string,
         public code?: number,
         public unit_price?: number,
