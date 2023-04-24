@@ -11,10 +11,11 @@ import { RootState } from "../../../..";
 import { Invoice } from "../../../../models/Invoice";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { Part } from "../../../../models/Part";
-import { asyncInputParts } from "../../../../stores/maintenance.store";
+import { NewParts } from "../components/NewParts";
+import { asyncNewParts } from "../../../../stores/maintenance.store";
 
 let emptyDate: Date;
-export function InputPartsModal({ show, handleClose }: { show: boolean, handleClose: any }) {
+export function NewPartsModal({ show, handleClose }: { show: boolean, handleClose: any }) {
 
     const { input } = useSelector((state: RootState) => state);
     const [linkInvoice, setLinkInvoice] = useState(false);
@@ -50,8 +51,8 @@ export function InputPartsModal({ show, handleClose }: { show: boolean, handleCl
     }
 
     const register = () => {
-        dispatch(asyncInputParts(selectedInvoice.id!,products))
-        
+
+        dispatch(asyncNewParts(selectedInvoice.id!, products));
         handleClose();
 
     }
@@ -130,7 +131,7 @@ export function InputPartsModal({ show, handleClose }: { show: boolean, handleCl
             <hr />
         </div> : <></>}
         {products.map((p, index) => {
-            return <NewInputParts index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></NewInputParts>
+            return <NewParts index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></NewParts>
         })}
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
             <Button variant="primary" onClick={() => setProducts([...products, new Part()])}>Adicionar Linha</Button>

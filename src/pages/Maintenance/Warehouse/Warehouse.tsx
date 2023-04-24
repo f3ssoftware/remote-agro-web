@@ -5,6 +5,7 @@ import { RootState } from "../../..";
 import { asyncFetchParts } from "../../../stores/maintenance.store";
 import { Part } from "../../../models/Part";
 import { InputPartsModal } from "./modals/InputPartsModal";
+import { NewPartsModal } from "./modals/NewPartsModal";
 
 
 export function Warehouse() {
@@ -14,6 +15,7 @@ export function Warehouse() {
     const [findParts, setFindParts] = useState('')
     const [parts, setParts] = useState(initialParts)
     const [showInputPartsModal, setShowInputPartsModal] = useState(false)
+    const [showNewPartsModal, setShowNewPartsModal] = useState(false)
 
     const find = () =>{
         setParts(maintenance?.parts?.filter((parts: Part)=>{
@@ -50,7 +52,10 @@ export function Warehouse() {
                     <Col md={2}>
                         <Button>Saída</Button>
                     </Col>
-                    <Col md={6}>
+                    <Col md={2}>
+                        <Button className="inputs-btn" onClick={() => setShowNewPartsModal(true)}>Nova peça</Button>
+                    </Col>
+                    <Col md={3}>
                         <Form>
                             <Form.Control type="text" style={{ backgroundColor: "transparent", borderColor: '#4F9D24', borderRadius: '100px', height: '30px' }} placeholder="Pesquisar" onChange={(e) =>{setFindParts(e.target.value)}}></Form.Control>
                         </Form>
@@ -90,5 +95,6 @@ export function Warehouse() {
             </Card.Body>
         </Card>
         <InputPartsModal show={showInputPartsModal} handleClose={() => setShowInputPartsModal(false)}></InputPartsModal>
+        <NewPartsModal show={showNewPartsModal} handleClose={() => setShowNewPartsModal(false)}></NewPartsModal>
     </div>
 }
