@@ -15,7 +15,7 @@ import { OutputWeighingRow } from '../../../../models/OutputWeighingRow';
 import { Contract } from '../../../../models/Contract'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
-import { GeneratePdf } from './GeneratePdf'
+import { GeneratePdf } from './GeneratePdf/GeneratePdf';
 
 
 

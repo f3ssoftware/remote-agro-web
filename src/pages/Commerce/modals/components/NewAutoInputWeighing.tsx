@@ -24,7 +24,7 @@ import { InputWeighingRow } from '../../../../models/InputWeighingRow'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
-import { GeneratePdf } from './GeneratePdf'
+import { GeneratePdf } from './GeneratePdf/GeneratePdf';
 
 export function NewAutoInputWeighing({
   index,

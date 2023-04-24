@@ -13,7 +13,7 @@ import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirma
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
-import { GeneratePdf } from './GeneratePdf'
+import { GeneratePdf } from './GeneratePdf/GeneratePdf';
 
 export function NewManualInputWeighing({ index, manualInputWeigh }: { index: number, manualInputWeigh: InputWeighingRow }) {
   const dispatch = useDispatch<any>()

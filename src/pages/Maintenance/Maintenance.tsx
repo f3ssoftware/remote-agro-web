@@ -4,6 +4,7 @@ import { ManualRegistration } from "../Financial/ManualRegistration/ManualRegist
 import { SefazInvoice } from "../Financial/Sefaz/SefazInvoice";
 import { Riches } from "./Riches/Riches";
 import { Warehouse } from "./Warehouse/Warehouse";
+import { Fuel } from "./Fuel/Fuel";
 
 export function Maintenance() {
     const location = useLocation();
@@ -16,7 +17,7 @@ export function Maintenance() {
             return <Warehouse></Warehouse>
         }
         default: {
-            return <div>Not found</div>
+            return <Fuel></Fuel>
         }
     }
 }

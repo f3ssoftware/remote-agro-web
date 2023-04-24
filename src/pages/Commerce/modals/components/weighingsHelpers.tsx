@@ -1,3 +1,5 @@
+import { pdfStyle } from './PdfStyle';
+
 export function calculateHumidityDiscount(humidity: number, cultivationId: number) {
   let convertedHumidity = humidity;
   if (cultivationId !== 1 && cultivationId !== 2) {
@@ -1185,7 +1187,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      
+      ${pdfStyle}
     </style>
   </head>
 
@@ -1456,7 +1458,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
 </html>
 `;
 
-return htmlContent;
+  return htmlContent;
 
 
   // try {
