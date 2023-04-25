@@ -23,7 +23,7 @@ export function NewParts({ index, onHandleRemove, onHandleUpdate }: { index: num
     useEffect(() => {
         const p: Part = {
             unit_price: initialCost,
-            quantity: initialQuantity*1000,
+            quantity: initialQuantity,
             accountable: accountable,
             observations: observation,
             name: name,
