@@ -142,3 +142,26 @@ export function asyncFetchTanks() {
     }
   }
 }
+
+export function asyncFetchFuellings(params: any) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.get(
+        `https://remoteapi.murilobotelho.com.br/fuellings`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(setTanks(result.data));
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}

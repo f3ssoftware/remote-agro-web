@@ -301,6 +301,7 @@ export function asyncInputWeighing(
           },
         },
       )
+      dispatch(setInputWeighingRows(result.data));
       dispatch(
         getMessages({
           message: 'Pesagem de entrada salva com sucesso',
@@ -476,6 +477,7 @@ export function asyncOutputWeighing(output: any) {
           },
         },
       )
+      dispatch(setOutputWeighingRows(result.data));
       dispatch(
         getMessages({
           message: 'Pesagem de saída salva com sucesso',

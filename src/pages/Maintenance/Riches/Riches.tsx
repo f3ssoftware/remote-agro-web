@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Dropdown, Row, Table } from "react-bootstrap";
 import richesImg from '../../../assets/images/bens.png';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
@@ -25,6 +25,29 @@ export function Riches() {
                     <Card className="ra-card">
                         <Card.Body>
                             <Card.Title>Histórico</Card.Title>
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    className="second-col-dropdown"
+                                    variant="success"
+                                    id="dropdown-basic"
+                                >
+                                    Bens
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    {[...maintenance.goods].map((tank, index) => {
+                                        return <Dropdown.Item
+                                            key={index}
+                                            onClick={() => {
+
+                                            }}
+                                        >
+                                            {tank?.name}
+                                        </Dropdown.Item>
+                                    })}
+
+                                </Dropdown.Menu>
+                            </Dropdown>
                             <Table striped hover>
                                 <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
                                     <tr>

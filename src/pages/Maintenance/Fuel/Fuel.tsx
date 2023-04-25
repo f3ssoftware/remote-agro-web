@@ -1,17 +1,33 @@
-import { Row, Col, Card, Table } from "react-bootstrap"
+import { Row, Col, Card, Table, Pagination, Dropdown } from "react-bootstrap"
 import richesImg from '../../../assets/images/bens.png';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
 import { asyncFetchTanks } from "../../../stores/maintenance.store";
 import "./Fuel.scss";
+import { Tank } from "../../../models/Tank";
 
+const PAGE_SIZE = 3;
 export function Fuel() {
+    const [tanks, setTanks] = useState<Tank[]>([]);
+    const [page, setPage] = useState(1);
+    // const [history, setHistory] = useState<>([]);
     const { maintenance } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
     useEffect(() => {
         dispatch(asyncFetchTanks());
     }, []);
+
+    useEffect(() => {
+        setTanks([...maintenance.tanks].slice(0, 3));
+
+    }, [maintenance]);
+
+    const paginate = (page: number) => {
+        // [...financial.bankAccounts].slice((page - 1) * pageSize, page * pageSize)
+        setTanks([...maintenance.tanks].slice(((page - 1) * PAGE_SIZE), page * PAGE_SIZE));
+    }
+
     return <div>
         <Row>
             <Row>
@@ -22,6 +38,29 @@ export function Fuel() {
                     <Card className="ra-card">
                         <Card.Body>
                             <Card.Title>Histórico</Card.Title>
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    className="second-col-dropdown"
+                                    variant="success"
+                                    id="dropdown-basic"
+                                >
+                                    Tanques
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    {[...maintenance.tanks].map((tank, index) => {
+                                        return <Dropdown.Item
+                                            key={index}
+                                            onClick={() => {
+                                                
+                                            }}
+                                        >
+                                            {tank?.name}
+                                        </Dropdown.Item>
+                                    })}
+
+                                </Dropdown.Menu>
+                            </Dropdown>
                             <Table striped hover>
                                 <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
                                     <tr>
@@ -53,7 +92,7 @@ export function Fuel() {
                         <Card.Body>
                             <Card.Title>Tanques</Card.Title>
                             <Card.Text>
-                                {maintenance.tanks.map(tank => {
+                                {tanks.map(tank => {
                                     return <div className="fuel-card">
                                         <Row>
                                             <Col>
@@ -66,6 +105,23 @@ export function Fuel() {
                                         </Row>
                                     </div>
                                 })}
+                                <div className="flex-center" style={{ marginTop: '10%' }}>
+                                    <Pagination size="sm" >
+                                        <Pagination.Prev onClick={() => {
+                                            if (page > 1) {
+                                                paginate(page - 1);
+                                                setPage(page - 1);
+                                            }
+                                        }} />
+                                        <Pagination.Next onClick={() => {
+                                            if (page < (maintenance.tanks.length / PAGE_SIZE)) {
+                                                console.log((maintenance.tanks.length / PAGE_SIZE));
+                                                paginate(page + 1);
+                                                setPage(page + 1);
+                                            }
+                                        }} />
+                                    </Pagination>
+                                </div>
                             </Card.Text>
                         </Card.Body>
                     </Card>
