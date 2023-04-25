@@ -6,6 +6,7 @@ import { asyncFetchParts } from "../../../stores/maintenance.store";
 import { Part } from "../../../models/Part";
 import { InputPartsModal } from "./modals/InputPartsModal";
 import { NewPartsModal } from "./modals/NewPartsModal";
+import { OutputPartsModal } from "./modals/OutputPartsModal";
 
 
 export function Warehouse() {
@@ -16,6 +17,7 @@ export function Warehouse() {
     const [parts, setParts] = useState(initialParts)
     const [showInputPartsModal, setShowInputPartsModal] = useState(false)
     const [showNewPartsModal, setShowNewPartsModal] = useState(false)
+    const [showOutputPartsModal, setShowOutputPartsModal] = useState(false)
 
     const find = () =>{
         setParts(maintenance?.parts?.filter((parts: Part)=>{
@@ -50,10 +52,10 @@ export function Warehouse() {
                         <Button className="inputs-btn" onClick={() => setShowInputPartsModal(true)}>Entrada</Button>
                     </Col>
                     <Col md={2}>
-                        <Button>Saída</Button>
+                    <Button  className="output-btn" variant="danger" onClick={() => setShowOutputPartsModal(true)}>Saída</Button>
                     </Col>
                     <Col md={2}>
-                        <Button className="inputs-btn" onClick={() => setShowNewPartsModal(true)}>Nova peça</Button>
+                        <Button className="inputsparts-btn" onClick={() => setShowNewPartsModal(true)}>Nova peça</Button>
                     </Col>
                     <Col md={3}>
                         <Form>
@@ -96,5 +98,6 @@ export function Warehouse() {
         </Card>
         <InputPartsModal show={showInputPartsModal} handleClose={() => setShowInputPartsModal(false)}></InputPartsModal>
         <NewPartsModal show={showNewPartsModal} handleClose={() => setShowNewPartsModal(false)}></NewPartsModal>
+        <OutputPartsModal show={showOutputPartsModal} handleClose={() => setShowOutputPartsModal(false)}></OutputPartsModal>
     </div>
 }
