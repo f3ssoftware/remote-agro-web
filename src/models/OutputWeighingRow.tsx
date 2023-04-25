@@ -23,6 +23,7 @@ export class OutputWeighingRow extends WeighingRow {
         public tare_weight_date?: string,
         public gross_weight_date?: string,
         public mode?: string,
+        public number?: number,
         public weighing_date?: string,
         public car_plate?: string,
         public createdAt?: string

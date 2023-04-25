@@ -294,6 +294,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
             <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
+              step={0.1}
               value={impurity}
               onChange={(e) => {
                 setImpurity(Number(e.target.value))
@@ -379,25 +380,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         >
           {manualOutputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {manualOutputWeigh?.id ? <GeneratePdf weighing={{
-          silo_id: selectedSilo?.id,
-          gross_weight: grossWeighing,
-          net_weight: netWeighing,
-          humidity: humidity * 100,
-          impurity: impurity * 100,
-          discount: discount * 100,
-          final_weight: (totalWeighning * 1000).toString(),
-          type: "Saída",
-          shipping_company: company,
-          humidity_discount: humidityDiscount.toString(),
-          total_discount: totalDiscount.toString(),
-          observations: observation,
-          tare_weight: tare,
-          mode: "Manual",
-          car_plate: carPlate,
-          car_driver: driver,
-          weighing_date: new Date().toISOString()
-        }} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+        {manualOutputWeigh?.id ? <GeneratePdf weighing={manualOutputWeigh} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualOutputWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>

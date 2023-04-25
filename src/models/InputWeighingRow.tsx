@@ -26,8 +26,8 @@ export class InputWeighingRow extends WeighingRow {
         public mode?: string,
         public weighing_date?: string,
         public car_plate?: string,
-        public createdAt?: string
-
+        public createdAt?: string,
+        public number?: number
     ) {
         super();
     }

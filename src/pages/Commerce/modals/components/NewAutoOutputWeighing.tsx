@@ -401,25 +401,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         >
           {autoOutputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {autoOutputWeighing?.id ? <GeneratePdf weighing={{
-          silo_id: selectedSilo?.id,
-          gross_weight: grossWeighing,
-          net_weight: netWeighing,
-          humidity: humidity * 100,
-          impurity: impurity * 100,
-          discount: discount * 100,
-          final_weight: (totalWeighning * 1000).toString(),
-          type: "Saída",
-          shipping_company: company,
-          humidity_discount: humidityDiscount.toString(),
-          total_discount: totalDiscount.toString(),
-          observations: observation,
-          tare_weight: tare,
-          mode: "Automático",
-          car_plate: carPlate,
-          car_driver: driver,
-          weighing_date: new Date().toISOString()
-        }} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+        {autoOutputWeighing?.id ? <GeneratePdf weighing={autoOutputWeighing} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={autoOutputWeighing.type!}></DeleteConfirmationModal>
       </div>
     </div>
