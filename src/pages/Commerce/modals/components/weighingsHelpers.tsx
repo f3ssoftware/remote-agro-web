@@ -1213,7 +1213,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       <p class="info-label">TICKET:</p>
       <p class="info-value">${number || 'SEM INFORMACAO'}</p>
       <p class="info-label">DATA:</p>
-      <p class="info-value">${createdAt ? createdAt : 'SEM INFORMACAO'
+      <p class="info-value">${createdAt ? `${new Date(createdAt).toLocaleDateString('pt-BR')} ${new Date(createdAt).toLocaleTimeString('pt-BR')}` : 'SEM INFORMACAO'
     }</p>
       <p class="info-label">PLACA:</p>
       <p class="info-value">${car_plate || 'SEM INFORMACAO'}</p>
@@ -1251,7 +1251,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       <p class="obs-headers big-headers">IMPUREZA</p>
       <div>
         <p class="obs-info">${gross_weight_date
-      ? gross_weight_date
+      ? new Date(gross_weight_date).toLocaleDateString('pt-BR')
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${gross_weight ? `${gross_weight}kg` : 'SEM INFORMACAO'
@@ -1259,7 +1259,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       </div>
       <div>
         <p class="obs-info">${tare_weight_date
-      ? tare_weight_date
+      ? new Date(tare_weight_date).toLocaleDateString('pt-BR')
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${tare_weight ? `${tare_weight}kg` : 'SEM INFORMACAO'
@@ -1275,7 +1275,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
           <p>DESC</p>
         </div>
         <div class="obs-info-group">
-          <p>${humidity ? `${humidity}%` : 'SEM INFORMACAO'}</p>
+          <p>${humidity ? `${humidity/100}%` : 'SEM INFORMACAO'}</p>
           <p>${humidity_discount && net_weight
       ? `${(
         (parseFloat(humidity_discount) / 100) *
@@ -1293,7 +1293,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
           <p>DESC</p>
         </div>
         <div class="obs-info-group">
-          <p>${impurity ? `${impurity}%` : 'SEM INFORMACAO'}</p>
+          <p>${impurity ? `${impurity/ 100}%` : 'SEM INFORMACAO'}</p>
           <p>${discount && net_weight
       ? `${((parseFloat(discount) / 100) * parseFloat(net_weight))
         .toFixed(3)
@@ -1344,7 +1344,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       <p class="info-label">TICKET:</p>
       <p class="info-value">${number || 'SEM INFORMACAO'}</p>
       <p class="info-label">DATA:</p>
-      <p class="info-value">${createdAt ? createdAt : 'SEM INFORMACAO'
+      <p class="info-value">${createdAt ? `${new Date(createdAt).toLocaleDateString('pt-BR')} ${new Date(createdAt).toLocaleTimeString('pt-BR')}` : 'SEM INFORMACAO'
     }</p>
       <p class="info-label">PLACA:</p>
       <p class="info-value">${car_plate || 'SEM INFORMACAO'}</p>
@@ -1382,7 +1382,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       <p class="obs-headers big-headers">IMPUREZA</p>
       <div>
         <p class="obs-info">${gross_weight_date
-      ? gross_weight_date
+      ? new Date(gross_weight_date).toLocaleDateString('pt-BR')
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${gross_weight ? `${gross_weight}kg` : 'SEM INFORMACAO'
@@ -1390,7 +1390,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       </div>
       <div>
         <p class="obs-info">${tare_weight_date
-      ? tare_weight_date
+      ? new Date(tare_weight_date).toLocaleDateString('pt-BR')
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${tare_weight ? `${tare_weight}kg` : 'SEM INFORMACAO'
@@ -1406,7 +1406,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
           <p>DESC</p>
         </div>
         <div class="obs-info-group">
-          <p>${humidity ? `${humidity}%` : 'SEM INFORMACAO'}</p>
+          <p>${humidity ? `${humidity/100}%` : 'SEM INFORMACAO'}</p>
           <p>${humidity_discount && net_weight
       ? `${(
         (parseFloat(humidity_discount) / 100) *
@@ -1424,7 +1424,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
           <p>DESC</p>
         </div>
         <div class="obs-info-group">
-          <p>${impurity ? `${impurity}%` : 'SEM INFORMACAO'}</p>
+          <p>${impurity ? `${impurity/100}%` : 'SEM INFORMACAO'}</p>
           <p>${discount && net_weight
       ? `${((parseFloat(discount) / 100) * parseFloat(net_weight))
         .toFixed(3)
