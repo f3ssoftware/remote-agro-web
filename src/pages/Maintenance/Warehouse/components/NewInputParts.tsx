@@ -24,6 +24,7 @@ export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index
     useEffect(() => {
         const p: Part = {
             id: productId.id,
+            part_id: productId.id.toString(),
             unit_price: initialCost,
             quantity: initialQuantity,
             accountable: accountable,
