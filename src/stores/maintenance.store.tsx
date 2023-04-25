@@ -119,6 +119,37 @@ export function asyncInputParts(invoiceId: number, input: Part[]) {
     }
   }
 }
+export function asyncOutputParts( output: Part[]) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.put(
+        `https://remoteapi.murilobotelho.com.br/parts`,
+        {
+          parts: output,
+          type: 'Saida'
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(
+        getMessages({
+          message: 'Saída de peça salva com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
 
 export function asyncFetchTanks() {
   return async function (dispatch: AppDispatch) {
