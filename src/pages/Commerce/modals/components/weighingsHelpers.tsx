@@ -1305,9 +1305,9 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
     </div>
     <div class="net-weight">
       <p>LIQUIDO FINAL: <span>${final_weight
-      ? final_weight.toString().indexOf(',') > -1
-        ? final_weight
-        : `${parseFloat(final_weight)
+      ? (final_weight).toString().indexOf(',') > -1
+        ? final_weight/1000
+        : `${(parseFloat(final_weight)/1000)
           .toFixed(3)
           .replace('.', ',')}kg`
       : 'SEM INFORMACAO'
@@ -1437,8 +1437,8 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
     <div class="net-weight">
       <p>LIQUIDO FINAL: <span>${final_weight
       ? final_weight.toString().indexOf(',') > -1
-        ? final_weight
-        : `${parseFloat(final_weight)
+        ? final_weight/1000
+        : `${(parseFloat(final_weight)/1000)
           .toFixed(3)
           .replace('.', ',')}kg`
       : 'SEM INFORMACAO'

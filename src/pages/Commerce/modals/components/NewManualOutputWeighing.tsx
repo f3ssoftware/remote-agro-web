@@ -380,7 +380,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
         >
           {manualOutputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {manualOutputWeigh?.id ? <GeneratePdf weighing={manualOutputWeigh} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+        {manualOutputWeigh?.id ? <GeneratePdf weighing={manualOutputWeigh} contractsList={financial?.contracts} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualOutputWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>

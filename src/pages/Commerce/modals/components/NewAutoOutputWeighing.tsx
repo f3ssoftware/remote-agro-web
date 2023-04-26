@@ -401,7 +401,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         >
           {autoOutputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {autoOutputWeighing?.id ? <GeneratePdf weighing={autoOutputWeighing} cultivationsList={financial?.cultivations} silosList={commerce?.silo} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+        {autoOutputWeighing?.id ? <GeneratePdf weighing={autoOutputWeighing} cultivationsList={financial?.cultivations} contractsList={financial?.contracts} silosList={commerce?.silo} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={autoOutputWeighing.type!}></DeleteConfirmationModal>
       </div>
     </div>
