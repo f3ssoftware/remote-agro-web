@@ -1426,7 +1426,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
         <div class="obs-info-group">
           <p>${impurity ? `${impurity/100}%` : 'SEM INFORMACAO'}</p>
           <p>${discount && net_weight
-      ? `${((parseFloat(discount) / 100) * parseFloat(net_weight))
+      ? `${(((parseFloat(discount) / 100) * parseFloat(net_weight))/100)
         .toFixed(3)
         .replace('.', ',')}kg`
       : 'SEM INFORMACAO'
