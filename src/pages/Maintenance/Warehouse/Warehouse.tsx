@@ -7,6 +7,9 @@ import { Part } from "../../../models/Part";
 import { InputPartsModal } from "./modals/InputPartsModal";
 import { NewPartsModal } from "./modals/NewPartsModal";
 import { OutputPartsModal } from "./modals/OutputPartsModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { PartHistoryModal } from "./modals/PartHistoryModal";
 
 
 export function Warehouse() {
@@ -18,6 +21,7 @@ export function Warehouse() {
     const [showInputPartsModal, setShowInputPartsModal] = useState(false)
     const [showNewPartsModal, setShowNewPartsModal] = useState(false)
     const [showOutputPartsModal, setShowOutputPartsModal] = useState(false)
+    const [showPartHistoryModal, setShowPartHistoryModal] = useState(false)
 
     const find = () =>{
         setParts(maintenance?.parts?.filter((parts: Part)=>{
@@ -79,7 +83,17 @@ export function Warehouse() {
                             return <tr>
                                 <td>{part?.name}</td>
                                 <td>{part?.code}</td>
-                                <td>{part?.quantity}</td>
+                                <td><Row>
+                                                <Col md={10}>
+                                                    {part?.quantity}
+                                                </Col>
+                                                <Col md={2}>
+                                                    <FontAwesomeIcon icon={faEye} style={{ color: '#000AFF', cursor: 'pointer' }} onClick={() => {
+                                                        setShowPartHistoryModal(true);
+                                                        // setHistorySelectedProduct(input);
+                                                    }}></FontAwesomeIcon>
+                                                </Col>
+                                            </Row></td>
                                 <td>{part?.unit_price}</td>
                                 <td>{part?.quantity! * part?.unit_price!}</td>
                                 <td>{part?.position}</td>
@@ -99,5 +113,6 @@ export function Warehouse() {
         <InputPartsModal show={showInputPartsModal} handleClose={() => setShowInputPartsModal(false)}></InputPartsModal>
         <NewPartsModal show={showNewPartsModal} handleClose={() => setShowNewPartsModal(false)}></NewPartsModal>
         <OutputPartsModal show={showOutputPartsModal} handleClose={() => setShowOutputPartsModal(false)}></OutputPartsModal>
+        <PartHistoryModal show={showPartHistoryModal} handleClose={() => setShowPartHistoryModal(false)} ></PartHistoryModal>
     </div>
 }
