@@ -8,7 +8,7 @@ export function GeneratePdf({ weighing, cultivationsList, silosList, farmsList, 
     return <Button onClick={() => {
         const html = _generatePDF(weighing, cultivationsList, silosList, profile, contractsList, farmsList);
 
-        console.log(html);
-        // dispatch(asyncGeneratePdf(html));
+        // console.log(html);
+        dispatch(asyncGeneratePdf(html));
     }}>Gerar Romaneio</Button>
 }
