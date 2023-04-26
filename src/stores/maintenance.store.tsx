@@ -54,6 +54,16 @@ export function asyncFetchParts() {
     dispatch(setParts(results.data))
   }
 }
+export function asyncFetchHistoryParts(id: number) {
+  return async function (dispatch: AppDispatch) {
+    const results = await axios.get('https://remoteapi.murilobotelho.com.br/parts/', {
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      }
+    });
+    dispatch(setParts(results.data))
+  }
+}
 
 export function asyncNewParts(invoiceId: number, input: Part[]) {
   return async function (dispatch: AppDispatch) {

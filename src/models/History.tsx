@@ -9,5 +9,3 @@ export class History {
         public price?: number
     ) { }
 }
-
-// { "id":14758, "flow_type":"TRATAMENTO ENTRADA", "createdAt":"2022-10-25T02:46:18.000Z", "accountable":"", "quantity":100, "observations":"obs", "price":0}

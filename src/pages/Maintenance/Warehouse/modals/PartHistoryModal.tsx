@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { Button, Col, Modal, Row, Spinner, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
-import { Product } from "../../../../models/Product";
+import { Part } from "../../../../models/Part";
 
 
 
 
-export function PartHistoryModal({ show, handleClose }: { show: boolean, handleClose: any }) {
+export function PartHistoryModal({ show, handleClose, part }: { show: boolean, handleClose: any, part: Part }) {
     const { input, loading } = useSelector((state: RootState) => state);
     const [history, setHistory] = useState(input.productHistory);
     const dispatch = useDispatch<any>();

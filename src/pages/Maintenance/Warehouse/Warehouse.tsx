@@ -22,6 +22,7 @@ export function Warehouse() {
     const [showNewPartsModal, setShowNewPartsModal] = useState(false)
     const [showOutputPartsModal, setShowOutputPartsModal] = useState(false)
     const [showPartHistoryModal, setShowPartHistoryModal] = useState(false)
+    const [selectedPart, setSelectedPart] = useState(new Part())
 
     const find = () =>{
         setParts(maintenance?.parts?.filter((parts: Part)=>{
@@ -90,7 +91,7 @@ export function Warehouse() {
                                                 <Col md={2}>
                                                     <FontAwesomeIcon icon={faEye} style={{ color: '#000AFF', cursor: 'pointer' }} onClick={() => {
                                                         setShowPartHistoryModal(true);
-                                                        // setHistorySelectedProduct(input);
+                                                        setSelectedPart(part);
                                                     }}></FontAwesomeIcon>
                                                 </Col>
                                             </Row></td>
@@ -113,6 +114,6 @@ export function Warehouse() {
         <InputPartsModal show={showInputPartsModal} handleClose={() => setShowInputPartsModal(false)}></InputPartsModal>
         <NewPartsModal show={showNewPartsModal} handleClose={() => setShowNewPartsModal(false)}></NewPartsModal>
         <OutputPartsModal show={showOutputPartsModal} handleClose={() => setShowOutputPartsModal(false)}></OutputPartsModal>
-        <PartHistoryModal show={showPartHistoryModal} handleClose={() => setShowPartHistoryModal(false)} ></PartHistoryModal>
+        <PartHistoryModal show={showPartHistoryModal} handleClose={() => { setShowPartHistoryModal(false), setSelectedPart(new Part()); } } part={selectedPart} ></PartHistoryModal>
     </div>
 }
