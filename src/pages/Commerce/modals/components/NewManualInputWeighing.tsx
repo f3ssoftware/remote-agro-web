@@ -416,7 +416,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {manualInputWeigh?.id ? <GeneratePdf weighing={manualInputWeigh} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+        {manualInputWeigh?.id ? <GeneratePdf weighing={manualInputWeigh} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
 
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualInputWeigh.type!} ></DeleteConfirmationModal>
       </div>

@@ -468,7 +468,7 @@ export function NewAutoInputWeighing({
         >
           {autoInputWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {autoInputWeighing.id ? <GeneratePdf weighing={autoInputWeighing} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={sessionStorage.getItem('user')}></GeneratePdf> : <></>}
+        {autoInputWeighing.id ? <GeneratePdf weighing={autoInputWeighing} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
 
       </div>
       <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={commerce?.inputWeighingData?.id!} index={index} weighingType={autoInputWeighing.type!}></DeleteConfirmationModal>
