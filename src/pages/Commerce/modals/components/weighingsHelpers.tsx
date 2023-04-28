@@ -1251,7 +1251,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       <p class="obs-headers big-headers">IMPUREZA</p>
       <div>
         <p class="obs-info">${gross_weight_date
-      ? new Date(gross_weight_date).toLocaleDateString('pt-BR')
+      ? `${new Date(gross_weight_date).toLocaleDateString('pt-BR')} ${new Date(gross_weight_date).toLocaleTimeString('pt-BR')}`
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${gross_weight ? `${gross_weight}kg` : 'SEM INFORMACAO'
@@ -1259,7 +1259,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       </div>
       <div>
         <p class="obs-info">${tare_weight_date
-      ? new Date(tare_weight_date).toLocaleDateString('pt-BR')
+      ? `${new Date(tare_weight_date).toLocaleDateString('pt-BR')} ${new Date(tare_weight_date).toLocaleTimeString('pt-BR')}`
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${tare_weight ? `${tare_weight}kg` : 'SEM INFORMACAO'
@@ -1382,7 +1382,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       <p class="obs-headers big-headers">IMPUREZA</p>
       <div>
         <p class="obs-info">${gross_weight_date
-      ? new Date(gross_weight_date).toLocaleDateString('pt-BR')
+      ? `${new Date(gross_weight_date).toLocaleDateString('pt-BR')} ${new Date(gross_weight_date).toLocaleTimeString('pt-BR')}`
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${gross_weight ? `${gross_weight}kg` : 'SEM INFORMACAO'
@@ -1390,7 +1390,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
       </div>
       <div>
         <p class="obs-info">${tare_weight_date
-      ? new Date(tare_weight_date).toLocaleDateString('pt-BR')
+      ? `${new Date(tare_weight_date).toLocaleDateString('pt-BR')} ${new Date(tare_weight_date).toLocaleTimeString('pt-BR')}`
       : 'SEM INFORMACAO'
     }</p>
         <p class="obs-info">${tare_weight ? `${tare_weight}kg` : 'SEM INFORMACAO'
