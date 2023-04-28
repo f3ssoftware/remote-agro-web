@@ -5,10 +5,13 @@ import axios from "axios";
 import { Part } from "../models/Part";
 import { getMessages } from './messaging.store'
 import { Tank } from "../models/Tank";
+import { PartHistory } from "../models/PartHistory";
+import { popLoading, pushLoading } from "./loading.store";
 
 const initialGoods: Good[] = [];
 const initialParts: Part[] = [];
 const initialTanks: Tank[] = [];
+const initialPartHistory: PartHistory[] = [];
 
 const maintenanceStore = createSlice({
   name: "maintenance",
@@ -16,6 +19,7 @@ const maintenanceStore = createSlice({
     goods: initialGoods,
     parts: initialParts,
     tanks: initialTanks,
+    partHistory: initialPartHistory
   },
   reducers: {
     setGoods(state, action) {
@@ -26,11 +30,14 @@ const maintenanceStore = createSlice({
     },
     setTanks(state, action) {
       state.tanks = action.payload;
+    },
+    setPartHistory(state, action) {
+      state.tanks = action.payload;
     }
   },
 });
 
-export const { setGoods, setParts, setTanks } = maintenanceStore.actions;
+export const { setGoods, setParts, setTanks, setPartHistory } = maintenanceStore.actions;
 export default maintenanceStore.reducer;
 
 export function asyncFetchGoods() {
@@ -54,14 +61,16 @@ export function asyncFetchParts() {
     dispatch(setParts(results.data))
   }
 }
-export function asyncFetchHistoryParts(id: number) {
+export function asyncFetchPartHistory(id: number) {
   return async function (dispatch: AppDispatch) {
-    const results = await axios.get('https://remoteapi.murilobotelho.com.br/parts/', {
+    dispatch(popLoading("parts"));
+    const results = await axios.get(`https://remoteapi.murilobotelho.com.br/parts/${id}`, {
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       }
     });
-    dispatch(setParts(results.data))
+    dispatch(popLoading("parts"));
+    dispatch(setPartHistory(results.data))
   }
 }
 
