@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
 import { Good } from "../../../models/Good";
 import { useEffect, useState } from "react";
-import { asyncFetchGoods, asyncFetchParts, asyncGetHistories } from "../../../stores/maintenance.store";
+import { asyncFetchGoods, asyncFetchParts, asyncGetGoodHistory } from "../../../stores/maintenance.store";
 import { tr } from "date-fns/locale";
 
 export function Riches() {
@@ -41,7 +41,7 @@ export function Riches() {
                                             key={index}
                                             onClick={() => {
                                                 setSelectedRich(good);
-                                                dispatch(asyncGetHistories({ good_id: good.id }));
+                                                dispatch(asyncGetGoodHistory({ good_id: good.id }));
                                             }}
                                         >
                                             {good?.name}
@@ -60,7 +60,7 @@ export function Riches() {
                                     </tr>
                                 </thead>
                                 <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                                    {maintenance.history.map((data: any) => {
+                                    {maintenance.goodHistory.map((data: any) => {
                                         return (
                                             <tr>
                                                 <td>{new Date(data?.updatedAt).toLocaleDateString('pt-BR')} {new Date(data?.updatedAt).toLocaleTimeString('pt-BR')}</td>

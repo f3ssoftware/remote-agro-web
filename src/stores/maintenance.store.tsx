@@ -5,10 +5,13 @@ import axios from "axios";
 import { Part } from "../models/Part";
 import { getMessages } from './messaging.store'
 import { Tank } from "../models/Tank";
+import { PartHistory } from "../models/PartHistory";
+import { popLoading, pushLoading } from "./loading.store";
 
 const initialGoods: Good[] = [];
 const initialParts: Part[] = [];
 const initialTanks: Tank[] = [];
+const initialPartHistory: PartHistory[] = [];
 
 const maintenanceStore = createSlice({
   name: "maintenance",
@@ -16,7 +19,8 @@ const maintenanceStore = createSlice({
     goods: initialGoods,
     parts: initialParts,
     tanks: initialTanks,
-    history: [],
+    goodHistory: [],
+    partHistory: initialPartHistory
   },
   reducers: {
     setGoods(state, action) {
@@ -28,13 +32,16 @@ const maintenanceStore = createSlice({
     setTanks(state, action) {
       state.tanks = action.payload;
     },
-    setHistory(state, action) {
-      state.history = action.payload
+    setGoodHistory(state, action) {
+      state.goodHistory = action.payload
+    },
+    setPartHistory(state, action) {
+      state.tanks = action.payload;
     }
   },
 });
 
-export const { setGoods, setParts, setTanks, setHistory } = maintenanceStore.actions;
+export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory} = maintenanceStore.actions;
 export default maintenanceStore.reducer;
 
 export function asyncFetchGoods() {
@@ -56,6 +63,18 @@ export function asyncFetchParts() {
       }
     });
     dispatch(setParts(results.data))
+  }
+}
+export function asyncFetchPartHistory(id: number) {
+  return async function (dispatch: AppDispatch) {
+    dispatch(popLoading("parts"));
+    const results = await axios.get(`https://remoteapi.murilobotelho.com.br/parts/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      }
+    });
+    dispatch(popLoading("parts"));
+    dispatch(setPartHistory(results.data))
   }
 }
 
@@ -201,7 +220,7 @@ export function asyncFetchFuellings(params: any) {
   }
 }
 
-export function asyncGetHistories(params: any) {
+export function asyncGetGoodHistory(params: any) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.get(
@@ -213,7 +232,7 @@ export function asyncGetHistories(params: any) {
           params,
         },
       )
-      dispatch(setHistory(result.data));
+      dispatch(setGoodHistory(result.data));
     } catch (err: any) {
       dispatch(
         getMessages({
