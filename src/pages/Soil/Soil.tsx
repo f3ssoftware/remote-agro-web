@@ -63,7 +63,7 @@ export function Soil() {
               <h4>Análises de solo</h4>
             </Col>
             <Col>
-              <Button variant='success'>Solicite já sua amostra</Button>
+              <Button variant='success' onClick={() => window.open("https://wa.me/5564992928067?text=Ol%C3%A1%21+Gostaria+de+solicitar+um+or%C3%A7amento+de+an%C3%A1lises+de+solo", "_blank")}>Solicite já sua amostra</Button>
             </Col>
             <Col>
               <Form>
