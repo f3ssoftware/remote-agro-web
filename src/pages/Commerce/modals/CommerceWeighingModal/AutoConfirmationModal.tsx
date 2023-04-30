@@ -28,6 +28,11 @@ export function AutoConfirmationModal({
     dispatch(asyncFetchWeighingData())
   }, [])
 
+  useEffect(()=>{
+    console.log('show alterou');
+    dispatch(asyncFetchWeighingData())
+  }, [show])
+
   return (
     <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>
       <Modal.Header

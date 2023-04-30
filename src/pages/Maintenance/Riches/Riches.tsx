@@ -3,13 +3,14 @@ import richesImg from '../../../assets/images/bens.png';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
 import { Good } from "../../../models/Good";
-import { useEffect } from "react";
-import { asyncFetchGoods, asyncFetchParts } from "../../../stores/maintenance.store";
+import { useEffect, useState } from "react";
+import { asyncFetchGoods, asyncFetchParts, asyncGetHistories } from "../../../stores/maintenance.store";
 import { tr } from "date-fns/locale";
 
 export function Riches() {
     const { maintenance } = useSelector((state: RootState) => state);
     const dispatch = useDispatch<any>();
+    const [selectedRich, setSelectedRich] = useState<Good>();
 
     useEffect(() => {
         dispatch(asyncFetchGoods());
@@ -31,18 +32,19 @@ export function Riches() {
                                     variant="success"
                                     id="dropdown-basic"
                                 >
-                                    Bens
+                                    {selectedRich ? `${selectedRich.name}` : 'Selecione um bem'}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    {[...maintenance.goods].map((tank, index) => {
+                                    {[...maintenance.goods].map((good, index) => {
                                         return <Dropdown.Item
                                             key={index}
                                             onClick={() => {
-
+                                                setSelectedRich(good);
+                                                dispatch(asyncGetHistories({ good_id: good.id }));
                                             }}
                                         >
-                                            {tank?.name}
+                                            {good?.name}
                                         </Dropdown.Item>
                                     })}
 
@@ -52,20 +54,22 @@ export function Riches() {
                                 <thead style={{ backgroundColor: '#243C74', color: '#fff', border: 'none' }}>
                                     <tr>
                                         <th>Data</th>
-                                        <th>Maquinário</th>
+                                        <th>Tipo</th>
                                         <th>Quantidade</th>
-                                        <th>Tanque</th>
+                                        <th>Observações</th>
                                     </tr>
                                 </thead>
                                 <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                                    {/* {maintenance?.parts?.map(part => {
-                                        return <tr>
-                                            <td>{part?.createdAt}</td>
-                                            <td>{part?.name}</td>
-                                            <td>{part?.quantity}</td>
-                                            <td>{part?.}</td>
-                                        </tr>
-                                    })} */}
+                                    {maintenance.history.map((data: any) => {
+                                        return (
+                                            <tr>
+                                                <td>{new Date(data?.updatedAt).toLocaleDateString('pt-BR')} {new Date(data?.updatedAt).toLocaleTimeString('pt-BR')}</td>
+                                                <td>{data?.type}</td>
+                                                <td>{data?.quantity}</td>
+                                                <td>{data?.observations}</td>
+                                            </tr>
+                                        )
+                                    })}
 
                                 </tbody>
                             </Table>

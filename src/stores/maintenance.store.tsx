@@ -16,6 +16,7 @@ const maintenanceStore = createSlice({
     goods: initialGoods,
     parts: initialParts,
     tanks: initialTanks,
+    history: [],
   },
   reducers: {
     setGoods(state, action) {
@@ -26,11 +27,14 @@ const maintenanceStore = createSlice({
     },
     setTanks(state, action) {
       state.tanks = action.payload;
+    },
+    setHistory(state, action) {
+      state.history = action.payload
     }
   },
 });
 
-export const { setGoods, setParts, setTanks } = maintenanceStore.actions;
+export const { setGoods, setParts, setTanks, setHistory } = maintenanceStore.actions;
 export default maintenanceStore.reducer;
 
 export function asyncFetchGoods() {
@@ -119,7 +123,7 @@ export function asyncInputParts(invoiceId: number, input: Part[]) {
     }
   }
 }
-export function asyncOutputParts( output: Part[]) {
+export function asyncOutputParts(output: Part[]) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.put(
@@ -186,6 +190,30 @@ export function asyncFetchFuellings(params: any) {
         },
       )
       dispatch(setTanks(result.data));
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
+export function asyncGetHistories(params: any) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.get(
+        `https://remoteapi.murilobotelho.com.br/part-histories`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+          params,
+        },
+      )
+      dispatch(setHistory(result.data));
     } catch (err: any) {
       dispatch(
         getMessages({
