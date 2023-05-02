@@ -57,7 +57,8 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
   }, [grossWeighing, tare])
 
   useEffect(() => {
-    setDiscount(impurity == 0 ? 0 : impurity - 1)
+    console.log(impurity);
+    setDiscount(impurity < 1 ? 0 : impurity - 1)
   }, [impurity])
 
   useEffect(() => {
