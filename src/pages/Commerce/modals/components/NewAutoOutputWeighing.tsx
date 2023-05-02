@@ -98,7 +98,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         total_discount: totalDiscount.toString(),
         observations: observation,
         tare_weight: tare,
-        mode: "Manual",
+        mode: "Automático",
         car_plate: carPlate,
         car_driver: driver,
         gross_weight_date: grossWeightDate,
@@ -246,7 +246,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
             ) : (<Form.Control
               type="number"
               disabled
-              value={grossWeighing}
+              value={9999}
             />)}
           </Form.Group>
         </Col>
