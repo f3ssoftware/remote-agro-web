@@ -3,7 +3,7 @@ import richesImg from '../../../assets/images/bens.png';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../..";
-import { asyncFetchTanks } from "../../../stores/maintenance.store";
+import { asyncFetchFuellings, asyncFetchTanks } from "../../../stores/maintenance.store";
 import "./Fuel.scss";
 import { Tank } from "../../../models/Tank";
 
@@ -52,7 +52,10 @@ export function Fuel() {
                                         return <Dropdown.Item
                                             key={index}
                                             onClick={() => {
-                                                
+                                                dispatch(asyncFetchFuellings({
+                                                    page: 1,
+                                                    tank_id: tank?.id
+                                                }))
                                             }}
                                         >
                                             {tank?.name}
@@ -71,14 +74,14 @@ export function Fuel() {
                                     </tr>
                                 </thead>
                                 <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-                                    {/* {maintenance?.parts?.map(part => {
+                                    {maintenance.fuellings.map((f: any) => {
                                         return <tr>
-                                            <td>{part?.createdAt}</td>
-                                            <td>{part?.name}</td>
-                                            <td>{part?.quantity}</td>
-                                            <td>{part?.}</td>
+                                            <td>{new Date(f?.updatedAt)?.toLocaleDateString('pt-BR')} {new Date(f?.updatedAt)?.toLocaleTimeString('pt-BR')}</td>
+                                            <td></td>
+                                            <td>{f?.quantity}</td>
+                                            <td>{f?.tank?.name}</td>
                                         </tr>
-                                    })} */}
+                                    })}
 
                                 </tbody>
                             </Table>

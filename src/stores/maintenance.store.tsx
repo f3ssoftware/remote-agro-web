@@ -20,7 +20,8 @@ const maintenanceStore = createSlice({
     parts: initialParts,
     tanks: initialTanks,
     goodHistory: [],
-    partHistory: initialPartHistory
+    partHistory: initialPartHistory,
+    fuellings: [],
   },
   reducers: {
     setGoods(state, action) {
@@ -37,11 +38,14 @@ const maintenanceStore = createSlice({
     },
     setPartHistory(state, action) {
       state.tanks = action.payload;
+    },
+    setFuellings(state, action) {
+      state.fuellings = action.payload;
     }
   },
 });
 
-export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory} = maintenanceStore.actions;
+export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory, setFuellings } = maintenanceStore.actions;
 export default maintenanceStore.reducer;
 
 export function asyncFetchGoods() {
@@ -206,9 +210,16 @@ export function asyncFetchFuellings(params: any) {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
+          params
         },
       )
-      dispatch(setTanks(result.data));
+      const dailyFuellings = result.data;
+      const allFuellings: any[] = []; 
+      
+      dailyFuellings.forEach((df: any[]) => {
+        return df.forEach(fuelling => allFuellings.push(fuelling));
+      })
+      dispatch(setFuellings(allFuellings));
     } catch (err: any) {
       dispatch(
         getMessages({

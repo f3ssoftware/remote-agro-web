@@ -31,7 +31,7 @@ export function asyncFetchFarms(params?: any) {
     return async function (dispatch: AppDispatch) {
         try {
             const result = await axios.get(
-                `https://remoteapi.murilobotelho.com.br/farms?include=cultivares&include=cultivations`,
+                `https://remoteapi.murilobotelho.com.br/farms?include=cultivares&include=cultivations&include=seasons`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
