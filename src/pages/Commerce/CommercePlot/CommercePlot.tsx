@@ -53,15 +53,16 @@ export function CommercePlot() {
           <Col md={2} className="title-box">
             <span>Silos</span>
           </Col>
-          <Col md={2}>
+          <div>
             <Button
-              variant="success"
-              className="plot-btn"
-              onClick={() => setShowNewCommercePlotModal(true)}
-            >
-              +
-            </Button>{' '}
-          </Col>
+                variant="success"
+                className="plot-btn"
+                onClick={() => setShowNewCommercePlotModal(true)}
+              >
+                +
+              </Button>{' '}
+          </div>
+
         </Row>
         <Row className="plot-cards">
           {silos.map((silo, index) => (
@@ -81,7 +82,10 @@ export function CommercePlot() {
                   </Card.Title>
                   <Card.Text className="cardText">
                      {silo?.cultivations?.map(
-                        (ss: any) => `${ss?.name} ${ss?.SiloCultivar?.quantity} `,
+                        (ss: any) => <Row>
+                          <Col><span>{ss?.name}</span></Col>
+                          <Col><span>{ss?.SiloCultivar?.quantity} Sacas</span></Col>
+                        </Row>
                      )}
                   </Card.Text>
                 </Card.Body>
