@@ -56,13 +56,13 @@ export function PartHistoryModal({ show, handleClose, part }: { show: boolean, h
                     </thead>
                     <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
                     {partHistory?.map((h: PartHistory, index) => {
-                            return <tr key={index}>
+                            return (<tr key={index}>
                                 <td>{h?.type}</td>
                                 <td>{new Date(h?.createdAt!).toLocaleDateString('pt-BR')}</td>
                                 <td>{h?.accountable}</td>
                                 <td>{h?.quantity!}</td>
                                 <td>{h?.good_name}</td>
-                            </tr>
+                            </tr>)
                         })}
                     </tbody>
                 </Table> : <Spinner animation="border" role="status">

@@ -7,7 +7,6 @@ import { RootState } from "../../..";
 import { History } from "../../../models/History";
 import { Product } from "../../../models/Product";
 import { asyncFetchProductHistory } from "../../../stores/input.store";
-import { currencyFormat } from "../../../utils/currencyFormat";
 
 export function HistoryModal({ show, product, handleClose }: { show: boolean, product: Product, handleClose: any }) {
     const { input, loading } = useSelector((state: RootState) => state);
