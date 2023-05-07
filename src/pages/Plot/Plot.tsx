@@ -66,19 +66,20 @@ export function Plot() {
     dispatch(asyncFetchFarms())
     setSelectedFarm(farm?.farms[0])
     dispatch(selectAFarm(farm?.farms[0]))
-    dispatch(
-      asyncFetchApplications({
-        from_date: startDate,
-        until_date: untilDate,
-        order_type: 1,
-        season_id: seasons.selectedSeason.id,
-        field_name: selectedPlot.name,
-      }),
-    )
+    filter();
+    // dispatch(
+    //   asyncFetchApplications({
+    //     from_date: startDate,
+    //     until_date: untilDate,
+    //     order_type: 1,
+    //     season_id: seasons.selectedSeason.id,
+    //     field_name: selectedPlot.name,
+    //   }),
+    // )
     // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
-  const filter = (field: string) => {
+  const filter = (field?: string) => {
     dispatch(
       asyncFetchApplications({
         from_date: startDate,
@@ -240,6 +241,14 @@ export function Plot() {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSelectedPlot(null)
+                        filter();
+                      }}
+                    >
+                      Todos os talhões
+                    </Dropdown.Item>
                     {selectedFarm?.fields?.map((field: any) => {
                       return (
                         <Dropdown.Item
