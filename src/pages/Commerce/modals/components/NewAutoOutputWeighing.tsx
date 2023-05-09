@@ -247,7 +247,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
             ) : (<Form.Control
               type="number"
               disabled
-              value={9999}
+              value={grossWeighing}
             />)}
           </Form.Group>
         </Col>
