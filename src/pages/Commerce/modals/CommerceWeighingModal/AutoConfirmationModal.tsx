@@ -25,12 +25,12 @@ export function AutoConfirmationModal({
   }
 
   useEffect(()=>{
-    dispatch(asyncFetchWeighingData())
+    dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).id))
   }, [])
 
   useEffect(()=>{
     console.log('show alterou');
-    dispatch(asyncFetchWeighingData())
+    dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).id));
   }, [show])
 
   return (

@@ -442,11 +442,11 @@ export function asyncFetchSeparateWeighingData(seasonId: number) {
 }
 
 
-export function asyncFetchWeighingData() {
+export function asyncFetchWeighingData(user_id: number) {
   return async function (dispatch: AppDispatch) {
     try {
       const result = await axios.get(
-        `https://remoteweighingsapi.murilobotelho.com.br/weighings?user_id=1`,
+        `https://remoteweighingsapi.murilobotelho.com.br/weighings?user_id=${user_id}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
