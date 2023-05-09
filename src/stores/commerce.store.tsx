@@ -144,7 +144,7 @@ const commerceStore = createSlice({
           const rowData: OutputWeighingRow = { ...row }
           if (row.id && row.mode === 'Manual') {
             rowData.rowType = WeighingRowType.MANUAL
-          } else if (!row.id) {
+          } else{
             rowData.rowType = WeighingRowType.AUTOMATIC
           }
           return rowData

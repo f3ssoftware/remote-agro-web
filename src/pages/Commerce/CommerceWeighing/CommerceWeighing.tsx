@@ -49,11 +49,6 @@ export function CommerceWeighing() {
               onClick={() => setShowTransferWeighingModal(true)}
             >Transferência</Button>
           </Col>
-          <Col md={2}>
-            <Button variant="success" className="plot-btnW">
-              +
-            </Button>{' '}
-          </Col>
         </Row>
         <Row>
           <WeighingCalendar></WeighingCalendar>
