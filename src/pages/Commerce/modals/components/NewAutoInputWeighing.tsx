@@ -430,18 +430,19 @@ export function NewAutoInputWeighing({
           </Form.Group>
         </Col>
       </Row>
-      <AutoConfirmationModal
+      {showWeighingConfirmationModal ? <AutoConfirmationModal
         setValue={setGrossWeighing}
         setWeightDate={setGrossWeightDate}
         show={showWeighingConfirmationModal}
         handleClose={() => setShowWeighingConfirmationModal(false)}
-      ></AutoConfirmationModal>
-      <AutoConfirmationModal
+      ></AutoConfirmationModal> : <></>}
+      {showTareConfirmationModal ? <AutoConfirmationModal
         setValue={setTare}
         setWeightDate={setTareWeightDate}
         show={showTareConfirmationModal}
         handleClose={() => setShowTareConfirmationModal(false)}
-      ></AutoConfirmationModal>
+      ></AutoConfirmationModal> : <></>}
+
 
       <div
         style={{
