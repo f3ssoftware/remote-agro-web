@@ -129,7 +129,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
       setHumidity(autoOutputWeighing?.humidity! / 100);
       setImpurity(autoOutputWeighing?.impurity! / 100);
       setDiscount(autoOutputWeighing?.discount! / 100);
-      setTotalWeighning(autoOutputWeighing?.final_weight!);
+      setTotalWeighning(autoOutputWeighing?.final_weight!/ 1000);
       setHumidityDiscount(Number(autoOutputWeighing?.humidity_discount!));
       setTare(autoOutputWeighing?.tare_weight!);
       setObservation(autoOutputWeighing?.observations!);

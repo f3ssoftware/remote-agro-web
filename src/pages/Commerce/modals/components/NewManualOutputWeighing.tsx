@@ -121,7 +121,7 @@ export function NewManualOutputWeighing({ onHandleRemove, onHandleUpdate, index,
       setHumidity(manualOutputWeigh?.humidity! / 100);
       setImpurity(manualOutputWeigh?.impurity! / 100);
       setDiscount(manualOutputWeigh?.discount! / 100);
-      setTotalWeighning(manualOutputWeigh?.final_weight!);
+      setTotalWeighning(manualOutputWeigh?.final_weight! / 1000);
       setHumidityDiscount(Number(manualOutputWeigh?.humidity_discount!));
       setTare(manualOutputWeigh?.tare_weight!);
       setObservation(manualOutputWeigh?.observations!);
