@@ -128,7 +128,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         humidity: humidity * 100,
         impurity: impurity * 100,
         discount: discount * 100,
-        final_weight: totalWeighning * 1000,
+        final_weight: manualInputWeigh.id ? totalWeighning : totalWeighning * 1000,
         type: "Entrada",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
