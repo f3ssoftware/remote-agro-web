@@ -92,7 +92,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
         humidity: humidity * 100,
         impurity: impurity * 100,
         discount: discount * 100,
-        final_weight: (autoOutputWeighing.id ? totalWeighning : (totalWeighning * 1000)),
+        final_weight: autoOutputWeighing.id ? totalWeighning : totalWeighning * 1000,
         type: "Saída",
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
@@ -376,7 +376,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
       </Row>
       {showWeighingConfirmationModal ? <AutoConfirmationModal setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal> : <></>}
       {showTareConfirmationModal ? <AutoConfirmationModal setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal> : <></>}
-      
+
 
       <div
         style={{
