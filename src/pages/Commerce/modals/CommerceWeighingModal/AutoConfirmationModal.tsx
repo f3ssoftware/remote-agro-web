@@ -16,15 +16,15 @@ export function AutoConfirmationModal({
   setWeightDate: any,
 }) {
   const dispatch = useDispatch<any>()
-  const { commerce } = useSelector((state: RootState) => state)
+  const { commerce, loading } = useSelector((state: RootState) => state)
 
-  const confirmation = () =>{
+  const confirmation = () => {
     setValue(commerce?.autoInputWeighing?.Peso!)
     setWeightDate(commerce?.autoInputWeighing?.Horario!)
 
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).id));
   }, [show]);
 
@@ -35,12 +35,12 @@ export function AutoConfirmationModal({
         style={{ backgroundColor: '#7C5529', border: 'none' }}
       >
         <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>
+          {loading.requests.filter(r => r === 'weighings').length > 0 ? 'Carregando' : <span style={{ color: '#fff' }}>
             Dados da balança foram obtidos com sucesso. Por favor, verifique o
             valor: {commerce.autoInputWeighing.Peso}. Se o valor estiver correto, pressione 'OK', caso
             contrário, cancele e pressione novamente o botão 'Receber'.
-          </span>
+          </span>}
+
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ backgroundColor: '#7C5529' }}></Modal.Body>
