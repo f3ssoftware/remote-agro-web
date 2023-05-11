@@ -555,7 +555,7 @@ export function asyncFilterByButton(filter: string, startDate: string, endDate: 
 export function asyncFetchSefaz() {
     return async function (dispatch: AppDispatch) {
         try {
-            dispatch(pushLoading({}))
+            dispatch(pushLoading('expenses-invoices-external'))
             const result = await axios.get(
                 `https://remoteapi.murilobotelho.com.br/expenses-invoices-external`,
                 {

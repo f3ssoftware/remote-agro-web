@@ -62,7 +62,7 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation.id))
+    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation?.id))
   }, [humidity])
 
   // useEffect(() => {
@@ -374,8 +374,9 @@ export function NewAutoOutputWeighing({ onHandleRemove, onHandleUpdate, index, a
           </Form.Group>
         </Col>
       </Row>
-      <AutoConfirmationModal setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal>
-      <AutoConfirmationModal setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal>
+      {showWeighingConfirmationModal ? <AutoConfirmationModal setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal> : <></>}
+      {showTareConfirmationModal ? <AutoConfirmationModal setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal> : <></>}
+      
 
       <div
         style={{

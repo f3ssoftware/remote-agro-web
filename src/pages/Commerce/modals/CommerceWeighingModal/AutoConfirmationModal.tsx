@@ -8,12 +8,12 @@ export function AutoConfirmationModal({
   show,
   handleClose,
   setValue,
-  setWeightDate
+  setWeightDate,
 }: {
   show: boolean
   handleClose: any
   setValue: any
-  setWeightDate: any
+  setWeightDate: any,
 }) {
   const dispatch = useDispatch<any>()
   const { commerce } = useSelector((state: RootState) => state)
@@ -25,13 +25,8 @@ export function AutoConfirmationModal({
   }
 
   useEffect(()=>{
-    dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).id))
-  }, [])
-
-  useEffect(()=>{
-    console.log('show alterou');
     dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).id));
-  }, [show])
+  }, [show]);
 
   return (
     <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>

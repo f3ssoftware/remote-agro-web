@@ -12,6 +12,7 @@ import { WeighingRow } from '../models/WeighingRow'
 import { OutputWeighingRow } from '../models/OutputWeighingRow'
 import { WeighingRowType } from '../utils/WeighingRowType.enum'
 import { SeparateWeighingRow } from '../models/SepareteWeighingRow'
+import { popLoading, pushLoading } from './loading.store'
 
 const initialSilo: Silo[] = []
 const initialEditContracts: Contract = {}
@@ -402,7 +403,7 @@ export function asyncFetchOutputWeighingData(seasonId: number) {
           },
         },
       )
-      dispatch(setOutputWeighing(result.data))
+      dispatch(setOutputWeighing(result.data));
     } catch (err: any) {
       dispatch(
         getMessages({
@@ -445,6 +446,7 @@ export function asyncFetchSeparateWeighingData(seasonId: number) {
 export function asyncFetchWeighingData(user_id: number) {
   return async function (dispatch: AppDispatch) {
     try {
+      dispatch(pushLoading('weighings'));
       const result = await axios.get(
         `https://remoteweighingsapi.murilobotelho.com.br/weighings?user_id=${user_id}`,
         {
@@ -453,6 +455,7 @@ export function asyncFetchWeighingData(user_id: number) {
           },
         },
       )
+      dispatch(popLoading('weighings'));
       dispatch(setAutoInputWeighing(result.data))
     } catch (err: any) {
       dispatch(
