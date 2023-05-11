@@ -9,6 +9,6 @@ export function GeneratePdf({ weighing, cultivationsList, silosList, farmsList, 
         const html = _generatePDF(weighing, cultivationsList, silosList, profile, contractsList, farmsList);
 
         console.log(html);
-        // dispatch(asyncGeneratePdf(html));
+        dispatch(asyncGeneratePdf(html));
     }}>Gerar Romaneio</Button>
 }
