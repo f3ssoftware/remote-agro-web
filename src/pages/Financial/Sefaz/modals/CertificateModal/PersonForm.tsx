@@ -131,7 +131,8 @@ export function PersonForm() {
             <Col>
                 <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Estado</Form.Label>
-                    <Form.Select aria-label="Pessoa Física ou Jurídica?" onChange={(e) => setUf(e.target.value)}>
+                    <Form.Select onChange={(e) => setUf(e.target.value)}>
+                        <option value="">Selecione um estado</option>
                         <option value="AC">Acre</option>
                         <option value="AL">Alagoas</option>
                         <option value="AP">Amapá</option>
@@ -173,19 +174,21 @@ export function PersonForm() {
             <Col>
                 <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Regime tributário</Form.Label>
-                    <Form.Select aria-label="Regime Tributário" onChange={(e) => setUf(e.target.value)}>
-                        <option value="AC">Simples Nacional</option>
+                    <Form.Select aria-label="Regime Tributário" onChange={(e) => setTaxRegime(e.target.value)}>
+                        <option value="">Selecione uma opção</option>
+                        <option value="SIMPLES_NACIONAL">Simples Nacional</option>
                         <option value="AL">Simples Nacional - excesso de sublimite de receita bruta</option>
-                        <option value="AP">Regime Normal</option>
+                        <option value="REGIME_NORMAL">Regime Normal</option>
                     </Form.Select>
                 </Form.Group>
             </Col>
             <Col>
                 <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Possui Integração</Form.Label>
-                    <Form.Select aria-label="Pessoa Física ou Jurídica?" onChange={(e) => setUf(e.target.value)}>
-                        <option value="AC">Sim</option>
-                        <option value="AL">Não</option>
+                    <Form.Select aria-label="Pessoa Física ou Jurídica?" onChange={(e) => setIsIntegrated(Boolean(e.target.value))}>
+                        <option value="">Selecione uma opção</option>
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
                     </Form.Select>
                 </Form.Group>
             </Col>
