@@ -167,6 +167,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                             >
                                 <option value="NÃO TRATADA">Não Tratada</option>
                                 <option value="EXTERNO">Externo</option>
+                                <option value="INTERNO">Interno</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>

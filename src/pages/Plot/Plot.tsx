@@ -67,16 +67,6 @@ export function Plot() {
     setSelectedFarm(farm?.farms[0])
     dispatch(selectAFarm(farm?.farms[0]))
     filter();
-    // dispatch(
-    //   asyncFetchApplications({
-    //     from_date: startDate,
-    //     until_date: untilDate,
-    //     order_type: 1,
-    //     season_id: seasons.selectedSeason.id,
-    //     field_name: selectedPlot.name,
-    //   }),
-    // )
-    // setSelectedPlot(farm?.farms[0].fields[0]);
   }, [])
 
   const filter = (field?: string) => {
