@@ -63,7 +63,9 @@ export function Plot() {
   }
 
   useEffect(() => {
-    dispatch(asyncFetchFarms())
+    dispatch(asyncFetchFarms({
+      season_id: seasons.selectedSeason.id
+    }))
     setSelectedFarm(farm?.farms[0])
     dispatch(selectAFarm(farm?.farms[0]))
     filter();
