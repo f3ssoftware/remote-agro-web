@@ -58,6 +58,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
 
     useEffect(() => {
         dispatch(asyncFetchCultivations())
+        dispatch(asyncFetchEditContracts(id))
         setSelectedCultivations(financial?.cultivations[0])
       }, [])
 

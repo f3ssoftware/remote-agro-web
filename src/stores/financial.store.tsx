@@ -632,3 +632,34 @@ export function asyncFetchExpenseInvoiceById(expense_invoice_id: number) {
         }
     };
 }
+
+export function asyncEditExpenseInvoiceById(expense_invoice_id: number, exp: ExpenseInvoice) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            dispatch(pushLoading('expenses-invoices'));
+            const result = await axios.put(
+                `https://remoteapi.murilobotelho.com.br/expenses-invoices/${expense_invoice_id}`,
+                exp,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(popLoading('expenses-invoices'));
+            dispatch(
+                getMessages({
+                  message: 'Despesa editada com sucesso',
+                  type: 'success',
+                }),
+              )
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: err?.result?.data?.error,
+                    type: "error",
+                })
+            );
+        }
+    };
+}

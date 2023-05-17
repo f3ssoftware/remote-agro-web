@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker";
 import { pt } from "date-fns/locale";
 import { Installments } from "../../ManualRegistration/components/Installments";
 import { MensalExpense } from "../../ManualRegistration/components/MensalExpense";
-import { asyncFetchExpenseInvoiceById } from "../../../../stores/financial.store";
+import { asyncFetchExpenseInvoiceById, asyncEditExpenseInvoiceById } from "../../../../stores/financial.store";
 
 export function EditExpenseModal({ show, handleClose, expenseInvoiceId }: { show: boolean, handleClose: any, expenseInvoiceId?: number }) {
     const navigate = useNavigate();
@@ -90,7 +90,7 @@ export function EditExpenseModal({ show, handleClose, expenseInvoiceId }: { show
             external_expenses_invoice_id: externalInvoiceId,
             observations: observation,
         }
-
+        dispatch(asyncEditExpenseInvoiceById(expenseInvoiceId!,exp))
 
     }
 
@@ -98,6 +98,7 @@ export function EditExpenseModal({ show, handleClose, expenseInvoiceId }: { show
         if(expenseInvoiceId) {
             dispatch(asyncFetchExpenseInvoiceById(expenseInvoiceId!))
         }
+        console.log(expenseInvoiceId)
     }, [expenseInvoiceId]);
 
     useEffect(() => {
