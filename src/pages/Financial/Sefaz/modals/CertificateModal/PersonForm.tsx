@@ -177,8 +177,8 @@ export function PersonForm() {
                     <Form.Select aria-label="Regime Tributário" onChange={(e) => setTaxRegime(e.target.value)}>
                         <option value="">Selecione uma opção</option>
                         <option value="SIMPLES_NACIONAL">Simples Nacional</option>
-                        <option value="AL">Simples Nacional - excesso de sublimite de receita bruta</option>
-                        <option value="REGIME_NORMAL">Regime Normal</option>
+                        <option value="SIMPLES_NACIONAL_EXCESSO">Simples Nacional - excesso de sublimite de receita bruta</option>
+                        <option value="NORMAL">Regime Normal</option>
                     </Form.Select>
                 </Form.Group>
             </Col>
