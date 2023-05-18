@@ -22,7 +22,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
     const dispatch = useDispatch<any>();
     const [invoices, setInvoices] = useState(input.invoices);
     const [selectedInvoice, setSelectedInvoice] = useState(new Invoice());
-    const [products, setProducts] = useState([new UserProduct()]);
+    const [products, setProducts] = useState<any[]>([]);
     const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
     const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
 

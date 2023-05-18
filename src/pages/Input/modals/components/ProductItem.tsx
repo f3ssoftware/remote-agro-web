@@ -49,7 +49,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
             p.product_id = productId;
         }
         onHandleUpdate(p, index, userHasProduct);
-    }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation]);
+    }, [productId, measureUnit, minimumQuantity, initialQuantity, initialCost, observation, pms, treatment, seedQuantityType]);
     return <div>
         <Row style={{ marginTop: '2%' }}>
             <Col>
@@ -148,7 +148,8 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                                 onChange={(e) => {
                                     return setSeedQuantityType(e.target.value)
                                 }}
-                            >
+                            >   
+                                <option value="">Selecione um tipo</option>
                                 <option value="KG">KG</option>
                                 <option value="SACOS">SACOS</option>
                                 <option value="UNIDADE">UNIDADE</option>
