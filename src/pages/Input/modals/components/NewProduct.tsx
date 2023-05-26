@@ -182,7 +182,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                                     setSelectedInvoice(invoiceSelected);
                                 }
                             }}
-                            options={invoices.map(invoice => { return { ...invoice, label: invoice.reference }; })}
+                            options={invoices.map(invoice => { return { ...invoice, label: `${invoice.number} - ${invoice.reference}` }; })}
                         />
                     </Form.Group>
                 </Col>
