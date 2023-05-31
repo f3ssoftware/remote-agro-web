@@ -101,9 +101,9 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
         setProducts(productsArr);
     }
 
-    const search = () => {
+    const search = (start: Date,end: Date) => {
         const invoices = input.invoices.filter((invoice: Invoice) => {
-            return new Date(invoice?.due_date!).getTime() >= startDate.getTime() && new Date(invoice?.due_date!).getTime()! <= endDate.getTime();
+            return new Date(invoice?.due_date!).getTime() >= start.getTime() && new Date(invoice?.due_date!).getTime()! <= end.getTime();
         });
         setInvoices(invoices);
     }
@@ -155,7 +155,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                         <DatePicker selected={startDate} onChange={(date: any) => {
                             console.log('changing');
                             setStartDate(date);
-                            search();
+                            search(date, endDate);
                         }} locale={pt} dateFormat="dd/MM/yyyy" />
                     </Form.Group>
 
@@ -165,7 +165,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                         <Form.Label>Até</Form.Label>
                         <DatePicker selected={endDate} onChange={(date: any) => {
                             setEndDate(date);
-                            search();
+                            search(startDate, date);
                         }} locale={pt} dateFormat="dd/MM/yyyy" />
                     </Form.Group>
                 </Col>
