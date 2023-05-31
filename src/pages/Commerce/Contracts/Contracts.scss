@@ -86,8 +86,10 @@
 .second-col-card {
   background: #ece4b4;
   border-radius: 20px;
-  height: 96%;
+  height: 95%;
+  width: 110vh;
   display: flex;
+  margin-left: 100px;
   flex-direction: column;
 }
 
@@ -169,9 +171,9 @@
   margin-top: 5%;
 }
 
-.contracts-content {
-  overflow: hidden  ;
-  max-height: 10%;
-  margin-top: -16%;
-}
+// .contracts-content {
+//   overflow: scroll;
+//   max-height: 10%;
+//   margin-top: -16%;
+// }
 

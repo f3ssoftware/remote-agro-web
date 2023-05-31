@@ -16,6 +16,11 @@ export function PartHistoryModal({ show, handleClose, part }: { show: boolean, h
     const [partHistory, setPartHistory] = useState(maintenance.partHistory);
     const dispatch = useDispatch<any>();
 
+    useEffect(()=>{
+        setPartHistory(maintenance.partHistory)
+        },[maintenance])
+
+        
     useEffect(() => {
         if (show) {
             dispatch(asyncFetchPartHistory(part.id!))

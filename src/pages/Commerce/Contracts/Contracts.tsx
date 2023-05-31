@@ -53,11 +53,6 @@ export function Contracts() {
     setSelectedCultivations(financial?.cultivations[0])
   }, [])
 
-  useEffect(() => {
-    paginate(page)
-    setTotalResults(financial.contracts.length)
-    setPageSize(2)
-  }, [financial])
 
   const filter = () => {
     setContracts(financial.contracts.filter((contract: any) => {
@@ -69,12 +64,6 @@ export function Contracts() {
     }))
   }
 
-  const paginate = (page: number) => {
-    const pageSize = 2
-    setContracts(
-      [...financial.contracts].slice((page - 1) * pageSize, page * pageSize),
-    )
-  }
 
   const editContract = (id: number) =>{
     dispatch(asyncFetchEditContracts(id))
@@ -84,7 +73,7 @@ export function Contracts() {
   return (
     <Container>
       <Row>
-        <Col>
+        <Col md={4}>
           <div className="frist-column">
             <div className="frist-card">
               <Dropdown className="frist-card-dropdown">
@@ -121,7 +110,7 @@ export function Contracts() {
               <div
                 style={{ marginTop: '2%', marginLeft: '5%', marginRight: '5%' }}
               >
-                <div className="contracts-content">
+                <div className="contracts-content" style={{maxHeight: '50vh', overflowY: 'auto' }}>
                   {contracts.map((contract, index) => (
                     <div className="contracts-card" key={index}>
                       <Row style={{ marginLeft: '1%' }}>
@@ -207,34 +196,13 @@ export function Contracts() {
                     </div>
                   ))}
                 </div>
-                <div className="flex-center" style={{ marginTop: '5%' }}>
-                  <Pagination size="sm">
-                    <Pagination.Prev
-                      onClick={() => {
-                        if (page > 1) {
-                          paginate(page - 1)
-                          setPage(page - 1)
-                        }
-                      }}
-                    />
-                    <Pagination.Next
-                      onClick={() => {
-                        if (page < totalResults / pageSize) {
-                          console.log(totalResults / pageSize)
-                          paginate(page + 1)
-                          setPage(page + 1)
-                        } else {
-                          console.log('else: ', totalResults / pageSize)
-                        }
-                      }}
-                    />
-                  </Pagination>
-                </div>
               </div>
             </div>
           </div>
         </Col>
-        <ContractLoad></ContractLoad>
+        <Col md={8}>
+          <ContractLoad></ContractLoad>
+        </Col>
       </Row>
       <NewContractModal
         show={showNewContractModal}

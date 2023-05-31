@@ -37,7 +37,7 @@ const maintenanceStore = createSlice({
       state.goodHistory = action.payload
     },
     setPartHistory(state, action) {
-      state.tanks = action.payload;
+      state.partHistory = action.payload;
     },
     setFuellings(state, action) {
       state.fuellings = action.payload;
@@ -78,7 +78,7 @@ export function asyncFetchPartHistory(id: number) {
       }
     });
     dispatch(popLoading("parts"));
-    dispatch(setPartHistory(results.data))
+    dispatch(setPartHistory(results.data.part_history))
   }
 }
 
