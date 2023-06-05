@@ -55,9 +55,9 @@ export function NewPlanningItem({
     onHandleUpdate(p, index)
   }, [productId, measureUnit, observation, quantity, totalCost, payDate])
 
-  // useEffect(() => {
-  //   dispatch(asyncFetchInput());
-  // }, [])
+  useEffect(() => {
+    dispatch(asyncFetchInput());
+  }, [])
 
   return (
     <div>
