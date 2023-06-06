@@ -85,7 +85,7 @@ export function Riches() {
             </div>
         </Col>  
           <Col md={8}>
-            <Card className="ra-card">
+            <Card  className="second-col-plot">
               <Card.Body>
                 <Card.Title className="second-col-text">Histórico</Card.Title>
                 <Dropdown>
