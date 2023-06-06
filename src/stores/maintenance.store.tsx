@@ -59,6 +59,35 @@ export function asyncFetchGoods() {
   }
 }
 
+export function asyncNewGoods(good: Good) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.post(
+        `https://remoteapi.murilobotelho.com.br/goods`,
+        good,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(
+        getMessages({
+          message: 'Bem criado com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
 export function asyncFetchParts() {
   return async function (dispatch: AppDispatch) {
     const results = await axios.get('https://remoteapi.murilobotelho.com.br/parts', {
