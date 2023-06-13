@@ -1,6 +1,6 @@
 export class Tank {
     constructor(
-        public id: number,
+        public id?: number,
         public owner_id?: number,
         public fuel?: string,
         public name?: string,

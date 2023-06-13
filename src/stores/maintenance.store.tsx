@@ -230,6 +230,35 @@ export function asyncFetchTanks() {
   }
 }
 
+export function asyncNewTank(tank: Tank) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.post(
+        `https://remoteapi.murilobotelho.com.br/tanks`,
+        tank,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(
+        getMessages({
+          message: 'Tanque criado com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
 export function asyncFetchFuellings(params: any) {
   return async function (dispatch: AppDispatch) {
     try {
