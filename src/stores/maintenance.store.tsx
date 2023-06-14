@@ -7,6 +7,7 @@ import { getMessages } from './messaging.store'
 import { Tank } from "../models/Tank";
 import { PartHistory } from "../models/PartHistory";
 import { popLoading, pushLoading } from "./loading.store";
+import { Fuel } from "../models/Fuel";
 
 const initialGoods: Good[] = [];
 const initialParts: Part[] = [];
@@ -22,6 +23,7 @@ const maintenanceStore = createSlice({
     goodHistory: [],
     partHistory: initialPartHistory,
     fuellings: [],
+    movelGood: initialGoods
   },
   reducers: {
     setGoods(state, action) {
@@ -41,11 +43,14 @@ const maintenanceStore = createSlice({
     },
     setFuellings(state, action) {
       state.fuellings = action.payload;
+    },
+    setMovelGood(state,action){
+      state.movelGood = action.payload;
     }
   },
 });
 
-export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory, setFuellings } = maintenanceStore.actions;
+export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory, setFuellings, setMovelGood } = maintenanceStore.actions;
 export default maintenanceStore.reducer;
 
 export function asyncFetchGoods() {
@@ -56,6 +61,20 @@ export function asyncFetchGoods() {
       }
     });
     dispatch(setGoods(results.data))
+  }
+}
+
+export function asyncFetchMovelGoods() {
+  return async function (dispatch: AppDispatch) {
+    const results = await axios.get('https://remoteapi.murilobotelho.com.br/goods', {
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      },
+      params: {
+        type: 'Movel'
+      },
+    });
+    dispatch(setMovelGood(results.data))
   }
 }
 
@@ -278,6 +297,34 @@ export function asyncFetchFuellings(params: any) {
         return df.forEach(fuelling => allFuellings.push(fuelling));
       })
       dispatch(setFuellings(allFuellings));
+    } catch (err: any) {
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+export function asyncFuel(fuel: Fuel) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.post(
+        `https://remoteapi.murilobotelho.com.br/fuellings`,
+        fuel,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(
+        getMessages({
+          message: 'Combustível adicionado com sucesso',
+          type: 'success',
+        }),
+      )
     } catch (err: any) {
       dispatch(
         getMessages({
