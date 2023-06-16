@@ -18,11 +18,18 @@ import {
 import './Fuel.scss'
 import { Tank } from '../../../models/Tank'
 import { NewTankModal } from './Modals/NewTankModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGasPump } from '@fortawesome/free-solid-svg-icons'
+import { InputTankModal } from './Modals/InputTankModal'
+import { OutputTankModal } from './Modals/OutputTankModal'
 
 const PAGE_SIZE = 3
 export function Fuel() {
   const [tanks, setTanks] = useState<Tank[]>([])
   const [showNewTankModal, setShowNewTankModal] = useState(false)
+  const [showInputTankModal, setShowInputTankModal] = useState(false)
+  const [showOutputTankModal, setShowOutputTankModal] = useState(false)
+  const [tankId, setTankId] = useState(0)
   const [page, setPage] = useState(1)
   // const [history, setHistory] = useState<>([]);
   const { maintenance } = useSelector((state: RootState) => state)
@@ -70,7 +77,24 @@ export function Fuel() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col md={8}></Col>
+                    <Col md={8}>
+                      <FontAwesomeIcon
+                        icon={faGasPump}
+                        style={{ color: '#71f207', marginLeft: '2%', cursor: 'pointer'}}
+                        onClick={()=>{
+                          setShowInputTankModal(true)
+                          setTankId(tank.id!)
+                        }}
+                      />
+                      <FontAwesomeIcon
+                        icon={faGasPump}
+                        style={{ color: '#ed0707', marginLeft: '6%', cursor:'pointer' }}
+                        onClick={()=>{
+                          setShowOutputTankModal(true)
+                          setTankId(tank.id!)
+                        }}
+                      />
+                    </Col>
                     <Col md={4}>{tank?.quantity} L</Col>
                   </Row>
                 </div>
@@ -171,6 +195,8 @@ export function Fuel() {
         show={showNewTankModal}
         handleClose={() => setShowNewTankModal(false)}
       ></NewTankModal>
+      <InputTankModal show={showInputTankModal} handleClose={() => setShowInputTankModal(false)} id={tankId}></InputTankModal>
+      <OutputTankModal show={showOutputTankModal} handleClose={() => setShowOutputTankModal(false)} id={tankId}></OutputTankModal>
     </div>
   )
 }
