@@ -13,6 +13,7 @@ const initialGoods: Good[] = [];
 const initialParts: Part[] = [];
 const initialTanks: Tank[] = [];
 const initialPartHistory: PartHistory[] = [];
+const initialFuel: Fuel[] = [];
 
 const maintenanceStore = createSlice({
   name: "maintenance",
@@ -22,7 +23,7 @@ const maintenanceStore = createSlice({
     tanks: initialTanks,
     goodHistory: [],
     partHistory: initialPartHistory,
-    fuellings: [],
+    fuellings: initialFuel,
     movelGood: initialGoods
   },
   reducers: {

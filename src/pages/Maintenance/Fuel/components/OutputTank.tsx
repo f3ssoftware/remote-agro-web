@@ -8,11 +8,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Fuel } from '../../../../models/Fuel'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { RootState } from '../../../..'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export function OutputTank({
   id,
+  index,
+  onHandleUpdate,
+  onHandleRemove
+  
 }: {
   id: number
+  index: number
+  onHandleUpdate: any
+  onHandleRemove: any
 }) {
   const [quantity, setQuantity] = useState(0)
   const [accountable, setAccountable] = useState('')
@@ -35,6 +44,7 @@ export function OutputTank({
       type: 'Saida'
 
     }
+    onHandleUpdate(fuel,index)
     dispatch(asyncFuel(fuel))
   }
   return (
@@ -129,6 +139,11 @@ export function OutputTank({
                   </Button>
                 </div>
               </Col>
+              {index !== 0 ? <Col md={1}>
+            <Button variant="danger" onClick={() => {
+                onHandleRemove(index);
+            }} style={{ marginTop: '45%' }}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></Button>
+        </Col> : <></>}
             </Row>
           </div>
     </Container>

@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { OutputTank } from '../components/OutputTank'
+import { Fuel } from '../../../../models/Fuel'
+import { setFuellings } from '../../../../stores/maintenance.store'
+import { RootState } from '../../../..'
 
 export function OutputTankModal({
   show,
@@ -12,9 +15,23 @@ export function OutputTankModal({
   handleClose: any
   id: number
 }) {
-  const [quantity, setQuantity] = useState(0)
-  const [date, setDate] = useState(new Date())
+ 
+  const [outputTankRows, setOutputTankRows] = useState([new Fuel()])
   const dispatch = useDispatch<any>()
+
+
+  const onUpdateItem = (fuel: Fuel, index: number) => {
+    const fuelArr = [...outputTankRows];
+    fuelArr.splice(index, 1);
+    fuelArr.push(fuel);
+    setOutputTankRows(fuelArr);
+
+}
+const onRemoveItem = (index: number) => {
+  const fuelArr = [...outputTankRows];
+  fuelArr.splice(index, 1);
+  setOutputTankRows(fuelArr);
+}
 
 
   return (
@@ -33,7 +50,9 @@ export function OutputTankModal({
           <div>
             <Row style={{ marginTop: '2%' }}>
 
-                <OutputTank id={id}></OutputTank>
+              {outputTankRows.map((o,index)=>{
+                return <OutputTank id={id} index={index} key={index} onHandleUpdate={onUpdateItem} onHandleRemove={onRemoveItem}></OutputTank>
+              })}
 
             </Row>
           </div>
@@ -48,7 +67,7 @@ export function OutputTankModal({
             <Button
               variant="success"
               onClick={() => {
-                handleClose()
+                setOutputTankRows([...outputTankRows, new Fuel()])
               }}
             >
               Adicionar linha
