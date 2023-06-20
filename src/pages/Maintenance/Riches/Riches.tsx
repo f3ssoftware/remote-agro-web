@@ -11,12 +11,17 @@ import {
 } from '../../../stores/maintenance.store'
 import { tr } from 'date-fns/locale'
 import { NewRichesModal } from './Modals/NewRichesModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { DeleteConfirmationModal } from './Modals/DeleteConfirmationModal'
 
 export function Riches() {
   const { maintenance } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
   const [selectedRich, setSelectedRich] = useState<Good>()
   const [showNewRichesModal, setShowNewRichesModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteGoods, setDeleteGoods] = useState(0)
 
   useEffect(() => {
     dispatch(asyncFetchGoods())
@@ -63,7 +68,14 @@ export function Riches() {
                       {maintenance.goods.map((good) => {
                         return (
                           <tr>
-                            <td>{good?.name}</td>
+                            <td><FontAwesomeIcon
+                            icon={faTrash}
+                            style={{ marginRight:'4%',cursor: 'pointer' }}
+                            onClick={() => {
+                              setShowDeleteModal(true)
+                              setDeleteGoods(good.id!)
+                            }}
+                          ></FontAwesomeIcon>{good?.name}</td>
                             <td>{good?.type}</td>
                             <td>
                               {new Date(good?.createdAt!).toLocaleDateString(
@@ -156,6 +168,9 @@ export function Riches() {
         show={showNewRichesModal}
         handleClose={() => setShowNewRichesModal(false)}
       ></NewRichesModal>
+      <DeleteConfirmationModal show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        id={deleteGoods}></DeleteConfirmationModal>
     </div>
   )
 }

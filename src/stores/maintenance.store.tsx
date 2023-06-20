@@ -107,6 +107,36 @@ export function asyncNewGoods(good: Good) {
     }
   }
 }
+export function asyncDeleteGood(id: number) {
+  return async function (dispatch: AppDispatch) {
+    try {
+      const result = await axios.delete(
+        `https://remoteapi.murilobotelho.com.br/goods/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        },
+      )
+      dispatch(asyncFetchGoods())
+      dispatch(
+        getMessages({
+          message: 'Bem excluído com sucesso',
+          type: 'success',
+        }),
+      )
+    } catch (err: any) {
+      console.log(err)
+      dispatch(
+        getMessages({
+          message: err.response.data.message,
+          type: 'error',
+        }),
+      )
+    }
+  }
+}
+
 
 export function asyncFetchParts() {
   return async function (dispatch: AppDispatch) {
