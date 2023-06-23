@@ -34,6 +34,7 @@ export function PlanningMain() {
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
   const [showPlanningModal, setShowPlanningModal] = useState(false);
+  const [editPlanning, setEditPlanning] = useState(0)
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
@@ -52,13 +53,13 @@ export function PlanningMain() {
     )
   }
 
-  const deletePlanning = (id: number) => {
-    dispatch(asyncDeletePlanning(id))
-    dispatch(asyncFetchPlanningData)
-  }
-  const editPlanning = (id: number) =>{
-    dispatch(asyncFetchEditPlannings(id))
-  }
+  // const deletePlanning = (id: number) => {
+  //   dispatch(asyncDeletePlanning(id))
+  //   dispatch(asyncFetchPlanningData)
+  // }
+  // const editPlanning = (id: number) =>{
+  //   dispatch(asyncFetchEditPlannings(id))
+  // }
 
   return (
     <Container>
@@ -97,7 +98,7 @@ export function PlanningMain() {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(planning.id)
-                              deletePlanning(planning.id!)
+                              // deletePlanning(planning.id!)
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -108,8 +109,8 @@ export function PlanningMain() {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(planning.id)
-                              editPlanning(planning.id!)
-                              setShowPlanningModal(true)
+                              {planning.type == 'Custos Indiretos' ? setShowPlanningModal(true) : <></>}
+                              setEditPlanning(planning.id!)
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -165,6 +166,7 @@ export function PlanningMain() {
       <EditPlanningCost
         show={showPlanningModal}
         handleClose={() => setShowPlanningModal(false)}
+        id={editPlanning}
       ></EditPlanningCost>
     </Container>
   )

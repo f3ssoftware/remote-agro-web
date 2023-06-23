@@ -4,16 +4,18 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Planning } from '../../../models/Planning'
-import { asyncNewPlannings } from '../../../stores/planning.store'
+import { asyncFetchEditPlannings, asyncNewPlannings } from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
 import {EditPlanningTab} from './EditPlanningTab'
 
 export function EditPlanningCost({
   show,
   handleClose,
+  id
 }: {
   show: boolean,
-  handleClose: any
+  handleClose: any,
+  id: number
 }) {
   const [referenceName, setReferenceName] = useState('')
   const [key, setKey] = useState('')
@@ -40,16 +42,8 @@ export function EditPlanningCost({
   const edit = () => {
     const planning: Planning = {
         name: referenceName,
-        id: 0,
-        owner_id: 0,
-        season_id: 0,
         season_year: outcomeYear,
-        user_id: 0,
         type: 'Custos Indiretos',
-        deleted_at: '',
-        createdAt: '',
-        updatedAt: '',
-        season: null,
         plannings: plannings
     }
     dispatch(asyncNewPlannings(planning));
@@ -57,9 +51,13 @@ export function EditPlanningCost({
   }
 
   useEffect(() => {
-    setOutcomeYear(planning.editPlannings.season_year)
-    setReferenceName(planning.editPlannings.name)
-  }, [])
+    setOutcomeYear(planning.editPlannings.season_year!)
+    setReferenceName(planning.editPlannings.name!)
+  }, [planning])
+
+  useEffect(()=>{
+    dispatch(asyncFetchEditPlannings(id))
+  },[])
 
 const onUpdateItem = (planning: PlanningCost, index: number) => {
   const planningArr = [...plannings];

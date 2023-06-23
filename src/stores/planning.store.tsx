@@ -5,20 +5,12 @@ import { Planning } from "../models/Planning";
 import { getMessages } from "./messaging.store";
 
 const initialPlanning: Planning[] = [];
+const initialEditPlannings: Planning ={}
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
         plannings: initialPlanning,
-        editPlannings: {
-            id: 1,
-            season_year: '',
-            name: '',
-            type: '',
-            deleted_at: '',
-            createdAt: '',
-            updatedAt: '',
-            season: null,
-        }
+        editPlannings: initialEditPlannings
 
     },
     reducers: {
