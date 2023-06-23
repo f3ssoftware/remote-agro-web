@@ -72,7 +72,6 @@ export function asyncNewPlannings(register: Planning) {
             message: "Planejamento cadastrado com sucesso",
             type: "success",
         }));
-        dispatch(setPlannings(results.data))
       } catch (err: any) {
           console.log(err);
           dispatch(

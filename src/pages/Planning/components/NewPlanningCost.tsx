@@ -39,16 +39,8 @@ export function NewPlanningCost({
   const register = () => {
     const planning: Planning = {
         name: referenceName,
-        id: 0,
-        owner_id: 0,
-        season_id: 0,
         season_year: outcomeYear,
-        user_id: 0,
         type: 'Custos Indiretos',
-        deleted_at: '',
-        createdAt: '',
-        updatedAt: '',
-        season: null,
         plannings: plannings
     }
     dispatch(asyncNewPlannings(planning));
