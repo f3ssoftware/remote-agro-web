@@ -34,7 +34,7 @@ export function PlanningMain() {
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
   const [showPlanningModal, setShowPlanningModal] = useState(false);
-  const [editPlanning, setEditPlanning] = useState(0)
+  const [editPlanningId, setEditPlanningId] = useState(0)
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
@@ -57,9 +57,9 @@ export function PlanningMain() {
   //   dispatch(asyncDeletePlanning(id))
   //   dispatch(asyncFetchPlanningData)
   // }
-  // const editPlanning = (id: number) =>{
-  //   dispatch(asyncFetchEditPlannings(id))
-  // }
+  const editPlanning = (id: number) =>{
+    dispatch(asyncFetchEditPlannings(id))
+  }
 
   return (
     <Container>
@@ -109,8 +109,9 @@ export function PlanningMain() {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(planning.id)
+                              editPlanning(planning.id!)
+                              setEditPlanningId(planning.id!)
                               {planning.type == 'Custos Indiretos' ? setShowPlanningModal(true) : <></>}
-                              setEditPlanning(planning.id!)
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -166,7 +167,7 @@ export function PlanningMain() {
       <EditPlanningCost
         show={showPlanningModal}
         handleClose={() => setShowPlanningModal(false)}
-        id={editPlanning}
+        id={editPlanningId}
       ></EditPlanningCost>
     </Container>
   )

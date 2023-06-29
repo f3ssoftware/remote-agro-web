@@ -2,7 +2,7 @@ import { Card, Dropdown, Tab, Tabs } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../..';
 import { useEffect, useState } from 'react';
-import { asyncFetchPlanningData } from '../../../stores/planning.store';
+import { asyncFetchPlanningData, asyncFetchTotalPlanningsCosts } from '../../../stores/planning.store';
 
 export function PlanningPlotCard() {
   const { planning } = useSelector((state: RootState) => state);
@@ -12,6 +12,7 @@ export function PlanningPlotCard() {
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
+    dispatch(asyncFetchTotalPlanningsCosts())
     setSelectedPlanning(planning?.plannings[0])
   }, [])
 
@@ -50,6 +51,7 @@ export function PlanningPlotCard() {
         <Card.Footer className="card-footer">
           <div className="frist-box">
             <span>Custos diretos</span>
+            <span>{}</span>
           </div>
           <div className="second-box">
             <span>Custos indiretos</span>

@@ -3,14 +3,17 @@ import axios from "axios";
 import { AppDispatch } from "..";
 import { Planning } from "../models/Planning";
 import { getMessages } from "./messaging.store";
+import { TotalPlanningCosts } from "../models/TotalPlanningCosts";
 
 const initialPlanning: Planning[] = [];
-const initialEditPlannings: Planning ={}
+const initialEditPlannings: Planning = {}
+const initialTotalPlanningCosts: TotalPlanningCosts[]=[]
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
         plannings: initialPlanning,
-        editPlannings: initialEditPlannings
+        editPlannings: initialEditPlannings,
+        planningData: initialTotalPlanningCosts
 
     },
     reducers: {
@@ -19,12 +22,15 @@ const planningStore = createSlice({
         },
         setEditPlannings(state,action){
             state.editPlannings=action.payload
-          }
+          },
+        setTotalPlanningCosts(state,action){
+            state.planningData=action.payload
+        }
     }
 });
 
 
-export const { setPlannings, setEditPlannings} = planningStore.actions;
+export const { setPlannings, setEditPlannings, setTotalPlanningCosts} = planningStore.actions;
 export default planningStore.reducer;
 export function asyncFetchPlanningData() {
     return async function (dispatch: AppDispatch) {
@@ -115,6 +121,27 @@ export function asyncFetchEditPlannings(id: number) {
             }
         });
         dispatch(setEditPlannings(results.data));
+    } catch (err: any) {
+        console.log(err);
+        dispatch(
+            getMessages({
+                message: err.response.data.message,
+                type: "error",
+            })
+        );
+    }
+    }
+}
+export function asyncFetchTotalPlanningsCosts() {
+    return async function (dispatch: AppDispatch) {
+        try{
+
+        const results = await axios.get(`https://remoteapi.murilobotelho.com.br/plannings-data`, {
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+        dispatch(setTotalPlanningCosts(results.data));
     } catch (err: any) {
         console.log(err);
         dispatch(

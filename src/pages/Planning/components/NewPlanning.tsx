@@ -29,7 +29,7 @@ export function NewPlanning({
   const register = () => {
     const p: Planning = {
       name: referenceName,
-      season_id: selectedSeason.id,
+      // season_id: selectedSeason.id,
       type: 'Insumos',
       plannings: plannings
     }
@@ -65,7 +65,7 @@ const onUpdateItem = (planning: PlanningInput, index: number) => {
             />
           </Form.Group>
         </Col>
-        <Col>
+        {/* <Col>
                 <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>Selecione a temporada</Form.Label>
                   <Typeahead
@@ -80,7 +80,7 @@ const onUpdateItem = (planning: PlanningInput, index: number) => {
                     })}
                   />
                 </Form.Group>
-              </Col>
+              </Col> */}
       </Row>
       {plannings.map((newPlanning, index) => {
             return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
