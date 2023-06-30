@@ -8,7 +8,6 @@ export function PlanningPlotCard() {
   const { planning } = useSelector((state: RootState) => state);
   const dispatch = useDispatch<any>();
   const [selectedPlanning,setSelectedPlanning]: any = useState({})
-  // const [data, setData] = useState(initialData);
 
   useEffect(() => {
     dispatch(asyncFetchPlanningData())
@@ -51,10 +50,11 @@ export function PlanningPlotCard() {
         <Card.Footer className="card-footer">
           <div className="frist-box">
             <span>Custos diretos</span>
-            <span>{}</span>
+            <span>{planning?.planningData?.totalProducts?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</span>
           </div>
           <div className="second-box">
             <span>Custos indiretos</span>
+            <span>{planning?.planningData?.totalIndirectCosts?.toLocaleString('fullwide', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</span>
           </div>
         </Card.Footer>
       </Card>

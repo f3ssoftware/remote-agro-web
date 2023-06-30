@@ -7,7 +7,7 @@ import { TotalPlanningCosts } from "../models/TotalPlanningCosts";
 
 const initialPlanning: Planning[] = [];
 const initialEditPlannings: Planning = {}
-const initialTotalPlanningCosts: TotalPlanningCosts[]=[]
+const initialTotalPlanningCosts: TotalPlanningCosts={}
 const planningStore = createSlice({
     name: 'planning',
     initialState: {
