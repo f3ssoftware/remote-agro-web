@@ -40,7 +40,6 @@ export function NewPlanningItem({
       measure_unit: measureUnit,
       observations: observation,
       quantity: quantity,
-      treatment: null,
       total_price: totalCost,
       payment_date: payDate.toISOString(),
     }
@@ -49,11 +48,11 @@ export function NewPlanningItem({
       p.pms = pms
       p.seed_quantity_type = seedQuantityType
     } else {
-      p.product_id = productId
+      p.product_id = productId.toString()
     }
 
     onHandleUpdate(p, index)
-  }, [productId, measureUnit, observation, quantity, totalCost, payDate])
+  }, [productId, measureUnit, observation, quantity, totalCost, payDate, treatment, seedQuantityType])
 
   useEffect(() => {
     dispatch(asyncFetchInput());
@@ -70,7 +69,7 @@ export function NewPlanningItem({
               onChange={(selected: any) => {
                 if (selected.length > 0) {
                   const p = selected[0]
-                  console.log(p)
+                  console.log(productId)
                   const userProducts = input.inputs.filter(
                     (i) => i.product?.name === p.label,
                   )
@@ -217,6 +216,7 @@ export function NewPlanningItem({
                 >
                   <option value="NÃO TRATADA">Não Tratada</option>
                   <option value="EXTERNO">Externo</option>
+                  <option value="INTERNO">Interno</option>
                 </Form.Select>
               </Form.Group>
             </Col>

@@ -4,7 +4,7 @@ export class PlanningInput {
         public observations?: string,
         public payment_date?: string,
         public pms?: string,
-        public product_id?: number,
+        public product_id?: string,
         public quantity?: number,
         public seed_quantity_type?: string,
         public total_price?: number,

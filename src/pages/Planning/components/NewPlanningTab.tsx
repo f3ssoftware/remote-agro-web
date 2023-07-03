@@ -36,12 +36,10 @@ export function NewPlanningTab({
         gasoline_amount: gas,
         labor_amount: labor,
         maintenance_amount: maintenance,
-        month: 0,
         others_amount: others,
         outsource_amount: outsourced,
         rent_amount: rent,
         storage_amount: storage,
-        year: ''
 
     };
     onHandleUpdate(p, index);
