@@ -73,22 +73,17 @@ export function NewPlanningItem({
                   const userProducts = input.inputs.filter(
                     (i) => i.product?.name === p.label,
                   )
-                  if (userProducts.length > 0) {
-                    setUserHasProduct(true)
+
                     setUserProductId(userProducts[0].id!)
                     setMeasureUnit(userProducts[0].measure_unit!)
-                  } else {
                     if (p?.class === 'SEMENTE') {
                       setIsSeed(true)
                     }
                     setUserHasProduct(false)
                     setProductId(p.id)
                   }
-                } else {
-                  setUserHasProduct(false)
-                  onHandleRemove(index)
-                }
-              }}
+                } 
+              }
               options={input.generalProductsList.map((input) => {
                 return { id: input.id, label: input?.name, class: input.class }
               })}
