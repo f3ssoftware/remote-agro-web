@@ -12,13 +12,11 @@ import { asyncNewPlannings } from '../../../stores/planning.store'
 export function NewPlanning({
   show,
   handleClose,
-  onHandleRemove,
-  index
+
 }: {
   show: boolean,
   handleClose: any,
-  onHandleRemove: any,
-  index: number
+
 }) {
   const [referenceName, setReferenceName] = useState('')
   const dispatch = useDispatch<any>()
