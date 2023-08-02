@@ -17,10 +17,14 @@ export function SeasonSelection({ show, handleClose }: any) {
   }
   const [showSeasonsSelectionModal, setShowSeasonsSelectionModal] = useState(false)
 
-
   useEffect(() => {
     dispatch(asyncFetchInputWeighingData(seasons?.selectedSeason?.id));
     dispatch(asyncFetchOutputWeighingData(seasons?.selectedSeason?.id));
+
+    if (selectedSeason?.id !== seasons.selectedSeason.id) {
+      setSelectedSeason(seasons.selectedSeason)
+    }
+
   }, [seasons])
   return (
     <Container>
@@ -39,7 +43,7 @@ export function SeasonSelection({ show, handleClose }: any) {
                   Selecione a temporada
                 </Form.Label>
                 <Form.Select
-                  value={JSON.stringify(seasons.selectedSeason)}
+                  value={JSON.stringify(selectedSeason)}
                   aria-label=""
                   onChange={(e) => {
                     // dispatch(selectSeason(e.target.value))
