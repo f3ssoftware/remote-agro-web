@@ -74,19 +74,17 @@ export function Warehouse() {
                             <th>Nome</th>
                             <th>Código</th>
                             <th>Qntd.</th>
-                            <th>Unitário (R$)</th>
-                            <th>Total (R$)</th>
+                            <th>Unitário</th>
+                            <th>Total</th>
                             <th>Posição</th>
                         </tr>
                     </thead>
                     <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
                         {parts.map(part => {
                             return <tr>
-                                <td>{part?.name}</td>
-                                <td>{part?.code}</td>
                                 <td><Row>
-                                                <Col md={10}>
-                                                    {part?.quantity}
+                                                <Col md={6}>
+                                                {part?.name}
                                                 </Col>
                                                 <Col md={2}>
                                                     <FontAwesomeIcon icon={faEye} style={{ color: '#000AFF', cursor: 'pointer' }} onClick={() => {
@@ -95,8 +93,10 @@ export function Warehouse() {
                                                     }}></FontAwesomeIcon>
                                                 </Col>
                                             </Row></td>
-                                <td>{part?.unit_price}</td>
-                                <td>{part?.quantity! * part?.unit_price!}</td>
+                                <td>{part?.code}</td>
+                                <td>{part?.quantity}</td>
+                                <td>{Number(part.unit_price).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
+                                <td>{Number(part?.quantity! * part?.unit_price!).toLocaleString('pt-BR', { maximumFractionDigits: 2, style: 'currency', currency: 'BRL', useGrouping: true })}</td>
                                 <td>{part?.position}</td>
                             </tr>
                         })}
