@@ -12,13 +12,11 @@ import { asyncNewPlannings } from '../../../stores/planning.store'
 export function NewPlanning({
   show,
   handleClose,
-  onHandleRemove,
-  index
+
 }: {
   show: boolean,
   handleClose: any,
-  onHandleRemove: any,
-  index: number
+
 }) {
   const [referenceName, setReferenceName] = useState('')
   const dispatch = useDispatch<any>()
@@ -65,7 +63,7 @@ const onUpdateItem = (planning: PlanningInput, index: number) => {
             />
           </Form.Group>
         </Col>
-        {/* <Col>
+        <Col>
                 <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>Selecione a temporada</Form.Label>
                   <Typeahead
@@ -80,7 +78,7 @@ const onUpdateItem = (planning: PlanningInput, index: number) => {
                     })}
                   />
                 </Form.Group>
-              </Col> */}
+              </Col>
       </Row>
       {plannings.map((newPlanning, index) => {
             return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>

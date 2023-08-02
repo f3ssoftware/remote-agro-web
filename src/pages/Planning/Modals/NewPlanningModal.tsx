@@ -43,8 +43,6 @@ export function NewPlanningModal({
           <NewPlanning
             show={false}
             handleClose={() => handleClose()}
-            index={0}
-            onHandleRemove={undefined}
           ></NewPlanning>
         ) : (
           <NewPlanningCost
