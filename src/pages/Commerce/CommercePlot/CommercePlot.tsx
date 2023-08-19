@@ -1,14 +1,22 @@
 import { useEffect, useState } from 'react'
-import { Container, Button, Card, Row, Col, Pagination } from 'react-bootstrap'
+import {
+  Container,
+  Button,
+  Row,
+  Col,
+  Table,
+} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
-import logoCard from '../../../assets/images/logoCard.png'
 import { Silo } from '../../../models/Silo'
-import { asyncDeleteSilo, asyncFetchSiloData } from '../../../stores/commerce.store'
+import {
+  asyncFetchSiloData,
+} from '../../../stores/commerce.store'
 import '../CommercePlot/Commerceplot.scss'
 import { NewCommercePlotModal } from '../modals/NewCommercePlotModal/NewCommercePlotModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { PlotDeleteConfirmation } from './PlotDeleteConfirmation'
 
 const initialSiloList: Silo[] = []
 export function CommercePlot() {
@@ -17,9 +25,9 @@ export function CommercePlot() {
   const { commerce } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
   const [silos, setSilos] = useState(initialSiloList)
-  const [pageSize, setPageSize] = useState(0)
-  const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [siloId, setSiloId] = useState(0)
 
   useEffect(() => {
     dispatch(asyncFetchSiloData())
@@ -29,22 +37,9 @@ export function CommercePlot() {
     setSilos(commerce.silo)
   }, [commerce])
 
-  useEffect(() => {
-    paginate(page)
-    setTotalResults(commerce.silo.length)
-    setPageSize(5)
-  }, [commerce])
 
-  const paginate = (page: number) => {
-    const pageSize = 5
-    setSilos([...commerce.silo].slice((page - 1) * pageSize, page * pageSize),
-    )
-  }
 
-  const deleteSilo = (id: number) => {
-    dispatch(asyncDeleteSilo(id))
-    dispatch(asyncFetchSiloData)
-  }
+
 
   return (
     <Container>
@@ -55,72 +50,69 @@ export function CommercePlot() {
           </Col>
           <div>
             <Button
-                variant="success"
-                className="plot-btn"
-                onClick={() => setShowNewCommercePlotModal(true)}
-              >
-                +
-              </Button>{' '}
+              variant="success"
+              className="plot-btn"
+              onClick={() => setShowNewCommercePlotModal(true)}
+            >
+              +
+            </Button>{' '}
           </div>
-
         </Row>
-        <Row className="plot-cards">
-          {silos.map((silo, index) => (
-            <Col md={2} key={index} style={{marginLeft: '2.5%'}}>
-              <Card className="cardBody">
-                <Card.Img variant="top" src={logoCard} className="logoCard" />
-                <Card.Body>
-                  <Card.Title className="cardTitle">{silo.name}
-                            {' '}
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => {
-                                deleteSilo(silo.id!)
-                              }}
-                            ></FontAwesomeIcon>
-                  </Card.Title>
-                  <Card.Text className="cardText">
-                     {silo?.cultivations?.map(
-                        (ss: any) => <Row>
-                          <Col><span>{ss?.name}</span></Col>
-                          <Col><span>{ss?.SiloCultivar?.quantity} Sacas</span></Col>
-                        </Row>
-                     )}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-        <div className="flex-center" style={{ marginTop: '2%' }}>
-          <Pagination size="sm">
-            <Pagination.Prev
-              onClick={() => {
-                if (page > 1) {
-                  paginate(page - 1)
-                  setPage(page - 1)
-                }
-              }}
-            />
-            <Pagination.Next
-              onClick={() => {
-                if (page < totalResults / pageSize) {
-                  console.log(totalResults / pageSize)
-                  paginate(page + 1)
-                  setPage(page + 1)
-                } else {
-                  console.log('else: ', totalResults / pageSize)
-                }
-              }}
-            />
-          </Pagination>
+        <div className="plot-table">
+          <Table striped bordered hover>
+            <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
+              <tr>
+                <th>Silo</th>
+                <th>Cultivar</th>
+                <th>Quantidade</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
+              {silos.map((silo, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{silo.name}</td>
+                    <td>
+                      {silo?.cultivations?.map((c: any) => {
+                        return (
+                          <ul>
+                            <li>{c?.name}</li>
+                          </ul>
+                        )
+                      })}
+                    </td>
+                    <td>
+                      {silo?.cultivations?.map((c: any) => {
+                        return (
+                          <ul>
+                            <li>{c?.SiloCultivar?.quantity} Sacas</li>
+                          </ul>
+                        )
+                      })}
+                    </td>
+                    <td>
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          setSiloId(silo.id!)
+                          setDeleteModal(true)
+                        }}
+                      ></FontAwesomeIcon>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
         </div>
       </div>
       <NewCommercePlotModal
         show={showNewCommercePlotModal}
         handleClose={() => setShowNewCommercePlotModal(false)}
       ></NewCommercePlotModal>
+      <PlotDeleteConfirmation show={deleteModal} handleClose={setDeleteModal} id={siloId}></PlotDeleteConfirmation>
     </Container>
   )
 }
