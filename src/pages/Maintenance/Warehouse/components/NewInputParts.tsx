@@ -1,12 +1,14 @@
 import { pt } from "date-fns/locale";
 import { useEffect, useState } from "react";
-import { Row, Col, Button, Form } from "react-bootstrap";
+import { Row, Col, Button, Form, Tab } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Part } from "../../../../models/Part";
+import { NewParts } from "./NewParts";
+import { NewPartsModal } from "../modals/NewPartsModal";
 
 
 export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
@@ -16,6 +18,7 @@ export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index
     const [initialCost, setInitialCost] = useState(0);
     const [observation, setObservation] = useState("");
     const [accountable, setAccountable] = useState("");
+    const [showNewPartsModal, setShowNewPartsModal] = useState(false)
 
     useEffect(() => {
         const p: Part = {
@@ -30,7 +33,10 @@ export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index
         console.log('p do lado do component:', p);
         onHandleUpdate(p, index);
     }, [productId, initialQuantity, initialCost, observation, accountable]);
-    return <Row style={{ marginTop: '2%' }}>
+    return( 
+    <>
+
+    <Row style={{ marginTop: '2%' }}>
         <Col>
             <Form.Group className="mb-3" controlId="">
                 <Form.Label style={{ color: '#fff' }}>Peça</Form.Label>
@@ -90,4 +96,8 @@ export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index
             }} style={{ marginTop: '45%' }}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></Button>
         </Col> : <></>}
     </Row>
+    
+    </>
+    )
+    
 }

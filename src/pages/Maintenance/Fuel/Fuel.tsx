@@ -166,6 +166,7 @@ export function Fuel() {
                 >
                   <tr>
                     <th>Data</th>
+                    <th>Bem</th>
                     <th>Quantidade</th>
                     <th>Tanque</th>
                   </tr>
@@ -178,6 +179,7 @@ export function Fuel() {
                           {new Date(f?.updatedAt)?.toLocaleDateString('pt-BR')}{' '}
                           {new Date(f?.updatedAt)?.toLocaleTimeString('pt-BR')}
                         </td>
+                        <td>{f?.good.name}</td>
                         {f?.type == 'Saida' ? <td style={{color: '#ff0000'}}>{f?.quantity}</td> : <td style={{color: '#008000'}}>{f?.quantity}</td>}
                         <td>{f?.tank?.name}</td>
                       </tr>
