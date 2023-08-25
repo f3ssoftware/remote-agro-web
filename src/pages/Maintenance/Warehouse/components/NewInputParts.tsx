@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Part } from "../../../../models/Part";
 import { NewParts } from "./NewParts";
-import { NewPartsModal } from "../modals/NewPartsModal";
 
 
 export function NewInputParts({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
