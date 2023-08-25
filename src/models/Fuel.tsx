@@ -1,7 +1,10 @@
+import { Good } from "./Good"
+
 export class Fuel {
   accountable?: string;
   createdAt?: string;
   date?: string;
+  good?: Good [];
   good_id?: number;
   id?: number;
   kilometers?: number;

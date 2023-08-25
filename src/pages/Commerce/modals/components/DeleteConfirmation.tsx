@@ -1,7 +1,7 @@
 import { Button, Modal } from 'react-bootstrap'
 import { asyncFetchContractsData } from '../../../../stores/financial.store'
 import { useDispatch } from 'react-redux'
-import { asyncDeleteContract } from '../../../../stores/commerce.store'
+import { asyncDeleteContract, asyncDeleteSilo, asyncFetchSiloData } from '../../../../stores/commerce.store'
 
 
 export function DeleteConfirmation({

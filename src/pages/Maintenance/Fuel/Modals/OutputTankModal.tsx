@@ -3,8 +3,7 @@ import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { OutputTank } from '../components/OutputTank'
 import { Fuel } from '../../../../models/Fuel'
-import { setFuellings } from '../../../../stores/maintenance.store'
-import { RootState } from '../../../..'
+import { asyncFetchGoods, setFuellings } from '../../../../stores/maintenance.store'
 
 export function OutputTankModal({
   show,
@@ -32,6 +31,10 @@ const onRemoveItem = (index: number) => {
   fuelArr.splice(index, 1);
   setOutputTankRows(fuelArr);
 }
+
+useEffect(() => {
+  dispatch(asyncFetchGoods())
+}, [])
 
 
   return (
