@@ -56,7 +56,7 @@ export function EditPlanningCost({
   }, [planning])
 
   useEffect(()=>{
-    dispatch(asyncFetchEditPlannings(id))
+    // dispatch(asyncFetchEditPlannings(id))
   },[])
 
 const onUpdateItem = (planning: PlanningCost, index: number) => {

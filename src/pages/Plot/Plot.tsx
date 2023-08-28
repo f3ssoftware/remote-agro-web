@@ -5,7 +5,6 @@ import {
   Col,
   Container,
   Dropdown,
-  Form,
   Row,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,10 +16,6 @@ import { NewPlotModal } from './Modals/NewPlotModal'
 import { PrescriptionModal } from './Modals/PrescriptionModal'
 import './Plot.scss'
 import { Calendar, dateFnsLocalizer, momentLocalizer } from 'react-big-calendar'
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
-import startOfWeek from 'date-fns/startOfWeek'
-import getDay from 'date-fns/getDay'
 import ptBR from 'date-fns/locale/pt-BR'
 import { asyncFetchApplications } from '../../stores/plot.store'
 import { FertilizerEventModal } from './Modals/FertilizerEventModal'
@@ -169,7 +164,9 @@ export function Plot() {
               </h4>
             </div>
             <div style={{ overflowY: 'scroll', height: '300px' }}>
-              {farm?.selectedFarm?.fields?.map((field: any) => (
+              {selectedFarm?.fields?.filter((field: any) => 
+                    {
+                      return field.season.id === seasons.selectedSeason.id}).map((field: any) => (
                 <div className="plot-card">
                   <Row>
                     <Col>
@@ -241,7 +238,9 @@ export function Plot() {
                     >
                       Todos os talhões
                     </Dropdown.Item>
-                    {selectedFarm?.fields?.map((field: any) => {
+                    {selectedFarm?.fields?.filter((field: any) => 
+                    {
+                      return field.season.id === seasons.selectedSeason.id}).map((field: any) => {
                       return (
                         <Dropdown.Item
                           onClick={() => {
