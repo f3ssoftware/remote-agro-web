@@ -25,7 +25,7 @@ export function AutoConfirmationModal({
   }
 
   useEffect(() => {
-    dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).id));
+    dispatch(asyncFetchWeighingData(JSON.parse(sessionStorage.getItem('user')!).user_id));
   }, [show]);
 
   return (

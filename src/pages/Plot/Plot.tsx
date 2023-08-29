@@ -29,13 +29,7 @@ const locales = {
 }
 moment.locale('pt-BR')
 const localizer = momentLocalizer(moment)
-// const localizer = dateFnsLocalizer({
-//   format,
-//   parse,
-//   startOfWeek,
-//   getDay,
-//   locales,
-// })
+
 export function Plot() {
   const { farm, plot, seasons } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
@@ -230,14 +224,14 @@ export function Plot() {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item
+                    {/* <Dropdown.Item
                       onClick={() => {
                         setSelectedPlot(null)
                         filter();
                       }}
                     >
                       Todos os talhões
-                    </Dropdown.Item>
+                    </Dropdown.Item> */}
                     {selectedFarm?.fields?.filter((field: any) => 
                     {
                       return field.season.id === seasons.selectedSeason.id}).map((field: any) => {
