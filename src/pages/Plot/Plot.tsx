@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Dropdown,
-  Row,
-} from 'react-bootstrap'
+import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from '../..'
@@ -23,6 +16,9 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 import { DefensiveEventModal } from './Modals/DefensiveEventModal'
 import { SeedingEventModal } from './Modals/SeedingEventModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { NewEditPlotModal } from './Modals/NewEditPlotModal'
 
 const locales = {
   'pt-BR': ptBR,
@@ -38,26 +34,28 @@ export function Plot() {
   const [showNewFarmModal, setShowNewFarmModal] = useState(false)
   const [selectedFarm, setSelectedFarm]: any = useState({})
   const [selectedPlot, setSelectedPlot]: any = useState({})
-  const [plots, setPlots] = useState<any[]>([])
   const [showDefensive, setShowDefensive] = useState(false)
   const [showFertilizer, setShowFertilizer] = useState(false)
   const [showSeeding, setShowSeeding] = useState(false)
   const [application, setApplication] = useState<any>()
   const [startDate, setStartDate] = useState<Date>()
   const [untilDate, setUntilDate] = useState<Date>()
-
+  const [showFieldModal,setShowFieldModal ] = useState(false)
+  const [editPlotId, setEditPlotId] =  useState(0)
   const selectFarm = (farm: any) => {
     setSelectedFarm(farm)
     dispatch(selectAFarm(farm))
   }
 
   useEffect(() => {
-    dispatch(asyncFetchFarms({
-      season_id: seasons.selectedSeason.id
-    }))
+    dispatch(
+      asyncFetchFarms({
+        season_id: seasons.selectedSeason.id,
+      }),
+    )
     setSelectedFarm(farm?.farms[0])
     dispatch(selectAFarm(farm?.farms[0]))
-    filter();
+    filter()
   }, [])
 
   const filter = (field?: string) => {
@@ -107,7 +105,9 @@ export function Plot() {
               >
                 <Dropdown className="frist-card-dropdown-plot">
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    {selectedFarm ? `${selectedFarm?.name}` : 'Selecione uma fazenda'}
+                    {selectedFarm
+                      ? `${selectedFarm?.name}`
+                      : 'Selecione uma fazenda'}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
@@ -158,45 +158,59 @@ export function Plot() {
               </h4>
             </div>
             <div style={{ overflowY: 'scroll', height: '300px' }}>
-              {selectedFarm?.fields?.filter((field: any) => 
-                    {
-                      return field.season.id === seasons.selectedSeason.id}).map((field: any) => (
-                <div className="plot-card">
-                  <Row>
-                    <Col>
-                      <span>{field.name}</span>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <span>Área Total: {field.total_area}</span>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <span>Cultivo: {field.cultivation_name}</span>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <span>
-                        Cultivar:{' '}
-                        {field.cultivares.map((c: any) => `${c.name}, `)}
-                      </span>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <span>
-                        Data de Plantio:{' '}
-                        {new Date(field.planting_date).toLocaleDateString(
-                          'pt-BR',
-                        )}
-                      </span>
-                    </Col>
-                  </Row>
-                </div>
-              ))}
+              {selectedFarm?.fields
+                ?.filter((field: any) => {
+                  return field.season.id === seasons.selectedSeason.id
+                })
+                .map((field: any) => (
+                  <div className="plot-card">
+                    <Row>
+                      <Col>
+                        <span>
+                          {field.name}{' '}
+                          <FontAwesomeIcon
+                            icon={faPen}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              console.log(field.id!)
+                              // editPlot(field.id!)
+                              setEditPlotId(field.id!)
+                              setShowFieldModal(true)
+                            }}
+                          ></FontAwesomeIcon>
+                        </span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <span>Área Total: {field.total_area}</span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <span>Cultivo: {field.cultivation_name}</span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <span>
+                          Cultivar:{' '}
+                          {field.cultivares.map((c: any) => `${c.name}, `)}
+                        </span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <span>
+                          Data de Plantio:{' '}
+                          {new Date(field.planting_date).toLocaleDateString(
+                            'pt-BR',
+                          )}
+                        </span>
+                      </Col>
+                    </Row>
+                  </div>
+                ))}
             </div>
           </div>
         </Col>
@@ -232,20 +246,22 @@ export function Plot() {
                     >
                       Todos os talhões
                     </Dropdown.Item> */}
-                    {selectedFarm?.fields?.filter((field: any) => 
-                    {
-                      return field.season.id === seasons.selectedSeason.id}).map((field: any) => {
-                      return (
-                        <Dropdown.Item
-                          onClick={() => {
-                            setSelectedPlot(field)
-                            filter(field.name)
-                          }}
-                        >
-                          {field.name}
-                        </Dropdown.Item>
-                      )
-                    })}
+                    {selectedFarm?.fields
+                      ?.filter((field: any) => {
+                        return field.season.id === seasons.selectedSeason.id
+                      })
+                      .map((field: any) => {
+                        return (
+                          <Dropdown.Item
+                            onClick={() => {
+                              setSelectedPlot(field)
+                              filter(field.name)
+                            }}
+                          >
+                            {field.name}
+                          </Dropdown.Item>
+                        )
+                      })}
                   </Dropdown.Menu>
                 </Dropdown>
               </Card.Text>
@@ -339,6 +355,7 @@ export function Plot() {
         application={application}
         handleClose={() => setShowSeeding(false)}
       ></SeedingEventModal>
+      <NewEditPlotModal show={showFieldModal} handleClose={() => setShowFieldModal(false)}></NewEditPlotModal>
     </Container>
   )
 }
