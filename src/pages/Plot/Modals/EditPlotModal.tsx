@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
-import { NewEditPlot } from "../components/NewEditPlot";
+import { EditPlot } from "../components/EditPlot";
 
-export function NewEditPlotModal({show, handleClose}: {show: boolean, handleClose: any}){
+export function EditPlotModal({show, handleClose,id}: {id: number, show: boolean, handleClose: any}){
 
 
 
@@ -10,7 +10,7 @@ export function NewEditPlotModal({show, handleClose}: {show: boolean, handleClos
             <Modal.Title> <span style={{ color: '#fff' }}>Edição de talhão</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            <NewEditPlot></NewEditPlot>
+            <EditPlot id={id}></EditPlot>
         </Modal.Body>
     </Modal >
 }

@@ -3,7 +3,7 @@ import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from '../..'
-import { asyncFetchFarms, selectAFarm } from '../../stores/farm.store'
+import { asyncFetchEditPlots, asyncFetchFarms, selectAFarm } from '../../stores/farm.store'
 import { NewFarmModal } from './Modals/NewFarmModal'
 import { NewPlotModal } from './Modals/NewPlotModal'
 import { PrescriptionModal } from './Modals/PrescriptionModal'
@@ -18,7 +18,7 @@ import { DefensiveEventModal } from './Modals/DefensiveEventModal'
 import { SeedingEventModal } from './Modals/SeedingEventModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
-import { NewEditPlotModal } from './Modals/NewEditPlotModal'
+import { EditPlotModal } from './Modals/EditPlotModal'
 
 const locales = {
   'pt-BR': ptBR,
@@ -68,6 +68,9 @@ export function Plot() {
         field_name: field,
       }),
     )
+  }
+  const editPlot = (id?: number) =>{
+    dispatch(asyncFetchEditPlots(id!))
   }
 
   return (
@@ -173,7 +176,7 @@ export function Plot() {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(field.id!)
-                              // editPlot(field.id!)
+                              editPlot(field.id!)
                               setEditPlotId(field.id!)
                               setShowFieldModal(true)
                             }}
@@ -355,7 +358,7 @@ export function Plot() {
         application={application}
         handleClose={() => setShowSeeding(false)}
       ></SeedingEventModal>
-      <NewEditPlotModal show={showFieldModal} handleClose={() => setShowFieldModal(false)}></NewEditPlotModal>
+      <EditPlotModal show={showFieldModal} handleClose={() => setShowFieldModal(false)} id={editPlotId}></EditPlotModal>
     </Container>
   )
 }
