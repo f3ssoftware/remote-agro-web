@@ -2,15 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "..";
 import axios from "axios";
 import { getMessages } from "./messaging.store";
-import { FarmInput } from "../pages/Input/FarmInput";
 import { RegisterPlotDTO } from "../models/dtos/RegisterPlotDTO";
 
 const initialSelectedFarm: any = []
+const initialEditPlot: RegisterPlotDTO = {}
 const farmStore = createSlice({
     name: "farm",
     initialState: {
         farms: [],
         selectedFarm: initialSelectedFarm,
+        editPlot: initialEditPlot
     },
     reducers: {
         setFarms(state, action) {
@@ -18,11 +19,15 @@ const farmStore = createSlice({
         },
         selectAFarm(state, action) {
             state.selectedFarm = action.payload;
+        },
+        setEditPlot(state, action) {
+            state.editPlot = action.payload;
         }
+        
     },
 });
 
-export const { setFarms, selectAFarm } =
+export const { setFarms, selectAFarm, setEditPlot } =
     farmStore.actions;
 export default farmStore.reducer;
 
@@ -54,6 +59,27 @@ export function asyncFetchFarms(params?: any) {
         }
     };
 }
+export function asyncFetchEditPlots(id: number) {
+      return async function (dispatch: AppDispatch) {
+          try{
+    
+          const results = await axios.get(`https://remoteapi.murilobotelho.com.br/fields/${id}?include=cultivares&include=cultivation&`, {
+              headers: {
+                  'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+              }
+          });
+          dispatch(setEditPlot(results.data));
+      } catch (err: any) {
+          console.log(err);
+          dispatch(
+              getMessages({
+                  message: err.response.data.message,
+                  type: "error",
+              })
+          );
+      }
+      }
+    }
 
 export function asyncRegisterField(requestBody: RegisterPlotDTO) {
     return async function (dispatch: AppDispatch) {
@@ -84,3 +110,32 @@ export function asyncRegisterField(requestBody: RegisterPlotDTO) {
         }
     };
 }
+export function asyncEditPlot(id: number, editRequestBody: RegisterPlotDTO) {
+    return async function (dispatch: AppDispatch) {
+      try {
+        await axios.put(
+          `https://remoteapi.murilobotelho.com.br/fields/${id}`,
+          editRequestBody,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          },
+        )
+        dispatch(
+          getMessages({
+            message: 'Talhão editado com sucesso',
+            type: 'success',
+          }),
+        )
+      } catch (err: any) {
+        console.log(err)
+        dispatch(
+          getMessages({
+            message: err.message,
+            type: 'error',
+          }),
+        )
+      }
+    }
+  }

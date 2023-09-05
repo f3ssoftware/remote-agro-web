@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Cultivar } from "../../../models/Cultivar";
 
-export function CultivarItem({ cultivar, index, onHandleUpdate, onHandleRemove, maxArea }: { cultivar: Cultivar, index: number, onHandleUpdate: any, onHandleRemove: any, maxArea: number }) {
+export function CultivarItem({ cultivar, index, onHandleUpdate, onHandleRemove, maxArea }: {cultivar: Cultivar, index: number, onHandleUpdate: any, onHandleRemove: any, maxArea: number }) {
     const [showArea, setShowArea] = useState(false);
     const [area, setArea] = useState(0);
+   
     return <div style={{}}>
         <Form.Check
             type="checkbox"
@@ -30,3 +31,4 @@ export function CultivarItem({ cultivar, index, onHandleUpdate, onHandleRemove, 
 
     </div>
 }
+
