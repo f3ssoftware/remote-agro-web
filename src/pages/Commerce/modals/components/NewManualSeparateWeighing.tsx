@@ -13,6 +13,7 @@ import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
 import { Contract } from '../../../../models/Contract'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
+import { GeneratePdf } from './GeneratePdf/GeneratePdf'
 
 
 
@@ -356,6 +357,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         >
           {manualSeparateWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
+        {manualSeparateWeigh?.id ? <GeneratePdf weighing={manualSeparateWeigh} contractsList={financial?.contracts} cultivationsList={financial?.cultivations} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
         <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh.type!}></DeleteConfirmationModal>
       </div>
     </div>

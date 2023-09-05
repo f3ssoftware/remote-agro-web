@@ -22,7 +22,6 @@ export function EditPlot({ id }: { id: number }) {
   const [productivity, setProductivity] = useState(0)
   const [value, setValue] = useState(0)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [cultivars, setCultivars]: any[] = useState(initialCultivars)
   const [sendCultivars, setSendCultivars] = useState(initialSendCultivars)
   const [weigh, setWeigh] = useState(0)
   const [plantingType, setPlantingType] = useState('')
@@ -62,7 +61,7 @@ export function EditPlot({ id }: { id: number }) {
       (cultivation: any) => cultivation.id === farm.editPlot.cultivation_id,
     )[0]
     if(c) {
-      setSelectedCultivation(c)
+    setSelectedCultivation(c)
     setPropName(farm?.editPlot.name!)
     setTotalArea(Number(farm?.editPlot.total_area!))
     setProductivity(Number(farm?.editPlot.productivity!))
@@ -77,6 +76,7 @@ export function EditPlot({ id }: { id: number }) {
 
   useEffect(() => {
     fillFormEdit()
+    console.log(farm?.editPlot.cultivares!)
   }, [farm])
 
   useEffect(() => {
@@ -268,7 +268,7 @@ export function EditPlot({ id }: { id: number }) {
               planting_date: plantingDate.toISOString(),
               total_area: totalArea,
               cultivares: sendCultivars,
-              productivity,
+              productivity: productivity,
               season_id: seasons.selectedSeason.id,
               is_active: active,
               name: propName,
