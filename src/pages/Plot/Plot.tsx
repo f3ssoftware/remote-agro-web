@@ -191,7 +191,7 @@ export function Plot() {
                     </Row>
                     <Row>
                       <Col>
-                        <span>Cultivo: {field.cultivation_name}</span>
+                        <span>Cultivo: {field?.cultivation?.name}</span>
                       </Col>
                     </Row>
                     <Row>

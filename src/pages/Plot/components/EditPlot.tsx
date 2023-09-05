@@ -10,10 +10,7 @@ import { asyncFetchCultivations } from '../../../stores/financial.store'
 import { CultivarItem } from './CultivarItem'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
-import {
-  asyncEditPlot,
-  asyncFetchEditPlots,
-} from '../../../stores/farm.store'
+import { asyncEditPlot, asyncFetchEditPlots } from '../../../stores/farm.store'
 import { RegisterPlotDTO } from '../../../models/dtos/RegisterPlotDTO'
 
 const initialCultivars: Cultivar[] = []
@@ -24,12 +21,12 @@ export function EditPlot({ id }: { id: number }) {
   const [totalArea, setTotalArea] = useState(0)
   const [productivity, setProductivity] = useState(0)
   const [value, setValue] = useState(0)
-  const [cultivation, setCultivation]: any = useState({})
+  const [selectedCultivation, setSelectedCultivation]: any = useState({})
   const [cultivars, setCultivars]: any[] = useState(initialCultivars)
   const [sendCultivars, setSendCultivars] = useState(initialSendCultivars)
   const [weigh, setWeigh] = useState(0)
   const [plantingType, setPlantingType] = useState('')
-  const [plantingDate, setPlantingDate] = useState(new Date)
+  const [plantingDate, setPlantingDate] = useState(new Date())
   const dispatch = useDispatch<any>()
   const [active, setActive] = useState(false)
 
@@ -59,18 +56,27 @@ export function EditPlot({ id }: { id: number }) {
 
     setSendCultivars(newSendCultivar)
   }
- 
+
+  const fillFormEdit = () => {
+    const c: any = financial.cultivations.filter(
+      (cultivation: any) => cultivation.id === farm.editPlot.cultivation_id,
+    )[0]
+    if(c) {
+      setSelectedCultivation(c)
+    setPropName(farm?.editPlot.name!)
+    setTotalArea(Number(farm?.editPlot.total_area!))
+    setProductivity(Number(farm?.editPlot.productivity!))
+    setValue(Number(farm?.editPlot.expected_unit_price!))
+    setWeigh(farm?.editPlot.expenses_weight!)
+    setPlantingType(farm?.editPlot.planting_type!)
+    setActive(farm?.editPlot.is_active!)
+    setPlantingDate(new Date(farm?.editPlot?.planting_date!))
+    }
+    
+  }
 
   useEffect(() => {
-    setPropName(farm.editPlot.name!)
-    setTotalArea(Number(farm.editPlot.total_area!))
-    setProductivity(Number(farm.editPlot.productivity!))
-    setValue(Number(farm.editPlot.expected_unit_price!))
-    // setCultivation()
-    setWeigh(farm.editPlot.expenses_weight!)
-    setPlantingType(farm.editPlot.planting_type!)
-    setActive(farm.editPlot.is_active!)
-    setPlantingDate(new Date(farm.editPlot.planting_date!))
+    fillFormEdit()
   }, [farm])
 
   useEffect(() => {
@@ -160,9 +166,12 @@ export function EditPlot({ id }: { id: number }) {
             <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
             <Typeahead
               id="cultivation"
-              selected={cultivation}
+              selected={financial?.cultivations.filter((cultivation: any) => cultivation?.id === selectedCultivation?.id)}
+              labelKey={(selected: any) => {
+                return `${selected?.name}`
+              }}
               onChange={(selected: any) => {
-                setCultivation(selected[0])
+                setSelectedCultivation(selected[0])
               }}
               options={financial.cultivations.map(
                 (cultivation: Cultivation) => {
@@ -179,7 +188,7 @@ export function EditPlot({ id }: { id: number }) {
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Cultivares</Form.Label>
-            {cultivation?.cultivares?.map(
+            {selectedCultivation?.cultivares?.map(
               (cultivar: Cultivar, index: number) => {
                 return (
                   <CultivarItem
@@ -264,11 +273,11 @@ export function EditPlot({ id }: { id: number }) {
               is_active: active,
               name: propName,
               expected_unit_price: value,
-              cultivation_id: cultivation.id,
+              cultivation_id: selectedCultivation.id,
               expenses_weight: weigh,
-              cultivation_name: cultivation.name,
+              cultivation_name: selectedCultivation.name,
             }
-            dispatch(asyncEditPlot(id,editRequestBody))
+            dispatch(asyncEditPlot(id, editRequestBody))
           }}
         >
           Registrar
