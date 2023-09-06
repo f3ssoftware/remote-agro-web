@@ -115,7 +115,7 @@ export function asyncFetchEditPlannings(id: number) {
     return async function (dispatch: AppDispatch) {
         try{
 
-        const results = await axios.get(`https://remoteapi.murilobotelho.com.br/plannings/${id}`, {
+        const results = await axios.get(`https://remoteapi.murilobotelho.com.br/plannings/${id}?type=Custos%20Indiretos&`, {
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }

@@ -5,10 +5,12 @@ import { PlanningCost } from '../../../models/PlanningCost'
 
 export function NewPlanningTab({
   index,
-  onHandleUpdate
+  onHandleUpdate,
+  month
 }: {
   index: number,
-  onHandleUpdate: any
+  onHandleUpdate: any,
+  month: number
 }) {
   const [maintenance, setMaintenance] = useState(0)
   const [diesel, setDiesel] = useState(0)
@@ -40,7 +42,7 @@ export function NewPlanningTab({
         outsource_amount: outsourced,
         rent_amount: rent,
         storage_amount: storage,
-
+        month: month
     };
     onHandleUpdate(p, index);
 }, [administrative, arla, restaurant,conservation,diesel,gas,labor,maintenance,others,outsourced,rent,storage]);

@@ -18,7 +18,7 @@ export function EditPlanningCost({
   id: number
 }) {
   const [referenceName, setReferenceName] = useState('')
-  const [key, setKey] = useState('')
+  const [key, setKey] = useState(0)
   const [plannings, setPlannings] = useState([new PlanningCost()])
   const dispatch = useDispatch<any>()
   const { seasons } = useSelector((state: RootState) => state)
@@ -55,9 +55,6 @@ export function EditPlanningCost({
     setReferenceName(planning.editPlannings.name!)
   }, [planning])
 
-  useEffect(()=>{
-    // dispatch(asyncFetchEditPlannings(id))
-  },[])
 
 const onUpdateItem = (planning: PlanningCost, index: number) => {
   const planningArr = [...plannings];

@@ -104,7 +104,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
           {month.map((month, index) => {
             return (
               <Tab eventKey={index} title={month} >
-                  <NewPlanningTab index={index} onHandleUpdate={onUpdateItem}></NewPlanningTab>
+                  <NewPlanningTab index={index} onHandleUpdate={onUpdateItem} month={key}></NewPlanningTab>
               </Tab>
             )
           })}

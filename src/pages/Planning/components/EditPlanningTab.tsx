@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Row, Col, Button, Form, Dropdown, Tabs, Tab } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { PlanningCost } from '../../../models/PlanningCost'
+import { RootState } from '../../..'
+import { useSelector } from 'react-redux'
 
 export function EditPlanningTab({
   index,
@@ -23,6 +25,7 @@ export function EditPlanningTab({
   const [rent, setRent] = useState(0)
   const [outsourced, setOutsourced] = useState(0)
   const [others, setOthers] = useState(0)
+  const { planning } = useSelector((state: RootState) => state)
 
 
   useEffect(() => {
@@ -46,6 +49,10 @@ export function EditPlanningTab({
     };
     onHandleUpdate(p, index);
 }, [administrative, arla, restaurant,conservation,diesel,gas,labor,maintenance,others,outsourced,rent,storage]);
+
+useEffect(() => {
+  
+}, [planning])
 
 
   return (
