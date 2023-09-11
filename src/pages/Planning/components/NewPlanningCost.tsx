@@ -16,25 +16,11 @@ export function NewPlanningCost({
   handleClose: any
 }) {
   const [referenceName, setReferenceName] = useState('')
-  const [key, setKey] = useState(0)
-  const [plannings, setPlannings] = useState([new PlanningCost()])
+  const [plannings, setPlannings] = useState<any[]>([])
   const dispatch = useDispatch<any>()
   const { seasons } = useSelector((state: RootState) => state)
   const [outcomeYear, setOutcomeYear] = useState('')
-  const month = [
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-  ]
+
 
   const register = () => {
     const planning: Planning = {
@@ -95,21 +81,15 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
         </Col>
       </Row>
       <div style={{backgroundColor: '#7C5529'}}>
-      <Tabs
-          id="controlled-tab"
-          activeKey={key}
-          onSelect={(k: any) => setKey(k)}
-          className="mb-3"
-        >
-          {month.map((month, index) => {
+      
+          {plannings.map((month, index) => {
             return (
-              <Tab eventKey={index} title={month} >
-                  <NewPlanningTab index={index} onHandleUpdate={onUpdateItem} month={key}></NewPlanningTab>
-              </Tab>
+             
+                  <NewPlanningTab index={index} onHandleUpdate={onUpdateItem}></NewPlanningTab>
+              
             )
           })}
-        </Tabs>
-
+        
       </div>
         
       <div
@@ -128,6 +108,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
         >
           Registrar
         </Button>
+        <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningCost()])}>Adicionar Linha</Button>
       </div>
     </>
   )

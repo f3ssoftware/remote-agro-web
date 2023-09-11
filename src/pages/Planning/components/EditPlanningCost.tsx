@@ -19,25 +19,12 @@ export function EditPlanningCost({
 }) {
   const [referenceName, setReferenceName] = useState('')
   const [key, setKey] = useState(0)
-  const [plannings, setPlannings] = useState([new PlanningCost()])
+  const [plannings, setPlannings] = useState<any[]>([])
   const dispatch = useDispatch<any>()
   const { seasons } = useSelector((state: RootState) => state)
   const { planning } = useSelector((state: RootState) => state)
   const [outcomeYear, setOutcomeYear] = useState('')
-  const month = [
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-  ]
+
 
   const edit = () => {
     const planning: Planning = {
@@ -104,20 +91,15 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
           </Form.Group>
         </Col>
       </Row>
-        <Tabs
-          id="controlled-tab"
-          activeKey={key}
-          onSelect={(k: any) => setKey(k)}
-          className="mb-3"
-        >
-          {month.map((month, index) => {
+        
+          {plannings.map((month, index) => {
             return (
-              <Tab eventKey={index} title={month} >
+  
                   <EditPlanningTab index={index} onHandleUpdate={onUpdateItem}></EditPlanningTab>
-              </Tab>
+
             )
           })}
-        </Tabs>
+
 
       <div
         style={{
@@ -135,6 +117,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
         >
           Editar
         </Button>
+        <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningCost()])}>Adicionar Linha</Button>
       </div>
     </div>
   </Modal.Body>
