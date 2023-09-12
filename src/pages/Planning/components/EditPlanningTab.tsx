@@ -51,7 +51,7 @@ export function EditPlanningTab({
 }, [administrative, arla, restaurant,conservation,diesel,gas,labor,maintenance,others,outsourced,rent,storage]);
 
 useEffect(() => {
-  
+    
 }, [planning])
 
 
