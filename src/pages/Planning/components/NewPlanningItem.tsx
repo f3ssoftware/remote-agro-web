@@ -48,7 +48,7 @@ export function NewPlanningItem({
       p.pms = pms
       p.seed_quantity_type = seedQuantityType
     } else {
-      p.product_id = productId.toString()
+      p.product_id = productId
     }
 
     onHandleUpdate(p, index)
@@ -181,7 +181,7 @@ export function NewPlanningItem({
         )}
       </Row>
       <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
-        {!isSeed ? (
+        {isSeed ? (
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="">

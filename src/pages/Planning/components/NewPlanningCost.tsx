@@ -72,7 +72,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
               {seasons.seasons.map((season, index) => {
                 return (
                   <option value={season.year} key={index}>
-                    {season.year}
+                    {season.type} - {season.year}
                   </option>
                 )
               })}

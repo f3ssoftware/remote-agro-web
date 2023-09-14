@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Planning } from '../../../models/Planning'
 import {
-  asyncFetchEditPlannings,
   asyncNewPlannings,
 } from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
@@ -100,7 +99,7 @@ export function EditPlanningCost({
                   {seasons.seasons.map((season, index) => {
                     return (
                       <option value={season.year} key={index}>
-                        {season.year}
+                        {season.type} - {season.year}
                       </option>
                     )
                   })}

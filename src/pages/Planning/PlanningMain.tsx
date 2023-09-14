@@ -14,6 +14,7 @@ import planningImg from '../../assets/images/planning_image.png'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   asyncDeletePlanning,
+  asyncFetchEditPlanningProducts,
   asyncFetchEditPlannings,
   asyncFetchPlanningData,
 } from '../../stores/planning.store'
@@ -60,8 +61,13 @@ export function PlanningMain() {
   //   dispatch(asyncDeletePlanning(id))
   //   dispatch(asyncFetchPlanningData)
   // }
-  const editPlanning = (id: number) => {
+  const editPlanningCost = (id: number) => {
     dispatch(asyncFetchEditPlannings(id))
+    
+  }
+  const editPlanningProduct = (id: number) => {
+    dispatch(asyncFetchEditPlanningProducts(id))
+    
   }
 
   return (
@@ -112,13 +118,14 @@ export function PlanningMain() {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(planning.id)
-                              editPlanning(planning.id!)
                               setEditPlanningId(planning.id!)
                               {
                                 planning.type == 'Custos Indiretos' ? (
-                                  setShowPlanningCostModal(true)
+                                  setShowPlanningCostModal(true),
+                                  editPlanningCost(planning?.id!)
                                 ) : planning.type == 'Insumos' ? (
-                                  setShowPlanningProductModal(true)
+                                  setShowPlanningProductModal(true),
+                                  editPlanningProduct(planning?.id!)
                                 ) : (
                                   <></>
                                 )

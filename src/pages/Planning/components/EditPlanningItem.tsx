@@ -28,12 +28,12 @@ export function EditPlanningItem({
   const [userHasProduct, setUserHasProduct] = useState(false)
   const [userProductId, setUserProductId] = useState(0)
   const [isSeed, setIsSeed] = useState(false)
-  const { input } = useSelector((state: RootState) => state)
   const [totalCost, setTotalCost] = useState(0)
   const [seedQuantityType, setSeedQuantityType] = useState('')
   const [treatment, setTreatment] = useState('NÃO TRATADA')
   const [pms, setPms] = useState('')
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<any>()
+  const { planning, input } = useSelector((state: RootState) => state)
 
   useEffect(() => {
     const p: PlanningInput = {
@@ -48,15 +48,46 @@ export function EditPlanningItem({
       p.pms = pms
       p.seed_quantity_type = seedQuantityType
     } else {
-      p.product_id = productId.toString()
+      p.product_id = productId
     }
 
     onHandleUpdate(p, index)
-  }, [productId, measureUnit, observation, quantity, totalCost, payDate, treatment, seedQuantityType])
+  }, [
+    productId,
+    measureUnit,
+    observation,
+    quantity,
+    totalCost,
+    payDate,
+    treatment,
+    seedQuantityType,
+  ])
 
   useEffect(() => {
-    dispatch(asyncFetchInput());
+    dispatch(asyncFetchInput())
   }, [])
+
+  const fillFormEdit = () => {
+    planning.editPlannings?.plannings_products?.map((item: any, index) => {
+      const p: any = input.inputs.filter(
+        (products: any) => products.id === item.product_id,
+      )[0]
+      setProductId(p)
+      setMeasureUnit(item.measure_unit!)
+      setPayDate(new Date(item.payment_date!))
+      setQuantity(item.quantity!)
+      setTotalCost(item.total_price!)
+      setObservation(item.observations!)
+      setSeedQuantityType(item.seed_quantity_type!)
+      setTreatment(item.treatment!)
+      setPms(item.pms!)
+    })
+    setMeasureUnit
+  }
+
+  useEffect(() => {
+    fillFormEdit()
+  }, [planning])
 
   return (
     <div>
@@ -66,6 +97,9 @@ export function EditPlanningItem({
             <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
             <Typeahead
               id="product"
+              selected={input.inputs.filter(
+                (product: any) => product?.id === productId,
+              )}
               onChange={(selected: any) => {
                 if (selected.length > 0) {
                   const p = selected[0]
@@ -74,16 +108,15 @@ export function EditPlanningItem({
                     (i) => i.product?.name === p.label,
                   )
 
-                    setUserProductId(userProducts[0].id!)
-                    setMeasureUnit(userProducts[0].measure_unit!)
-                    if (p?.class === 'SEMENTE') {
-                      setIsSeed(true)
-                    }
-                    setUserHasProduct(false)
-                    setProductId(p.id)
+                  setUserProductId(userProducts[0].id!)
+                  setMeasureUnit(userProducts[0].measure_unit!)
+                  if (p?.class === 'SEMENTE') {
+                    setIsSeed(true)
                   }
-                } 
-              }
+                  setUserHasProduct(false)
+                  setProductId(p.id)
+                }
+              }}
               options={input.generalProductsList.map((input) => {
                 return { id: input.id, label: input?.name, class: input.class }
               })}
@@ -96,6 +129,7 @@ export function EditPlanningItem({
               <Form.Label style={{ color: '#fff' }}>Unidade Medida</Form.Label>
               <Form.Control
                 type="text"
+                value={measureUnit}
                 onChange={(e) => {
                   setMeasureUnit(e.target.value)
                 }}
@@ -121,6 +155,7 @@ export function EditPlanningItem({
             <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
             <Form.Control
               type="number"
+              value={quantity}
               onChange={(e) => {
                 setQuantity(Number(e.target.value))
               }}
@@ -183,7 +218,7 @@ export function EditPlanningItem({
         )}
       </Row>
       <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
-        {!isSeed ? (
+        {isSeed ? (
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="">

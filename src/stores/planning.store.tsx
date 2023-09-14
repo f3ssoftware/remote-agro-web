@@ -132,6 +132,29 @@ export function asyncFetchEditPlannings(id: number) {
     }
     }
 }
+
+export function asyncFetchEditPlanningProducts(id: number) {
+    return async function (dispatch: AppDispatch) {
+        try{
+
+        const results = await axios.get(`https://remoteapi.murilobotelho.com.br/plannings/${id}?type=Insumos&`, {
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+        dispatch(setEditPlannings(results.data));
+    } catch (err: any) {
+        console.log(err);
+        dispatch(
+            getMessages({
+                message: err.response.data.message,
+                type: "error",
+            })
+        );
+    }
+    }
+}
+
 export function asyncFetchTotalPlanningsCosts() {
     return async function (dispatch: AppDispatch) {
         try{

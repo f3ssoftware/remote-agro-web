@@ -21,14 +21,14 @@ export function EditPlanningProducts({
 }) {
   const [referenceName, setReferenceName] = useState('')
   const dispatch = useDispatch<any>()
-  const [plannings, setPlannings] = useState([new PlanningInput()])
+  const [plannings, setPlannings] = useState<any[]>([])
   const { seasons, planning } = useSelector((state: RootState) => state)
-  const [selectedSeason, setSelectedSeason] = useState({ id: 0 })
+  const [selectedSeason, setSelectedSeason] = useState('')
 
   const register = () => {
     const p: Planning = {
       name: referenceName,
-      // season_id: selectedSeason.id,
+      season_year:selectedSeason,
       type: 'Insumos',
       plannings: plannings,
     }
@@ -48,6 +48,12 @@ export function EditPlanningProducts({
     planningsArr.push(planning)
     setPlannings(planningsArr)
   }
+
+  useEffect(() => {
+    setPlannings(planning.editPlannings?.plannings_products!)
+    setSelectedSeason(planning.editPlannings?.season_year!)
+    setReferenceName(planning.editPlannings?.name!)
+  }, [planning])
 
   return (
     <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
@@ -70,6 +76,7 @@ export function EditPlanningProducts({
                 <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
                 <Form.Control
                   type="text"
+                  value={referenceName}
                   onChange={(e) => {
                     setReferenceName(e.target.value)
                   }}
@@ -78,27 +85,27 @@ export function EditPlanningProducts({
             </Col>
             <Col>
               <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>
-                  Selecione a temporada
-                </Form.Label>
-                <Typeahead
-                  id="season"
-                  onChange={(selected: any) => {
-                    if (selected.length > 0) {
-                      setSelectedSeason({ id: selected[0].id })
-                    }
+                <Form.Label>Ano agrícola</Form.Label>
+                <Form.Select
+                  value={selectedSeason}
+                  aria-label=""
+                  onChange={(e) => {
+                    return setSelectedSeason(e.target.value)
                   }}
-                  options={seasons.seasons.map((season) => {
-                    return {
-                      id: season.id,
-                      label: `${season.type} - ${season.year}`,
-                    }
+                >
+                  {' '}
+                  {seasons.seasons.map((season, index) => {
+                    return (
+                      <option value={season.year} key={index}>
+                        {season.type} - {season.year}
+                      </option>
+                    )
                   })}
-                />
+                </Form.Select>
               </Form.Group>
             </Col>
           </Row>
-          {plannings.map((newPlanning, index) => {
+          {plannings?.map((newPlanning, index) => {
             return (
               <EditPlanningItem
                 onHandleRemove={onRemoveItem}

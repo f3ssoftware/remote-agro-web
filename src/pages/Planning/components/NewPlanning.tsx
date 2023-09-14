@@ -22,12 +22,12 @@ export function NewPlanning({
   const dispatch = useDispatch<any>()
   const [plannings, setPlannings] = useState([new PlanningInput()])
   const { seasons } = useSelector((state: RootState) => state)
-  const [selectedSeason, setSelectedSeason] = useState({ id: 0 })
+  const [selectedSeason, setSelectedSeason] = useState('')
 
   const register = () => {
     const p: Planning = {
       name: referenceName,
-      // season_id: selectedSeason.id,
+      season_year: selectedSeason,
       type: 'Insumos',
       plannings: plannings
     }
@@ -64,21 +64,25 @@ const onUpdateItem = (planning: PlanningInput, index: number) => {
           </Form.Group>
         </Col>
         <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Selecione a temporada</Form.Label>
-                  <Typeahead
-                    id="season"
-                    onChange={(selected: any) => {
-                      if (selected.length > 0) {
-                        setSelectedSeason({ id: selected[0].id })
-                      }
-                    }}
-                    options={seasons.seasons.map((season) => {
-                      return { id: season.id, label: `${season.type} - ${season.year}` }
-                    })}
-                  />
-                </Form.Group>
-              </Col>
+              <Form.Group className="mb-3" controlId="">
+                <Form.Label>Ano agrícola</Form.Label>
+                <Form.Select
+                  aria-label=""
+                  onChange={(e) => {
+                    return setSelectedSeason(e.target.value)
+                  }}
+                >
+                  {' '}
+                  {seasons.seasons.map((season, index) => {
+                    return (
+                      <option value={season.year} key={index}>
+                        {season.type} - {season.year}
+                      </option>
+                    )
+                  })}
+                </Form.Select>
+              </Form.Group>
+            </Col>
       </Row>
       {plannings.map((newPlanning, index) => {
             return <NewPlanningItem onHandleRemove={onRemoveItem} index={index} key={index} onHandleUpdate={onUpdateItem}></NewPlanningItem>
