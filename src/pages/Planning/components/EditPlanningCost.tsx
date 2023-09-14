@@ -1,20 +1,32 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Button, Form, Dropdown, Tabs, Tab, Modal } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  Dropdown,
+  Tabs,
+  Tab,
+  Modal,
+} from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Planning } from '../../../models/Planning'
-import { asyncFetchEditPlannings, asyncNewPlannings } from '../../../stores/planning.store'
+import {
+  asyncFetchEditPlannings,
+  asyncNewPlannings,
+} from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
-import {EditPlanningTab} from './EditPlanningTab'
+import { EditPlanningTab } from './EditPlanningTab'
 
 export function EditPlanningCost({
   show,
   handleClose,
-  id
+  id,
 }: {
-  show: boolean,
-  handleClose: any,
+  show: boolean
+  handleClose: any
   id: number
 }) {
   const [referenceName, setReferenceName] = useState('')
@@ -25,103 +37,115 @@ export function EditPlanningCost({
   const { planning } = useSelector((state: RootState) => state)
   const [outcomeYear, setOutcomeYear] = useState('')
 
-
   const edit = () => {
     const planning: Planning = {
-        name: referenceName,
-        season_year: outcomeYear,
-        type: 'Custos Indiretos',
-        plannings: plannings
+      name: referenceName,
+      season_year: outcomeYear,
+      type: 'Custos Indiretos',
+      plannings_indirect_costs: plannings,
     }
-    dispatch(asyncNewPlannings(planning));
-    handleClose();
+    dispatch(asyncNewPlannings(planning))
+    handleClose()
   }
 
   useEffect(() => {
-    setOutcomeYear(planning.editPlannings.season_year!)
-    setReferenceName(planning.editPlannings.name!)
+    setPlannings(planning.editPlannings?.plannings_indirect_costs!)
+    setOutcomeYear(planning.editPlannings?.season_year!)
+    setReferenceName(planning.editPlannings?.name!)
   }, [planning])
 
+  const onUpdateItem = (planning: PlanningCost, index: number) => {
+    const planningArr = [...plannings]
+    planningArr.splice(index, 1)
+    planningArr.push(planning)
+    setPlannings(planningArr)
+  }
 
-const onUpdateItem = (planning: PlanningCost, index: number) => {
-  const planningArr = [...plannings];
-  planningArr.splice(index, 1);
-  planningArr.push(planning);
-  setPlannings(planningArr);
-}
+  return (
+    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
+      <Modal.Header
+        closeButton
+        style={{ backgroundColor: '#7C5529', border: 'none' }}
+      >
+        <Modal.Title>
+          {' '}
+          <span style={{ color: '#fff' }}>
+            Planejamento - {planning.editPlannings.name}
+          </span>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+        <div>
+          <Row style={{ marginTop: '2%' }}>
+            <Col>
+              <Form.Group className="mb-3" controlId="">
+                <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={referenceName}
+                  onChange={(e) => {
+                    setReferenceName(e.target.value)
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3" controlId="">
+                <Form.Label>Ano agrícola</Form.Label>
+                <Form.Select
+                  value={outcomeYear}
+                  aria-label=""
+                  onChange={(e) => {
+                    return setOutcomeYear(e.target.value)
+                  }}
+                >
+                  {' '}
+                  {seasons.seasons.map((season, index) => {
+                    return (
+                      <option value={season.year} key={index}>
+                        {season.year}
+                      </option>
+                    )
+                  })}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
 
-  return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
-            <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
-            <Modal.Title> <span style={{ color: '#fff' }}>Planejamento - {planning.editPlannings.name}</span></Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-    <div>
-      <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
-            <Form.Control
-              type="text"
-              value={referenceName}
-              onChange={(e) => {
-                setReferenceName(e.target.value)
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label>Ano agrícola</Form.Label>
-            <Form.Select
-              value={outcomeYear}
-              aria-label=""
-              onChange={(e) => {
-                return setOutcomeYear(e.target.value)
-              }}
-            >
-              {' '}
-              {seasons.seasons.map((season, index) => {
-                return (
-                  <option value={season.year} key={index}>
-                    {season.year}
-                  </option>
-                )
-              })}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
-        
-          {plannings.map((month, index) => {
+          {plannings?.map((month, index) => {
             return (
-  
-                  <EditPlanningTab index={index} onHandleUpdate={onUpdateItem}></EditPlanningTab>
-
+              <EditPlanningTab
+                index={index}
+                onHandleUpdate={onUpdateItem}
+              ></EditPlanningTab>
             )
           })}
 
-
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: '2%',
-        }}
-      >
-        <Button
-          variant="success"
-          onClick={() => {
-            edit()
-          }}
-        >
-          Editar
-        </Button>
-        <Button variant="primary" onClick={() => setPlannings([...plannings, new PlanningCost()])}>Adicionar Linha</Button>
-      </div>
-    </div>
-  </Modal.Body>
-  </Modal>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: '2%',
+            }}
+          >
+            <Button
+              variant="success"
+              onClick={() => {
+                edit()
+              }}
+            >
+              Editar
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => setPlannings([...plannings, new PlanningCost()])}
+            >
+              Adicionar Linha
+            </Button>
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+  )
 }
-
-

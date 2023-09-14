@@ -14,6 +14,8 @@ export class Planning {
         public createdAt?: string,
         public updatedAt?: string,
         public season?: null,
+        public plannings_indirect_costs?: PlanningCost[],
+        public plannings_products?: PlanningInput[],
         public plannings?: PlanningCost[] | PlanningInput[]
     ) { }
 }

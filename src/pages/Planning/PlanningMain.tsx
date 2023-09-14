@@ -23,6 +23,7 @@ import { PlanningPlotCard } from './components/PlanningPlotCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { EditPlanningCost } from './components/EditPlanningCost'
+import { EditPlanningProducts } from './components/EditPlanningProducts'
 
 const initialPlanningList: Planning[] = []
 export function PlanningMain() {
@@ -33,7 +34,9 @@ export function PlanningMain() {
   const [pageSize, setPageSize] = useState(0)
   const [totalResults, setTotalResults] = useState(0)
   const [page, setPage] = useState(1)
-  const [showPlanningModal, setShowPlanningModal] = useState(false);
+  const [showPlanningCostModal, setShowPlanningCostModal] = useState(false)
+  const [showPlanningProductModal, setShowPlanningProductModal] =
+    useState(false)
   const [editPlanningId, setEditPlanningId] = useState(0)
 
   useEffect(() => {
@@ -57,7 +60,7 @@ export function PlanningMain() {
   //   dispatch(asyncDeletePlanning(id))
   //   dispatch(asyncFetchPlanningData)
   // }
-  const editPlanning = (id: number) =>{
+  const editPlanning = (id: number) => {
     dispatch(asyncFetchEditPlannings(id))
   }
 
@@ -111,7 +114,15 @@ export function PlanningMain() {
                               console.log(planning.id)
                               editPlanning(planning.id!)
                               setEditPlanningId(planning.id!)
-                              {planning.type == 'Custos Indiretos' ? setShowPlanningModal(true) : <></>}
+                              {
+                                planning.type == 'Custos Indiretos' ? (
+                                  setShowPlanningCostModal(true)
+                                ) : planning.type == 'Insumos' ? (
+                                  setShowPlanningProductModal(true)
+                                ) : (
+                                  <></>
+                                )
+                              }
                             }}
                           ></FontAwesomeIcon>
                         </Col>
@@ -165,10 +176,15 @@ export function PlanningMain() {
         handleClose={() => setShowNewPlannningModal(false)}
       ></NewPlanningModal>
       <EditPlanningCost
-        show={showPlanningModal}
-        handleClose={() => setShowPlanningModal(false)}
+        show={showPlanningCostModal}
+        handleClose={() => setShowPlanningCostModal(false)}
         id={editPlanningId}
       ></EditPlanningCost>
+      <EditPlanningProducts
+        show={showPlanningProductModal}
+        handleClose={() => setShowPlanningProductModal(false)}
+        id={editPlanningId}
+      ></EditPlanningProducts>
     </Container>
   )
 }
