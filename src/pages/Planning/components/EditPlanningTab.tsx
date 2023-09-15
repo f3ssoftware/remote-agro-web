@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { PlanningCost } from '../../../models/PlanningCost'
 import { RootState } from '../../..'
 import { useSelector } from 'react-redux'
-import { PlanningInput } from '../../../models/PlanningInput'
+
 
 export function EditPlanningTab({
   index,
@@ -53,7 +53,7 @@ export function EditPlanningTab({
       outsource_amount: outsourced,
       rent_amount: rent,
       storage_amount: storage,
-      year: selectedYear,
+      year: selectedYear
     }
     onHandleUpdate(p, index)
   }, [

@@ -82,35 +82,63 @@ export function asyncNewPlannings(register: Planning) {
   };
 }
 
-export function asyncDeletePlanning(id: number) {
+export function asyncEditPlannings(id:number, update: Planning) {
     return async function (dispatch: AppDispatch) {
         try {
-            const result = await axios.delete(
+            const results = await axios.put(
                 `https://remoteapi.murilobotelho.com.br/plannings/${id}`,
+                update,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                     },
                 }
             );
-            dispatch(asyncFetchPlanningData());
-            dispatch(
-                getMessages({
-                    message: "Planejamento excluído com sucesso",
-                    type: "success",
-                })
-            );
+            dispatch(getMessages({
+              message: "Planejamento atualizado com sucesso",
+              type: "success",
+          }));
         } catch (err: any) {
             console.log(err);
             dispatch(
                 getMessages({
-                    message: err.response.data.message,
+                    message: err.message,
                     type: "error",
                 })
             );
         }
     };
-}
+  }
+
+// export function asyncDeletePlanning(id: number) {
+//     return async function (dispatch: AppDispatch) {
+//         try {
+//             const result = await axios.delete(
+//                 `https://remoteapi.murilobotelho.com.br/plannings/${id}`,
+//                 {
+//                     headers: {
+//                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+//                     },
+//                 }
+//             );
+//             dispatch(asyncFetchPlanningData());
+//             dispatch(
+//                 getMessages({
+//                     message: "Planejamento excluído com sucesso",
+//                     type: "success",
+//                 })
+//             );
+//         } catch (err: any) {
+//             console.log(err);
+//             dispatch(
+//                 getMessages({
+//                     message: err.response.data.message,
+//                     type: "error",
+//                 })
+//             );
+//         }
+//     };
+// }
 export function asyncFetchEditPlannings(id: number) {
     return async function (dispatch: AppDispatch) {
         try{

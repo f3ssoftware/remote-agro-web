@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Planning } from '../../../models/Planning'
 import {
+  asyncEditPlannings,
   asyncNewPlannings,
 } from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
@@ -38,9 +39,9 @@ export function EditPlanningCost({
       name: referenceName,
       season_year: outcomeYear,
       type: 'Custos Indiretos',
-      plannings_indirect_costs: plannings,
+      plannings_indirect_costs: plannings
     }
-    dispatch(asyncNewPlannings(planning))
+    dispatch(asyncEditPlannings(id,planning))
     handleClose()
   }
 

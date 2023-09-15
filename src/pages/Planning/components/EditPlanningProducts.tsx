@@ -7,7 +7,7 @@ import { RootState } from '../../..'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { NewPlanningItem } from './NewPlanningItem'
 import { Planning } from '../../../models/Planning'
-import { asyncNewPlannings } from '../../../stores/planning.store'
+import { asyncEditPlannings, asyncNewPlannings } from '../../../stores/planning.store'
 import { EditPlanningItem } from './EditPlanningItem'
 
 export function EditPlanningProducts({
@@ -30,9 +30,10 @@ export function EditPlanningProducts({
       name: referenceName,
       season_year:selectedSeason,
       type: 'Insumos',
-      plannings: plannings,
+      plannings: plannings
+
     }
-    dispatch(asyncNewPlannings(p))
+    dispatch(asyncEditPlannings(id,p))
     handleClose()
   }
 

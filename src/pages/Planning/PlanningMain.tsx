@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react'
 import planningImg from '../../assets/images/planning_image.png'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  asyncDeletePlanning,
   asyncFetchEditPlanningProducts,
   asyncFetchEditPlannings,
   asyncFetchPlanningData,
