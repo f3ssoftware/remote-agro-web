@@ -1018,7 +1018,7 @@ export function calculateHumidityDiscount(humidity: number, cultivationId: numbe
   return 0;
 }
 
-export function _generatePDF(weighing: any, cultivationsList: any[], silosList: any[], profile: any, contractsList?: any[], farmsList?: any[]): string {
+export function _generatePDF(weighing: any, cultivationsList: any[], profile: any, contractsList?: any[], farmsList?: any[], silosList?: any[]): string {
   const {
     createdAt,
     id,
@@ -1118,6 +1118,16 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
   let fieldName = 'SEM INFORMACAO';
   let cultivarName = 'SEM INFORMACAO';
   if (type === 'Única') {
+    const cultivation = cultivationsList.find(
+      (item: any) => parseInt(cultivation_id) === item.id
+    );
+    cultivationName = cultivation ? cultivation.name : 'SEM INFORMACAO';
+
+    const contract = contractsList?.find(
+      item => parseInt(contract_id) === item.id
+    );
+    contractName = contract ? contract.name : 'SEM INFORMACAO';
+    contractCode = contract ? contract.code : 'SEM CODIGO';
   }
 
   if (type === 'Entrada') {
@@ -1169,7 +1179,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], silosList: 
     );
     cultivationName = cultivation ? cultivation.name : 'SEM INFORMACAO';
 
-    const silo = silosList.find((item: any) => parseInt(silo_id) === item.id);
+    const silo = silosList!.find((item: any) => parseInt(silo_id) === item.id);
     siloName = silo ? silo.name : 'SEM INFORMACAO';
 
     const contract = contractsList?.find(
