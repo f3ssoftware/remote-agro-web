@@ -1,23 +1,16 @@
 import { useEffect, useState } from 'react'
-import {
-  Row,
-  Col,
-  Button,
-  Form,
-  Modal,
-} from 'react-bootstrap'
+import { Row, Col, Button, Form, Dropdown, Modal } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
+import { Typeahead } from 'react-bootstrap-typeahead'
 import { RootState } from '../../..'
+import { PlanningInput } from '../../../models/PlanningInput'
+import { NewPlanningItem } from './NewPlanningItem'
 import { Planning } from '../../../models/Planning'
-import {
-  asyncEditPlannings,
-  asyncNewPlannings,
-} from '../../../stores/planning.store'
-import { PlanningCost } from '../../../models/PlanningCost'
-import { EditPlanningTab } from './EditPlanningTab'
+import { asyncEditPlannings, asyncNewPlannings } from '../../../stores/planning.store'
+import { EditPlanningItem } from './EditPlanningItem'
 
-export function EditPlanningCost({
+export function EditPlanningProducts({
   show,
   handleClose,
   id,
@@ -27,36 +20,41 @@ export function EditPlanningCost({
   id: number
 }) {
   const [referenceName, setReferenceName] = useState('')
-  const [key, setKey] = useState(0)
-  const [plannings, setPlannings] = useState<any[]>([])
   const dispatch = useDispatch<any>()
-  const { seasons } = useSelector((state: RootState) => state)
-  const { planning } = useSelector((state: RootState) => state)
-  const [outcomeYear, setOutcomeYear] = useState('')
+  const [plannings, setPlannings] = useState<any[]>([])
+  const { seasons, planning } = useSelector((state: RootState) => state)
+  const [selectedSeason, setSelectedSeason] = useState('')
 
-  const edit = () => {
-    const planning: Planning = {
+  const register = () => {
+    const p: Planning = {
       name: referenceName,
-      season_year: outcomeYear,
-      type: 'Custos Indiretos',
-      plannings_indirect_costs: plannings
+      season_year:selectedSeason,
+      type: 'Insumos',
+      plannings: plannings
+
     }
-    dispatch(asyncEditPlannings(id,planning))
+    dispatch(asyncEditPlannings(id,p))
     handleClose()
   }
 
+  const onRemoveItem = (index: number) => {
+    const planningsArr = [...plannings]
+    planningsArr.splice(index, 1)
+    setPlannings(planningsArr)
+  }
+
+  const onUpdateItem = (planning: PlanningInput, index: number) => {
+    const planningsArr = [...plannings]
+    planningsArr.splice(index, 1)
+    planningsArr.push(planning)
+    setPlannings(planningsArr)
+  }
+
   useEffect(() => {
-    setPlannings(planning.editPlannings?.plannings_indirect_costs!)
-    setOutcomeYear(planning.editPlannings?.season_year!)
+    setPlannings(planning.editPlannings?.plannings_products!)
+    setSelectedSeason(planning.editPlannings?.season_year!)
     setReferenceName(planning.editPlannings?.name!)
   }, [planning])
-
-  const onUpdateItem = (planning: PlanningCost, index: number) => {
-    const planningArr = [...plannings]
-    planningArr.splice(index, 1)
-    planningArr.push(planning)
-    setPlannings(planningArr)
-  }
 
   return (
     <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
@@ -90,10 +88,10 @@ export function EditPlanningCost({
               <Form.Group className="mb-3" controlId="">
                 <Form.Label>Ano agrícola</Form.Label>
                 <Form.Select
-                  value={outcomeYear}
+                  value={selectedSeason}
                   aria-label=""
                   onChange={(e) => {
-                    return setOutcomeYear(e.target.value)
+                    return setSelectedSeason(e.target.value)
                   }}
                 >
                   {' '}
@@ -108,13 +106,14 @@ export function EditPlanningCost({
               </Form.Group>
             </Col>
           </Row>
-
-          {plannings?.map((month, index) => {
+          {plannings?.map((newPlanning, index) => {
             return (
-              <EditPlanningTab
+              <EditPlanningItem
+                onHandleRemove={onRemoveItem}
                 index={index}
+                key={index}
                 onHandleUpdate={onUpdateItem}
-              ></EditPlanningTab>
+              ></EditPlanningItem>
             )
           })}
 
@@ -127,18 +126,18 @@ export function EditPlanningCost({
             }}
           >
             <Button
-              variant="success"
-              onClick={() => {
-                edit()
-              }}
-            >
-              Editar
-            </Button>
-            <Button
               variant="primary"
-              onClick={() => setPlannings([...plannings, new PlanningCost()])}
+              onClick={() => setPlannings([...plannings, new PlanningInput()])}
             >
               Adicionar Linha
+            </Button>
+            <Button
+              variant="success"
+              onClick={() => {
+                register()
+              }}
+            >
+              Registrar
             </Button>
           </div>
         </div>

@@ -14,6 +14,10 @@ export class PlanningCost {
         public outsource_amount?: number,
         public rent_amount?: number,
         public storage_amount?: number,
-        public year?: string
+        public year?: string,
+        public amount?: string,
+        public key?: string
+
+
     ) { }
 }
