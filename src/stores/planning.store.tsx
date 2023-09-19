@@ -98,6 +98,7 @@ export function asyncEditPlannings(id:number, update: Planning) {
               message: "Planejamento atualizado com sucesso",
               type: "success",
           }));
+          dispatch(asyncFetchPlanningData())
         } catch (err: any) {
             console.log(err);
             dispatch(

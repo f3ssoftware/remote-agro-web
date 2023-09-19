@@ -29,6 +29,9 @@ export function EditPlanningTab({
   const { planning } = useSelector((state: RootState) => state)
   const [selectedMonth, setSelectedMonth] = useState(0)
   const [selectedYear, setSelectedYear] = useState('')
+  const [id,setId] = useState(0)
+  const [key, setKey] = useState('')
+
   const currentYear = new Date().getFullYear()
   const futureYearsCount = 20 // You can adjust this to your desired range.
 
@@ -53,7 +56,9 @@ export function EditPlanningTab({
       outsource_amount: outsourced,
       rent_amount: rent,
       storage_amount: storage,
-      year: selectedYear
+      year: selectedYear,
+      id,
+      key
     }
     onHandleUpdate(p, index)
   }, [
@@ -89,6 +94,7 @@ export function EditPlanningTab({
         setOutsourced(cost.outsource_amount!)
         setSelectedMonth(cost.month!)
         setSelectedYear(cost.year!)
+        setId(cost.id)
       },
     )
   }, [planning])
