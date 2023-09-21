@@ -59,6 +59,11 @@ export function EditPlanningCost({
     planningArr.push(planning)
     setPlannings(planningArr)
   }
+  const onRemoveItem = (index: number) => {
+    const planningsArr = [...plannings]
+    planningsArr.splice(index, 1)
+    setPlannings(planningsArr)
+  }
 
   return (
     <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
@@ -116,6 +121,7 @@ export function EditPlanningCost({
               <EditPlanningTab
                 index={index}
                 onHandleUpdate={onUpdateItem}
+                onHandleRemove={onRemoveItem}
               ></EditPlanningTab>
             )
           })}

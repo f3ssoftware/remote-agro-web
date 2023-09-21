@@ -84,7 +84,6 @@ export function EditPlanningItem({
       setPms(item.pms!)
       setId(item.id!)
     })
-    setMeasureUnit
   }
 
   useEffect(() => {

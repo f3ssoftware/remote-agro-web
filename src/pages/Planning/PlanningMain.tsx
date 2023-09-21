@@ -50,7 +50,7 @@ export function PlanningMain() {
   }, [planning])
 
   const paginate = (page: number) => {
-    const pageSize = 3
+    const pageSize = 4
     setPlannings(
       [...planning.plannings].slice((page - 1) * pageSize, page * pageSize),
     )
