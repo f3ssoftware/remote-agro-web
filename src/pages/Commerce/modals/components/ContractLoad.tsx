@@ -95,6 +95,7 @@ export function ContractLoad() {
                   <th>Valor do contrato</th>
                   <th>Sacas negociadas</th>
                   <th>Sacas entregues</th>
+                  <th>Sacas faltantes</th>
                 </tr>
               </thead>
               <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
@@ -132,6 +133,7 @@ export function ContractLoad() {
                     </td>
                     <td>{selectedContract?.sacks}</td>
                     <td>{selectedContract?.sacks_delivered / 1000}</td>
+                    <td>{selectedContract?.missing_sacks}</td>
                   </tr>
                 ) : (
                   <></>
