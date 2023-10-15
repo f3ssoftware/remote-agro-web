@@ -12,6 +12,7 @@ import { RootState } from '../../..'
 import { Planning } from '../../../models/Planning'
 import {
   asyncEditPlannings,
+  asyncFetchPlanningData,
   asyncNewPlannings,
 } from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
@@ -39,9 +40,10 @@ export function EditPlanningCost({
       name: referenceName,
       season_year: outcomeYear,
       type: 'Custos Indiretos',
-      plannings_indirect_costs: plannings
+      plannings,
     }
     dispatch(asyncEditPlannings(id,planning))
+
     handleClose()
   }
 
@@ -56,6 +58,11 @@ export function EditPlanningCost({
     planningArr.splice(index, 1)
     planningArr.push(planning)
     setPlannings(planningArr)
+  }
+  const onRemoveItem = (index: number) => {
+    const planningsArr = [...plannings]
+    planningsArr.splice(index, 1)
+    setPlannings(planningsArr)
   }
 
   return (
@@ -114,6 +121,7 @@ export function EditPlanningCost({
               <EditPlanningTab
                 index={index}
                 onHandleUpdate={onUpdateItem}
+                onHandleRemove={onRemoveItem}
               ></EditPlanningTab>
             )
           })}

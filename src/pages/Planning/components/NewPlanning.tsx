@@ -73,6 +73,9 @@ const onUpdateItem = (planning: PlanningInput, index: number) => {
                   }}
                 >
                   {' '}
+                  <option value={0} key={0}>
+                        "Selecione um ano agrícola"
+                      </option>
                   {seasons.seasons.map((season, index) => {
                     return (
                       <option value={season.year} key={index}>

@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Form, Dropdown } from 'react-bootstrap'
+import { Row, Col, Form, Dropdown, Button } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { PlanningCost } from '../../../models/PlanningCost'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export function NewPlanningTab({
   index,
   onHandleUpdate,
+  onHandleRemove
 }: {
   index: number
   onHandleUpdate: any
+  onHandleRemove: any
+
 }) {
   const [maintenance, setMaintenance] = useState(0)
   const [diesel, setDiesel] = useState(0)
@@ -477,6 +482,21 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
+        {index !== 0 ? (
+          <Col md={1}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                onHandleRemove(index)
+              }}
+              style={{ marginTop: '45%' }}
+            >
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </div>
   )
