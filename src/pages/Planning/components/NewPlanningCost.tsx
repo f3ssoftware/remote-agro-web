@@ -44,6 +44,12 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
   setPlannings(planningArr);
 }
 
+const onRemoveItem = (index: number) => {
+  const planningsArr = [...plannings]
+  planningsArr.splice(index, 1)
+  setPlannings(planningsArr)
+}
+
   return (
     <>
       <Row style={{ marginTop: '2%' }}>
@@ -85,7 +91,7 @@ const onUpdateItem = (planning: PlanningCost, index: number) => {
           {plannings.map((month, index) => {
             return (
              
-                  <NewPlanningTab index={index} onHandleUpdate={onUpdateItem}></NewPlanningTab>
+                  <NewPlanningTab index={index} onHandleUpdate={onUpdateItem} onHandleRemove={onRemoveItem}></NewPlanningTab>
               
             )
           })}

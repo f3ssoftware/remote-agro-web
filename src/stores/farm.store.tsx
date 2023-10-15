@@ -3,6 +3,7 @@ import { AppDispatch } from "..";
 import axios from "axios";
 import { getMessages } from "./messaging.store";
 import { RegisterPlotDTO } from "../models/dtos/RegisterPlotDTO";
+import { asyncFetchPlots } from "./commerce.store";
 
 const initialSelectedFarm: any = []
 const initialEditPlot: RegisterPlotDTO = {}

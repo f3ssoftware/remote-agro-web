@@ -20,6 +20,7 @@ export function IncomeOthers() {
   const [cultivation, setCultivation] = useState(new Cultivation());
   const [code, setCode] = useState('');
   const naviate = useNavigate();
+  const { loading } = useSelector((state: RootState) => state);
 
   const dispatch = useDispatch<any>();
 
@@ -66,7 +67,7 @@ export function IncomeOthers() {
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label >Código</Form.Label>
-            <Form.Control type="text" onChange={(e) => { return setCode(e.target.value)}} />
+            <Form.Control type="text" onChange={(e) => { return setCode(e.target.value) }} />
           </Form.Group>
         </Col>
       </Row>
@@ -141,7 +142,7 @@ export function IncomeOthers() {
         </Row>
       </Row>
       <div className="flex-right">
-        <Button variant="success" onClick={() => register()}>Registrar</Button>
+        <Button disabled={loading.requests.filter(l => l === 'contracts').length > 0} variant="success" onClick={() => register()}>Registrar</Button>
       </div>
     </div>
   )

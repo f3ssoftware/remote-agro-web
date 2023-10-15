@@ -23,6 +23,8 @@ export function IncomeContracts({ isUpdate, contract }: { isUpdate?: boolean, co
     const [description, setDescription] = useState('');
     const [cultivation, setCultivation] = useState(new Cultivation());
     const dispatch = useDispatch<any>();
+    const { loading } = useSelector((state: RootState) => state);
+
     const navigate = useNavigate();
 
     const register = async () => {
@@ -148,7 +150,7 @@ export function IncomeContracts({ isUpdate, contract }: { isUpdate?: boolean, co
             </Col>
         </Row>
         <div className="flex-right">
-            <Button variant="success" onClick={() => register()}>Registrar</Button>
+            <Button variant="success" disabled={loading.requests.filter(l => l === 'contracts').length > 0} onClick={() => register()}>Registrar</Button>
         </div>
     </div>
 }

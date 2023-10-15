@@ -65,13 +65,13 @@ const financialStore = createSlice({
         setExternalInvoices(state, action) {
             state.externalInvoices = action.payload.sort((a: ExternalInvoice, b: ExternalInvoice) => {
                 if (a.id! < b.id!) {
-                  return -1;
+                    return -1;
                 }
                 if (a.id! > b.id!) {
-                  return 1;
+                    return 1;
                 }
                 return 0;
-              });
+            });
         },
         setContracts(state, action) {
             state.contracts = action.payload
@@ -158,6 +158,7 @@ export function asyncFetchBankAccountsData() {
 export function asyncFetchContractsData() {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('contracts'));
             const result = await axios.get(
                 `https://remoteapi.murilobotelho.com.br/contracts`,
                 {
@@ -167,6 +168,7 @@ export function asyncFetchContractsData() {
                 }
             );
             dispatch(setContracts(result.data));
+            dispatch(popLoading('contracts'));
         } catch (err: any) {
             dispatch(
                 getMessages({
@@ -174,6 +176,7 @@ export function asyncFetchContractsData() {
                     type: "error",
                 })
             );
+            dispatch(popLoading('contracts'));
         }
     };
 }
@@ -181,6 +184,7 @@ export function asyncFetchContractsData() {
 export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fromDate: string, untilDate: string, paymentStatus?: string | null, type?: string | null) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('expenses-and-revenues'));
             const result = await axios.get(`https://remoteapi.murilobotelho.com.br/expenses-and-revenues/`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -195,9 +199,11 @@ export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fr
                 }
             });
             dispatch(setExpensesRevenue(result.data.content));
+            dispatch(popLoading('expenses-and-revenues'));
             return 0;
         } catch (err) {
             console.log(err);
+            dispatch(popLoading('expenses-and-revenues'));
         }
     }
 }
@@ -205,6 +211,7 @@ export function asyncFetchExpensesAndRevenues(page: number, pageSize: number, fr
 export function asyncCreateBankAccount(bankAccountDTO: BankAccountDTO) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('bank-accounts'));
             const result = await axios.post(`https://remoteapi.murilobotelho.com.br/bank-accounts`, bankAccountDTO, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -215,8 +222,10 @@ export function asyncCreateBankAccount(bankAccountDTO: BankAccountDTO) {
                 type: "success",
             }));
             dispatch(asyncFetchBankAccountsData());
+            dispatch(popLoading('bank-accounts'));
         } catch (err) {
             console.log(err);
+            dispatch(popLoading('bank-accounts'));
         }
     }
 }
@@ -224,6 +233,7 @@ export function asyncCreateBankAccount(bankAccountDTO: BankAccountDTO) {
 export function asyncFetchChart() {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('cash-flows'));
             const result = await axios.get(
                 `https://remoteapi.murilobotelho.com.br/cash-flows/graph`,
                 {
@@ -234,6 +244,7 @@ export function asyncFetchChart() {
             );
             console.log('resultados: ', result.data);
             dispatch(setCashFlowChart(result.data));
+            dispatch(popLoading('cash-flows'));
         } catch (err: any) {
             dispatch(
                 getMessages({
@@ -371,6 +382,7 @@ export function asyncConciliateExpense(id: number, seasonId: number) {
 
 export function asyncDeleteExpense(id: number) {
     return async function (dispatch: AppDispatch) {
+        dispatch(pushLoading('expenses-invoices'));
         try {
             const result = await axios.delete(
                 `https://remoteapi.murilobotelho.com.br/expenses-invoices/${id}`,
@@ -392,6 +404,7 @@ export function asyncDeleteExpense(id: number) {
                     type: "success",
                 })
             );
+            dispatch(popLoading('expenses-invoices'));
         } catch (err: any) {
             console.log(err);
             dispatch(
@@ -400,6 +413,7 @@ export function asyncDeleteExpense(id: number) {
                     type: "error",
                 })
             );
+            dispatch(popLoading('expenses-invoices'));
         }
     };
 }
@@ -407,6 +421,7 @@ export function asyncDeleteExpense(id: number) {
 export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('expenses-invoices'))
             const result = await axios.post(
                 `https://remoteapi.murilobotelho.com.br/expenses-invoices`,
                 expense,
@@ -422,6 +437,7 @@ export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
                     type: "success",
                 })
             );
+            dispatch(popLoading('expenses-invoices'))
             const actualYear = new Date().getFullYear();
             const actualMonth = new Date().getMonth();
             dispatch(asyncFetchExpensesAndRevenues(1, 300, new Date(actualYear, actualMonth, 0).toLocaleDateString('pt-BR'), new Date(actualYear, actualMonth + 1, 0).toLocaleDateString('pt-BR')));
@@ -436,6 +452,7 @@ export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
                     type: "error",
                 })
             );
+            dispatch(popLoading('expenses-invoices'))
         }
     };
 }
@@ -443,6 +460,7 @@ export function asyncManualRegisterExpense(expense: ExpenseInvoice) {
 export function asyncRegisterContract(contract: Contract) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('contracts'));
             const result = await axios.post(
                 `https://remoteapi.murilobotelho.com.br/contracts`,
                 contract,
@@ -458,6 +476,7 @@ export function asyncRegisterContract(contract: Contract) {
                     type: "success",
                 })
             );
+            dispatch(popLoading('contracts'));
             return 0;
         } catch (err: any) {
             console.log(err);
@@ -467,6 +486,7 @@ export function asyncRegisterContract(contract: Contract) {
                     type: "error",
                 })
             );
+            dispatch(popLoading('contracts'));
         }
     };
 }
@@ -498,6 +518,7 @@ export function asyncFetchPlannings() {
 export function asyncFetchCultivations() {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('cultivations'));
             const result = await axios.get(
                 `https://remoteapi.murilobotelho.com.br/cultivations`,
                 {
@@ -507,6 +528,7 @@ export function asyncFetchCultivations() {
                 }
             );
             dispatch(setCultivations(result.data));
+            dispatch(popLoading('cultivations'));
         } catch (err: any) {
             console.log(err);
             dispatch(
@@ -515,6 +537,7 @@ export function asyncFetchCultivations() {
                     type: "error",
                 })
             );
+            dispatch(popLoading('cultivations'));
         }
     };
 }
@@ -565,6 +588,7 @@ export function asyncFetchSefaz() {
                 }
             );
             dispatch(setExternalInvoices(result.data));
+            dispatch(popLoading('expenses-invoices-external'))
         } catch (err: any) {
             console.log(err);
             dispatch(
@@ -573,6 +597,7 @@ export function asyncFetchSefaz() {
                     type: "error",
                 })
             );
+            dispatch(popLoading('expenses-invoices-external'))
         }
     };
 }
@@ -581,6 +606,7 @@ export function asyncFetchSefaz() {
 export function asyncLinkCertificate(data: any) {
     return async function (dispatch: AppDispatch) {
         try {
+            dispatch(pushLoading('entities'));
             const result = await axios.post(
                 `https://remoteapi.murilobotelho.com.br/entities`,
                 data,
@@ -596,6 +622,7 @@ export function asyncLinkCertificate(data: any) {
                     type: "success",
                 })
             );
+            dispatch(popLoading('entities'));
         } catch (err: any) {
             console.log(err);
             dispatch(
@@ -604,6 +631,7 @@ export function asyncLinkCertificate(data: any) {
                     type: "error",
                 })
             );
+            dispatch(popLoading('entities'));
         }
     };
 }
@@ -629,6 +657,7 @@ export function asyncFetchExpenseInvoiceById(expense_invoice_id: number) {
                     type: "error",
                 })
             );
+            dispatch(popLoading('expenses-invoices'));
         }
     };
 }
@@ -649,10 +678,10 @@ export function asyncEditExpenseInvoiceById(expense_invoice_id: number, exp: Exp
             dispatch(popLoading('expenses-invoices'));
             dispatch(
                 getMessages({
-                  message: 'Despesa editada com sucesso',
-                  type: 'success',
+                    message: 'Despesa editada com sucesso',
+                    type: 'success',
                 }),
-              )
+            )
         } catch (err: any) {
             dispatch(
                 getMessages({
@@ -660,6 +689,7 @@ export function asyncEditExpenseInvoiceById(expense_invoice_id: number, exp: Exp
                     type: "error",
                 })
             );
+            dispatch(popLoading('expenses-invoices'));
         }
     };
 }

@@ -702,6 +702,7 @@ export function asyncEditContract(id: number, contract: Contract) {
           type: 'success',
         }),
       )
+      dispatch(asyncFetchContractsData())
     } catch (err: any) {
       console.log(err)
       dispatch(

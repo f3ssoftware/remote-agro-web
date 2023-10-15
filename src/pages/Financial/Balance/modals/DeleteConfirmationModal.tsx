@@ -20,13 +20,13 @@ export function DeleteConfirmationModal({
     
     const deleteExpense = (id: number) => {
         dispatch(asyncDeleteExpense(id));
-        dispatch(asyncFetchBankAccountsData);
-        dispatch(asyncFetchExpensesAndRevenues);
+        dispatch(asyncFetchBankAccountsData());
+        // dispatch(asyncFetchExpensesAndRevenues());
     }
 
     const deleteContract = (id2: number) => {
       dispatch(asyncDeleteContract(id2))
-      dispatch(asyncFetchContractsData)
+      dispatch(asyncFetchContractsData())
     }
 
   return (
