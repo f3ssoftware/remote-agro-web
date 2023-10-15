@@ -27,6 +27,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
   const [externalInvoiceId, setExternalInvoiceId] = useState(0);
   const [recurrencyDate, setRecurrencyDate] = useState(new Date());
   const [recurrencyQuantity, setRecurrencyQuantity] = useState(1)
+  const { loading } = useSelector((state: RootState) => state)
 
   useEffect(() => {
     dispatch(asyncFetchPlannings());
@@ -260,7 +261,7 @@ export function OutcomeForm({ costType, costAction, sefaz }: { costType: string,
         {renderPaymentConditionForm()}
       </Row>
       <div className="flex-right">
-        <Button variant="success" onClick={() => {
+        <Button variant="success" disabled={loading.requests.filter(l => l === 'expenses-invoices').length > 0} onClick={() => {
           register();
         }}>Registrar</Button>
       </div>

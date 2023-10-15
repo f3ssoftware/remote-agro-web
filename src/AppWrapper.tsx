@@ -47,7 +47,7 @@ export function AppWrapper() {
         case "financial": return <AppStructure loading={loading.requests.length > 0}>
             <Financial></Financial>
         </AppStructure>;
-        case "input": return <AppStructure loading={false}>
+        case "input": return <AppStructure loading={loading.requests.length > 0}>
             <FarmInput></FarmInput>
         </AppStructure>;
         case "commerce": return <AppStructure loading={loading.requests.length > 0}>
@@ -90,7 +90,7 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
             </Row>
             <Row>
                 {loading ? <Loading></Loading> : <></>}
-                <Col lg={12} md={12}>
+                <Col lg={12} md={12} style={{display: loading ? 'none' : 'block'}}>
                     {children}
                 </Col>
             </Row>

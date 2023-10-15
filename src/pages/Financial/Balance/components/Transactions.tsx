@@ -1,7 +1,7 @@
 import { faCalendar, faEye, faPencil, faPrint, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, InputGroup, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Form, InputGroup, Row, Spinner, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { start } from "repl";
 import { RootState } from "../../../..";
@@ -43,6 +43,7 @@ export function Transactions() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showModalEditContract, setShowModalEditContract] = useState(false);
     const [showModalEditExpense, setShowModalEditExpense] = useState(false);
+    const { loading } = useSelector((state: RootState) => state);
 
     useEffect(() => {
         dispatch(asyncFetchExpensesAndRevenues(1, 300, `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getUTCFullYear()}`, `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getUTCFullYear()}`));
@@ -235,6 +236,11 @@ export function Transactions() {
                             })}
                         </tbody>
                     </Table>
+                    <div style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                        {loading.requests.filter(r => r === 'expenses-and-revenues').length > 0 ? <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner> : <></>}
+                    </div>
                 </div>
             </Card.Body>
         </Card>

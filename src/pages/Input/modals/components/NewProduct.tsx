@@ -25,6 +25,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
     const [products, setProducts] = useState<any[]>([]);
     const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
     const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
+    const [loading, setLoading] = useState(false);
 
     const validateUserProduct = (userProduct: UserProduct, method: string) => {
         let isValid = true;
@@ -101,7 +102,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
         setProducts(productsArr);
     }
 
-    const search = (start: Date,end: Date) => {
+    const search = (start: Date, end: Date) => {
         const invoices = input.invoices.filter((invoice: Invoice) => {
             return new Date(invoice?.due_date!).getTime() >= start.getTime() && new Date(invoice?.due_date!).getTime()! <= end.getTime();
         });
@@ -116,7 +117,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
         if (productsToUpdate.length > 0) {
             dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
         }
-        
+
         handleClose();
 
     }
@@ -194,7 +195,10 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
         })}
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
             <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
-            <Button variant="success" onClick={() => register()}>Registrar</Button>
+            <Button variant="success" onClick={() => {
+                setLoading(true);
+                register()
+            }} disabled={loading}>Registrar</Button>
         </div>
 
     </div>
