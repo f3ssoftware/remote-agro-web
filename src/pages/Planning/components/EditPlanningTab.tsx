@@ -4,14 +4,18 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { PlanningCost } from '../../../models/PlanningCost'
 import { RootState } from '../../..'
 import { useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 
 export function EditPlanningTab({
   index,
   onHandleUpdate,
+  onHandleRemove
 }: {
   index: number
   onHandleUpdate: any
+  onHandleRemove: any
 }) {
   const [maintenance, setMaintenance] = useState(0)
   const [diesel, setDiesel] = useState(0)
@@ -29,6 +33,9 @@ export function EditPlanningTab({
   const { planning } = useSelector((state: RootState) => state)
   const [selectedMonth, setSelectedMonth] = useState(0)
   const [selectedYear, setSelectedYear] = useState('')
+  const [id,setId] = useState(0)
+  const [key, setKey] = useState('')
+
   const currentYear = new Date().getFullYear()
   const futureYearsCount = 20 // You can adjust this to your desired range.
 
@@ -53,7 +60,9 @@ export function EditPlanningTab({
       outsource_amount: outsourced,
       rent_amount: rent,
       storage_amount: storage,
-      year: selectedYear
+      year: selectedYear,
+      id,
+      key
     }
     onHandleUpdate(p, index)
   }, [
@@ -89,6 +98,7 @@ export function EditPlanningTab({
         setOutsourced(cost.outsource_amount!)
         setSelectedMonth(cost.month!)
         setSelectedYear(cost.year!)
+        setId(cost.id)
       },
     )
   }, [planning])
@@ -294,6 +304,21 @@ export function EditPlanningTab({
             />
           </Form.Group>
         </Col>
+        {index !== 0 ? (
+          <Col md={1}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                onHandleRemove(index)
+              }}
+              style={{ marginTop: '45%' }}
+            >
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </div>
   )
