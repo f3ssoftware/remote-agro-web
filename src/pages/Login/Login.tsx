@@ -7,6 +7,8 @@ import { asyncFetchUser } from "../../stores/user.store";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../..";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
 
 export function Login() {
     let navigate = useNavigate();
@@ -31,13 +33,22 @@ export function Login() {
                     }
                 }}>
                     <Form.Group className="mb-2 user-box" controlId="formBasicEmail">
-                        <Form.Label>Usuário</Form.Label>
-                        <Form.Control type="text" onChange={e => setUsername(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} />
+                        <span className="p-float-label">
+                            <InputText style={{ width: '100%' }} value={username} onChange={(e) => setUsername(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} />
+                            <label htmlFor="username">Usuário</label>
+                        </span>
+                        {/* <Form.Label>Usuário</Form.Label>
+                        <Form.Control type="text" onChange={e => setUsername(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} /> */}
                     </Form.Group>
 
                     <Form.Group className="mb-2 password-box" controlId="formBasicPassword">
-                        <Form.Label>Senha</Form.Label>
-                        <Form.Control type="password" onChange={e => setPassword(e.target.value)} />
+                        <span className="p-float-label">
+                            <Password feedback={false} style={{ width: '100%' }} inputStyle={{ width: '100%' }} value={password} onChange={(e) => setPassword(e.target.value)} toggleMask disabled={loading.requests.filter(r => r === 'sessions').length > 0} />
+                            {/* <InputText value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} /> */}
+                            <label htmlFor="username">Senha</label>
+                        </span>
+                        {/* <Form.Label>Senha</Form.Label>
+                        <Form.Control type="password" onChange={e => setPassword(e.target.value)} /> */}
                     </Form.Group>
                 </Form>
                 <div className="square-text">
