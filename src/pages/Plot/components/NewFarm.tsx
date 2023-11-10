@@ -9,6 +9,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
+import { InputNumber } from 'primereact/inputnumber'
 
 export function NewFarm({ handleClose }: { handleClose: any }) {
   const [propName, setPropName] = useState('')
@@ -46,6 +47,7 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2))
             setSubmitting(false)
+            handleClose()
           }, 400)
         }}
       >
@@ -79,36 +81,64 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
                         {formik.errors.propName}
                       </div>
                     ) : null}
-                    <label htmlFor="propName">Nome da propriedade</label>
+                    <label htmlFor="propName" style={{color: 'black'}}>Nome da propriedade</label>
                   </span>
                 </Col>
-              </Row>
-              <Row>
                 <Col>
-                  <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>
-                      Área total (ha)
-                    </Form.Label>
-                    <Form.Control
-                      type="number"
-                      onChange={(e) => {
-                        setTotalArea(Number(e.target.value))
+                <span className="p-float-label">
+                  <InputNumber
+                    id="totalArea"
+                    value={formik.values.totalArea}
+                    onValueChange={(e) => {
+                      formik.setFieldValue("totalArea", e.target.value);
+                      setTotalArea(Number(e.value));
+                    }}
+                    className={classNames({
+                      "p-invalid":
+                        formik.touched.totalArea && formik.errors.totalArea,
+                    })}
+                  />
+                  {formik.touched.totalArea && formik.errors.totalArea ? (
+                    <div
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        fontFamily: "Roboto",
                       }}
-                    />
-                  </Form.Group>
+                    >
+                      {formik.errors.totalArea}
+                    </div>
+                  ) : null}
+                  <label htmlFor="totalArea" style={{color: 'black'}}>Area total (ha)</label>
+                </span>
                 </Col>
                 <Col>
-                  <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>
-                      Quantidade de talhões
-                    </Form.Label>
-                    <Form.Control
-                      type="number"
-                      onChange={(e) => {
-                        setQuantity(Number(e.target.value))
+                <span className="p-float-label">
+                  <InputNumber
+                    id="quantity"
+                    value={formik.values.quantity}
+                    onValueChange={(e) => {
+                      formik.setFieldValue("quantity", e.target.value);
+                      setQuantity(Number(e.value));
+                    }}
+                    className={classNames({
+                      "p-invalid":
+                        formik.touched.quantity && formik.errors.quantity,
+                    })}
+                  />
+                  {formik.touched.quantity && formik.errors.quantity ? (
+                    <div
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        fontFamily: "Roboto",
                       }}
-                    />
-                  </Form.Group>
+                    >
+                      {formik.errors.quantity}
+                    </div>
+                  ) : null}
+                  <label htmlFor="quantity" style={{color: 'black'}}>Quantidade de talhões</label>
+                </span>
                 </Col>
               </Row>
               <div
