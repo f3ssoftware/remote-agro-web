@@ -169,3 +169,4 @@ export function asyncEditPlot(id: number, editRequestBody: RegisterPlotDTO) {
       }
     }
   }
+
