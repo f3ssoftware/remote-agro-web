@@ -27,6 +27,7 @@ export function EditPlanningItem({
   const [observation, setObservation] = useState('')
   const [userHasProduct, setUserHasProduct] = useState(false)
   const [userProductId, setUserProductId] = useState(0)
+  const [id, setId] = useState(0)
   const [isSeed, setIsSeed] = useState(false)
   const [totalCost, setTotalCost] = useState(0)
   const [seedQuantityType, setSeedQuantityType] = useState('')
@@ -42,13 +43,13 @@ export function EditPlanningItem({
       quantity: quantity,
       total_price: totalCost,
       payment_date: payDate.toISOString(),
+      product_id: productId,
+      id: id
     }
     if (isSeed) {
       p.treatment = treatment
       p.pms = pms
       p.seed_quantity_type = seedQuantityType
-    } else {
-      p.product_id = productId
     }
 
     onHandleUpdate(p, index)
@@ -69,10 +70,10 @@ export function EditPlanningItem({
 
   const fillFormEdit = () => {
     planning.editPlannings?.plannings_products?.map((item: any, index) => {
-      const p: any = input.inputs.filter(
-        (products: any) => products.id === item.product_id,
-      )[0]
-      setProductId(p)
+      // const p: any = input.inputs.filter(
+      //   (products: any) => products.id === item.product_id,
+      // )[0]
+      // setProductId(p)
       setMeasureUnit(item.measure_unit!)
       setPayDate(new Date(item.payment_date!))
       setQuantity(item.quantity!)
@@ -81,8 +82,8 @@ export function EditPlanningItem({
       setSeedQuantityType(item.seed_quantity_type!)
       setTreatment(item.treatment!)
       setPms(item.pms!)
+      setId(item.id!)
     })
-    setMeasureUnit
   }
 
   useEffect(() => {
@@ -97,9 +98,9 @@ export function EditPlanningItem({
             <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
             <Typeahead
               id="product"
-              selected={input.inputs.filter(
-                (product: any) => product?.id === productId,
-              )}
+              // selected={input.inputs.filter(
+              //   (product: any) => product?.id === productId,
+              // )}
               onChange={(selected: any) => {
                 if (selected.length > 0) {
                   const p = selected[0]

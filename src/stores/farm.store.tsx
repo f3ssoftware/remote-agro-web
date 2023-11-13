@@ -3,6 +3,8 @@ import { AppDispatch } from "..";
 import axios from "axios";
 import { getMessages } from "./messaging.store";
 import { RegisterPlotDTO } from "../models/dtos/RegisterPlotDTO";
+import { asyncFetchPlots } from "./commerce.store";
+import { Farm } from "../models/Farm";
 
 const initialSelectedFarm: any = []
 const initialEditPlot: RegisterPlotDTO = {}
@@ -110,6 +112,34 @@ export function asyncRegisterField(requestBody: RegisterPlotDTO) {
         }
     };
 }
+export function asyncRegisterFarm(requestBody: Farm) {
+    return async function (dispatch: AppDispatch) {
+        try {
+            await axios.post(
+                `https://remoteapi.murilobotelho.com.br/farms`,
+                requestBody,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(
+                getMessages({
+                    message: 'Fazenda registrada com sucesso',
+                    type: "success",
+                })
+            );
+        } catch (err: any) {
+            dispatch(
+                getMessages({
+                    message: err.response.data.message,
+                    type: "error",
+                })
+            );
+        }
+    };
+}
 export function asyncEditPlot(id: number, editRequestBody: RegisterPlotDTO) {
     return async function (dispatch: AppDispatch) {
       try {
@@ -139,3 +169,4 @@ export function asyncEditPlot(id: number, editRequestBody: RegisterPlotDTO) {
       }
     }
   }
+

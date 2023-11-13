@@ -16,7 +16,8 @@ export class PlanningCost {
         public storage_amount?: number,
         public year?: string,
         public amount?: string,
-        public key?: string
+        public key?: string,
+        public id?: number
 
 
     ) { }
