@@ -11,9 +11,11 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Installments } from "./Installments";
 import { MensalExpense } from "./MensalExpense";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../..";
 import { ExpenseInvoice } from "../../../../models/ExpenseInvoice";
+import { useNavigate } from "react-router-dom";
+import { asyncManualRegisterExpense } from "../../../../stores/financial.store";
 
 interface Type {
   name: string;
@@ -45,6 +47,8 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
     { name: "Sem necessidade de pagamento", code: "none" },
   ];
   const { financial, seasons } = useSelector((state: RootState) => state);
+  const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
 
   const planninglist: Planning[] = [
     // financial.plannings.map((plannings)=>{return{ name: plannings.name, id: plannings.id}})
@@ -67,6 +71,8 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
       external_expenses_invoice_id: externalInvoiceId,
       observations: observation,
     }
+
+    console.log(exp);
 
     switch (paymentMethod) {
       case 'one_time': {
@@ -164,7 +170,6 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
           reference: "",
           outcomeYear: "",
           number: null,
-          planning: null,
           amount: null,
           paymentMethod: "",
         }}
@@ -174,14 +179,13 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
           paymentMethod: Yup.string().required("Necessário preencher"),
           number: Yup.string().required("Necessário preencher"),
           amount: Yup.string().required("Necessário preencher"),
-          planning: Yup.string().required("Necessário preencher"),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-          // register();
+          // setTimeout(() => {
+          //   alert(JSON.stringify(values, null, 2));
+          //   setSubmitting(false);
+          // }, 400);
+          register();
         }}
       >
         {(formik) => (
@@ -294,6 +298,7 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
               <div className="field col-12">
                 <span className="p-float-label">
                   <InputTextarea
+                    value={observation}
                     id="description"
                     onChange={(e) => setObservation(e.target.value)}
                     style={{ width: '100%' }}
@@ -336,22 +341,18 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
               </div>
               <div className="field col-6">
                 <Dropdown
-                  value={formik.values.planning}
+                  value={plan}
                   onChange={(e) => {
                     formik.setFieldValue("planning", e.target.value);
                     setPlan(e.target.value);
                   }}
-                  className={classNames({
-                    "p-invalid":
-                      formik.touched.planning && formik.errors.planning,
-                  })}
                   options={financial.plannings}
                   optionLabel="name"
                   optionValue="id"
                   placeholder="Vincular Planejamento"
                   style={{ width: '100%' }}
                 />
-                {formik.touched.planning && formik.errors.planning ? (
+                {/* {formik.touched.planning && formik.errors.planning ? (
                   <div
                     style={{
                       color: "red",
@@ -361,7 +362,7 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
                   >
                     {formik.errors.planning}
                   </div>
-                ) : null}
+                ) : null} */}
               </div>
             </div>
             <div
@@ -403,7 +404,7 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
               className="formgrid grid"
               style={{ marginTop: "2%", justifyContent: "center" }}
             >
-              <div className="col-12 md:col-3">
+              <div className="flex justify-content-end">
                 <Button
                   type="submit"
                   label="Registrar"
@@ -417,16 +418,5 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
       </Formik>
     </div>
   );
-}
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}
-
-function asyncManualRegisterExpense(exp: ExpenseInvoice): any {
-  throw new Error("Function not implemented.");
-}
-
-function navigate(arg0: string) {
-  throw new Error("Function not implemented.");
 }
 
