@@ -66,6 +66,25 @@ export function NewPlot() {
     setSendCultivars(newSendCultivar)
   }
 
+  const register = () => {
+  const requestBody: RegisterPlotDTO = {
+    farm_id: farm.selectedFarm.id,
+    planting_type: plantingType,
+    planting_date: plantingDate.toISOString(),
+    total_area: weigh,
+    cultivares: sendCultivars,
+    productivity,
+    season_id: seasons.selectedSeason.id,
+    is_active: active,
+    name: propName,
+    expected_unit_price: value,
+    cultivation_id: cultivation.id,
+    expenses_weight: weigh,
+    cultivation_name: cultivation.name,
+  }
+  dispatch(asyncRegisterField(requestBody))
+}
+
   useEffect(() => {
     dispatch(asyncFetchCultivations())
   }, [])
@@ -80,7 +99,7 @@ export function NewPlot() {
           value: null,
           cultivation: '',
           weigh: null,
-          plantingDate: []
+          plantingDate: [],
         }}
         validationSchema={Yup.object({
           propName: Yup.string().required('Necessário preencher'),
@@ -92,10 +111,7 @@ export function NewPlot() {
           plantingDate: Yup.string().required('Necessário preencher'),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-            setSubmitting(false)
-          }, 400)
+          register();
         }}
       >
         {(formik) => (
@@ -140,8 +156,7 @@ export function NewPlot() {
                       setTotalArea(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid':
-                        formik.touched.weigh && formik.errors.weigh,
+                      'p-invalid': formik.touched.weigh && formik.errors.weigh,
                     })}
                   />
                   {formik.touched.weigh && formik.errors.weigh ? (
@@ -268,7 +283,7 @@ export function NewPlot() {
             </Row>
             <Row>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <InputNumber
                     id="weigh"
                     value={formik.values.weigh}
@@ -277,8 +292,7 @@ export function NewPlot() {
                       setTotalArea(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid':
-                        formik.touched.weigh && formik.errors.weigh,
+                      'p-invalid': formik.touched.weigh && formik.errors.weigh,
                     })}
                   />
                   {formik.touched.weigh && formik.errors.weigh ? (
@@ -296,14 +310,16 @@ export function NewPlot() {
                 </span>
               </Col>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <Calendar
                     onChange={(e: any) => {
-                      formik.setFieldValue("plantingDate", e.target.value);
-                      setPlantingDate(e.value!);
+                      formik.setFieldValue('plantingDate', e.target.value)
+                      setPlantingDate(e.value!)
                     }}
                     className={classNames({
-                      "p-invalid": formik.touched.plantingDate && formik.errors.plantingDate,
+                      'p-invalid':
+                        formik.touched.plantingDate &&
+                        formik.errors.plantingDate,
                     })}
                     locale="en"
                     dateFormat="dd/mm/yy"
@@ -311,9 +327,9 @@ export function NewPlot() {
                   {formik.touched.plantingDate && formik.errors.plantingDate ? (
                     <div
                       style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
                       {formik.errors.plantingDate}
@@ -344,25 +360,7 @@ export function NewPlot() {
             <div className="flex-right">
               <Button
                 variant="success"
-                type='submit'
-                onClick={() => {
-                  const requestBody: RegisterPlotDTO = {
-                    farm_id: farm.selectedFarm.id,
-                    planting_type: plantingType,
-                    planting_date: plantingDate.toISOString(),
-                    total_area: weigh,
-                    cultivares: sendCultivars,
-                    productivity,
-                    season_id: seasons.selectedSeason.id,
-                    is_active: active,
-                    name: propName,
-                    expected_unit_price: value,
-                    cultivation_id: cultivation.id,
-                    expenses_weight: weigh,
-                    cultivation_name: cultivation.name,
-                  }
-                  dispatch(asyncRegisterField(requestBody))
-                }}
+                type="submit"
               >
                 Registrar
               </Button>

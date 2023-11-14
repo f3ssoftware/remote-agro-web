@@ -44,11 +44,8 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
           quantity: Yup.string().required('Necessário preencher'),
         })}
         onSubmit={(values, { setSubmitting } ) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-            setSubmitting(false)
-            handleClose()
-          }, 400)
+          register()
+          handleClose()
         }}
       >
         {(formik) => (
@@ -152,9 +149,6 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
                 <Button
                   variant="success"
                   type='submit'
-                  onClick={() => {
-                    register()
-                  }}
                 >
                   Cadastrar
                 </Button>
