@@ -237,34 +237,25 @@ export function NewPlot() {
             </Row>
             <Row>
               <Col>
-                <Dropdown
-                  value={formik.values.cultivation}
-                  onChange={(e) => {
-                    formik.setFieldValue('cultivation', e.target.value)
-                    setCultivation(e.target.value)
-                  }}
-                  className={classNames({
-                    'p-invalid':
-                      formik.touched.cultivation && formik.errors.cultivation,
-                  })}
-                  optionLabel="name"
-                  optionValue="id"
-                  placeholder="Cultivo"
-                  options={financial.cultivations}
-                />
-                {formik.touched.cultivation && formik.errors.cultivation ? (
-                  <div
-                    style={{
-                      color: 'red',
-                      fontSize: '12px',
-                      fontFamily: 'Roboto',
+                <Form.Group className="mb-3" controlId="">
+                  <Form.Label style={{ color: 'black' }}>Cultivo</Form.Label>
+                  <Typeahead
+                    id="cultivation"
+                    onChange={(selected: any) => {
+                      setCultivation(selected[0])
                     }}
-                  >
-                    {formik.errors.cultivation}
-                  </div>
-                ) : null}
+                    options={financial.cultivations.map(
+                      (cultivation: Cultivation) => {
+                        return {
+                          id: cultivation.id,
+                          label: cultivation.name,
+                          ...cultivation,
+                        }
+                      },
+                    )}
+                  />
+                </Form.Group>
               </Col>
-              <Col></Col>
               <Col>
                 <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>Cultivares</Form.Label>
