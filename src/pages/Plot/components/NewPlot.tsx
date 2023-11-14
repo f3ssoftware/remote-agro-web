@@ -67,23 +67,23 @@ export function NewPlot() {
   }
 
   const register = () => {
-  const requestBody: RegisterPlotDTO = {
-    farm_id: farm.selectedFarm.id,
-    planting_type: plantingType,
-    planting_date: plantingDate.toISOString(),
-    total_area: weigh,
-    cultivares: sendCultivars,
-    productivity,
-    season_id: seasons.selectedSeason.id,
-    is_active: active,
-    name: propName,
-    expected_unit_price: value,
-    cultivation_id: cultivation.id,
-    expenses_weight: weigh,
-    cultivation_name: cultivation.name,
+    const requestBody: RegisterPlotDTO = {
+      farm_id: farm.selectedFarm.id,
+      planting_type: plantingType,
+      planting_date: plantingDate.toISOString(),
+      total_area: weigh,
+      cultivares: sendCultivars,
+      productivity,
+      season_id: seasons.selectedSeason.id,
+      is_active: active,
+      name: propName,
+      expected_unit_price: value,
+      cultivation_id: cultivation.id,
+      expenses_weight: weigh,
+      cultivation_name: cultivation.name,
+    }
+    dispatch(asyncRegisterField(requestBody))
   }
-  dispatch(asyncRegisterField(requestBody))
-}
 
   useEffect(() => {
     dispatch(asyncFetchCultivations())
@@ -111,7 +111,7 @@ export function NewPlot() {
           plantingDate: Yup.string().required('Necessário preencher'),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          register();
+          register()
         }}
       >
         {(formik) => (
@@ -264,21 +264,25 @@ export function NewPlot() {
                   </div>
                 ) : null}
               </Col>
+              <Col></Col>
               <Col>
-                {cultivation?.cultivares?.map(
-                  (cultivar: Cultivar, index: number) => {
-                    return (
-                      <CultivarItem
-                        cultivar={cultivar}
-                        index={index}
-                        maxArea={weigh}
-                        key={cultivar.id}
-                        onHandleUpdate={onUpdate}
-                        onHandleRemove={onRemove}
-                      ></CultivarItem>
-                    )
-                  },
-                )}
+                <Form.Group className="mb-3" controlId="">
+                  <Form.Label style={{ color: '#fff' }}>Cultivares</Form.Label>
+                  {cultivation?.cultivares?.map(
+                    (cultivar: Cultivar, index: number) => {
+                      return (
+                        <CultivarItem
+                          cultivar={cultivar}
+                          index={index}
+                          maxArea={totalArea}
+                          key={cultivar.id}
+                          onHandleUpdate={onUpdate}
+                          onHandleRemove={onRemove}
+                        ></CultivarItem>
+                      )
+                    },
+                  )}
+                </Form.Group>
               </Col>
             </Row>
             <Row>
@@ -358,10 +362,7 @@ export function NewPlot() {
               </Col>
             </Row>
             <div className="flex-right">
-              <Button
-                variant="success"
-                type="submit"
-              >
+              <Button variant="success" type="submit">
                 Registrar
               </Button>
             </div>
