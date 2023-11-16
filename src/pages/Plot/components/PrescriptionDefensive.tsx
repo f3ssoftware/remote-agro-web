@@ -16,6 +16,14 @@ import * as Yup from 'yup'
 import { Toast } from 'primereact/toast'
 import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
+import { Dropdown } from 'primereact/dropdown'
+import { Calendar } from 'primereact/calendar'
+import { InputNumber } from 'primereact/inputnumber'
+
+interface Type {
+  name: string;
+  value: string;
+}
 
 export function PrescriptionDefensive({
   handleClose,
@@ -29,7 +37,7 @@ export function PrescriptionDefensive({
   const [block, setBlock]: any = useState('')
   const [applicationType, setApplicationType] = useState('Terrestre')
   const [flowRate, setFlowRate] = useState(0)
-  const [pressure, setPressure] = useState(0)
+  const [preassure, setPreassure] = useState(0)
   const [fullSyrup, setFullSyrup] = useState(0)
   const [tankNumbers, setTankNumbers] = useState(0)
   const [tankSyrup, setTankSyrup] = useState(0)
@@ -42,6 +50,23 @@ export function PrescriptionDefensive({
   const { plot, user } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
   const toast = useRef<Toast>(null)
+  const type: Type[] = [
+    { name: "Terrestre", value: "Terrestre" },
+    { name: "Aéreo", value: "Aéreo" },
+    { name: "Fertirrigação", value: "Fertirrigação" },
+  ];
+  const blockType: Type[] = [
+    { name: "LS015", value: "LS015" },
+    { name: "DL015", value: "DL015" },
+    { name: "CN015", value: "CN015" },
+    { name: "XPAIR015", value: "XPAIR015" },
+    { name: "DL0134", value: "DL0134" },
+    { name: "CN01", value: "CN01" },
+    { name: "LS01", value: "LS01" },
+    { name: "LSD0134", value: "LSD0134" },
+    { name: "Micron", value: "Micron" },
+  ];
+
 
   useEffect(() => {
     dispatch(
@@ -193,60 +218,87 @@ export function PrescriptionDefensive({
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
-                  <DatePicker
-                    locale={pt}
-                    dateFormat="dd/MM/yyyy"
-                    selected={dateTime}
-                    onChange={(date: Date) => setDateTime(date)}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Selecione um tipo
-                  </Form.Label>
-                  <Form.Select
-                    aria-label=""
-                    onChange={(e) => {
-                      return setApplicationType(e.target.value)
+              <span className="p-float-label">
+                  <Calendar
+                    onChange={(e: any) => {
+                      formik.setFieldValue('dateTime', e.target.value)
+                      setDateTime(e.value!)
                     }}
-                  >
-                    <option value={'Terrestre'}>Terrestre</option>
-                    <option value={'Aéreo'}>Aéreo</option>
-                    <option value={'Fertirrigação'}>Fertirrigação</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              {applicationType == 'Terrestre' ||
-              applicationType == 'Fertirrigação' ? (
-                <Col>
-                  <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>
-                      Selecione um tipo
-                    </Form.Label>
-                    <Form.Select
-                      aria-label=""
-                      onChange={(e) => {
-                        return setBlock(e.target.value)
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.dateTime &&
+                        formik.errors.dateTime,
+                    })}
+                    locale="en"
+                    dateFormat="dd/mm/yy"
+                  />
+                  {formik.touched.dateTime && formik.errors.dateTime ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
-                      <option value={''}>Selecione um bico</option>
-                      <option value={'DL015'}>DL015</option>
-                      <option value={'LS015'}>LS015</option>
-                      <option value={'CN015'}>CN015</option>
-                      <option value={'XPAIR015'}>XPAIR015</option>
-                      <option value={'DL0134'}>DL0134</option>
-                      <option value={'CN01'}>CN01</option>
-                      <option value={'LS01'}>LS01</option>
-                      <option value={'LSD0134'}>LSD0134</option>
-                      <option value={'Micron'}>Micron</option>
-                    </Form.Select>
-                  </Form.Group>
+                      {formik.errors.dateTime}
+                    </div>
+                  ) : null}
+                  <label htmlFor="date">Data de plantio</label>
+                </span>
+              </Col>
+              <Col>
+              <Dropdown
+                  value={formik.values.applicationType}
+                  onChange={(e) => {
+                    formik.setFieldValue("applicationType", e.target.value);
+                    setApplicationType(e.target.value);
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Selecione um tipo de aplicação"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.applicationType && formik.errors.applicationType ? (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      fontFamily: "Roboto",
+                    }}
+                  >
+                    {formik.errors.applicationType}
+                  </div>
+                ) : null}
+              </Col>
+            </Row>
+            <Row>
+              {applicationType == 'Terrestre' ||
+              applicationType == 'Fertirrigação' ? (
+                <Col>
+                  <Dropdown
+                  value={formik.values.block}
+                  onChange={(e) => {
+                    formik.setFieldValue("block", e.target.value);
+                    setBlock(e.target.value);
+                  }}
+                  options={blockType}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Selecione um bico"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.block && formik.errors.block ? (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      fontFamily: "Roboto",
+                    }}
+                  >
+                    {formik.errors.block}
+                  </div>
+                ) : null}
                 </Col>
               ) : (
                 <div></div>
@@ -254,17 +306,31 @@ export function PrescriptionDefensive({
               {applicationType == 'Terrestre' ||
               applicationType == 'Fertirrigação' ? (
                 <Col>
-                  <Form.Group className="mb-3" controlId="">
-                    <Form.Label style={{ color: '#fff' }}>
-                      Pressão (Pa)
-                    </Form.Label>
-                    <Form.Control
-                      type="number"
-                      onChange={(e) => {
-                        return setPressure(Number(e.target.value))
+                <span className="p-float-label">
+                  <InputNumber
+                    id="preassure"
+                    value={formik.values.preassure}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('preassure', e.target.value)
+                      setPreassure(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.preassure && formik.errors.preassure,
+                    })}
+                  />
+                  {formik.touched.preassure && formik.errors.preassure ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
-                    />
-                  </Form.Group>
+                    >
+                      {formik.errors.preassure}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Pressão (Pa)</label>
+                </span>
                 </Col>
               ) : (
                 <div></div>
@@ -272,62 +338,115 @@ export function PrescriptionDefensive({
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Vazão (L/ha)
-                  </Form.Label>
-                  <Form.Control
-                    type="number"
-                    onChange={(e) => {
-                      return setFlowRate(Number(e.target.value))
+              <span className="p-float-label">
+                  <InputNumber
+                    id="flowRate"
+                    value={formik.values.flowRate}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('flowRate', e.target.value)
+                      setFlowRate(Number(e.value))
                     }}
+                    className={classNames({
+                      'p-invalid': formik.touched.flowRate && formik.errors.flowRate,
+                    })}
                   />
-                </Form.Group>
+                  {formik.touched.flowRate && formik.errors.flowRate ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.flowRate}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Vazão (L/ha)</label>
+                </span>
+                
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Calda total (L)
-                  </Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={fullSyrup}
-                    onChange={(e) => {
-                      return setFullSyrup(Number(e.target.value))
+              <span className="p-float-label">
+                  <InputNumber
+                    id="fullSyrup"
+                    value={formik.values.fullSyrup}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('fullSyrup', e.target.value)
+                      setFullSyrup(Number(e.value))
                     }}
+                    className={classNames({
+                      'p-invalid': formik.touched.fullSyrup && formik.errors.fullSyrup,
+                    })}
                   />
-                </Form.Group>
+                  {formik.touched.fullSyrup && formik.errors.fullSyrup ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.fullSyrup}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Calda total (L)</label>
+                </span>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Nª de tanques
-                  </Form.Label>
-                  <Form.Control
-                    type="number"
-                    onChange={(e) => {
-                      return setTankNumbers(Number(e.target.value))
+              <span className="p-float-label">
+                  <InputNumber
+                    id="tankNumbers"
+                    value={formik.values.tankNumbers}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('tankNumbers', e.target.value)
+                      setTankNumbers(Number(e.value))
                     }}
+                    className={classNames({
+                      'p-invalid': formik.touched.tankNumbers && formik.errors.tankNumbers,
+                    })}
                   />
-                </Form.Group>
+                  {formik.touched.tankNumbers && formik.errors.tankNumbers ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.tankNumbers}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Nª de tanques</label>
+                </span>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Calda/tanque (L)
-                  </Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={tankSyrup}
-                    onChange={(e) => {
-                      return setTankSyrup(Number(e.target.value))
+              <span className="p-float-label">
+                  <InputNumber
+                    id="tankSyrup"
+                    value={formik.values.tankSyrup}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('tankSyrup', e.target.value)
+                      setTankSyrup(Number(e.value))
                     }}
+                    className={classNames({
+                      'p-invalid': formik.touched.tankSyrup && formik.errors.tankSyrup,
+                    })}
                   />
-                </Form.Group>
+                  {formik.touched.tankSyrup && formik.errors.tankSyrup ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.tankSyrup}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Calda/tanque (L)</label>
+                </span>
               </Col>
             </Row>
             <div
@@ -361,7 +480,7 @@ export function PrescriptionDefensive({
         selectedPlot={selectedPlot}
         flowRate={flowRate}
         block={block}
-        pressure={pressure}
+        preassure={preassure}
         tankNumbers={tankNumbers}
         tankSyrup={tankSyrup}
         fullSyrup={fullSyrup}

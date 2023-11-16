@@ -22,7 +22,7 @@ export function DefensivePrescriptionModal({
   selectedPlot,
   flowRate,
   block,
-  pressure,
+  preassure,
   tankNumbers,
   tankSyrup,
   fullSyrup,
@@ -38,7 +38,7 @@ export function DefensivePrescriptionModal({
   selectedPlot: any
   flowRate: number
   block: string
-  pressure: number
+  preassure: number
   tankNumbers: number
   tankSyrup: number
   fullSyrup: number
@@ -78,7 +78,7 @@ export function DefensivePrescriptionModal({
       application_type: applicationType,
       block: block,
       flow_rate: flowRate*1000,
-      pressure: pressure*1000,
+      pressure: preassure*1000,
       number_of_tanks: tankNumbers,
       correct_decimals: true,
       farm_id: selectedFarm.id,
@@ -142,7 +142,7 @@ export function DefensivePrescriptionModal({
           <Col>
             <Row>
               <span style={{ color: '#fff' }}>
-                Pressão: {pressure}
+                Pressão: {preassure}
               </span>
             </Row>
             <Row>
