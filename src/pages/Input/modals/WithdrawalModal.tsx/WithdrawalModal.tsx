@@ -7,6 +7,7 @@ import { UserProduct } from "../../../../models/UserProduct";
 import { asyncAddUserProductToStorage, asyncWithdrawUserProductToStorage } from "../../../../stores/input.store";
 import { NewProduct } from "../components/NewProduct";
 import { WithdrawalProduct } from "../components/WithdrawalProduct";
+import { Dialog } from "primereact/dialog";
 
 let emptyDate: Date;
 export function WithdrawalModal({ show, handleClose }: { show: boolean, handleClose: any }) {
@@ -46,18 +47,27 @@ export function WithdrawalModal({ show, handleClose }: { show: boolean, handleCl
         handleClose();
     }
 
-    return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
-        <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
-            <Modal.Title> <span style={{ color: '#fff' }}>Retirada de estoque</span></Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            {products.map((p, index) => {
-                return <WithdrawalProduct index={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></WithdrawalProduct>
-            })}
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-                <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
-                <Button variant="success" onClick={() => register()}>Registrar</Button>
-            </div>
-        </Modal.Body>
-    </Modal >
+    return <Dialog headerStyle={{backgroundColor: '#7C5529', color: '#FFF'}} contentStyle={{backgroundColor: '#7C5529'}} header="Retirada de estoque" visible={show} style={{ width: '50vw' }} onHide={() => handleClose()}>
+        {products.map((p, index) => {
+            return <WithdrawalProduct index={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></WithdrawalProduct>
+        })}
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
+            <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
+            <Button variant="success" onClick={() => register()}>Registrar</Button>
+        </div>
+    </Dialog>
+    // return <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>
+    //     <Modal.Header closeButton style={{ backgroundColor: "#7C5529", border: 'none' }}>
+    //         <Modal.Title> <span style={{ color: '#fff' }}>Retirada de estoque</span></Modal.Title>
+    //     </Modal.Header>
+    //     <Modal.Body style={{ backgroundColor: "#7C5529" }}>
+    //         {products.map((p, index) => {
+    //             return <WithdrawalProduct index={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></WithdrawalProduct>
+    //         })}
+    //         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
+    //             <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
+    //             <Button variant="success" onClick={() => register()}>Registrar</Button>
+    //         </div>
+    //     </Modal.Body>
+    // </Modal >
 }
