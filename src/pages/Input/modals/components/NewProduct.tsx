@@ -4,12 +4,17 @@ import "./NewProduct.scss";
 import DatePicker from "react-datepicker";
 import pt from 'date-fns/locale/pt-BR';
 import { useDispatch, useSelector } from "react-redux";
-import { asyncAddUserProductToStorage, asyncFetchInvoices, asyncUpdateUserProductOnStorage } from "../../../../stores/input.store";
+import inputStore, { asyncAddUserProductToStorage, asyncFetchInvoices, asyncUpdateUserProductOnStorage } from "../../../../stores/input.store";
 import { RootState } from "../../../..";
 import { Invoice } from "../../../../models/Invoice";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { UserProduct } from "../../../../models/UserProduct";
 import { ProductItem } from "./ProductItem";
+import { Checkbox } from "primereact/checkbox";
+import { InputNumber } from "primereact/inputnumber";
+import { Calendar } from "primereact/calendar";
+import { AutoComplete, AutoCompleteCompleteEvent } from "primereact/autocomplete";
+import { results } from "../../../../utils/results";
 
 let emptyDate: Date;
 const emptyProductList: UserProduct[] = [];
@@ -109,6 +114,11 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
         setInvoices(invoices);
     }
 
+    const autoComplete = (event: AutoCompleteCompleteEvent) => {
+        const resultSet = invoices.filter((invoice) => invoice.reference?.includes(event.query))
+        setInvoices(resultSet);
+    }
+
     const register = () => {
         if (productsToAdd.length > 0) {
             dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
@@ -136,7 +146,15 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
     }, [products])
 
     return <div>
-        <Form.Check
+        <div className="flex align-items-center">
+            <Checkbox inputId="ingredient1" name="linkInvoice" value={linkInvoice} onChange={() => {
+                setLinkInvoice(!linkInvoice);
+                setShowFormLinkInvoice(!linkInvoice);
+                dispatch(asyncFetchInvoices());
+            }} checked={linkInvoice} />
+            <label htmlFor="ingredient1" className="ml-2">Vincular Nota</label>
+        </div>
+        {/* <Form.Check
             style={{ color: '#fff', marginBottom: '2%' }}
             type="switch"
             checked={linkInvoice}
@@ -147,35 +165,68 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
             }}
             id={`default-checkbox`}
             label={`Vincular Nota`}
-        />
+        /> */}
         {showFormLinkInvoice ? <div>
             <Row>
                 <Col>
-                    <Form.Group className="mb-3" controlId="">
+                    <span className="p-float-label">
+                        <Calendar
+                            value={startDate}
+                            onChange={(e: any) => {
+                                setStartDate(e.value!);
+                                search(e.value, endDate)
+                            }}
+                            locale="en"
+                            dateFormat="dd/mm/yy"
+                            style={{ width: '100%' }}
+                        />
+                        <label htmlFor="totalValue">De</label>
+                    </span>
+                    {/* <Form.Group className="mb-3" controlId="">
                         <Form.Label>De</Form.Label>
                         <DatePicker selected={startDate} onChange={(date: any) => {
                             console.log('changing');
                             setStartDate(date);
                             search(date, endDate);
                         }} locale={pt} dateFormat="dd/MM/yyyy" />
-                    </Form.Group>
+                    </Form.Group> */}
 
                 </Col>
                 <Col>
-                    <Form.Group className="mb-3" controlId="">
+                    {/* <Form.Group className="mb-3" controlId="">
                         <Form.Label>Até</Form.Label>
                         <DatePicker selected={endDate} onChange={(date: any) => {
                             setEndDate(date);
                             search(startDate, date);
                         }} locale={pt} dateFormat="dd/MM/yyyy" />
-                    </Form.Group>
+                    </Form.Group> */}
+                    <span className="p-float-label">
+                        <Calendar
+                            value={endDate}
+                            onChange={(e: any) => {
+                                setEndDate(e.value);
+                                search(startDate, e.value);
+                            }}
+                            locale="en"
+                            dateFormat="dd/mm/yy"
+                            style={{ width: '100%' }}
+                            minDate={startDate}
+                        />
+                        <label htmlFor="endDate">Até</label>
+                    </span>
                 </Col>
             </Row>
             <Row>
                 <Col md={3}>
                     <Form.Group className="mb-3" controlId="">
                         <Form.Label>Vinculação de Nota</Form.Label>
-                        <Typeahead
+                        <AutoComplete value={selectedInvoice} suggestions={invoices.map(invoice => `${invoice.number} - ${invoice.reference}`)} completeMethod={autoComplete} onChange={(e) => {
+                            setSelectedInvoice(e.value);
+                            setInvoices(input.invoices);
+                            // setSelectedInvoice()
+                        }} dropdown />
+
+                        {/* <Typeahead
                             id="invoice"
                             onChange={selected => {
                                 if (selected.length > 0) {
@@ -184,7 +235,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                                 }
                             }}
                             options={invoices.map(invoice => { return { ...invoice, label: `${invoice.number} - ${invoice.reference}` }; })}
-                        />
+                        /> */}
                     </Form.Group>
                 </Col>
             </Row>

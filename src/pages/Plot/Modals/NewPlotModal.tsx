@@ -1,7 +1,7 @@
 import { Button, Modal } from 'react-bootstrap'
 import { NewPlot } from '../components/NewPlot'
 import { Dialog } from 'primereact/dialog'
-import '/Users/Mateus Cavalcanti/remote-agro-web/src/pages/Plot/Plot.scss'
+import '../Plot.scss'
 
 export function NewPlotModal({
   show,
