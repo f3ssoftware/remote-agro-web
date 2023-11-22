@@ -4,6 +4,7 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
+import { InputNumber } from 'primereact/inputnumber'
 
 export function NewDefensivePrescription({
   index,
@@ -36,11 +37,11 @@ export function NewDefensivePrescription({
   }, [])
 
   useEffect(() => {
-    setTest((quantity/flowRate)*1000)
+    setTest((quantity / flowRate) * 1000)
   }, [quantity, flowRate])
 
   useEffect(() => {
-    setTank((quantity*area)/tankNumbers)
+    setTank((quantity * area) / tankNumbers)
   }, [quantity, area, tank])
 
   return (
@@ -65,41 +66,40 @@ export function NewDefensivePrescription({
           </Form.Group>
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Qtd/ha (L)</Form.Label>
-            <Form.Control
-              type="number"
+          <span className="p-float-label">
+            <InputNumber
+              id="quantity"
+              value={quantity}
               onChange={(e) => {
-                return setQuantity(Number(e.target.value))
+                return setQuantity(Number(e.value))
               }}
             />
-          </Form.Group>
+            <label htmlFor="quantity">Qtd/ha (L)</label>
+          </span>
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Teste (mL)</Form.Label>
-            <Form.Control
-              type="number"
-              disabled
+        <span className="p-float-label">
+            <InputNumber
+              id="test"
               value={test}
               onChange={(e) => {
-                return setTest(Number(e.target.value))
+                return setTest(Number(e.value))
               }}
             />
-          </Form.Group>
+            <label htmlFor="test">Teste (mL)</label>
+          </span>
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Tanque (L)</Form.Label>
-            <Form.Control
-              type="number"
-              disabled
+        <span className="p-float-label">
+            <InputNumber
+              id="tank"
               value={tank}
               onChange={(e) => {
-                return setTank(Number(e.target.value))
+                return setTank(Number(e.value))
               }}
             />
-          </Form.Group>
+            <label htmlFor="tank">Tanque (L)</label>
+          </span>
         </Col>
       </Row>
     </div>

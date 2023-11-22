@@ -35,6 +35,8 @@ export function PrescriptionModal({
       <Dialog
         header="Receituário"
         visible={show}
+        headerStyle={{backgroundColor: '#7C5529'}} 
+        contentStyle={{backgroundColor: '#7C5529'}} 
         style={{ width: '50vw' }}
         className="custom-dialog"
         onHide={handleClose}

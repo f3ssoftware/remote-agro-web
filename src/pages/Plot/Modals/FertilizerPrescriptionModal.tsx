@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux'
 
 export function FertilizerPrescriptionModal({
   show,
-  handleClose,
   accountable,
   area,
   applier,
@@ -19,7 +18,6 @@ export function FertilizerPrescriptionModal({
   selectedPlot,
 }: {
   show: boolean
-  handleClose: any
   accountable: string
   area: number
   applier: any
@@ -74,7 +72,7 @@ export function FertilizerPrescriptionModal({
           dispatch(asyncPrescriptionTable(request));
   }
   return (
-    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
+    <Modal backdrop={'static'} show={show}  size={'xl'}>
       <Modal.Header
         closeButton
         style={{ backgroundColor: '#7C5529', border: 'none' }}
@@ -147,7 +145,7 @@ export function FertilizerPrescriptionModal({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 onClick={() => {
-                  handleClose()
+                  // handleClose()
                   next()
                   confirm()
                 }}

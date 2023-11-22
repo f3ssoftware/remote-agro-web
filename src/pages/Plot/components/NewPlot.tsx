@@ -110,13 +110,13 @@ export function NewPlot() {
           weigh: Yup.string().required('Necessário preencher'),
           plantingDate: Yup.string().required('Necessário preencher'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={() => {
           register()
         }}
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            <Row>
+            <Row style={{ marginTop: '4%' }}>
               <Col>
                 <span className="p-float-label">
                   <InputText
@@ -174,7 +174,7 @@ export function NewPlot() {
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginTop: '4%' }}>
               <Col>
                 <span className="p-float-label">
                   <InputNumber
@@ -238,7 +238,7 @@ export function NewPlot() {
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: 'black' }}>Cultivo</Form.Label>
+                  <Form.Label style={{ color: 'gray' }}>Cultivo</Form.Label>
                   <Typeahead
                     id="cultivation"
                     onChange={(selected: any) => {

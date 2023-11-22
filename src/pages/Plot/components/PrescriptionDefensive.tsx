@@ -21,8 +21,8 @@ import { Calendar } from 'primereact/calendar'
 import { InputNumber } from 'primereact/inputnumber'
 
 interface Type {
-  name: string;
-  value: string;
+  name: string
+  value: string
 }
 
 export function PrescriptionDefensive({
@@ -51,22 +51,21 @@ export function PrescriptionDefensive({
   const dispatch = useDispatch<any>()
   const toast = useRef<Toast>(null)
   const type: Type[] = [
-    { name: "Terrestre", value: "Terrestre" },
-    { name: "Aéreo", value: "Aéreo" },
-    { name: "Fertirrigação", value: "Fertirrigação" },
-  ];
+    { name: 'Terrestre', value: 'Terrestre' },
+    { name: 'Aéreo', value: 'Aéreo' },
+    { name: 'Fertirrigação', value: 'Fertirrigação' },
+  ]
   const blockType: Type[] = [
-    { name: "LS015", value: "LS015" },
-    { name: "DL015", value: "DL015" },
-    { name: "CN015", value: "CN015" },
-    { name: "XPAIR015", value: "XPAIR015" },
-    { name: "DL0134", value: "DL0134" },
-    { name: "CN01", value: "CN01" },
-    { name: "LS01", value: "LS01" },
-    { name: "LSD0134", value: "LSD0134" },
-    { name: "Micron", value: "Micron" },
-  ];
-
+    { name: 'LS015', value: 'LS015' },
+    { name: 'DL015', value: 'DL015' },
+    { name: 'CN015', value: 'CN015' },
+    { name: 'XPAIR015', value: 'XPAIR015' },
+    { name: 'DL0134', value: 'DL0134' },
+    { name: 'CN01', value: 'CN01' },
+    { name: 'LS01', value: 'LS01' },
+    { name: 'LSD0134', value: 'LSD0134' },
+    { name: 'Micron', value: 'Micron' },
+  ]
 
   useEffect(() => {
     dispatch(
@@ -91,7 +90,7 @@ export function PrescriptionDefensive({
       <Formik
         initialValues={{
           accountable: '',
-          dateTime: [],
+          dateTime:'',
           block: '',
           applicationType: 'Terrestre',
           flowRate: null,
@@ -115,9 +114,9 @@ export function PrescriptionDefensive({
           tankSyrup: Yup.string().required('Necessário preencher'),
           selectedPlot: Yup.string().required('Necessário preencher'),
           selectedApplier: Yup.string().required('Necessário preencher'),
-          area: Yup.string().required('Necessário preencher')
+          area: Yup.string().required('Necessário preencher'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={() => {
           setShowNewPrescriptionModal(true)
         }}
       >
@@ -125,7 +124,7 @@ export function PrescriptionDefensive({
           <form onSubmit={formik.handleSubmit}>
             <Row style={{ marginTop: '2%' }}>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <InputText
                     id="accountable"
                     name="accountable"
@@ -218,7 +217,7 @@ export function PrescriptionDefensive({
             </Row>
             <Row>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <Calendar
                     onChange={(e: any) => {
                       formik.setFieldValue('dateTime', e.target.value)
@@ -226,8 +225,7 @@ export function PrescriptionDefensive({
                     }}
                     className={classNames({
                       'p-invalid':
-                        formik.touched.dateTime &&
-                        formik.errors.dateTime,
+                        formik.touched.dateTime && formik.errors.dateTime,
                     })}
                     locale="en"
                     dateFormat="dd/mm/yy"
@@ -247,11 +245,11 @@ export function PrescriptionDefensive({
                 </span>
               </Col>
               <Col>
-              <Dropdown
+                <Dropdown
                   value={formik.values.applicationType}
                   onChange={(e) => {
-                    formik.setFieldValue("applicationType", e.target.value);
-                    setApplicationType(e.target.value);
+                    formik.setFieldValue('applicationType', e.target.value)
+                    setApplicationType(e.target.value)
                   }}
                   options={type}
                   optionLabel="name"
@@ -259,12 +257,13 @@ export function PrescriptionDefensive({
                   placeholder="Selecione um tipo de aplicação"
                   style={{ width: '100%' }}
                 />
-                {formik.touched.applicationType && formik.errors.applicationType ? (
+                {formik.touched.applicationType &&
+                formik.errors.applicationType ? (
                   <div
                     style={{
-                      color: "red",
-                      fontSize: "12px",
-                      fontFamily: "Roboto",
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
                     }}
                   >
                     {formik.errors.applicationType}
@@ -277,48 +276,18 @@ export function PrescriptionDefensive({
               applicationType == 'Fertirrigação' ? (
                 <Col>
                   <Dropdown
-                  value={formik.values.block}
-                  onChange={(e) => {
-                    formik.setFieldValue("block", e.target.value);
-                    setBlock(e.target.value);
-                  }}
-                  options={blockType}
-                  optionLabel="name"
-                  optionValue="value"
-                  placeholder="Selecione um bico"
-                  style={{ width: '100%' }}
-                />
-                {formik.touched.block && formik.errors.block ? (
-                  <div
-                    style={{
-                      color: "red",
-                      fontSize: "12px",
-                      fontFamily: "Roboto",
+                    value={formik.values.block}
+                    onChange={(e) => {
+                      formik.setFieldValue('block', e.target.value)
+                      setBlock(e.target.value)
                     }}
-                  >
-                    {formik.errors.block}
-                  </div>
-                ) : null}
-                </Col>
-              ) : (
-                <div></div>
-              )}
-              {applicationType == 'Terrestre' ||
-              applicationType == 'Fertirrigação' ? (
-                <Col>
-                <span className="p-float-label">
-                  <InputNumber
-                    id="preassure"
-                    value={formik.values.preassure}
-                    onValueChange={(e) => {
-                      formik.setFieldValue('preassure', e.target.value)
-                      setPreassure(Number(e.value))
-                    }}
-                    className={classNames({
-                      'p-invalid': formik.touched.preassure && formik.errors.preassure,
-                    })}
+                    options={blockType}
+                    optionLabel="name"
+                    optionValue="value"
+                    placeholder="Selecione um bico"
+                    style={{ width: '100%' }}
                   />
-                  {formik.touched.preassure && formik.errors.preassure ? (
+                  {formik.touched.block && formik.errors.block ? (
                     <div
                       style={{
                         color: 'red',
@@ -326,11 +295,42 @@ export function PrescriptionDefensive({
                         fontFamily: 'Roboto',
                       }}
                     >
-                      {formik.errors.preassure}
+                      {formik.errors.block}
                     </div>
                   ) : null}
-                  <label htmlFor="preassure">Pressão (Pa)</label>
-                </span>
+                </Col>
+              ) : (
+                <div></div>
+              )}
+              {applicationType == 'Terrestre' ||
+              applicationType == 'Fertirrigação' ? (
+                <Col>
+                  <span className="p-float-label">
+                    <InputNumber
+                      id="preassure"
+                      value={formik.values.preassure}
+                      onValueChange={(e) => {
+                        formik.setFieldValue('preassure', e.target.value)
+                        setPreassure(Number(e.value))
+                      }}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.preassure && formik.errors.preassure,
+                      })}
+                    />
+                    {formik.touched.preassure && formik.errors.preassure ? (
+                      <div
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
+                        }}
+                      >
+                        {formik.errors.preassure}
+                      </div>
+                    ) : null}
+                    <label htmlFor="preassure">Pressão (Pa)</label>
+                  </span>
                 </Col>
               ) : (
                 <div></div>
@@ -338,7 +338,7 @@ export function PrescriptionDefensive({
             </Row>
             <Row>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <InputNumber
                     id="flowRate"
                     value={formik.values.flowRate}
@@ -347,7 +347,8 @@ export function PrescriptionDefensive({
                       setFlowRate(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid': formik.touched.flowRate && formik.errors.flowRate,
+                      'p-invalid':
+                        formik.touched.flowRate && formik.errors.flowRate,
                     })}
                   />
                   {formik.touched.flowRate && formik.errors.flowRate ? (
@@ -363,10 +364,9 @@ export function PrescriptionDefensive({
                   ) : null}
                   <label htmlFor="preassure">Vazão (L/ha)</label>
                 </span>
-                
               </Col>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <InputNumber
                     id="fullSyrup"
                     value={formik.values.fullSyrup}
@@ -375,7 +375,8 @@ export function PrescriptionDefensive({
                       setFullSyrup(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid': formik.touched.fullSyrup && formik.errors.fullSyrup,
+                      'p-invalid':
+                        formik.touched.fullSyrup && formik.errors.fullSyrup,
                     })}
                   />
                   {formik.touched.fullSyrup && formik.errors.fullSyrup ? (
@@ -395,7 +396,7 @@ export function PrescriptionDefensive({
             </Row>
             <Row>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <InputNumber
                     id="tankNumbers"
                     value={formik.values.tankNumbers}
@@ -404,7 +405,8 @@ export function PrescriptionDefensive({
                       setTankNumbers(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid': formik.touched.tankNumbers && formik.errors.tankNumbers,
+                      'p-invalid':
+                        formik.touched.tankNumbers && formik.errors.tankNumbers,
                     })}
                   />
                   {formik.touched.tankNumbers && formik.errors.tankNumbers ? (
@@ -422,7 +424,7 @@ export function PrescriptionDefensive({
                 </span>
               </Col>
               <Col>
-              <span className="p-float-label">
+                <span className="p-float-label">
                   <InputNumber
                     id="tankSyrup"
                     value={formik.values.tankSyrup}
@@ -431,7 +433,8 @@ export function PrescriptionDefensive({
                       setTankSyrup(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid': formik.touched.tankSyrup && formik.errors.tankSyrup,
+                      'p-invalid':
+                        formik.touched.tankSyrup && formik.errors.tankSyrup,
                     })}
                   />
                   {formik.touched.tankSyrup && formik.errors.tankSyrup ? (

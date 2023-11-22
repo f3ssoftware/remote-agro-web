@@ -43,99 +43,99 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
           totalArea: Yup.string().required('Necessário preencher'),
           quantity: Yup.string().required('Necessário preencher'),
         })}
-        onSubmit={(values, { setSubmitting } ) => {
+        onSubmit={() => {
           register()
           handleClose()
         }}
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            <Row style={{ marginTop: '2%' }}>
+            <Row style={{ marginTop: '4%' }} >
               <Row>
-                <Col>
-                <span className="p-float-label">
+                <Col md="auto">
+                  <span className="p-float-label">
                     <InputText
                       id="propName"
                       name="propName"
                       value={formik.values.propName}
                       onChange={(e) => {
-                        formik.setFieldValue("propName", e.target.value);
-                        setPropName(e.target.value);
+                        formik.setFieldValue('propName', e.target.value)
+                        setPropName(e.target.value)
                       }}
                       className={classNames({
-                        "p-invalid":
+                        'p-invalid':
                           formik.touched.propName && formik.errors.propName,
                       })}
                     />
                     {formik.touched.propName && formik.errors.propName ? (
                       <div
                         style={{
-                          color: "red",
-                          fontSize: "12px",
-                          fontFamily: "Roboto",
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
                         }}
                       >
                         {formik.errors.propName}
                       </div>
                     ) : null}
-                    <label htmlFor="propName" style={{color: 'black'}}>Nome da propriedade</label>
+                    <label htmlFor="propName">Nome da propriedade</label>
                   </span>
                 </Col>
-                <Col>
-                <span className="p-float-label">
-                  <InputNumber
-                    id="totalArea"
-                    value={formik.values.totalArea}
-                    onValueChange={(e) => {
-                      formik.setFieldValue("totalArea", e.target.value);
-                      setTotalArea(Number(e.value));
-                    }}
-                    className={classNames({
-                      "p-invalid":
-                        formik.touched.totalArea && formik.errors.totalArea,
-                    })}
-                  />
-                  {formik.touched.totalArea && formik.errors.totalArea ? (
-                    <div
-                      style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                <Col md='auto'>
+                  <span className="p-float-label">
+                    <InputNumber
+                      id="totalArea"
+                      value={formik.values.totalArea}
+                      onValueChange={(e) => {
+                        formik.setFieldValue('totalArea', e.target.value)
+                        setTotalArea(Number(e.value))
                       }}
-                    >
-                      {formik.errors.totalArea}
-                    </div>
-                  ) : null}
-                  <label htmlFor="totalArea" style={{color: 'black'}}>Area total (ha)</label>
-                </span>
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.totalArea && formik.errors.totalArea,
+                      })}
+                    />
+                    {formik.touched.totalArea && formik.errors.totalArea ? (
+                      <div
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
+                        }}
+                      >
+                        {formik.errors.totalArea}
+                      </div>
+                    ) : null}
+                    <label htmlFor="totalArea">Area total (ha)</label>
+                  </span>
                 </Col>
-                <Col>
-                <span className="p-float-label">
-                  <InputNumber
-                    id="quantity"
-                    value={formik.values.quantity}
-                    onValueChange={(e) => {
-                      formik.setFieldValue("quantity", e.target.value);
-                      setQuantity(Number(e.value));
-                    }}
-                    className={classNames({
-                      "p-invalid":
-                        formik.touched.quantity && formik.errors.quantity,
-                    })}
-                  />
-                  {formik.touched.quantity && formik.errors.quantity ? (
-                    <div
-                      style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                <Col  style={{ marginTop: '4%' }} md="auto">
+                  <span className="p-float-label">
+                    <InputNumber
+                      id="quantity"
+                      value={formik.values.quantity}
+                      onValueChange={(e) => {
+                        formik.setFieldValue('quantity', e.target.value)
+                        setQuantity(Number(e.value))
                       }}
-                    >
-                      {formik.errors.quantity}
-                    </div>
-                  ) : null}
-                  <label htmlFor="quantity" style={{color: 'black'}}>Quantidade de talhões</label>
-                </span>
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.quantity && formik.errors.quantity,
+                      })}
+                    />
+                    {formik.touched.quantity && formik.errors.quantity ? (
+                      <div
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
+                        }}
+                      >
+                        {formik.errors.quantity}
+                      </div>
+                    ) : null}
+                    <label htmlFor="quantity">Quantidade de talhões</label>
+                  </span>
                 </Col>
               </Row>
               <div
@@ -146,10 +146,7 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
                   marginTop: '2%',
                 }}
               >
-                <Button
-                  variant="success"
-                  type='submit'
-                >
+                <Button variant="success" type="submit">
                   Cadastrar
                 </Button>
               </div>

@@ -3,7 +3,6 @@ import { NewPlot } from '../components/NewPlot'
 import { Dialog } from 'primereact/dialog'
 import '/Users/Mateus Cavalcanti/remote-agro-web/src/pages/Plot/Plot.scss'
 
-
 export function NewPlotModal({
   show,
   handleClose,
@@ -11,14 +10,15 @@ export function NewPlotModal({
   show: boolean
   handleClose: any
 }) {
-
   return (
     <Dialog
       header="Cadastro de novo talhão"
       visible={show}
       style={{ width: '50vw' }}
-      className='custom-dialog'
+      className="custom-dialog"
       onHide={handleClose}
+      headerStyle={{ backgroundColor: '#7C5529' }}
+      contentStyle={{ backgroundColor: '#7C5529' }}
     >
       <NewPlot></NewPlot>
     </Dialog>
