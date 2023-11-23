@@ -21,6 +21,11 @@ import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 
+interface Type {
+  name: string
+  value: boolean
+}
+
 const initialCultivars: Cultivar[] = []
 const initialSendCultivars: SendCultivarsDTO[] = []
 export function NewPlot() {
@@ -38,6 +43,10 @@ export function NewPlot() {
   const dispatch = useDispatch<any>()
   const [active, setActive] = useState(false)
   const toast = useRef<Toast>(null)
+  const type: Type[] = [
+    { name: 'Ativo', value: true },
+    { name: 'Inativo', value: false },
+  ]
 
   const onRemove = (id: number) => {
     const newSendCultivar = [...sendCultivars]
@@ -99,7 +108,8 @@ export function NewPlot() {
           value: null,
           cultivation: '',
           weigh: null,
-          plantingDate: [],
+          plantingDate: '',
+          active: null
         }}
         validationSchema={Yup.object({
           propName: Yup.string().required('Necessário preencher'),
@@ -109,6 +119,7 @@ export function NewPlot() {
           cultivation: Yup.string().required('Necessário preencher'),
           weigh: Yup.string().required('Necessário preencher'),
           plantingDate: Yup.string().required('Necessário preencher'),
+          active: Yup.string().required('Necessário preencher'),
         })}
         onSubmit={() => {
           register()
@@ -336,20 +347,30 @@ export function NewPlot() {
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Talhão ativo?
-                  </Form.Label>
-                  <Form.Select
-                    aria-label=""
-                    onChange={(e) => {
-                      return setActive(Boolean(e.target.value))
+              <Dropdown
+                  value={formik.values.active}
+                  onChange={(e) => {
+                    formik.setFieldValue('active', e.target.value)
+                    setActive(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Talhão ativo?"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.active &&
+                formik.errors.active ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
                     }}
                   >
-                    <option data-value={true}>Ativo</option>
-                    <option data-value={false}>Inativo</option>
-                  </Form.Select>
-                </Form.Group>
+                    {formik.errors.active}
+                  </div>
+                ) : null}
               </Col>
             </Row>
             <div className="flex-right">
