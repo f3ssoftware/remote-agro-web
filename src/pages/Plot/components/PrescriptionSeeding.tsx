@@ -23,6 +23,7 @@ import { classNames } from 'primereact/utils'
 import { Calendar } from 'primereact/calendar'
 import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
 
 interface Type {
   name: string
@@ -58,6 +59,9 @@ export function PrescriptionSeeding({
     { name: 'Sim', value: 'Sim' },
     { name: 'Não', value: 'Não' },
   ]
+  const [products, setProducts] = useState<any[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<any>();
+
 
   useEffect(() => {
     dispatch(
@@ -68,6 +72,11 @@ export function PrescriptionSeeding({
     dispatch(asyncFetchApplicationData())
     dispatch(asyncFetchInput())
   }, [])
+
+  const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = input.generalProductsList.filter(product => product.name.includes(event.query));
+    setProducts(resultSet);
+}
 
   // const next = () => {
   //   const seeding: Application = {
@@ -269,7 +278,28 @@ export function PrescriptionSeeding({
               </Col>
               {fertilizing == 'Sim' ? (
                 <>
-                  <Col>
+                <Col>
+                <span className="p-float-label">
+                    <AutoComplete field="name" value={selectedProduct} suggestions={products} completeMethod={autoComplete} onChange={(e: any) => {
+                        setSelectedProduct(e.value);
+
+                        // const userProducts = input.inputs.filter(i => i.product?.name === e.value.name)
+                        // if (userProducts.length > 0) {
+                        //     setUserHasProduct(true);
+                        //     setUserProductId(userProducts[0].id!);
+                        //     setMeasureUnit(userProducts[0].measure_unit!);
+                        // } else if (e.value instanceof Object) {
+                        //     if (e.value?.class === 'SEMENTE') {
+                        //         setIsSeed(true);
+                        //     }
+                        //     setUserHasProduct(false);
+                        //     setProductId(e.value?.id!);
+                        // }
+                    }} dropdown />
+                    <label htmlFor="product">Produto</label>
+                </span>
+            </Col>
+                  {/* <Col>
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>
                         Produtos
@@ -291,7 +321,7 @@ export function PrescriptionSeeding({
                           })}
                       />
                     </Form.Group>
-                  </Col>
+                  </Col> */}
                   <Col>
                     <span className="p-float-label">
                       <InputNumber
