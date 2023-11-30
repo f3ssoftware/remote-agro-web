@@ -36,7 +36,7 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
         dispatch(asyncFetchInput());
     }, [])
 
-    return <div>
+    return <div style={{ marginTop: '5%' }}>
         <Row>
             <Col md={6}>
                 <span className="p-float-label">
@@ -48,7 +48,7 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
                         if (e.value instanceof Object) {
                             setSelectedProduct(e.value);
                         }
-                    }} dropdown style={{ width: '100%' }} />
+                    }} dropdown style={{ width: '100%' }} forceSelection />
                     <label htmlFor="endDate">Produto</label>
                 </span>
                 {/* <Form.Group className="mb-3" controlId="">

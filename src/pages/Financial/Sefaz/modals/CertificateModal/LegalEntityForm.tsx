@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { asyncLinkCertificate } from "../../../../../stores/financial.store";
+import { InputText } from "primereact/inputtext";
 
 export function LegalEntityForm() {
     const [name, setName] = useState('');
@@ -39,7 +40,7 @@ export function LegalEntityForm() {
             };
         });
     };
-    
+
     const register = async () => {
         const base64Result = await getBase64() as string;
         const data = {
@@ -61,22 +62,34 @@ export function LegalEntityForm() {
             certificate_password: password,
         }
         dispatch(asyncLinkCertificate(data));
-        
+
     }
 
     return <div>
         <Row>
             <Col>
-                <Form.Group className="mb-3" controlId="">
+                <span className="p-float-label">
+                    <InputText value={name} onChange={(e) => {
+                        setName(e.target.value!);
+                    }} style={{ width: '100%' }}></InputText>
+                    <label htmlFor="city">Nome</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
                     <Form.Control type="text" id="name" onChange={(e) => { setName(e.target.value); }} />
-                </Form.Group>
+                </Form.Group> */}
             </Col>
             <Col>
-                <Form.Group className="mb-3" controlId="">
+                <span className="p-float-label">
+                    <InputText value={commercialName} onChange={(e) => {
+                        setCommercialName(e.target.value!);
+                    }} style={{ width: '100%' }}></InputText>
+                    <label htmlFor="city">Nome Fantasia</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Nome Fantasia</Form.Label>
                     <Form.Control type="text" id="name" onChange={(e) => { setCommercialName(e.target.value); }} />
-                </Form.Group>
+                </Form.Group> */}
             </Col>
         </Row>
         <Row>

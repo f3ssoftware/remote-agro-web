@@ -22,7 +22,7 @@ export function SeedsTreatment({
 }) {
     const dispatch = useDispatch<any>();
     const { input } = useSelector((state: RootState) => state);
-    const [seed, setSeed] = useState({ id: 0 });
+    const [seed, setSeed] = useState<any>();
     const [seedQuantity, setSeedQuantity] = useState(0);
     const [accountable, setAccountable] = useState("");
     const [observations, setObservations] = useState("");
@@ -81,26 +81,34 @@ export function SeedsTreatment({
 
     const autoComplete = (event: AutoCompleteCompleteEvent) => {
         const resultSet = productList.filter((p: any) => p?.label?.includes(event.query));
-        setProductList(resultSet);
+        if (resultSet.length > 0) {
+            setProductList(resultSet);
+        } else {
+            setProductList(fetchSeeds());
+        }
     }
 
     useEffect(() => {
         if (input.inputs) {
-            setProductList(input.inputs
-                .filter((product: Product) => {
-                    return (
-                        product.product?.class === "SEMENTE" &&
-                        product.treatment !== "EXTERNO"
-                    );
-                })
-                .map((input) => {
-                    return {
-                        id: input.id,
-                        label: `${input?.product?.name} - ${input.treatment}`,
-                    };
-                }))
+            setProductList(fetchSeeds())
         }
     }, [input])
+
+    const fetchSeeds = () => {
+        return input.inputs
+            .filter((product: Product) => {
+                return (
+                    product.product?.class === "SEMENTE" &&
+                    product.treatment !== "EXTERNO"
+                );
+            })
+            .map((input) => {
+                return {
+                    id: input.id,
+                    label: `${input?.product?.name} - ${input.treatment}`,
+                };
+            });
+    }
 
     return <Dialog headerStyle={{ backgroundColor: '#7C5529', color: '#FFF' }} contentStyle={{ backgroundColor: '#7C5529' }} header="Tratamento de Sementes" visible={show} style={{ width: '50vw' }} onHide={() => handleClose()}>
         <Row>
@@ -108,7 +116,7 @@ export function SeedsTreatment({
                 <span className="p-float-label">
                     <AutoComplete field="label" value={seed} suggestions={productList} completeMethod={autoComplete} onChange={(e: any) => {
                         setSeed(e.value);
-                    }} dropdown style={{ width: '100%' }} />
+                    }} dropdown style={{ width: '100%' }} forceSelection />
                     <label htmlFor="endDate">Semente</label>
                 </span>
                 {/* <Form.Group className="mb-3" controlId="">
