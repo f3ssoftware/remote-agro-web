@@ -249,7 +249,7 @@ export function NewPlot() {
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: 'gray' }}>Cultivo</Form.Label>
+                  <Form.Label style={{ color: 'white' }}>Cultivo</Form.Label>
                   <Typeahead
                     id="cultivation"
                     onChange={(selected: any) => {

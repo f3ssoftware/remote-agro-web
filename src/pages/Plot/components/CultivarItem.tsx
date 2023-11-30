@@ -6,7 +6,7 @@ export function CultivarItem({ cultivar, index, onHandleUpdate, onHandleRemove, 
     const [showArea, setShowArea] = useState(false);
     const [area, setArea] = useState(0);
    
-    return <div style={{}}>
+    return <div style={{color: "white"}}>
         <Form.Check
             type="checkbox"
             id={`default-cultivar-${cultivar.id}`}

@@ -20,6 +20,7 @@ import { classNames } from 'primereact/utils'
 import { InputText } from 'primereact/inputtext'
 import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
 
 interface Type {
   name: string
@@ -50,6 +51,7 @@ export function PrescriptionFertilizers({
     { name: 'Fertirrigação', value: 'Fertirrigação' },
     { name: 'Cocho', value: 'Cocho' },
   ]
+
 
   useEffect(() => {
     dispatch(
@@ -83,6 +85,22 @@ export function PrescriptionFertilizers({
           <form onSubmit={formik.handleSubmit}>
             <Row style={{ marginTop: '2%' }}>
               <Col>
+              {/* <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    // value={selectedPlot}
+                    suggestions={selectedFarm?.fields?.map((field: any) => {
+                      return { id: field.id, label: field.name, ...field }
+                    })}
+                    completeMethod={autoComplete}
+                    onChange={(e: any) => {
+                      setSelectedPlot(e.value)
+                    }}
+                    dropdown
+                    style={{ width: '100%' }}
+                  />
+                  <label htmlFor="endDate">Talhões</label>
+                </span> */}
                 <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
                   {selectedFarm?.fields?.length > 0 ? (

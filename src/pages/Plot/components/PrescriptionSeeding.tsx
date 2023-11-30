@@ -23,7 +23,10 @@ import { classNames } from 'primereact/utils'
 import { Calendar } from 'primereact/calendar'
 import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
 
 interface Type {
   name: string
@@ -59,9 +62,9 @@ export function PrescriptionSeeding({
     { name: 'Sim', value: 'Sim' },
     { name: 'Não', value: 'Não' },
   ]
-  const [productList, setProductList] = useState<any[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<any>();
-
+  const [productList, setProductList] = useState<any[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<any>()
+  const [seedList, setSeedList] = useState<any[]>([])
 
   useEffect(() => {
     dispatch(
@@ -74,26 +77,48 @@ export function PrescriptionSeeding({
   }, [])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
-    const resultSet = input.generalProductsList.filter(product => product.name.includes(event.query));
-    setProductList(resultSet);
+    const resultSet = input.generalProductsList.filter((product) =>
+      product.name.includes(event.query),
+    )
+    setProductList(resultSet)
+  }
 
-    useEffect(() => {
-      if (input.inputs) {
-          setProductList(input.inputs
-            .filter((product: Product) => {
-              return (
-                  product.product?.class !== "SEMENTE"
-              );
+  useEffect(() => {
+    if (input.inputs) {
+      setProductList(
+        input.inputs
+          .filter((product: Product) => {
+            return product.product?.class !== 'SEMENTE'
           })
-            .map((input) => {
-              return {
-                id: input.id,
-                label: `${input?.product?.name}`,
-              }
-            }))
-      }
+          .map((input) => {
+            return {
+              id: input.id,
+              label: `${input?.product?.name}`,
+            }
+          }),
+      )
+    }
   }, [input])
-}
+
+  useEffect(() => {
+    if (input.inputs) {
+      setSeedList(
+        input.inputs
+          .filter((product: Product) => {
+            return (
+              product.product?.class === 'SEMENTE' &&
+              product.treatment !== 'EXTERNO'
+            )
+          })
+          .map((input) => {
+            return {
+              id: input.id,
+              label: `${input?.product?.name} - ${input.treatment}`,
+            }
+          }),
+      )
+    }
+  }, [input])
 
   // const next = () => {
   //   const seeding: Application = {
@@ -177,7 +202,23 @@ export function PrescriptionSeeding({
                 </span>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="">
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    // value={selectedPlot}
+                    suggestions={selectedFarm?.fields?.map((field: any) => {
+                      return { id: field.id, label: field.name, ...field }
+                    })}
+                    completeMethod={autoComplete}
+                    onChange={(e: any) => {
+                      setSelectedPlot(e.value)
+                    }}
+                    dropdown
+                    style={{ width: '100%' }}
+                  />
+                  <label htmlFor="endDate">Talhões</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
                   {selectedFarm?.fields?.length > 0 ? (
                     <Typeahead
@@ -197,7 +238,7 @@ export function PrescriptionSeeding({
                   ) : (
                     <></>
                   )}
-                </Form.Group>
+                </Form.Group> */}
                 {selectedPlot?.total_area > 0 ? (
                   <>
                     <Form.Range
@@ -214,11 +255,24 @@ export function PrescriptionSeeding({
                   <></>
                 )}
               </Col>
-            </Row>
-            <Row>
-              {' '}
               <Col>
-                <Form.Group className="mb-3" controlId="">
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    // value={selectedPlot}
+                    suggestions={plot?.appliers?.map((applier: Applier) => {
+                      return { id: applier.id, label: applier.name, ...applier }
+                    })}
+                    completeMethod={autoComplete}
+                    onChange={(e: any) => {
+                      setSelectedApplier(e.value)
+                    }}
+                    dropdown
+                    style={{ width: '100%' }}
+                  />
+                  <label htmlFor="endDate">Aplicador</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
                   <Typeahead
                     id="applier"
@@ -236,9 +290,9 @@ export function PrescriptionSeeding({
                       return { id: applier.id, label: applier.name, ...applier }
                     })}
                   />
-                </Form.Group>
+                </Form.Group> */}
               </Col>
-            </Row>
+            </Row>{' '}
             <Row>
               <Col>
                 <span className="p-float-label">
@@ -269,40 +323,48 @@ export function PrescriptionSeeding({
                 </span>
               </Col>
               <Col>
-              <Dropdown
-                    value={formik.values.fertilizing}
-                    onChange={(e) => {
-                      formik.setFieldValue('fertilizing', e.target.value)
-                      setFertilizing(e.target.value)
+                <Dropdown
+                  value={formik.values.fertilizing}
+                  onChange={(e) => {
+                    formik.setFieldValue('fertilizing', e.target.value)
+                    setFertilizing(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Possui adubação?"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.fertilizing && formik.errors.fertilizing ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
                     }}
-                    options={type}
-                    optionLabel="name"
-                    optionValue="value"
-                    placeholder="Possui adubação?"
-                    style={{ width: '100%' }}
-                  />
-                  {formik.touched.fertilizing && formik.errors.fertilizing ? (
-                    <div
-                      style={{
-                        color: 'red',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto',
-                      }}
-                    >
-                      {formik.errors.fertilizing}
-                    </div>
-                  ) : null}
+                  >
+                    {formik.errors.fertilizing}
+                  </div>
+                ) : null}
               </Col>
               {fertilizing == 'Sim' ? (
                 <>
-                <Col>
-                <span className="p-float-label">
-                    <AutoComplete field="label" value={selectedProduct} suggestions={productList} completeMethod={autoComplete} onChange={(e: any) => {
-                        setSelectedProduct(e.value);
-                    }} dropdown style={{ width: '100%' }} />
-                    <label htmlFor="endDate">Produto</label>
-                </span>
-            </Col>
+                  <Col>
+                    <span className="p-float-label">
+                      <AutoComplete
+                        field="label"
+                        value={selectedProduct}
+                        suggestions={productList}
+                        completeMethod={autoComplete}
+                        onChange={(e: any) => {
+                          setSelectedProduct(e.value)
+                        }}
+                        dropdown
+                        style={{ width: '100%' }}
+                      />
+                      <label htmlFor="endDate">Produto</label>
+                    </span>
+                  </Col>
                   {/* <Col>
                     <Form.Group className="mb-3" controlId="">
                       <Form.Label style={{ color: '#fff' }}>
@@ -366,7 +428,21 @@ export function PrescriptionSeeding({
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="">
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={seed}
+                    suggestions={seedList}
+                    completeMethod={autoComplete}
+                    onChange={(e: any) => {
+                      setSeed(e.value)
+                    }}
+                    dropdown
+                    style={{ width: '100%' }}
+                  />
+                  <label htmlFor="endDate">Semente/Cultivar</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
                   <Form.Label style={{ color: '#fff' }}>
                     Semente/Cultivar
                   </Form.Label>
@@ -391,7 +467,7 @@ export function PrescriptionSeeding({
                         }
                       })}
                   />
-                </Form.Group>
+                </Form.Group> */}
               </Col>
               <Col>
                 <span className="p-float-label">
@@ -404,7 +480,8 @@ export function PrescriptionSeeding({
                     }}
                     className={classNames({
                       'p-invalid':
-                        formik.touched.seedQuantity && formik.errors.seedQuantity,
+                        formik.touched.seedQuantity &&
+                        formik.errors.seedQuantity,
                     })}
                   />
                   {formik.touched.seedQuantity && formik.errors.seedQuantity ? (
@@ -424,47 +501,20 @@ export function PrescriptionSeeding({
             </Row>
             <Row>
               <Col>
-              <span className="p-float-label">
-                    <InputNumber
-                      id="lineSpacing"
-                      value={formik.values.lineSpacing}
-                      onValueChange={(e) => {
-                        formik.setFieldValue('lineSpacing', e.target.value)
-                        setLineSpacing(Number(e.value))
-                      }}
-                      className={classNames({
-                        'p-invalid':
-                          formik.touched.lineSpacing && formik.errors.lineSpacing,
-                      })}
-                    />
-                    {formik.touched.lineSpacing && formik.errors.lineSpacing ? (
-                      <div
-                        style={{
-                          color: 'red',
-                          fontSize: '12px',
-                          fontFamily: 'Roboto',
-                        }}
-                      >
-                        {formik.errors.lineSpacing}
-                      </div>
-                    ) : null}
-                    <label htmlFor="lineSpacing">Espaçamento entre linhas</label>
-                  </span>
-              </Col>
-              <Col>
-              <Dropdown
-                    value={formik.values.jet}
-                    onChange={(e) => {
-                      formik.setFieldValue('jet', e.target.value)
-                      setJet(e.target.value)
+                <span className="p-float-label">
+                  <InputNumber
+                    id="lineSpacing"
+                    value={formik.values.lineSpacing}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('lineSpacing', e.target.value)
+                      setLineSpacing(Number(e.value))
                     }}
-                    options={type}
-                    optionLabel="name"
-                    optionValue="value"
-                    placeholder="Possui jato dirigido?"
-                    style={{ width: '100%' }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.lineSpacing && formik.errors.lineSpacing,
+                    })}
                   />
-                  {formik.touched.jet && formik.errors.jet ? (
+                  {formik.touched.lineSpacing && formik.errors.lineSpacing ? (
                     <div
                       style={{
                         color: 'red',
@@ -472,13 +522,40 @@ export function PrescriptionSeeding({
                         fontFamily: 'Roboto',
                       }}
                     >
-                      {formik.errors.jet}
+                      {formik.errors.lineSpacing}
                     </div>
                   ) : null}
+                  <label htmlFor="lineSpacing">Espaçamento entre linhas</label>
+                </span>
+              </Col>
+              <Col>
+                <Dropdown
+                  value={formik.values.jet}
+                  onChange={(e) => {
+                    formik.setFieldValue('jet', e.target.value)
+                    setJet(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Possui jato dirigido?"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.jet && formik.errors.jet ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
+                    }}
+                  >
+                    {formik.errors.jet}
+                  </div>
+                ) : null}
               </Col>
               {jet == 'Sim' ? (
                 <Col>
-                <span className="p-float-label">
+                  <span className="p-float-label">
                     <InputNumber
                       id="flowRate"
                       value={formik.values.flowRate}
