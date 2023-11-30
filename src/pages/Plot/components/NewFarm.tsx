@@ -50,7 +50,7 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            <Row style={{ marginTop: '4%' }} >
+            <Row style={{marginTop: "4%"}} >
               <Row>
                 <Col md="auto">
                   <span className="p-float-label">
@@ -81,7 +81,7 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
                     <label htmlFor="propName">Nome da propriedade</label>
                   </span>
                 </Col>
-                <Col md='auto'>
+                <Col  md="auto">
                   <span className="p-float-label">
                     <InputNumber
                       id="totalArea"
@@ -109,7 +109,7 @@ export function NewFarm({ handleClose }: { handleClose: any }) {
                     <label htmlFor="totalArea">Area total (ha)</label>
                   </span>
                 </Col>
-                <Col  style={{ marginTop: '4%' }} md="auto">
+                <Col md="auto">
                   <span className="p-float-label">
                     <InputNumber
                       id="quantity"

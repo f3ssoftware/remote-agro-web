@@ -59,7 +59,7 @@ export function PrescriptionSeeding({
     { name: 'Sim', value: 'Sim' },
     { name: 'Não', value: 'Não' },
   ]
-  const [products, setProducts] = useState<any[]>([]);
+  const [productList, setProductList] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
 
@@ -75,7 +75,24 @@ export function PrescriptionSeeding({
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
     const resultSet = input.generalProductsList.filter(product => product.name.includes(event.query));
-    setProducts(resultSet);
+    setProductList(resultSet);
+
+    useEffect(() => {
+      if (input.inputs) {
+          setProductList(input.inputs
+            .filter((product: Product) => {
+              return (
+                  product.product?.class !== "SEMENTE"
+              );
+          })
+            .map((input) => {
+              return {
+                id: input.id,
+                label: `${input?.product?.name}`,
+              }
+            }))
+      }
+  }, [input])
 }
 
   // const next = () => {
@@ -280,23 +297,10 @@ export function PrescriptionSeeding({
                 <>
                 <Col>
                 <span className="p-float-label">
-                    <AutoComplete field="name" value={selectedProduct} suggestions={products} completeMethod={autoComplete} onChange={(e: any) => {
+                    <AutoComplete field="label" value={selectedProduct} suggestions={productList} completeMethod={autoComplete} onChange={(e: any) => {
                         setSelectedProduct(e.value);
-
-                        // const userProducts = input.inputs.filter(i => i.product?.name === e.value.name)
-                        // if (userProducts.length > 0) {
-                        //     setUserHasProduct(true);
-                        //     setUserProductId(userProducts[0].id!);
-                        //     setMeasureUnit(userProducts[0].measure_unit!);
-                        // } else if (e.value instanceof Object) {
-                        //     if (e.value?.class === 'SEMENTE') {
-                        //         setIsSeed(true);
-                        //     }
-                        //     setUserHasProduct(false);
-                        //     setProductId(e.value?.id!);
-                        // }
-                    }} dropdown />
-                    <label htmlFor="product">Produto</label>
+                    }} dropdown style={{ width: '100%' }} />
+                    <label htmlFor="endDate">Produto</label>
                 </span>
             </Col>
                   {/* <Col>
