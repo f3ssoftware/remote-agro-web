@@ -19,6 +19,11 @@ import { classNames } from 'primereact/utils'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 import { InputNumber } from 'primereact/inputnumber'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { Slider, SliderChangeEvent } from 'primereact/slider'
 
 interface Type {
   name: string
@@ -66,6 +71,42 @@ export function PrescriptionDefensive({
     { name: 'LSD0134', value: 'LSD0134' },
     { name: 'Micron', value: 'Micron' },
   ]
+  const [plotList, setPlotList] = useState<any[]>([])
+  const [applierList, setApplierList] = useState<any[]>([])
+
+  const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = plotList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setPlotList(resultSet)
+    } else {
+      setPlotList(fetchPlot())
+    }
+  }
+
+  const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = applierList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setApplierList(resultSet)
+    } else {
+      setApplierList(fetchApplier())
+    }
+  }
+
+  const fetchApplier = () => {
+    return plot?.appliers?.map((applier: Applier) => {
+      return { id: applier.id, label: applier.name, ...applier }
+    })
+  }
+
+  const fetchPlot = () => {
+    return selectedFarm?.fields?.map((field: any) => {
+      return { id: field.id, label: field.name, ...field }
+    })
+  }
 
   useEffect(() => {
     dispatch(
@@ -90,7 +131,7 @@ export function PrescriptionDefensive({
       <Formik
         initialValues={{
           accountable: '',
-          dateTime:'',
+          dateTime: '',
           block: '',
           applicationType: 'Terrestre',
           flowRate: null,
@@ -101,6 +142,8 @@ export function PrescriptionDefensive({
           selectedPlot: {},
           selectedApplier: {},
           area: null,
+          plot: null,
+          applier: null,
         }}
         validationSchema={Yup.object({
           accountable: Yup.string().required('Necessário preencher'),
@@ -115,6 +158,8 @@ export function PrescriptionDefensive({
           selectedPlot: Yup.string().required('Necessário preencher'),
           selectedApplier: Yup.string().required('Necessário preencher'),
           area: Yup.string().required('Necessário preencher'),
+          plot: Yup.object().required('Necessário preencher'),
+          applier: Yup.object().required('Necessário preencher'),
         })}
         onSubmit={() => {
           setShowNewPrescriptionModal(true)
@@ -156,63 +201,93 @@ export function PrescriptionDefensive({
             <Row>
               {' '}
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-                  {selectedFarm?.fields?.length > 0 ? (
-                    <Typeahead
-                      id="field"
-                      selected={selectedFarm?.fields?.filter(
-                        (field: any) => field?.id === selectedPlot?.id,
-                      )}
-                      labelKey={(selected: any) => selected?.name}
-                      isInvalid={!selectedPlot?.id}
-                      onChange={(selected: any) => {
-                        setSelectedPlot(selected[0])
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.plot}
+                    suggestions={plotList}
+                    completeMethod={autoCompletePlots}
+                    onChange={(e: any) => {
+                      formik.setFieldValue('plot', e.target.value)
+                      setSelectedPlot(e.value)
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.plot && formik.errors.plot,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.plot && formik.errors.plot ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
-                      options={selectedFarm?.fields?.map((field: any) => {
-                        return { id: field.id, label: field.name, ...field }
-                      })}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </Form.Group>
+                    >
+                      {formik.errors.plot}
+                    </div>
+                  ) : null}
+                  <label htmlFor="plot">Talhões</label>
+                </span>
                 {selectedPlot?.total_area > 0 ? (
                   <>
-                    <Form.Range
-                      min={0}
-                      max={selectedPlot?.total_area * 100}
-                      value={area}
-                      onChange={(e) => {
-                        return setArea(Number(e.target.value))
-                      }}
-                    />
-                    <Form.Label>Área aplicada: {area}</Form.Label>
+                    <span style={{ marginTop: '5%' }}>
+                      <Slider
+                        style={{ marginTop: '7%' }}
+                        value={area}
+                        max={selectedPlot?.total_area}
+                        min={0}
+                        onChange={(e: SliderChangeEvent) => {
+                          return setArea(Number(e.value))
+                        }}
+                        className="w-full"
+                      />
+                      <label
+                        style={{ marginTop: '5%', color: 'white' }}
+                        htmlFor="area"
+                      >
+                        Área aplicada: {area}
+                      </label>
+                    </span>
                   </>
                 ) : (
                   <></>
                 )}
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
-                  <Typeahead
-                    id="applier"
-                    onChange={(selected: any) => {
-                      setSelectedApplier(selected[0])
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.applier}
+                    suggestions={applierList}
+                    completeMethod={autoCompleteApplier}
+                    onChange={(e: any) => {
+                      setSelectedApplier(e.value)
+                      formik.setFieldValue('applier', e.target.value)
                     }}
-                    selected={plot?.appliers?.filter(
-                      (applier: any) => applier?.id === selectedApplier?.id,
-                    )}
-                    labelKey={(selected: any) => {
-                      return `${selected?.name}`
-                    }}
-                    isInvalid={!selectedApplier?.id}
-                    options={plot?.appliers?.map((applier: Applier) => {
-                      return { id: applier.id, label: applier.name, ...applier }
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.applier && formik.errors.applier,
                     })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
                   />
-                </Form.Group>
+                  {formik.touched.applier && formik.errors.applier ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.applier}
+                    </div>
+                  ) : null}
+                  <label htmlFor="applier">Aplicador</label>
+                </span>
               </Col>
             </Row>
             <Row>

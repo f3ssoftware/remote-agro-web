@@ -27,6 +27,7 @@ import {
   AutoComplete,
   AutoCompleteCompleteEvent,
 } from 'primereact/autocomplete'
+import { Slider, SliderChangeEvent } from 'primereact/slider'
 
 interface Type {
   name: string
@@ -50,9 +51,9 @@ export function PrescriptionSeeding({
   const [selectedApplier, setSelectedApplier]: any = useState<any>({})
   const { plot, input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
-  const [seed, setSeed] = useState({ id: 0 })
+  const [seed, setSeed] = useState<any>({})
   const [flowRate, setFlowRate] = useState(0)
-  const [product, setProduct] = useState({ id: 0 })
+  const [product, setProduct] = useState<any>({})
   const [area, setArea] = useState(0)
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
@@ -65,6 +66,8 @@ export function PrescriptionSeeding({
   const [productList, setProductList] = useState<any[]>([])
   const [selectedProduct, setSelectedProduct] = useState<any>()
   const [seedList, setSeedList] = useState<any[]>([])
+  const [plotList, setPlotList] = useState<any[]>([])
+  const [applierList, setApplierList] = useState<any[]>([])
 
   useEffect(() => {
     dispatch(
@@ -77,68 +80,80 @@ export function PrescriptionSeeding({
   }, [])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
-    const resultSet = input.generalProductsList.filter((product) =>
-      product.name.includes(event.query),
+    const resultSet = productList.filter((p: any) =>
+      p?.label?.includes(event.query),
     )
-    setProductList(resultSet)
+    if (resultSet.length > 0) {
+      setProductList(resultSet)
+    } else {
+      setProductList(fetchProducts())
+    }
+  }
+  const autoCompleteSeeds = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = seedList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setSeedList(resultSet)
+    } else {
+      setSeedList(fetchSeed())
+    }
+  }
+  const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = plotList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setPlotList(resultSet)
+    } else {
+      setPlotList(fetchPlot())
+    }
+  }
+  const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = applierList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setApplierList(resultSet)
+    } else {
+      setApplierList(fetchApplier())
+    }
   }
 
-  useEffect(() => {
-    if (input.inputs) {
-      setProductList(
-        input.inputs
-          .filter((product: Product) => {
-            return product.product?.class !== 'SEMENTE'
-          })
-          .map((input) => {
-            return {
-              id: input.id,
-              label: `${input?.product?.name}`,
-            }
-          }),
-      )
-    }
-  }, [input])
-
-  useEffect(() => {
-    if (input.inputs) {
-      setSeedList(
-        input.inputs
-          .filter((product: Product) => {
-            return (
-              product.product?.class === 'SEMENTE' &&
-              product.treatment !== 'EXTERNO'
-            )
-          })
-          .map((input) => {
-            return {
-              id: input.id,
-              label: `${input?.product?.name} - ${input.treatment}`,
-            }
-          }),
-      )
-    }
-  }, [input])
-
-  // const next = () => {
-  //   const seeding: Application = {
-  //     type: 'Semeadura',
-  //     accountable: accountable,
-  //     area: area,
-  //     applier_id: selectedApplier.id,
-  //     date: dateTime.toISOString(),
-  //     fertilizer_id: product.id,
-  //     fertilizer_quantity: productQuantity,
-  //     seed_id: seed.id,
-  //     seed_quantity: seedQuantity,
-  //     lines_spacing: lineSpacing,
-  //     flow_rate: flowRate,
-  //     farm_id: selectedFarm.id,
-  //     correct_decimals: true,
-  //     fields: [{ id: selectedPlot.id, area: area }],
-  //   }
-  //   dispatch(asyncPrescription(seeding))
-  // }
+  const fetchProducts = () => {
+    return input.inputs
+      .filter((product: Product) => {
+        return product.product?.class !== 'SEMENTE'
+      })
+      .map((input) => {
+        return {
+          id: input.id,
+          label: `${input?.product?.name}`,
+        }
+      })
+  }
+  const fetchSeed = () => {
+    return input.inputs
+      .filter((product: Product) => {
+        return product.product?.class === 'SEMENTE'
+      })
+      .map((input) => {
+        return {
+          id: input.id,
+          label: `${input?.product?.name}`,
+        }
+      })
+  }
+  const fetchPlot = () => {
+    return selectedFarm?.fields?.map((field: any) => {
+      return { id: field.id, label: field.name, ...field }
+    })
+  }
+  const fetchApplier = () => {
+    return plot?.appliers?.map((applier: Applier) => {
+      return { id: applier.id, label: applier.name, ...applier }
+    })
+  }
 
   return (
     <div>
@@ -153,6 +168,8 @@ export function PrescriptionSeeding({
           flowRate: null,
           jet: '',
           fertilizing: '',
+          plot: null,
+          applier: null,
         }}
         validationSchema={Yup.object({
           accountable: Yup.string().required('Necessário preencher'),
@@ -163,6 +180,8 @@ export function PrescriptionSeeding({
           flowRate: Yup.string().required('Necessário preencher'),
           jet: Yup.string().required('Necessário preencher'),
           fertilizing: Yup.string().required('Necessário preencher'),
+          plot: Yup.object().required('Necessário preencher'),
+          applier: Yup.object().required('Necessário preencher'),
         })}
         onSubmit={() => {
           handleClose()
@@ -205,51 +224,49 @@ export function PrescriptionSeeding({
                 <span className="p-float-label">
                   <AutoComplete
                     field="label"
-                    // value={selectedPlot}
-                    suggestions={selectedFarm?.fields?.map((field: any) => {
-                      return { id: field.id, label: field.name, ...field }
-                    })}
-                    completeMethod={autoComplete}
+                    value={formik.values.plot}
+                    suggestions={plotList}
+                    completeMethod={autoCompletePlots}
                     onChange={(e: any) => {
+                      formik.setFieldValue('plot', e.target.value)
                       setSelectedPlot(e.value)
                     }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.plot && formik.errors.plot,
+                    })}
                     dropdown
+                    forceSelection
                     style={{ width: '100%' }}
                   />
-                  <label htmlFor="endDate">Talhões</label>
-                </span>
-                {/* <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-                  {selectedFarm?.fields?.length > 0 ? (
-                    <Typeahead
-                      id="field"
-                      selected={selectedFarm?.fields?.filter(
-                        (field: any) => field?.id === selectedPlot?.id,
-                      )}
-                      labelKey={(selected: any) => selected?.name}
-                      isInvalid={!selectedPlot?.id}
-                      onChange={(selected: any) => {
-                        setSelectedPlot(selected[0])
+                  {formik.touched.plot && formik.errors.plot ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
-                      options={selectedFarm?.fields?.map((field: any) => {
-                        return { id: field.id, label: field.name, ...field }
-                      })}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </Form.Group> */}
+                    >
+                      {formik.errors.plot}
+                    </div>
+                  ) : null}
+                  <label htmlFor="plot">Talhões</label>
+                </span>
                 {selectedPlot?.total_area > 0 ? (
                   <>
-                    <Form.Range
-                      min={0}
-                      max={selectedPlot?.total_area}
-                      value={area}
-                      onChange={(e) => {
-                        return setArea(Number(e.target.value))
-                      }}
-                    />
-                    <Form.Label>Área aplicada: {area}</Form.Label>
+                    <span  style={{marginTop: '5%'}}>
+                      <Slider
+                       style={{marginTop: '7%'}}
+                        value={area}
+                        max={selectedPlot?.total_area}
+                        min={0}
+                        onChange={(e: SliderChangeEvent) => {
+                          return setArea(Number(e.value))
+                        }}
+                        className="w-full"
+                      />
+                      <label  style={{marginTop: '5%', color: 'white'}} htmlFor="area">Área aplicada: {area}</label>
+                    </span>
                   </>
                 ) : (
                   <></>
@@ -259,41 +276,37 @@ export function PrescriptionSeeding({
                 <span className="p-float-label">
                   <AutoComplete
                     field="label"
-                    // value={selectedPlot}
-                    suggestions={plot?.appliers?.map((applier: Applier) => {
-                      return { id: applier.id, label: applier.name, ...applier }
-                    })}
-                    completeMethod={autoComplete}
+                    value={formik.values.applier}
+                    suggestions={applierList}
+                    completeMethod={autoCompleteApplier}
                     onChange={(e: any) => {
                       setSelectedApplier(e.value)
+                      formik.setFieldValue('applier', e.target.value)
                     }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.applier && formik.errors.applier,
+                    })}
                     dropdown
+                    forceSelection
                     style={{ width: '100%' }}
                   />
-                  <label htmlFor="endDate">Aplicador</label>
+                  {formik.touched.applier && formik.errors.applier ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.applier}
+                    </div>
+                  ) : null}
+                  <label htmlFor="applier">Aplicador</label>
                 </span>
-                {/* <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
-                  <Typeahead
-                    id="applier"
-                    onChange={(selected: any) => {
-                      setSelectedApplier(selected[0])
-                    }}
-                    selected={plot?.appliers?.filter(
-                      (applier: any) => applier?.id === selectedApplier?.id,
-                    )}
-                    labelKey={(selected: any) => {
-                      return `${selected?.name}`
-                    }}
-                    isInvalid={!selectedApplier?.id}
-                    options={plot?.appliers?.map((applier: Applier) => {
-                      return { id: applier.id, label: applier.name, ...applier }
-                    })}
-                  />
-                </Form.Group> */}
               </Col>
             </Row>{' '}
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
                 <span className="p-float-label">
                   <Calendar
@@ -359,35 +372,13 @@ export function PrescriptionSeeding({
                         onChange={(e: any) => {
                           setSelectedProduct(e.value)
                         }}
+                        forceSelection
                         dropdown
                         style={{ width: '100%' }}
                       />
                       <label htmlFor="endDate">Produto</label>
                     </span>
                   </Col>
-                  {/* <Col>
-                    <Form.Group className="mb-3" controlId="">
-                      <Form.Label style={{ color: '#fff' }}>
-                        Produtos
-                      </Form.Label>
-                      <Typeahead
-                        id="product_input"
-                        onChange={(selected: any) => {
-                          if (selected.length > 0) {
-                            setProduct({ id: selected[0].id })
-                          }
-                        }}
-                        options={input.inputs
-                          .filter((i) => i.product?.class !== 'SEMENTE')
-                          .map((input) => {
-                            return {
-                              id: input.id,
-                              label: `${input?.product?.name}`,
-                            }
-                          })}
-                      />
-                    </Form.Group>
-                  </Col> */}
                   <Col>
                     <span className="p-float-label">
                       <InputNumber
@@ -426,48 +417,23 @@ export function PrescriptionSeeding({
                 <div></div>
               )}
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
                 <span className="p-float-label">
                   <AutoComplete
                     field="label"
                     value={seed}
                     suggestions={seedList}
-                    completeMethod={autoComplete}
+                    completeMethod={autoCompleteSeeds}
                     onChange={(e: any) => {
                       setSeed(e.value)
                     }}
+                    forceSelection
                     dropdown
                     style={{ width: '100%' }}
                   />
                   <label htmlFor="endDate">Semente/Cultivar</label>
                 </span>
-                {/* <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>
-                    Semente/Cultivar
-                  </Form.Label>
-                  <Typeahead
-                    id="seed"
-                    onChange={(selected: any) => {
-                      if (selected.length > 0) {
-                        setSeed({ id: selected[0].id })
-                      }
-                    }}
-                    options={input.inputs
-                      .filter((product: Product) => {
-                        return (
-                          product.product?.class === 'SEMENTE' &&
-                          product.treatment !== 'EXTERNO'
-                        )
-                      })
-                      .map((input) => {
-                        return {
-                          id: input.id,
-                          label: `${input?.product?.name} - ${input.treatment}`,
-                        }
-                      })}
-                  />
-                </Form.Group> */}
               </Col>
               <Col>
                 <span className="p-float-label">
@@ -499,7 +465,7 @@ export function PrescriptionSeeding({
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
                 <span className="p-float-label">
                   <InputNumber

@@ -20,6 +20,7 @@ import { classNames } from 'primereact/utils'
 import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
 
 interface Type {
   name: string
@@ -47,6 +48,30 @@ export function NewPlot() {
     { name: 'Ativo', value: true },
     { name: 'Inativo', value: false },
   ]
+  const [cultivationList, setCultivationList] = useState<any[]>([])
+
+  const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = cultivationList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setCultivationList(resultSet)
+    } else {
+      setCultivationList(fetchProducts())
+    }
+  }
+
+  const fetchProducts = () => {
+    return financial.cultivations.map(
+      (cultivation: Cultivation) => {
+        return {
+          id: cultivation.id,
+          label: cultivation.name,
+          ...cultivation,
+        }
+      },
+    )
+  }
 
   const onRemove = (id: number) => {
     const newSendCultivar = [...sendCultivars]
@@ -246,26 +271,14 @@ export function NewPlot() {
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{marginTop:'2%'}}>
               <Col>
-                <Form.Group className="mb-3" controlId="">
-                  <Form.Label style={{ color: 'white' }}>Cultivo</Form.Label>
-                  <Typeahead
-                    id="cultivation"
-                    onChange={(selected: any) => {
-                      setCultivation(selected[0])
-                    }}
-                    options={financial.cultivations.map(
-                      (cultivation: Cultivation) => {
-                        return {
-                          id: cultivation.id,
-                          label: cultivation.name,
-                          ...cultivation,
-                        }
-                      },
-                    )}
-                  />
-                </Form.Group>
+              <span className="p-float-label">
+                    <AutoComplete field="label" value={cultivation} suggestions={cultivationList} completeMethod={autoComplete} onChange={(e: any) => {
+                        setCultivation(e.value);
+                    }} dropdown style={{ width: '100%' }} forceSelection />
+                    <label htmlFor="endDate">Cultivo</label>
+                </span>
               </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="">
