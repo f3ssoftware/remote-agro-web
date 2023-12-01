@@ -7,6 +7,7 @@ import financialStore, { asyncFetchSefaz } from "../../../stores/financial.store
 import { CertificateModal } from "./modals/CertificateModal/CertificateModal";
 import { LaunchModal } from "./modals/LauchModal";
 import "./SefazInvoice.scss";
+import { useNavigate } from "react-router-dom";
 
 const initialExternalInvoices: ExternalInvoice[] = [];
 export function SefazInvoice() {
@@ -20,6 +21,7 @@ export function SefazInvoice() {
     const [showModalCertificates, setShowModalCertificates] = useState(false);
     const [externalInvoiceId, setExternalInvoiceId] = useState(0);
     const [findTerm, setFindTerm] = useState('');
+    const navigate = useNavigate();
 
     const find = () =>{
         setExternalInvoices(financial?.externalInvoices?.filter((ref: ExternalInvoice) =>{
@@ -66,7 +68,7 @@ export function SefazInvoice() {
                     <h4>Notas Sefaz</h4>
                 </Col>
                 <Col>
-                    <Button variant="success" onClick={() => setShowModalCertificates(true)}>Certificados</Button>
+                    <Button variant="success" onClick={() => navigate('financial/certificates')}>Certificados</Button>
                 </Col>
                 <Col md={6} sm={5} style={{marginBottom: '2%'}}>
                             <Form>

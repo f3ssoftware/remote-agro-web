@@ -42,6 +42,7 @@ const financialStore = createSlice({
         },
         activeCard: 'total',
         type: '',
+        certificates: []
     },
     reducers: {
         setExpensesInvoiceData(state, action) {
@@ -87,6 +88,9 @@ const financialStore = createSlice({
         },
         setExpenseInvoiceEdit(state, action) {
             state.expenseInvoiceEdit = action.payload
+        },
+        setCertificates(state, action) {
+            state.certificates = action.payload;
         }
     }
 });
@@ -103,7 +107,8 @@ export const {
     setFilterDates,
     setCardActive,
     setType,
-    setExpenseInvoiceEdit } =
+    setExpenseInvoiceEdit,
+    setCertificates } =
     financialStore.actions;
 export default financialStore.reducer;
 
@@ -690,6 +695,32 @@ export function asyncEditExpenseInvoiceById(expense_invoice_id: number, exp: Exp
                 })
             );
             dispatch(popLoading('expenses-invoices'));
+        }
+    };
+}
+
+export function asyncFetchCertificates() {
+    return async function (dispatch: AppDispatch) {
+        try {
+            dispatch(pushLoading('entities'));
+            const result = await axios.get(
+                `https://remoteapi.murilobotelho.com.br/entities`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(setCertificates(result.data));
+            dispatch(popLoading('entities'));
+        } catch (err: any) {
+            console.log(err);
+            dispatch(
+                getMessages({
+                    message: err.message,
+                    type: "error",
+                })
+            );
         }
     };
 }
