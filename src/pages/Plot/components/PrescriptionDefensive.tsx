@@ -198,7 +198,7 @@ export function PrescriptionDefensive({
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               {' '}
               <Col>
                 <span className="p-float-label">
@@ -290,7 +290,7 @@ export function PrescriptionDefensive({
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
                 <span className="p-float-label">
                   <Calendar
@@ -346,7 +346,7 @@ export function PrescriptionDefensive({
                 ) : null}
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               {applicationType == 'Terrestre' ||
               applicationType == 'Fertirrigação' ? (
                 <Col>
@@ -411,7 +411,7 @@ export function PrescriptionDefensive({
                 <div></div>
               )}
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
                 <span className="p-float-label">
                   <InputNumber
@@ -469,7 +469,7 @@ export function PrescriptionDefensive({
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
                 <span className="p-float-label">
                   <InputNumber
@@ -539,6 +539,7 @@ export function PrescriptionDefensive({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 type="submit"
+                onClick={() => setShowNewPrescriptionModal(true)}
               >
                 Avançar
               </Button>

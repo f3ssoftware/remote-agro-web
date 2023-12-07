@@ -143,7 +143,7 @@ export function FertilizerPrescriptionModal({
               style={{ backgroundColor: '#A5CD33', color: '#000' }}
               variant="success"
               onClick={() => {
-                // handleClose()
+                handleClose()
                 next()
                 confirm()
               }}
