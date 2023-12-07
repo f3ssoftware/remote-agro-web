@@ -5,8 +5,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
 import { InputNumber } from 'primereact/inputnumber'
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
 import { Product } from '../../../models/Product'
+import { Button } from 'primereact/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export function NewDefensivePrescription({
   index,
@@ -74,7 +80,7 @@ export function NewDefensivePrescription({
 
   return (
     <div>
-     <Row style={{ marginTop: '2%' }}>
+      <Row style={{ marginTop: '2%' }}>
         <Col>
           <span className="p-float-label">
             <AutoComplete
@@ -104,6 +110,19 @@ export function NewDefensivePrescription({
             <label htmlFor="quantity">Qtd/ha (L)</label>
           </span>
         </Col>
+        {index !== 0 ? (
+          <Col md={1}>
+            <Button
+              onClick={() => {
+                onHandleRemove(index)
+              }}
+            >
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </div>
   )

@@ -118,7 +118,6 @@ export function PrescriptionFertilizers({
 
         })}
         onSubmit={() => {
-          // handleClose()
           setShowNewPrescriptionModal(true)
         }}
       >

@@ -4,12 +4,26 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
 import { Product } from '../../../models/Product'
 import { InputNumber } from 'primereact/inputnumber'
+import { Button } from 'primereact/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
-export function NewSeedingPrescription({ index, onHandleRemove, onHandleUpdate }: { index: number, onHandleRemove: any, onHandleUpdate: any }) {
-  const [product, setProduct] = useState({id: 0})
+export function NewSeedingPrescription({
+  index,
+  onHandleRemove,
+  onHandleUpdate,
+}: {
+  index: number
+  onHandleRemove: any
+  onHandleUpdate: any
+}) {
+  const [product, setProduct] = useState({ id: 0 })
   const [quantity, setQuantity] = useState(0)
   const { input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
@@ -17,12 +31,12 @@ export function NewSeedingPrescription({ index, onHandleRemove, onHandleUpdate }
   const [productList, setProductList] = useState<any[]>([])
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity})
-}, [product, quantity]);
+    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity })
+  }, [product, quantity])
 
-  useEffect(()=>{
-      dispatch(asyncFetchInput())
-  },[])
+  useEffect(() => {
+    dispatch(asyncFetchInput())
+  }, [])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
     const resultSet = productList.filter((p: any) =>
@@ -80,6 +94,19 @@ export function NewSeedingPrescription({ index, onHandleRemove, onHandleUpdate }
             <label htmlFor="quantity">Qtd/ha (L)</label>
           </span>
         </Col>
+        {index !== 0 ? (
+          <Col md={1}>
+            <Button
+              onClick={() => {
+                onHandleRemove(index)
+              }}
+            >
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </div>
   )
