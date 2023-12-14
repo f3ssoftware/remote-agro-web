@@ -10,6 +10,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
+import { Product } from '../../../models/Product'
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
 
 export function NewPlanningItem({
   onHandleRemove,
@@ -33,7 +35,9 @@ export function NewPlanningItem({
   const [seedQuantityType, setSeedQuantityType] = useState('')
   const [treatment, setTreatment] = useState('NÃO TRATADA')
   const [pms, setPms] = useState('')
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<any>()
+  const [productList, setProductList] = useState<any[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<any>()
 
   useEffect(() => {
     const p: PlanningInput = {
@@ -52,16 +56,75 @@ export function NewPlanningItem({
     }
 
     onHandleUpdate(p, index)
-  }, [productId, measureUnit, observation, quantity, totalCost, payDate, treatment, seedQuantityType])
+  }, [
+    productId,
+    measureUnit,
+    observation,
+    quantity,
+    totalCost,
+    payDate,
+    treatment,
+    seedQuantityType,
+  ])
 
   useEffect(() => {
-    dispatch(asyncFetchInput());
+    dispatch(asyncFetchInput())
   }, [])
+
+  const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = productList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setProductList(resultSet)
+    } else {
+      setProductList(fetchProducts())
+    }
+  }
+
+  const fetchProducts = () => {
+    return input.inputs.map((input) => {
+      return {
+        id: input.id,
+        label: `${input?.product?.name}`,
+      }
+    })
+  }
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col>
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedProduct}
+              suggestions={productList}
+              completeMethod={autoComplete}
+              onChange={(e: any) => {
+                setSelectedProduct(e.value);
+
+                const userProducts = input.inputs.filter(i => i.product?.name === e.value.name)
+                if (userProducts.length > 0) {
+                    setUserHasProduct(true);
+                    setUserProductId(userProducts[0].id!);
+                    setMeasureUnit(userProducts[0].measure_unit!);
+                } else if (e.value instanceof Object) {
+                    if (e.value?.class === 'SEMENTE') {
+                        setIsSeed(true);
+                    }
+                    setUserHasProduct(false);
+                    setProductId(e.value?.id!);
+                }
+            }} 
+              forceSelection
+              dropdown
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="endDate">Produto</label>
+          </span>
+        </Col>
+        {/* <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Produto</Form.Label>
             <Typeahead
@@ -74,22 +137,21 @@ export function NewPlanningItem({
                     (i) => i.product?.name === p.label,
                   )
 
-                    setUserProductId(userProducts[0].id!)
-                    setMeasureUnit(userProducts[0].measure_unit!)
-                    if (p?.class === 'SEMENTE') {
-                      setIsSeed(true)
-                    }
-                    setUserHasProduct(false)
-                    setProductId(p.id)
+                  setUserProductId(userProducts[0].id!)
+                  setMeasureUnit(userProducts[0].measure_unit!)
+                  if (p?.class === 'SEMENTE') {
+                    setIsSeed(true)
                   }
-                } 
-              }
+                  setUserHasProduct(false)
+                  setProductId(p.id)
+                }
+              }}
               options={input.generalProductsList.map((input) => {
                 return { id: input.id, label: input?.name, class: input.class }
               })}
             />
           </Form.Group>
-        </Col>
+        </Col> */}
         {!userHasProduct ? (
           <Col>
             <Form.Group className="mb-3" controlId="">

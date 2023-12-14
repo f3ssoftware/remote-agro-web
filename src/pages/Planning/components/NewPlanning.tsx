@@ -13,6 +13,7 @@ import { Formik } from 'formik'
 import { InputText } from 'primereact/inputtext'
 import * as Yup from 'yup'
 import { classNames } from 'primereact/utils'
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
 
 export function NewPlanning({
   show,
@@ -27,6 +28,7 @@ export function NewPlanning({
   const { seasons } = useSelector((state: RootState) => state)
   const [selectedSeason, setSelectedSeason] = useState('')
   const toast = useRef<Toast>(null)
+  const [seasonList, setSeasonList] = useState<any[]>([])
 
   const register = () => {
     const p: Planning = {
@@ -52,6 +54,23 @@ export function NewPlanning({
     setPlannings(planningsArr)
   }
 
+  const autoCompleteSeason = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = seasonList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setSeasonList(resultSet)
+    } else {
+      setSeasonList(fetchSeason())
+    }
+  }
+
+  const fetchSeason = () => {
+    return seasons.seasons.map((season: any) => {
+      return { name: season.year, label: season.type - season.year, ...season }
+    })
+  }
+
   return (
     <div>
       <Toast ref={toast} />
@@ -60,11 +79,13 @@ export function NewPlanning({
           referenceName: '',
           totalArea: null,
           quantity: null,
+          season: '',
         }}
         validationSchema={Yup.object({
           referenceName: Yup.string().required('Necessário preencher'),
           totalArea: Yup.string().required('Necessário preencher'),
           quantity: Yup.string().required('Necessário preencher'),
+          season: Yup.object().required('Necessário preencher'),
         })}
         onSubmit={() => {
           register()
@@ -106,6 +127,39 @@ export function NewPlanning({
                     <label htmlFor="referenceName">Nome</label>
                   </span>
                 </Col>
+                <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.season}
+                    suggestions={seasonList}
+                    completeMethod={autoCompleteSeason}
+                    onChange={(e: any) => {
+                      setSelectedSeason(e.target.value)
+                      formik.setFieldValue('season', e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.season && formik.errors.season,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.season && formik.errors.season ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.season}
+                    </div>
+                  ) : null}
+                  <label htmlFor="season">Ano agrícola</label>
+                </span>
+              </Col>
               </Row>
               <div
                 style={{
@@ -138,7 +192,7 @@ export function NewPlanning({
         )}
       </Formik>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
+        {/* <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Ano agrícola</Form.Label>
             <Form.Select
@@ -160,7 +214,7 @@ export function NewPlanning({
               })}
             </Form.Select>
           </Form.Group>
-        </Col>
+        </Col> */}
       </Row>
       {plannings.map((newPlanning, index) => {
         return (

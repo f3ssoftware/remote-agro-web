@@ -73,7 +73,7 @@ export function NewFertilizerPrescription({
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
-                setSelectedProduct(e.value)
+                setProduct(e.value)
               }}
               forceSelection
               dropdown
