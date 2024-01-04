@@ -11,7 +11,13 @@ import { PlanningInput } from '../../../models/PlanningInput'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
 import { Product } from '../../../models/Product'
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { InputText } from 'primereact/inputtext'
+import { Calendar } from 'primereact/calendar'
+import { InputNumber } from 'primereact/inputnumber'
 
 export function NewPlanningItem({
   onHandleRemove,
@@ -23,7 +29,7 @@ export function NewPlanningItem({
   onHandleUpdate: any
 }) {
   const [payDate, setPayDate] = useState(new Date())
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState<number>()
   const [productId, setProductId] = useState(0)
   const [measureUnit, setMeasureUnit] = useState('')
   const [observation, setObservation] = useState('')
@@ -31,7 +37,7 @@ export function NewPlanningItem({
   const [userProductId, setUserProductId] = useState(0)
   const [isSeed, setIsSeed] = useState(false)
   const { input } = useSelector((state: RootState) => state)
-  const [totalCost, setTotalCost] = useState(0)
+  const [totalCost, setTotalCost] = useState<number>()
   const [seedQuantityType, setSeedQuantityType] = useState('')
   const [treatment, setTreatment] = useState('NÃO TRATADA')
   const [pms, setPms] = useState('')
@@ -102,21 +108,22 @@ export function NewPlanningItem({
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
-                setSelectedProduct(e.value);
+                setSelectedProduct(e.value)
 
-                const userProducts = input.inputs.filter(i => i.product?.name === e.value.name)
-                if (userProducts.length > 0) {
-                    setUserHasProduct(true);
-                    setUserProductId(userProducts[0].id!);
-                    setMeasureUnit(userProducts[0].measure_unit!);
-                } else if (e.value instanceof Object) {
-                    if (e.value?.class === 'SEMENTE') {
-                        setIsSeed(true);
-                    }
-                    setUserHasProduct(false);
-                    setProductId(e.value?.id!);
-                }
-            }} 
+                const userProducts = input.inputs.filter(
+                  (i) => i.product?.name === e.value.name,
+                )
+                
+                  setUserProductId(userProducts[0].id!)
+                  setMeasureUnit(userProducts[0].measure_unit!)
+                
+                  if (e.value?.class === 'SEMENTE') {
+                    setIsSeed(true)
+                  }
+                  setUserHasProduct(false)
+                  setProductId(e.value?.id!)
+
+              }}
               forceSelection
               dropdown
               style={{ width: '100%' }}
@@ -154,21 +161,33 @@ export function NewPlanningItem({
         </Col> */}
         {!userHasProduct ? (
           <Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>Unidade Medida</Form.Label>
-              <Form.Control
-                type="text"
+            <span className="p-float-label">
+              <InputText
+                id="measureUnit"
+                name="measureUnit"
+                value={measureUnit}
                 onChange={(e) => {
                   setMeasureUnit(e.target.value)
                 }}
               />
-            </Form.Group>
+              <label htmlFor="measureUnit">Unidade de medida</label>
+            </span>
           </Col>
         ) : (
           <></>
         )}
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <Calendar
+              onChange={(e: any) => {
+                setPayDate(e.value!)
+              }}
+              locale="en"
+              dateFormat="dd/mm/yyyy"
+            />
+            <label htmlFor="date">Data de pagamento</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
             <DatePicker
               locale={pt}
@@ -176,10 +195,20 @@ export function NewPlanningItem({
               selected={payDate}
               onChange={(date: Date) => setPayDate(date)}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              id="quantity"
+              value={quantity}
+              onValueChange={(e) => {
+                setQuantity(Number(e.value))
+              }}
+            />
+            <label htmlFor="quantity">Quantidade</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
             <Form.Control
               type="number"
@@ -187,10 +216,26 @@ export function NewPlanningItem({
                 setQuantity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              inputId="currency-br"
+              value={totalCost}
+              onValueChange={(e) => {
+                setTotalCost(Number(e.value))
+              }}
+              mode="currency"
+              currency="BRL"
+              minFractionDigits={2}
+              maxFractionDigits={2}
+              locale="pt-BR"
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="contractId">Custo total</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Custo total</Form.Label>
             <Form.Control
               type="text"
@@ -224,7 +269,7 @@ export function NewPlanningItem({
               type="text"
               onChange={(e) => setObservation(e.target.value)}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         {index !== 0 ? (
           <Col md={1}>
