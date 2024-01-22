@@ -2,6 +2,13 @@ import { useState } from 'react'
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap'
 import { NewPlanning } from '../components/NewPlanning'
 import { NewPlanningCost } from '../components/NewPlanningCost'
+import { Dropdown } from 'primereact/dropdown'
+import { Dialog } from 'primereact/dialog'
+
+interface Type {
+  name: string
+  value: number
+}
 
 export function NewPlanningModal({
   show,
@@ -11,46 +18,47 @@ export function NewPlanningModal({
   handleClose: any
 }) {
   const [registrationType, setRegistrationType] = useState(1)
+  const option: Type[] = [
+    { name: 'Insumos', value: 1 },
+    { name: 'Outros custos', value: 2 },
+  ]
 
   return (
-    <Modal show={show} onHide={handleClose} backdrop={'static'} size={'xl'}>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: '#7C5529', border: 'none' }}
-      >
-        <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>Novo Planejamento</span>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
-        <Row style={{ marginTop: '2%' }}>
-          <Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Select
-                aria-label=""
-                onChange={(e) => {
-                  return setRegistrationType(Number(e.target.value))
-                }}
-              >
-                <option value={1}>Insumos</option>
-                <option value={2}>Outros Custos</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-        {registrationType === 1 ? (
-          <NewPlanning
-            show={false}
-            handleClose={() => handleClose()}
-          ></NewPlanning>
-        ) : (
-          <NewPlanningCost
-            show={false}
-            handleClose={() => handleClose()}
-          ></NewPlanningCost>
-        )}
-      </Modal.Body>
-    </Modal>
+    <Dialog
+      header="Novo planejamento"
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={{ backgroundColor: '#7C5529' }}
+      contentStyle={{ backgroundColor: '#7C5529' }}
+    >
+      <Row style={{ marginTop: '2%' }}>
+        <Col>
+          <Dropdown
+            value={registrationType}
+            onChange={(e) => {
+              setRegistrationType(e.target.value)
+            }}
+            options={option}
+            optionLabel="name"
+            optionValue="value"
+            style={{ width: '100%' }}
+          />
+        </Col>
+      </Row>
+      {registrationType === 1 ? (
+        <NewPlanning
+          show={false}
+          handleClose={() => handleClose()}
+        ></NewPlanning>
+      ) : (
+        <NewPlanningCost
+          show={false}
+          handleClose={() => handleClose()}
+        ></NewPlanningCost>
+      )}
+    </Dialog>
   )
+  
 }

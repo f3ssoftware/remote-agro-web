@@ -118,7 +118,6 @@ export function PrescriptionFertilizers({
 
         })}
         onSubmit={() => {
-          // handleClose()
           setShowNewPrescriptionModal(true)
         }}
       >
@@ -320,6 +319,7 @@ export function PrescriptionFertilizers({
         show={showNewPrescriptionModal}
         accountable={accountable}
         area={area}
+        handleClose={handleClose}
         applier={selectedApplier}
         date={dateTime.toISOString()}
         applicationType={applicationType}

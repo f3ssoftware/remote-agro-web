@@ -9,6 +9,7 @@ import {
   asyncPrescriptionTable,
 } from '../../../stores/plot.store'
 import { useDispatch } from 'react-redux'
+import { Dialog } from 'primereact/dialog'
 
 export function SeedingPrescriptionModal({
   show,
@@ -95,18 +96,17 @@ export function SeedingPrescriptionModal({
     }
     dispatch(asyncPrescriptionTable(request))
   }
-  return (
-    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: '#7C5529', border: 'none' }}
-      >
-        <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>Receituário</span>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+  return <Dialog
+      header="Receituário"
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={{ backgroundColor: '#7C5529' }}
+      contentStyle={{ backgroundColor: '#7C5529' }}
+    >
+
+
         <Row>
           <Col>
             <Row>
@@ -212,7 +212,5 @@ export function SeedingPrescriptionModal({
             </Col>
           </Row>
         </div>
-      </Modal.Body>
-    </Modal>
-  )
+    </Dialog>
 }

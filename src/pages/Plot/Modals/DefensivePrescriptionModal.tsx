@@ -9,6 +9,7 @@ import {
 } from '../../../stores/plot.store'
 import { useDispatch } from 'react-redux'
 import { NewDefensivePrescription } from '../components/NewDefensivePrescription'
+import { Dialog } from 'primereact/dialog'
 
 export function DefensivePrescriptionModal({
   show,
@@ -92,18 +93,17 @@ export function DefensivePrescriptionModal({
     }
     dispatch(asyncPrescriptionTable(request))
   }
-  return (
-    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: '#7C5529', border: 'none' }}
-      >
-        <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>Receituário</span>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+  return   <Dialog
+      header="Receituário"
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={{ backgroundColor: '#7C5529' }}
+      contentStyle={{ backgroundColor: '#7C5529' }}
+    >
+
+
         <Row>
           <Col>
             <Row>
@@ -188,7 +188,7 @@ export function DefensivePrescriptionModal({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 onClick={() => {
-                  // handleClose()
+                  handleClose()
                   next()
                   confirm()
                 }}
@@ -198,7 +198,6 @@ export function DefensivePrescriptionModal({
             </Col>
           </Row>
         </div>
-      </Modal.Body>
-    </Modal>
-  )
+    </Dialog>
+
 }
