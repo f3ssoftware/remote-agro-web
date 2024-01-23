@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Button, Form, Dropdown } from 'react-bootstrap'
+import { Row, Col, Button, Form } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import pt from 'date-fns/locale/pt-BR'
@@ -12,6 +12,10 @@ import { RootState } from '../../../../index'
 import { Contract } from '../../../../models/Contract'
 import { Cultivation } from '../../../../models/Cultivation'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { InputText } from 'primereact/inputtext'
+import { InputNumber } from 'primereact/inputnumber'
+import { Dropdown } from 'primereact/dropdown'
+import { Calendar } from 'primereact/calendar'
 
 export function NewContract({
   show,
@@ -59,7 +63,13 @@ export function NewContract({
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputText value={contractName} onChange={(e) => {
+              setContractName(e.target.value);
+            }} style={{ width: '100%' }}></InputText>
+            <label htmlFor="product">Nome para o contrato</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
               Nome para o contrato
             </Form.Label>
@@ -69,10 +79,16 @@ export function NewContract({
                 setContractName(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber value={contractId} onChange={(e) => {
+              setContractId(e.value!);
+            }} style={{ width: '100%' }}></InputNumber>
+            <label htmlFor="product">Código do contrato</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>
               Codigo do contrato
             </Form.Label>
@@ -82,11 +98,28 @@ export function NewContract({
                 setContractId(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Row style={{ marginTop: '2%' }}>
           <Col>
-            <Form.Group as={Col} controlId="formGridState">
+            <span className="p-float-label">
+              <Dropdown
+                value={selectedCultivations}
+                onChange={(selected: any) => {
+                  setSelectedCultivations(selected[0])
+                }}
+                optionLabel="label"
+                optionValue="id"
+                options={financial.cultivations.map(
+                  (cultivation: Cultivation, index) => {
+                    return { id: cultivation.id, label: cultivation?.name }
+                  },
+                )}
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="product">Cultivo</label>
+            </span>
+            {/* <Form.Group as={Col} controlId="formGridState">
               <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
               <Typeahead
                 id="cultivation"
@@ -99,10 +132,16 @@ export function NewContract({
                   },
                 )}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
           <Col>
-            <Form.Group className="mb-3" controlId="">
+            <span className="p-float-label">
+              <InputNumber value={bags} onChange={(e) => {
+                setBags(e.value!);
+              }} style={{ width: '100%' }}></InputNumber>
+              <label htmlFor="product">Sacas Totais</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>Sacas Totais</Form.Label>
               <Form.Control
                 type="number"
@@ -110,10 +149,18 @@ export function NewContract({
                   setBags(Number(e.target.value))
                 }}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
           <Col>
-            <Form.Group className="mb-3" controlId="">
+            <span className="p-float-label">
+              <InputNumber value={contractPrice} onChange={(e) => {
+                setContractPrice(e.value!);
+              }} style={{ width: '100%' }} mode="currency"
+                currency="BRL"
+                locale="pt-BR"></InputNumber>
+              <label htmlFor="product">Valor total do contrato</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>
                 Valor total do contrato
               </Form.Label>
@@ -123,12 +170,23 @@ export function NewContract({
                   setContractPrice(Number(e.target.value))
                 }}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
         </Row>
         <Row style={{ marginTop: '2%' }}>
           <Col>
-            <Form.Group className="mb-3" controlId="">
+            <span className="p-float-label">
+              <Calendar
+                onChange={(e: any) => {
+                  setStartDate(e.value!);
+                }}
+                locale="en"
+                dateFormat="dd/mm/yy"
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="product">Início do contrato</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>
                 Inicio do contrato
               </Form.Label>
@@ -138,10 +196,21 @@ export function NewContract({
                 selected={startDate}
                 onChange={(date: Date) => setStartDate(date)}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
           <Col>
-            <Form.Group className="mb-3" controlId="">
+            <span className="p-float-label">
+              <Calendar
+                onChange={(e: any) => {
+                  setEndDate(e.value!);
+                }}
+                locale="en"
+                dateFormat="dd/mm/yy"
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="product">Fim do contrato</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>Fim do contrato</Form.Label>
               <DatePicker
                 locale={pt}
@@ -149,10 +218,21 @@ export function NewContract({
                 selected={endDate}
                 onChange={(date: Date) => setEndDate(date)}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
           <Col>
-            <Form.Group className="mb-3" controlId="">
+            <span className="p-float-label">
+              <Calendar
+                onChange={(e: any) => {
+                  setPayDate(e.value!);
+                }}
+                locale="en"
+                dateFormat="dd/mm/yy"
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="product">Data de pagamento</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>
                 Data de pagamento
               </Form.Label>
@@ -162,12 +242,18 @@ export function NewContract({
                 selected={payDate}
                 onChange={(date: Date) => setPayDate(date)}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
         </Row>
         <Row>
           <Col>
-            <Form.Group className="mb-3" controlId="">
+            <span className="p-float-label">
+              <InputText value={contractName} onChange={(e) => {
+                setDescription(e.target.value);
+              }} style={{ width: '100%' }}></InputText>
+              <label htmlFor="product">Descrição adicional</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>
                 Descrição adicional
               </Form.Label>
@@ -177,7 +263,7 @@ export function NewContract({
                   setDescription(e.target.value)
                 }}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Col>
         </Row>
       </Row>
@@ -200,6 +286,6 @@ export function NewContract({
           Registrar
         </Button>
       </div>
-    </div>
+    </div >
   )
 }
