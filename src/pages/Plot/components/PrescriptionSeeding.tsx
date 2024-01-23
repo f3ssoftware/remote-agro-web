@@ -161,7 +161,7 @@ export function PrescriptionSeeding({
       <Formik
         initialValues={{
           accountable: '',
-          dateTime: '',
+          dateTime: null,
           productQuantity: null,
           seedQuantity: null,
           lineSpacing: null,
@@ -319,6 +319,7 @@ export function PrescriptionSeeding({
                         formik.touched.dateTime && formik.errors.dateTime,
                     })}
                     locale="en"
+                    value={dateTime}
                     dateFormat="dd/mm/yy"
                   />
                   {formik.touched.dateTime && formik.errors.dateTime ? (

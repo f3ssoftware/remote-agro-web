@@ -105,7 +105,7 @@ export function PrescriptionFertilizers({
         initialValues={{
           accountable: '',
           applicationType: '',
-          dateTime: '',
+          dateTime: null,
           plot: null,
           applier: null,
         }}
@@ -253,6 +253,7 @@ export function PrescriptionFertilizers({
                         formik.touched.dateTime && formik.errors.dateTime,
                     })}
                     locale="en"
+                    value={dateTime}
                     dateFormat="dd/mm/yy"
                   />
                   {formik.touched.dateTime && formik.errors.dateTime ? (

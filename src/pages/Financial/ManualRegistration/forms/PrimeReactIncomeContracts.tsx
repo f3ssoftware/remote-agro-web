@@ -26,8 +26,8 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
   const [contractId, setContractId] = useState<number>();
   const [sacks, setSacks] = useState<number>();
   const [contractValue, setContractValue] = useState<number>();
-  const [startDate, setStartDate] = useState<string | Date | Date[] | null>([]);
-  const [payDate, setPayDate] = useState<string | Date | Date[] | null>([]);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [payDate, setPayDate] = useState<Date | null>(null);
   const [description, setDescription] = useState("");
   const [cultivation, setCultivation] = useState<any>();
   const toast = useRef<Toast>(null);
@@ -84,8 +84,8 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
           cultivation: "",
           sacks: null,
           contractValue: null,
-          startDate: [],
-          payDate: [],
+          startDate: null,
+          payDate: null,
         }}
         validationSchema={Yup.object({
           contractName: Yup.string().required("Necessário preencher"),
@@ -93,7 +93,7 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
           cultivation: Yup.string().required("Necessário preencher"),
           sacks: Yup.string().required("Necessário preencher"),
           contractValue: Yup.string().required("Necessário preencher"),
-          startDate: Yup.string().required("Necessário preencher"),
+          startDate: Yup.date().required("Necessário preencher"),
           payDate: Yup.string().required("Necessário preencher"),
         })}
         onSubmit={(values, { setSubmitting }) => {
@@ -176,8 +176,8 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
                 <Dropdown
                   value={formik.values.cultivation}
                   onChange={(e) => {
-                    formik.setFieldValue("cultivation", e.target.value);
-                    setCultivation(e.target.value);
+                    formik.setFieldValue("cultivation", e.value);
+                    setCultivation(e.value);
                   }}
                   className={classNames({
                     "p-invalid":
@@ -215,7 +215,7 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
                     })}
                     style={{ width: '100%' }}
                   />
-                  {formik.touched.cultivation && formik.errors.cultivation ? (
+                  {formik.touched.sacks && formik.errors.sacks ? (
                     <div
                       style={{
                         color: "red",
@@ -223,7 +223,7 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
                         fontFamily: "Roboto",
                       }}
                     >
-                      {formik.errors.cultivation}
+                      {formik.errors.sacks}
                     </div>
                   ) : null}
                   <label htmlFor="contractId">Sacas totais</label>
@@ -277,6 +277,7 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
                       "p-invalid": formik.touched.startDate && formik.errors.startDate,
                     })}
                     locale="en"
+                    value={startDate}
                     dateFormat="dd/mm/yy"
                     style={{ width: '100%' }}
                   />
@@ -302,6 +303,7 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
                       setPayDate(e.value!);
                     }}
                     locale="en"
+                    value={payDate}
                     dateFormat="dd/mm/yy"
                     style={{ width: '100%' }}
                   />

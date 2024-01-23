@@ -133,7 +133,7 @@ export function NewPlot() {
           value: null,
           cultivation: '',
           weigh: null,
-          plantingDate: '',
+          plantingDate: null,
           active: null
         }}
         validationSchema={Yup.object({
@@ -341,6 +341,7 @@ export function NewPlot() {
                         formik.errors.plantingDate,
                     })}
                     locale="en"
+                    value={plantingDate}
                     dateFormat="dd/mm/yy"
                   />
                   {formik.touched.plantingDate && formik.errors.plantingDate ? (

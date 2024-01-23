@@ -27,7 +27,7 @@ export function PrimeReactIncomeOthers() {
   const [contractId, setContractId] = useState<number>();
   const [sacks, setSacks] = useState<number>();
   const [totalValue, setTotalValue] = useState<number>();
-  const [startDate, setStartDate] = useState<string | Date | Date[] | null>([]);
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [description, setDescription] = useState("");
   const [cultivation, setCultivation] = useState<Cultivation>();
   const toast = useRef<Toast>(null);
@@ -68,7 +68,7 @@ export function PrimeReactIncomeOthers() {
           cultivation: "",
           sacks: null,
           totalValue: null,
-          startDate: [],
+          startDate: null,
         }}
         validationSchema={Yup.object({
           reference: Yup.string().required("Necessário preencher"),
@@ -202,7 +202,7 @@ export function PrimeReactIncomeOthers() {
                     })}
                     style={{ width: '100%' }}
                   />
-                  {formik.touched.cultivation && formik.errors.cultivation ? (
+                  {formik.touched.sacks && formik.errors.sacks ? (
                     <div
                       style={{
                         color: "red",
@@ -210,7 +210,7 @@ export function PrimeReactIncomeOthers() {
                         fontFamily: "Roboto",
                       }}
                     >
-                      {formik.errors.cultivation}
+                      {formik.errors.sacks}
                     </div>
                   ) : null}
                   <label htmlFor="contractId">Sacas totais</label>
@@ -258,6 +258,7 @@ export function PrimeReactIncomeOthers() {
                       "p-invalid": formik.touched.startDate && formik.errors.startDate,
                     })}
                     locale="en"
+                    value={startDate}
                     dateFormat="dd/mm/yy"
                     style={{ width: '100%' }}
                   />

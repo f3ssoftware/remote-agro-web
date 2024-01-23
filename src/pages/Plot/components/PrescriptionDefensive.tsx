@@ -131,7 +131,7 @@ export function PrescriptionDefensive({
       <Formik
         initialValues={{
           accountable: '',
-          dateTime: '',
+          dateTime: null,
           block: '',
           applicationType: 'Terrestre',
           flowRate: null,
@@ -303,6 +303,7 @@ export function PrescriptionDefensive({
                         formik.touched.dateTime && formik.errors.dateTime,
                     })}
                     locale="en"
+                    value={dateTime}
                     dateFormat="dd/mm/yy"
                   />
                   {formik.touched.dateTime && formik.errors.dateTime ? (
