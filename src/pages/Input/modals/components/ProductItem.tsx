@@ -70,8 +70,8 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
     }
 
     return <div>
-        <Row style={{ marginTop: '2%' }}>
-            <Col md={2}>
+        <Row style={{ marginTop: '5%' }}>
+            <Col md={3}>
                 <span className="p-float-label">
                     <AutoComplete field="name" value={selectedProduct} suggestions={products} completeMethod={autoComplete} onChange={(e: any) => {
                         setSelectedProduct(e.value);
@@ -92,7 +92,7 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                     <label htmlFor="product">Produto</label>
                 </span>
             </Col>
-            {!userHasProduct ? <Col md={2}>
+            {!userHasProduct ? <Col md={3}>
                 {/* <Form.Group className="mb-3" controlId="">
                     <Form.Label style={{ color: '#fff' }}>Unidade Medida</Form.Label>
                     <Form.Control type="text" onChange={(e) => {
@@ -101,10 +101,10 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                 </Form.Group> */}
                 <span className="p-float-label">
                     <InputText value={measureUnit} onChange={(e) => setMeasureUnit(e.target.value)} style={{ width: '100%' }}></InputText>
-                    <label htmlFor="product">Unidade Medida</label>
+                    <label htmlFor="product">Unidade medida</label>
                 </span>
             </Col> : <></>}
-            <Col md={2}>
+            <Col md={3}>
                 <span className="p-float-label">
                     <InputText value={accountable} onChange={(e) => {
                         setAccountable(e.target.value);
@@ -146,7 +146,8 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                     <label htmlFor="initialCost">Custo</label>
                 </span>
             </Col>
-            <Col md={2}>
+            <Row style={{ marginTop: '5%' }}>
+                <Col md={7}>
                 <span className="p-float-label">
                     <InputText value={observation} onChange={(e) => {
                         setObservation(e.target.value);
@@ -157,12 +158,13 @@ export function ProductItem({ index, onHandleRemove, onHandleUpdate }: { index: 
                     <Form.Label style={{ color: '#fff' }}>Observações</Form.Label>
                     <Form.Control type="text" onChange={(e) => setObservation(e.target.value)} />
                 </Form.Group> */}
-            </Col>
+                </Col>
             {index !== 0 ? <Col md={1}>
                 <Button variant="danger" onClick={() => {
                     onHandleRemove(index);
                 }} style={{ marginTop: '14%' }}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></Button>
             </Col> : <></>}
+            </Row>
         </Row>
         <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
             {!userHasProduct && isSeed ?

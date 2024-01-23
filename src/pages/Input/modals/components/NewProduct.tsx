@@ -167,7 +167,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
             label={`Vincular Nota`}
         /> */}
         {showFormLinkInvoice ? <div>
-            <Row>
+            <Row style={{marginTop: '2%'}}>
                 <Col>
                     <span className="p-float-label">
                         <Calendar
