@@ -75,10 +75,10 @@ export function NewPlanningTab({
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
+        <Col md={2}>
           <Dropdown>
             <Dropdown.Toggle variant="primary" id="year-dropdown">
-              {selectedYear || 'Select a Year'}
+              {selectedYear || 'Selecione um ano'}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
@@ -90,7 +90,7 @@ export function NewPlanningTab({
             </Dropdown.Menu>
           </Dropdown>
         </Col>
-        <Col>
+        <Col md={2}>
         <Form.Group className="mb-3" controlId="">
               <Form.Select
                 aria-label=""
@@ -114,7 +114,7 @@ export function NewPlanningTab({
             </Form.Group>
         </Col>
 
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Manutenção</Form.Label>
             <Form.Control
@@ -142,7 +142,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Diesel</Form.Label>
             <Form.Control
@@ -170,7 +170,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Gasolina</Form.Label>
             <Form.Control
@@ -198,7 +198,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Arla</Form.Label>
             <Form.Control
@@ -228,7 +228,7 @@ export function NewPlanningTab({
         </Col>
       </Row>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Administrativo</Form.Label>
             <Form.Control
@@ -256,7 +256,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Conservação</Form.Label>
             <Form.Control
@@ -284,7 +284,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Mão-de-obra</Form.Label>
             <Form.Control
@@ -312,7 +312,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Armazenagem</Form.Label>
             <Form.Control
@@ -342,7 +342,7 @@ export function NewPlanningTab({
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Cantina</Form.Label>
             <Form.Control
@@ -370,7 +370,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Diversos</Form.Label>
             <Form.Control
@@ -398,7 +398,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Arrendo</Form.Label>
             <Form.Control
@@ -426,7 +426,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Terceirizados</Form.Label>
             <Form.Control
@@ -454,7 +454,7 @@ export function NewPlanningTab({
             />
           </Form.Group>
         </Col>
-        <Col>
+        <Col md={2}>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Outros</Form.Label>
             <Form.Control

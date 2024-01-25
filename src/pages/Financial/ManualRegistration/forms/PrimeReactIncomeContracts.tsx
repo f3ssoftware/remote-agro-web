@@ -42,8 +42,7 @@ export function PrimeReactIncomeContracts({ isUpdate, contract }: { isUpdate?: b
     const contract: Contract = {
         amount: contractValue! * 100,
         code: contractId?.toString(),
-        cultivation_id: cultivation.id,
-        cultivation_name: cultivation.name,
+        cultivation_id: cultivation,
         description,
         end_date: new Date().toISOString(),
         start_date: startDate?.toString(),

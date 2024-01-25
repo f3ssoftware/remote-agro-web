@@ -96,11 +96,12 @@ export function NewPlanning({
           <form onSubmit={formik.handleSubmit}>
             <Row style={{ marginTop: '4%' }}>
               <Row>
-                <Col md="auto">
+                <Col md={3}>
                   <span className="p-float-label">
                     <InputText
                       id="ReferenceName"
                       name="ReferenceName"
+                      style={{ width: '100%' }}
                       value={formik.values.referenceName}
                       onChange={(e) => {
                         formik.setFieldValue('referenceName', e.target.value)
@@ -127,7 +128,7 @@ export function NewPlanning({
                     <label htmlFor="referenceName">Nome</label>
                   </span>
                 </Col>
-                <Col>
+                <Col md={3}>
                 <span className="p-float-label">
                   <AutoComplete
                     field="label"

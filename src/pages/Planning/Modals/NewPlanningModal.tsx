@@ -27,7 +27,7 @@ export function NewPlanningModal({
     <Dialog
       header="Novo planejamento"
       visible={show}
-      style={{ width: '50vw' }}
+      style={{ width: '80vw' }}
       className="custom-dialog"
       onHide={handleClose}
       headerStyle={{ backgroundColor: '#7C5529' }}

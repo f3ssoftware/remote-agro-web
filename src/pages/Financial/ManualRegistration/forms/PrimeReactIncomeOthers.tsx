@@ -7,7 +7,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { RootState } from "../../../..";
@@ -29,7 +29,7 @@ export function PrimeReactIncomeOthers() {
   const [totalValue, setTotalValue] = useState<number>();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [description, setDescription] = useState("");
-  const [cultivation, setCultivation] = useState<Cultivation>();
+  const [cultivation, setCultivation] = useState<any>();
   const toast = useRef<Toast>(null);
   const cultivationlist: Type[] = [
     // financial.cultivations.map((cultivation: Cultivation,index)=>{return{ name: cultivation.name, id: cultivation.id }})
@@ -42,8 +42,7 @@ export function PrimeReactIncomeOthers() {
     const contract: Contract = {
       amount: totalValue!,
       code: contractId?.toString(),
-      cultivation_id: cultivation?.id,
-      cultivation_name: cultivation?.name,
+      cultivation_id: cultivation,
       description,
       end_date: new Date().toString(),
       start_date: startDate?.toString(),
@@ -57,6 +56,10 @@ export function PrimeReactIncomeOthers() {
     await dispatch(asyncRegisterContract(contract));
     navigate('/financial/balance');
   }
+
+  useEffect(() => {
+    console.log(cultivation)
+  }, [cultivation]);
 
   return (
     <div>

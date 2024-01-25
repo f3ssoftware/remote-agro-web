@@ -100,7 +100,7 @@ export function NewPlanningItem({
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
+        <Col md={2}>
           <span className="p-float-label">
             <AutoComplete
               field="label"
@@ -160,12 +160,13 @@ export function NewPlanningItem({
           </Form.Group>
         </Col> */}
         {!userHasProduct ? (
-          <Col>
+          <Col md={2}>
             <span className="p-float-label">
               <InputText
                 id="measureUnit"
                 name="measureUnit"
                 value={measureUnit}
+                style={{ width: '100%' }}
                 onChange={(e) => {
                   setMeasureUnit(e.target.value)
                 }}
@@ -176,28 +177,28 @@ export function NewPlanningItem({
         ) : (
           <></>
         )}
-        <Col>
-          <span className="p-float-label">
-            <Calendar
-              onChange={(e: any) => {
-                setPayDate(e.value!)
-              }}
-              locale="en"
-              dateFormat="dd/mm/yyyy"
-            />
-            <label htmlFor="date">Data de pagamento</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
-            <DatePicker
-              locale={pt}
-              dateFormat="dd/MM/yyyy"
-              selected={payDate}
-              onChange={(date: Date) => setPayDate(date)}
-            />
-          </Form.Group> */}
-        </Col>
-        <Col>
+          <Col md={2}>
+            <span className="p-float-label">
+              <Calendar
+                onChange={(e: any) => {
+                  setPayDate(e.value!)
+                }}
+                locale="en"
+                dateFormat="dd/mm/yyyy"
+              />
+              <label htmlFor="date">Data de pagamento</label>
+            </span>
+            {/* <Form.Group className="mb-3" controlId="">
+              <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
+              <DatePicker
+                locale={pt}
+                dateFormat="dd/MM/yyyy"
+                selected={payDate}
+                onChange={(date: Date) => setPayDate(date)}
+              />
+            </Form.Group> */}
+          </Col>
+        <Col md={2}>
           <span className="p-float-label">
             <InputNumber
               id="quantity"
@@ -205,6 +206,7 @@ export function NewPlanningItem({
               onValueChange={(e) => {
                 setQuantity(Number(e.value))
               }}
+              inputStyle={{ width: '100%' }}
             />
             <label htmlFor="quantity">Quantidade</label>
           </span>
@@ -218,7 +220,7 @@ export function NewPlanningItem({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col md={2}>
           <span className="p-float-label">
             <InputNumber
               inputId="currency-br"
@@ -231,7 +233,7 @@ export function NewPlanningItem({
               minFractionDigits={2}
               maxFractionDigits={2}
               locale="pt-BR"
-              style={{ width: '100%' }}
+              inputStyle={{ width: '100%' }}
             />
             <label htmlFor="contractId">Custo total</label>
           </span>
@@ -278,7 +280,7 @@ export function NewPlanningItem({
               onClick={() => {
                 onHandleRemove(index)
               }}
-              style={{ marginTop: '45%' }}
+              style={{ marginTop: '14%' }}
             >
               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
             </Button>
