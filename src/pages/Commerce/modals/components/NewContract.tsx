@@ -29,10 +29,10 @@ export function NewContract({
   const [description, setDescription] = useState('')
   const [bags, setBags] = useState(0)
   const [contractPrice, setContractPrice] = useState(0)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const [payDate, setPayDate] = useState(new Date())
-  const [selectedCultivations, setSelectedCultivations]: any = useState({})
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
+  const [payDate, setPayDate] = useState<Date | null>(null)
+  const [cultivation, setCultivation] = useState<any>();
   const { financial, seasons } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
 
@@ -43,11 +43,10 @@ export function NewContract({
       description: description,
       sacks: bags.toString(),
       amount: contractPrice * 100,
-      cultivation_name: selectedCultivations.name,
-      cultivation_id: selectedCultivations.id,
-      payment_date: payDate.toISOString(),
-      start_date: startDate.toISOString(),
-      end_date: endDate.toISOString(),
+      cultivation_id: cultivation,
+      payment_date: payDate?.toISOString(),
+      start_date: startDate?.toISOString(),
+      end_date: endDate?.toISOString(),
       type: 'CONTRACT',
       season_id: seasons.selectedSeason.id,
     }
@@ -56,7 +55,6 @@ export function NewContract({
 
   useEffect(() => {
     dispatch(asyncFetchCultivations())
-    setSelectedCultivations(financial?.cultivations[0])
   }, [])
 
   return (
@@ -104,18 +102,15 @@ export function NewContract({
           <Col>
             <span className="p-float-label">
               <Dropdown
-                value={selectedCultivations}
-                onChange={(selected: any) => {
-                  setSelectedCultivations(selected[0])
+                value={cultivation}
+                onChange={(e) => {
+                  setCultivation(e.target.value);
                 }}
-                optionLabel="label"
-                optionValue="id"
-                options={financial.cultivations.map(
-                  (cultivation: Cultivation, index) => {
-                    return { id: cultivation.id, label: cultivation?.name }
-                  },
-                )}
-                style={{ width: '100%' }}
+                optionLabel="name"
+                  optionValue="id"
+                  placeholder="Cultivo"
+                  options={financial.cultivations}
+                  style={{ width: '100%' }}
               />
               <label htmlFor="product">Cultivo</label>
             </span>
@@ -180,6 +175,7 @@ export function NewContract({
                 onChange={(e: any) => {
                   setStartDate(e.value!);
                 }}
+                value={startDate}
                 locale="en"
                 dateFormat="dd/mm/yy"
                 style={{ width: '100%' }}
@@ -204,6 +200,7 @@ export function NewContract({
                 onChange={(e: any) => {
                   setEndDate(e.value!);
                 }}
+                value={endDate}
                 locale="en"
                 dateFormat="dd/mm/yy"
                 style={{ width: '100%' }}
@@ -227,6 +224,7 @@ export function NewContract({
                   setPayDate(e.value!);
                 }}
                 locale="en"
+                value={payDate}
                 dateFormat="dd/mm/yy"
                 style={{ width: '100%' }}
               />
@@ -248,7 +246,7 @@ export function NewContract({
         <Row>
           <Col>
             <span className="p-float-label">
-              <InputText value={contractName} onChange={(e) => {
+              <InputText value={description} onChange={(e) => {
                 setDescription(e.target.value);
               }} style={{ width: '100%' }}></InputText>
               <label htmlFor="product">Descrição adicional</label>
