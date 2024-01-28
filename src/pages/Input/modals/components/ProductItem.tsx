@@ -86,8 +86,9 @@ export function ProductItem({
   // }, [input])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = input.generalProductsList.filter((product) =>
-      product.name.includes(event.query),
+      product.name.toLowerCase().includes(query),
     )
     setProducts(resultSet)
   }
