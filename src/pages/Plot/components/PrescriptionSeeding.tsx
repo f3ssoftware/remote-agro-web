@@ -80,8 +80,9 @@ export function PrescriptionSeeding({
   }, [])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = productList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setProductList(resultSet)
@@ -90,8 +91,9 @@ export function PrescriptionSeeding({
     }
   }
   const autoCompleteSeeds = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = seedList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setSeedList(resultSet)
@@ -100,8 +102,9 @@ export function PrescriptionSeeding({
     }
   }
   const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = plotList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setPlotList(resultSet)
@@ -110,8 +113,9 @@ export function PrescriptionSeeding({
     }
   }
   const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = applierList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setApplierList(resultSet)

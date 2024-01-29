@@ -30,7 +30,8 @@ export function WithdrawalProduct({ index, onHandleRemove, onHandleUpdate }: { i
     const [products, setProducts] = useState<any[]>([]);
 
     const autoComplete = (event: AutoCompleteCompleteEvent) => {
-        const resultSet = input.inputs.filter(product => product.product?.name.includes(event.query));
+        const query = event.query.toLowerCase();
+        const resultSet = input.inputs.filter(product => product.product?.name.toLowerCase().includes(query));
         setProducts(resultSet);
     }
 

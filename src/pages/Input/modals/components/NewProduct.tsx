@@ -115,7 +115,8 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
     }
 
     const autoComplete = (event: AutoCompleteCompleteEvent) => {
-        const resultSet = invoices.filter((invoice) => invoice.reference?.includes(event.query))
+        const query = event.query.toLowerCase();
+        const resultSet = invoices.filter((invoice) => invoice.reference?.toLowerCase().includes(query))
         setInvoices(resultSet);
     }
 

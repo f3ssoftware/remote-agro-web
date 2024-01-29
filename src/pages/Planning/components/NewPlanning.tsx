@@ -55,8 +55,9 @@ export function NewPlanning({
   }
 
   const autoCompleteSeason = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = seasonList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setSeasonList(resultSet)

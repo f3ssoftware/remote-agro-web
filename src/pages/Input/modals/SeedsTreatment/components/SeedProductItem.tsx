@@ -24,7 +24,8 @@ export function SeedProductItem({ index, onHandleRemove, onHandleUpdate }: { ind
     }, [selectedProduct, quantity]);
 
     const autoComplete = (event: AutoCompleteCompleteEvent) => {
-        const resultSet = productList.filter((p: any) => p?.product.name?.includes(event.query));
+        const query = event.query.toLowerCase();
+        const resultSet = productList.filter((p: any) => p?.product.name?.toLowerCase().includes(query));
         setProductList(resultSet);
     }
 

@@ -67,8 +67,9 @@ export function PrescriptionFertilizers({
   }
 
   const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = applierList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setApplierList(resultSet)

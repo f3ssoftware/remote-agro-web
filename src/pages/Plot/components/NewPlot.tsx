@@ -51,8 +51,9 @@ export function NewPlot() {
   const [cultivationList, setCultivationList] = useState<any[]>([])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = cultivationList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setCultivationList(resultSet)

@@ -55,8 +55,9 @@ export function NewDefensivePrescription({
   }, [quantity, area, tank])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
     const resultSet = productList.filter((p: any) =>
-      p?.label?.includes(event.query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setProductList(resultSet)
