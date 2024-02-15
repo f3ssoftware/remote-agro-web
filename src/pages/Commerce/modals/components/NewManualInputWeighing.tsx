@@ -2,9 +2,18 @@ import { useEffect, useState } from 'react'
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
-import { asyncFetchFarms, selectAFarm, setFarms } from '../../../../stores/farm.store'
+import {
+  asyncFetchFarms,
+  selectAFarm,
+  setFarms,
+} from '../../../../stores/farm.store'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchSiloData, asyncInputWeighing, asyncUpdateInputWeighing, removeInputWeighRow } from '../../../../stores/commerce.store'
+import {
+  asyncFetchSiloData,
+  asyncInputWeighing,
+  asyncUpdateInputWeighing,
+  removeInputWeighRow,
+} from '../../../../stores/commerce.store'
 import { calculateHumidityDiscount } from './weighingsHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -13,9 +22,21 @@ import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirma
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Cultivar } from '../../../../models/Cultivar'
 import { Silo } from '../../../../models/Silo'
-import { GeneratePdf } from './GeneratePdf/GeneratePdf';
+import { GeneratePdf } from './GeneratePdf/GeneratePdf'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { InputText } from 'primereact/inputtext'
+import { InputNumber } from 'primereact/inputnumber'
 
-export function NewManualInputWeighing({ index, manualInputWeigh }: { index: number, manualInputWeigh: InputWeighingRow }) {
+export function NewManualInputWeighing({
+  index,
+  manualInputWeigh,
+}: {
+  index: number
+  manualInputWeigh: InputWeighingRow
+}) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons } = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState<any>({})
@@ -35,11 +56,16 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
   const [totalWeighning, setTotalWeighning] = useState(0)
   const [observation, setObservation] = useState('')
   const [company, setCompany] = useState('')
-  const [id, setId] = useState<number>();
-  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
+  const [id, setId] = useState<number>()
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] =
+    useState(false)
+  const [farmList, setFarmList] = useState<any[]>([])
+  const [plotList, setPlotList] = useState<any[]>([])
+  const [cultivarList, setCultivarList] = useState<any[]>([])
+  const [siloList, setSiloList] = useState<any[]>([])
 
   useEffect(() => {
-    fetchData();
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -51,11 +77,18 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivar?.cultivation_id))
+    setHumidityDiscount(
+      calculateHumidityDiscount(humidity, selectedCultivar?.cultivation_id),
+    )
   }, [humidity])
 
   useEffect(() => {
-    dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivares' }));
+    dispatch(
+      asyncFetchFarms({
+        season_id: seasons.selectedSeason.id,
+        include: 'cultivares',
+      }),
+    )
   }, [seasons])
 
   useEffect(() => {
@@ -74,41 +107,120 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
 
   const fetchData = async () => {
     await dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id }))
-    await dispatch(asyncFetchSiloData());
+    await dispatch(asyncFetchSiloData())
     if (!manualInputWeigh.id) {
       setSelectedFarm(farm?.farms[0])
-      dispatch(selectAFarm(farm?.farms[0]));
+      dispatch(selectAFarm(farm?.farms[0]))
+    }
+  }
+
+  const fetchFarm = () => {
+    return farm?.farms?.map((farm: any) => {
+      return { id: farm.id, label: farm.name, ...farm }
+    })
+  }
+
+  const fetchPlot = () => {
+    return selectedFarm?.fields?.map((field: any) => {
+      return { id: field.id, label: field.name, ...field }
+    })
+  }
+
+  const fetchCultivar = () => {
+    return selectedPlot?.cultivar?.map((cultivar: any) => {
+      return { id: cultivar.id, label: cultivar.name, ...cultivar }
+    })
+  }
+
+  const fetchSilo = () => {
+    return commerce?.silo?.map((silo: any) => {
+      return { id: silo.id, label: silo.name, ...silo }
+    })
+  }
+
+  const autoCompleteSilo = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = siloList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setSiloList(resultSet)
+    } else {
+      setSiloList(fetchSilo())
+    }
+  }
+
+  const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = plotList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setPlotList(resultSet)
+    } else {
+      setPlotList(fetchPlot())
+    }
+  }
+
+  const autoCompleteFarms = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = farmList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setFarmList(resultSet)
+    } else {
+      setFarmList(fetchFarm())
+    }
+  }
+
+  const autoCompleteCultivar = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = cultivarList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setCultivarList(resultSet)
+    } else {
+      setCultivarList(fetchCultivar())
     }
   }
 
   const fillFormEdit = () => {
-    const f: any = farm?.farms?.filter((farm: any) => farm?.id === manualInputWeigh?.farm_id)[0];
-    setSelectedFarm(f);
-    const p: any = f?.fields?.filter((plot: any) => plot?.id === manualInputWeigh?.field_id)[0]
-    setSelectedPlot(p);
-    const c: any = p?.cultivares?.filter((cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id)[0]
-    const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
+    const f: any = farm?.farms?.filter(
+      (farm: any) => farm?.id === manualInputWeigh?.farm_id,
+    )[0]
+    setSelectedFarm(f)
+    const p: any = f?.fields?.filter(
+      (plot: any) => plot?.id === manualInputWeigh?.field_id,
+    )[0]
+    setSelectedPlot(p)
+    const c: any = p?.cultivares?.filter(
+      (cultivar: Cultivar) => cultivar?.id === manualInputWeigh?.cultivar_id,
+    )[0]
+    const silum = commerce?.silo?.filter(
+      (silo: Silo) => silo?.id === manualInputWeigh?.silo_id,
+    )[0]
     if (silum) {
-      setSelectedSilo(silum);
+      setSelectedSilo(silum)
     }
-    setSelectedCultivar(c);
-    setCarPlate(manualInputWeigh?.car_plate!);
-    setDriver(manualInputWeigh?.car_driver!);
-    setCompany(manualInputWeigh?.shipping_company!);
-    setGrossWeighing(manualInputWeigh?.gross_weight!);
-    setNetWeighing(manualInputWeigh?.net_weight!);
-    setHumidity(manualInputWeigh?.humidity! / 100);
-    setImpurity(manualInputWeigh?.impurity! / 100);
-    setDiscount(manualInputWeigh?.discount! / 100);
-    setTotalWeighning(manualInputWeigh?.final_weight! / 1000);
-    setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!));
-    setTare(manualInputWeigh?.tare_weight!);
-    setObservation(manualInputWeigh?.observations!);
+    setSelectedCultivar(c)
+    setCarPlate(manualInputWeigh?.car_plate!)
+    setDriver(manualInputWeigh?.car_driver!)
+    setCompany(manualInputWeigh?.shipping_company!)
+    setGrossWeighing(manualInputWeigh?.gross_weight!)
+    setNetWeighing(manualInputWeigh?.net_weight!)
+    setHumidity(manualInputWeigh?.humidity! / 100)
+    setImpurity(manualInputWeigh?.impurity! / 100)
+    setDiscount(manualInputWeigh?.discount! / 100)
+    setTotalWeighning(manualInputWeigh?.final_weight! / 1000)
+    setHumidityDiscount(Number(manualInputWeigh?.humidity_discount!))
+    setTare(manualInputWeigh?.tare_weight!)
+    setObservation(manualInputWeigh?.observations!)
   }
 
   useEffect(() => {
-    fillFormEdit();
-  }, [farm]);
+    fillFormEdit()
+  }, [farm])
 
   // useEffect(() => {
   //   const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
@@ -129,32 +241,58 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         impurity: impurity * 100,
         discount: discount * 100,
         final_weight: totalWeighning * 1000,
-        type: "Entrada",
+        type: 'Entrada',
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
         total_discount: totalDiscount.toString(),
         observations: observation,
         tare_weight: tare,
-        mode: "Manual",
+        mode: 'Manual',
         car_plate: carPlate,
         car_driver: driver,
-        weighing_date: new Date().toISOString()
-      }
+        weighing_date: new Date().toISOString(),
+      },
     }
     if (!manualInputWeigh.id) {
-      dispatch(asyncInputWeighing(manualInput));
+      dispatch(asyncInputWeighing(manualInput))
     } else {
-      dispatch(asyncUpdateInputWeighing(manualInputWeigh?.id!, manualInput, index, WeighingRowType.MANUAL));
+      dispatch(
+        asyncUpdateInputWeighing(
+          manualInputWeigh?.id!,
+          manualInput,
+          index,
+          WeighingRowType.MANUAL,
+        ),
+      )
     }
-
   }
 
-
   return (
-    <div style={{ backgroundColor: (index % 2) > 0 ? '#f6eec1' : '#ebde90', paddingTop: '1%', paddingBottom: '1%' }}>
+    <div
+      style={{
+        backgroundColor: index % 2 > 0 ? '#f6eec1' : '#ebde90',
+        paddingTop: '1%',
+        paddingBottom: '1%',
+      }}
+    >
       <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedFarm}
+              suggestions={farmList}
+              completeMethod={autoCompleteFarms}
+              onChange={(e: any) => {
+                setSelectedFarm(e.value)
+              }}
+              dropdown
+              forceSelection
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="farm">Fazenda</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Fazenda</Form.Label>
             <Typeahead
               id="farm"
@@ -170,48 +308,115 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 return { ...farm, label: farm.label }
               })}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          {selectedFarm?.fields?.length > 0 ? (
+            <span className="p-float-label">
+              <AutoComplete
+                field="label"
+                value={selectedPlot}
+                suggestions={plotList}
+                completeMethod={autoCompletePlots}
+                onChange={(e: any) => {
+                  setSelectedPlot(e.value)
+                }}
+                dropdown
+                forceSelection
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="plot">Talhões</label>
+            </span>
+          ) : (
+            <></>
+          )}
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Talhões</Form.Label>
-            {selectedFarm?.fields?.length > 0 ? <Typeahead
-              id="field"
-              selected={selectedFarm?.fields.filter((field: any) => field?.id === selectedPlot?.id)}
-              labelKey={(selected: any) => selected?.name}
-              isInvalid={!selectedPlot?.id}
-              onChange={(selected: any) => {
-                setSelectedPlot(selected[0])
-              }}
-              options={selectedFarm?.fields?.map((field: any) => {
-                return { id: field.id, label: field.name, ...field }
-              })} /> : <></>}
-          </Form.Group>
+            {selectedFarm?.fields?.length > 0 ? (
+              <Typeahead
+                id="field"
+                selected={selectedFarm?.fields.filter(
+                  (field: any) => field?.id === selectedPlot?.id,
+                )}
+                labelKey={(selected: any) => selected?.name}
+                isInvalid={!selectedPlot?.id}
+                onChange={(selected: any) => {
+                  setSelectedPlot(selected[0])
+                }}
+                options={selectedFarm?.fields?.map((field: any) => {
+                  return { id: field.id, label: field.name, ...field }
+                })}
+              />
+            ) : (
+              <></>
+            )}
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          {selectedPlot?.cultivares?.length > 0 ? (
+            <span className="p-float-label">
+              <AutoComplete
+                field="label"
+                value={selectedCultivar}
+                suggestions={cultivarList}
+                completeMethod={autoCompleteCultivar}
+                onChange={(e: any) => {
+                  setSelectedCultivar(e.value)
+                }}
+                dropdown
+                forceSelection
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="cultivar">Cultivar</label>
+            </span>
+          ) : (
+            <></>
+          )}
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Cultivar</Form.Label>
-            {selectedPlot?.cultivares?.length > 0 ? <Typeahead
-              id="cultivar"
-              selected={selectedPlot?.cultivares?.filter((c: any) => c?.id === selectedCultivar?.id)}
-              labelKey={(selected: any) => selected?.name}
-              isInvalid={!selectedCultivar?.id}
-              onChange={(selected: any) => {
-                setSelectedCultivar(selected[0])
-              }}
-              options={selectedPlot?.cultivares?.map((cultivar: any) => {
-                return { id: cultivar.id, label: cultivar.name, ...cultivar }
-              })}
-            /> : <></>}
-
-          </Form.Group>
+            {selectedPlot?.cultivares?.length > 0 ? (
+              <Typeahead
+                id="cultivar"
+                selected={selectedPlot?.cultivares?.filter(
+                  (c: any) => c?.id === selectedCultivar?.id,
+                )}
+                labelKey={(selected: any) => selected?.name}
+                isInvalid={!selectedCultivar?.id}
+                onChange={(selected: any) => {
+                  setSelectedCultivar(selected[0])
+                }}
+                options={selectedPlot?.cultivares?.map((cultivar: any) => {
+                  return { id: cultivar.id, label: cultivar.name, ...cultivar }
+                })}
+              />
+            ) : (
+              <></>
+            )}
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedSilo}
+              suggestions={siloList}
+              completeMethod={autoCompleteSilo}
+              onChange={(e: any) => {
+                setSelectedSilo(e.value)
+              }}
+              dropdown
+              forceSelection
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="silo">Silo</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
-              selected={commerce?.silo?.filter((s: any) => s?.id === selectedSilo?.id)}
+              selected={commerce?.silo?.filter(
+                (s: any) => s?.id === selectedSilo?.id,
+              )}
               labelKey={(selected: any) => selected?.name}
               isInvalid={!selectedSilo?.id}
               onChange={(selected: any) => {
@@ -221,10 +426,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 return { id: silo.id, label: silo.name, ...silo }
               })}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={carPlate}
+              onChange={(e) => {
+                setCarPlate(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="carPlate">Placa</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
@@ -233,10 +449,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setCarPlate(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={driver}
+              onChange={(e) => {
+                setDriver(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="driver">Motorista</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
@@ -245,10 +472,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setDriver(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputText
+              value={company}
+              onChange={(e) => {
+                setCompany(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="company">Transportadora</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
@@ -257,10 +495,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setCompany(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={grossWeighing}
+              onChange={(e) => {
+                setGrossWeighing(e.value!)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="company">Peso Bruto</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
             <Form.Control
               type="number"
@@ -269,10 +518,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setGrossWeighing(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={tare}
+              onChange={(e) => {
+                setTare(e.value!)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="company">Tara</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
             <Form.Control
               type="number"
@@ -281,10 +541,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setTare(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={netWeighing}
+              onValueChange={(e) => {
+                setNetWeighing(Number(e.value))
+              }}
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="netWeigh">Peso líquido</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
@@ -294,12 +565,23 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setNetWeighing(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
       </Row>
       <Row>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={humidity}
+              onValueChange={(e) => {
+                setHumidity(Number(e.value))
+              }}
+              prefix="%"
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">UMID (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -308,10 +590,22 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setHumidity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={humidityDiscount}
+              onValueChange={(e) => {
+                setHumidityDiscount(Number(e.value))
+              }}
+              prefix="%"
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Desconto UMID (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -321,10 +615,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setHumidityDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={impurity}
+              onValueChange={(e) => {
+                setImpurity(Number(e.value))
+              }}
+              prefix="%"
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Impureza (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
@@ -334,10 +639,22 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setImpurity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={discount}
+              onValueChange={(e) => {
+                setDiscount(Number(e.value))
+              }}
+              prefix="%"
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Desconto (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
@@ -347,10 +664,22 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={totalDiscount}
+              onValueChange={(e) => {
+                setTotalDiscount(Number(e.value))
+              }}
+              prefix="%"
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Desconto total (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>
               Desconto total (%)
             </Form.Label>
@@ -362,10 +691,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setTotalDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={totalWeighning}
+              onValueChange={(e) => {
+                setTotalWeighning(Number(e.value))
+              }}
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="netWeigh">Peso Final</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
@@ -375,10 +715,21 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setTotalWeighning(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputText
+              value={observation}
+              onChange={(e) => {
+                setObservation(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="observation">Observações</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
             <Form.Control
               type="text"
@@ -387,7 +738,7 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
                 setObservation(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
       </Row>
 
@@ -402,8 +753,8 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         <Button
           variant="danger"
           onClick={() => {
-            setId(manualInputWeigh?.id!);
-            setShowAutoInputDeleteModal(true);
+            setId(manualInputWeigh?.id!)
+            setShowAutoInputDeleteModal(true)
           }}
         >
           <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
@@ -416,9 +767,25 @@ export function NewManualInputWeighing({ index, manualInputWeigh }: { index: num
         >
           {manualInputWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {manualInputWeigh?.id ? <GeneratePdf weighing={manualInputWeigh} cultivationsList={selectedPlot?.cultivares} silosList={commerce?.silo} farmsList={farm.farms} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
+        {manualInputWeigh?.id ? (
+          <GeneratePdf
+            weighing={manualInputWeigh}
+            cultivationsList={selectedPlot?.cultivares}
+            silosList={commerce?.silo}
+            farmsList={farm.farms}
+            profile={JSON.parse(sessionStorage.getItem('user')!)}
+          ></GeneratePdf>
+        ) : (
+          <></>
+        )}
 
-        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualInputWeigh.type!} ></DeleteConfirmationModal>
+        <DeleteConfirmationModal
+          show={showAutoInputDeleteModal}
+          handleClose={() => setShowAutoInputDeleteModal(false)}
+          id={id!}
+          index={index}
+          weighingType={manualInputWeigh.type!}
+        ></DeleteConfirmationModal>
       </div>
     </div>
   )

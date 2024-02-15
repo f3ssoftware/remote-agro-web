@@ -1,4 +1,3 @@
-import { Button, Modal } from "react-bootstrap"
 import { NewContract } from "../components/NewContract"
 import { Dialog } from "primereact/dialog"
 

@@ -425,7 +425,7 @@ export function NewContract({
             </Form.Group> */}
                 </Col>
               </Row>
-              <Row>
+              <Row style={{marginTop: '2%'}}>
                 <Col>
                   <span className="p-float-label">
                     <InputText

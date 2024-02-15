@@ -3,10 +3,16 @@ import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
+import {
+  asyncFetchContractsData,
+  asyncFetchCultivations,
+} from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
-import {  asyncSeparateWeighing, asyncUpdateSeparateWeighing } from '../../../../stores/commerce.store'
+import {
+  asyncSeparateWeighing,
+  asyncUpdateSeparateWeighing,
+} from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { AutoConfirmationModal } from '../CommerceWeighingModal/AutoConfirmationModal'
@@ -15,10 +21,20 @@ import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { Contract } from '../../../../models/Contract'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
 import { GeneratePdf } from './GeneratePdf/GeneratePdf'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { InputText } from 'primereact/inputtext'
+import { InputNumber } from 'primereact/inputnumber'
 
-
-
-export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:number, autoSeparateWeighing: SeparateWeighingRow}) {
+export function NewAutoSeparateWeighing({
+  index,
+  autoSeparateWeighing,
+}: {
+  index: number
+  autoSeparateWeighing: SeparateWeighingRow
+}) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
   const [selectedCultivation, setSelectedCultivation]: any = useState({})
@@ -37,12 +53,17 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
   const [reference, setReference] = useState('')
   const [grossWeighing, setGrossWeighing] = useState(0)
   const [tare, setTare] = useState(0)
-  const [showWeighingConfirmationModal, setShowWeighingConfirmationModal] = useState(false)
-  const [showTareConfirmationModal, setShowTareConfirmationModal] = useState(false)
-  const [grossWeightDate, setGrossWeightDate] = useState("")
-  const [tareWeightDate, setTareWeightDate] = useState("")
-  const [id, setId] = useState<number>();
-  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
+  const [showWeighingConfirmationModal, setShowWeighingConfirmationModal] =
+    useState(false)
+  const [showTareConfirmationModal, setShowTareConfirmationModal] =
+    useState(false)
+  const [grossWeightDate, setGrossWeightDate] = useState('')
+  const [tareWeightDate, setTareWeightDate] = useState('')
+  const [id, setId] = useState<number>()
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] =
+    useState(false)
+  const [cultivationList, setCultivationList] = useState<any[]>([])
+  const [contractList, setContractList] = useState<any[]>([])
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -51,50 +72,98 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
   }, [])
 
   useEffect(() => {
-    setNetWeighing(grossWeighing-tare)
+    setNetWeighing(grossWeighing - tare)
   }, [grossWeighing, tare])
 
   useEffect(() => {
-    setDiscount(impurity < 1 ? 0: impurity-1)
+    setDiscount(impurity < 1 ? 0 : impurity - 1)
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation?.id))
+    setHumidityDiscount(
+      calculateHumidityDiscount(humidity, selectedCultivation?.id),
+    )
   }, [humidity])
 
   // useEffect(() => {
   //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
   // }, [seasons])
 
-  useEffect(()=>{
-    setTotalDiscount(discount+humidityDiscount)
-  }, [discount,humidityDiscount])
+  useEffect(() => {
+    setTotalDiscount(discount + humidityDiscount)
+  }, [discount, humidityDiscount])
 
-  useEffect(()=>{
-    setTotalWeighning(netWeighing*((100-totalDiscount)/100))
+  useEffect(() => {
+    setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
   }, [netWeighing, totalDiscount])
+
+  const fetchCultivation = () => {
+    return financial?.cultivations?.map((cultivation: Cultivation) => {
+      return { id: cultivation.id, label: cultivation.name, ...cultivation }
+    })
+  }
+
+  const fetchContract = () => {
+    return financial?.contracts?.map((contract: any) => {
+      return { id: contract.id, label: contract.name, ...contract }
+    })
+  }
+
+  const autoCompleteCultivations = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = cultivationList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setCultivationList(resultSet)
+    } else {
+      setCultivationList(fetchCultivation())
+    }
+  }
+
+  const autoCompleteContracts = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = contractList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setContractList(resultSet)
+    } else {
+      setContractList(fetchContract())
+    }
+  }
 
   useEffect(() => {
     if (autoSeparateWeighing?.id) {
-      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === autoSeparateWeighing?.cultivation_id))
-      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === autoSeparateWeighing?.contract_id))
-      setReference(autoSeparateWeighing?.reference!);
-      setCarPlate(autoSeparateWeighing?.car_plate!);
-      setDriver(autoSeparateWeighing?.car_driver!);
-      setCompany(autoSeparateWeighing?.shipping_company!);
-      setGrossWeighing(autoSeparateWeighing?.gross_weight!);
-      setNetWeighing(autoSeparateWeighing?.net_weight!);
-      setHumidity(autoSeparateWeighing?.humidity! / 100);
-      setImpurity(autoSeparateWeighing?.impurity! / 100);
-      setDiscount(autoSeparateWeighing?.discount! / 100);
-      setTotalWeighning(autoSeparateWeighing?.final_weight!);
-      setHumidityDiscount(Number(autoSeparateWeighing?.humidity_discount!));
-      setTare(autoSeparateWeighing?.tare_weight!);
-      setObservation(autoSeparateWeighing?.observations!);
+      setSelectedCultivation(
+        financial?.cultivations?.filter(
+          (cultivation: Cultivation) =>
+            cultivation?.id === autoSeparateWeighing?.cultivation_id,
+        ),
+      )
+      setSelectedContract(
+        financial?.contracts.filter(
+          (contract: Contract) =>
+            contract?.id === autoSeparateWeighing?.contract_id,
+        ),
+      )
+      setReference(autoSeparateWeighing?.reference!)
+      setCarPlate(autoSeparateWeighing?.car_plate!)
+      setDriver(autoSeparateWeighing?.car_driver!)
+      setCompany(autoSeparateWeighing?.shipping_company!)
+      setGrossWeighing(autoSeparateWeighing?.gross_weight!)
+      setNetWeighing(autoSeparateWeighing?.net_weight!)
+      setHumidity(autoSeparateWeighing?.humidity! / 100)
+      setImpurity(autoSeparateWeighing?.impurity! / 100)
+      setDiscount(autoSeparateWeighing?.discount! / 100)
+      setTotalWeighning(autoSeparateWeighing?.final_weight!)
+      setHumidityDiscount(Number(autoSeparateWeighing?.humidity_discount!))
+      setTare(autoSeparateWeighing?.tare_weight!)
+      setObservation(autoSeparateWeighing?.observations!)
     }
-  }, [autoSeparateWeighing]);
+  }, [autoSeparateWeighing])
 
-  const Save = () =>{
+  const Save = () => {
     const autoSeparate = {
       weighings: {
         contract_id: selectedContract.id,
@@ -102,51 +171,55 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
         reference: reference,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity*100,
-        impurity: impurity*100,
-        discount: discount*100,
-        final_weight: totalWeighning*1000,
-        type: "Única",
+        humidity: humidity * 100,
+        impurity: impurity * 100,
+        discount: discount * 100,
+        final_weight: totalWeighning * 1000,
+        type: 'Única',
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
         total_discount: totalDiscount.toString(),
         observations: observation,
         tare_weight: tare,
-        mode: "Automático",
+        mode: 'Automático',
         car_plate: carPlate,
         car_driver: driver,
         gross_weight_date: grossWeightDate,
         tare_weight_date: tareWeightDate,
-        weighing_date: new Date().toISOString()
-      }
+        weighing_date: new Date().toISOString(),
+      },
     }
-    if(!autoSeparateWeighing.id){
+    if (!autoSeparateWeighing.id) {
       dispatch(asyncSeparateWeighing(autoSeparate))
-  }else{
-    dispatch(asyncUpdateSeparateWeighing(autoSeparateWeighing?.id!, autoSeparate, index, WeighingRowType.AUTOMATIC))
+    } else {
+      dispatch(
+        asyncUpdateSeparateWeighing(
+          autoSeparateWeighing?.id!,
+          autoSeparate,
+          index,
+          WeighingRowType.AUTOMATIC,
+        ),
+      )
+    }
   }
-}
-
-
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-          <Col md={1}>
-            <Button
-              variant="danger"
-              onClick={() => {
-                setId(autoSeparateWeighing?.id!)
-                setShowAutoInputDeleteModal(true)
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={reference}
+              onChange={(e) => {
+                setReference(e.target.value)
               }}
-              style={{ marginTop: '45%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
-          </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color:'#000'}}>Referência</Form.Label>
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="reference">Referência</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Referência</Form.Label>
             <Form.Control
               type="text"
               value={reference}
@@ -154,10 +227,25 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setReference(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedCultivation}
+              suggestions={cultivationList}
+              completeMethod={autoCompleteCultivations}
+              onChange={(e: any) => {
+                setSelectedCultivation(e.value)
+              }}
+              dropdown
+              forceSelection
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="farm">Cultivo</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
           <Form.Label style={{color:'#000'}}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
@@ -168,24 +256,50 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 return { id: cultivation.id, label: cultivation.name, ...cultivation }
               })}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-        <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Contratos</Form.Label>
+        <Col md={2}>
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedContract}
+              suggestions={contractList}
+              completeMethod={autoCompleteContracts}
+              onChange={(e: any) => {
+                setSelectedContract(e.value)
+              }}
+              dropdown
+              forceSelection
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="farm">Contratos</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Contratos</Form.Label>
             <Typeahead
               id="contract"
               onChange={(selected: any) => {
-                setSelectedContract(selected[0]);
+                setSelectedContract(selected[0])
               }}
               options={financial?.contracts?.map((contract: any) => {
                 return { id: contract.id, label: contract.name, ...contract }
               })}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={carPlate}
+              onChange={(e) => {
+                setCarPlate(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="carPlate">Placa</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
@@ -194,10 +308,21 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setCarPlate(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={driver}
+              onChange={(e) => {
+                setDriver(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="driver">Motorista</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
@@ -206,10 +331,21 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setDriver(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={company}
+              onChange={(e) => {
+                setCompany(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="company">Transportadora</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
@@ -218,48 +354,55 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setCompany(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
-          {grossWeighing ==0 ? (
-            <Button
-            variant="success"
-            onClick={() => {
-              setShowWeighingConfirmationModal(true)
-            }}
-          >
-            Receber
-          </Button>
-          ): (<Form.Control
-            type="number"
-            disabled
-            value={grossWeighing}
-          />)}
+            {grossWeighing == 0 ? (
+              <Button
+                variant="success"
+                onClick={() => {
+                  setShowWeighingConfirmationModal(true)
+                }}
+              >
+                Receber
+              </Button>
+            ) : (
+              <Form.Control type="number" disabled value={grossWeighing} />
+            )}
           </Form.Group>
         </Col>
         <Col>
           <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
-          {tare ==0 ? (
-            <Button
-            variant="success"
-            onClick={() => {
-              setShowTareConfirmationModal(true)
-            }}
-          >
-            Receber
-          </Button>
-          ): (<Form.Control
-            type="number"
-            disabled
-            value={tare}
-          />)}
+            {tare == 0 ? (
+              <Button
+                variant="success"
+                onClick={() => {
+                  setShowTareConfirmationModal(true)
+                }}
+              >
+                Receber
+              </Button>
+            ) : (
+              <Form.Control type="number" disabled value={tare} />
+            )}
           </Form.Group>
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={netWeighing}
+              onValueChange={(e) => {
+                setNetWeighing(Number(e.value))
+              }}
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="netWeigh">Peso líquido</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
@@ -269,12 +412,23 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setNetWeighing(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
       </Row>
       <Row>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={humidity}
+              onValueChange={(e) => {
+                setHumidity(Number(e.value))
+              }}
+              prefix="%"
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">UMID (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -283,10 +437,22 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setHumidity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={humidityDiscount}
+              onValueChange={(e) => {
+                setHumidityDiscount(Number(e.value))
+              }}
+              prefix="%"
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Desconto UMID (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -296,10 +462,21 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setHumidityDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={impurity}
+              onValueChange={(e) => {
+                setImpurity(Number(e.value))
+              }}
+              prefix="%"
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Impureza (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
@@ -308,10 +485,22 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setImpurity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={discount}
+              onValueChange={(e) => {
+                setDiscount(Number(e.value))
+              }}
+              prefix="%"
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Desconto (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
@@ -321,11 +510,25 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Desconto total (%)</Form.Label>
+          <span className="p-float-label">
+            <InputNumber
+              value={totalDiscount}
+              onValueChange={(e) => {
+                setTotalDiscount(Number(e.value))
+              }}
+              prefix="%"
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="humidity">Desconto total (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>
+              Desconto total (%)
+            </Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -334,10 +537,21 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setTotalDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={totalWeighning}
+              onValueChange={(e) => {
+                setTotalWeighning(Number(e.value))
+              }}
+              disabled
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="netWeigh">Peso Final</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
@@ -347,10 +561,21 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setTotalWeighning(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputText
+              value={observation}
+              onChange={(e) => {
+                setObservation(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="observation">Observações</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
             <Form.Control
               type="text"
@@ -359,11 +584,21 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
                 setObservation(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
       </Row>
-      <AutoConfirmationModal  setValue={setGrossWeighing} show={showWeighingConfirmationModal} handleClose={() => setShowWeighingConfirmationModal(false)} setWeightDate={setGrossWeightDate} ></AutoConfirmationModal>
-      <AutoConfirmationModal  setValue={setTare} show={showTareConfirmationModal} handleClose={() => setShowTareConfirmationModal(false)} setWeightDate={setTareWeightDate} ></AutoConfirmationModal>
+      <AutoConfirmationModal
+        setValue={setGrossWeighing}
+        show={showWeighingConfirmationModal}
+        handleClose={() => setShowWeighingConfirmationModal(false)}
+        setWeightDate={setGrossWeightDate}
+      ></AutoConfirmationModal>
+      <AutoConfirmationModal
+        setValue={setTare}
+        show={showTareConfirmationModal}
+        handleClose={() => setShowTareConfirmationModal(false)}
+        setWeightDate={setTareWeightDate}
+      ></AutoConfirmationModal>
 
       <div
         style={{
@@ -374,6 +609,15 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
         }}
       >
         <Button
+          variant="danger"
+          onClick={() => {
+            setId(autoSeparateWeighing?.id!)
+            setShowAutoInputDeleteModal(true)
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+        </Button>
+        <Button
           variant="success"
           onClick={() => {
             Save()
@@ -381,8 +625,23 @@ export function NewAutoSeparateWeighing({index, autoSeparateWeighing}:{index:num
         >
           {autoSeparateWeighing?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {autoSeparateWeighing?.id ? <GeneratePdf weighing={autoSeparateWeighing} contractsList={financial?.contracts} cultivationsList={financial?.cultivations} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
-        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={autoSeparateWeighing.type!}></DeleteConfirmationModal>
+        {autoSeparateWeighing?.id ? (
+          <GeneratePdf
+            weighing={autoSeparateWeighing}
+            contractsList={financial?.contracts}
+            cultivationsList={financial?.cultivations}
+            profile={JSON.parse(sessionStorage.getItem('user')!)}
+          ></GeneratePdf>
+        ) : (
+          <></>
+        )}
+        <DeleteConfirmationModal
+          show={showAutoInputDeleteModal}
+          handleClose={() => setShowAutoInputDeleteModal(false)}
+          id={id!}
+          index={index}
+          weighingType={autoSeparateWeighing.type!}
+        ></DeleteConfirmationModal>
       </div>
     </div>
   )
