@@ -4,6 +4,15 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { asyncFetchInput } from '../../../stores/input.store'
+import { InputNumber } from 'primereact/inputnumber'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { Product } from '../../../models/Product'
+import { Button } from 'primereact/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export function NewDefensivePrescription({
   index,
@@ -26,6 +35,8 @@ export function NewDefensivePrescription({
   const [tank, setTank] = useState(0)
   const { input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
+  const [selectedProduct, setSelectedProduct] = useState<any>()
+  const [productList, setProductList] = useState<any[]>([])
 
   useEffect(() => {
     onHandleUpdate(index, { user_product_id: product.id, quantity: quantity })
@@ -36,71 +47,83 @@ export function NewDefensivePrescription({
   }, [])
 
   useEffect(() => {
-    setTest((quantity/flowRate)*1000)
+    setTest((quantity / flowRate) * 1000)
   }, [quantity, flowRate])
 
   useEffect(() => {
-    setTank((quantity*area)/tankNumbers)
+    setTank((quantity * area) / tankNumbers)
   }, [quantity, area, tank])
+
+  const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
+    const resultSet = productList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setProductList(resultSet)
+    } else {
+      setProductList(fetchProducts())
+    }
+  }
+
+  const fetchProducts = () => {
+    return input.inputs
+      .filter((product: Product) => {
+        return product.product?.class !== 'SEMENTE'
+      })
+      .map((input) => {
+        return {
+          id: input.id,
+          label: `${input?.product?.name}`,
+        }
+      })
+  }
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Produtos</Form.Label>
-            <Typeahead
-              id="product_input"
-              onChange={(selected: any) => {
-                if (selected.length > 0) {
-                  setProduct({ id: selected[0].id })
-                }
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedProduct}
+              suggestions={productList}
+              completeMethod={autoComplete}
+              onChange={(e: any) => {
+                setSelectedProduct(e.value)
               }}
-              options={input.inputs
-                .filter((i) => i.product?.class !== 'SEMENTE')
-                .map((input) => {
-                  return { id: input.id, label: `${input?.product?.name}` }
-                })}
+              forceSelection
+              dropdown
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="endDate">Produto</label>
+          </span>
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Qtd/ha (L)</Form.Label>
-            <Form.Control
-              type="number"
+          <span className="p-float-label">
+            <InputNumber
+              id="quantity"
+              value={quantity}
               onChange={(e) => {
-                return setQuantity(Number(e.target.value))
+                return setQuantity(Number(e.value))
               }}
             />
-          </Form.Group>
+            <label htmlFor="quantity">Qtd/ha (L)</label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Teste (mL)</Form.Label>
-            <Form.Control
-              type="number"
-              disabled
-              value={test}
-              onChange={(e) => {
-                return setTest(Number(e.target.value))
+        {index !== 0 ? (
+          <Col md={1}>
+            <Button
+              onClick={() => {
+                onHandleRemove(index)
               }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Tanque (L)</Form.Label>
-            <Form.Control
-              type="number"
-              disabled
-              value={tank}
-              onChange={(e) => {
-                return setTank(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
+            >
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </div>
   )

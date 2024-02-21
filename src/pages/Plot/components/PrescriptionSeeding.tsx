@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
@@ -15,6 +15,24 @@ import {
 import { asyncFetchInput } from '../../../stores/input.store'
 import { Application } from '../../../models/Application'
 import { SeedingPrescriptionModal } from '../Modals/SeedingPrescriptionModal'
+import { Formik } from 'formik'
+import { Toast } from 'primereact/toast'
+import * as Yup from 'yup'
+import { InputText } from 'primereact/inputtext'
+import { classNames } from 'primereact/utils'
+import { Calendar } from 'primereact/calendar'
+import { InputNumber } from 'primereact/inputnumber'
+import { Dropdown } from 'primereact/dropdown'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { Slider, SliderChangeEvent } from 'primereact/slider'
+
+interface Type {
+  name: string
+  value: string
+}
 
 export function PrescriptionSeeding({
   handleClose,
@@ -33,13 +51,23 @@ export function PrescriptionSeeding({
   const [selectedApplier, setSelectedApplier]: any = useState<any>({})
   const { plot, input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
-  const [seed, setSeed] = useState({ id: 0 })
+  const [seed, setSeed] = useState<any>({})
   const [flowRate, setFlowRate] = useState(0)
-  const [product, setProduct] = useState({ id: 0 })
+  const [product, setProduct] = useState<any>({})
   const [area, setArea] = useState(0)
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
   const [productQuantity, setProductQuantity] = useState(0)
+  const toast = useRef<Toast>(null)
+  const type: Type[] = [
+    { name: 'Sim', value: 'Sim' },
+    { name: 'Não', value: 'Não' },
+  ]
+  const [productList, setProductList] = useState<any[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<any>()
+  const [seedList, setSeedList] = useState<any[]>([])
+  const [plotList, setPlotList] = useState<any[]>([])
+  const [applierList, setApplierList] = useState<any[]>([])
 
   useEffect(() => {
     dispatch(
@@ -51,273 +79,503 @@ export function PrescriptionSeeding({
     dispatch(asyncFetchInput())
   }, [])
 
-  // const next = () => {
-  //   const seeding: Application = {
-  //     type: 'Semeadura',
-  //     accountable: accountable,
-  //     area: area,
-  //     applier_id: selectedApplier.id,
-  //     date: dateTime.toISOString(),
-  //     fertilizer_id: product.id,
-  //     fertilizer_quantity: productQuantity,
-  //     seed_id: seed.id,
-  //     seed_quantity: seedQuantity,
-  //     lines_spacing: lineSpacing,
-  //     flow_rate: flowRate,
-  //     farm_id: selectedFarm.id,
-  //     correct_decimals: true,
-  //     fields: [{ id: selectedPlot.id, area: area }],
-  //   }
-  //   dispatch(asyncPrescription(seeding))
-  // }
+  const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
+    const resultSet = productList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setProductList(resultSet)
+    } else {
+      setProductList(fetchProducts())
+    }
+  }
+  const autoCompleteSeeds = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
+    const resultSet = seedList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setSeedList(resultSet)
+    } else {
+      setSeedList(fetchSeed())
+    }
+  }
+  const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
+    const resultSet = plotList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setPlotList(resultSet)
+    } else {
+      setPlotList(fetchPlot())
+    }
+  }
+  const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
+    const resultSet = applierList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setApplierList(resultSet)
+    } else {
+      setApplierList(fetchApplier())
+    }
+  }
+
+  const fetchProducts = () => {
+    return input.inputs
+      .filter((product: Product) => {
+        return product.product?.class !== 'SEMENTE'
+      })
+      .map((input) => {
+        return {
+          id: input.id,
+          label: `${input?.product?.name}`,
+        }
+      })
+  }
+  const fetchSeed = () => {
+    return input.inputs
+      .filter((product: Product) => {
+        return product.product?.class === 'SEMENTE'
+      })
+      .map((input) => {
+        return {
+          id: input.id,
+          label: `${input?.product?.name}`,
+        }
+      })
+  }
+  const fetchPlot = () => {
+    return selectedFarm?.fields?.map((field: any) => {
+      return { id: field.id, label: field.name, ...field }
+    })
+  }
+  const fetchApplier = () => {
+    return plot?.appliers?.map((applier: Applier) => {
+      return { id: applier.id, label: applier.name, ...applier }
+    })
+  }
 
   return (
     <div>
-      <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => {
-                setAccountable(e.target.value)
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-            {selectedFarm?.fields?.length > 0 ? (
-              <Typeahead
-                id="field"
-                selected={selectedFarm?.fields?.filter(
-                  (field: any) => field?.id === selectedPlot?.id,
-                )}
-                labelKey={(selected: any) => selected?.name}
-                isInvalid={!selectedPlot?.id}
-                onChange={(selected: any) => {
-                  setSelectedPlot(selected[0])
-                }}
-                options={selectedFarm?.fields?.map((field: any) => {
-                  return { id: field.id, label: field.name, ...field }
-                })}
-              />
-            ) : (
-              <></>
-            )}
-          </Form.Group>
-          {selectedPlot?.total_area > 0 ? (
-            <>
-              <Form.Range
-                min={0}
-                max={selectedPlot?.total_area}
-                value={area}
-                onChange={(e) => {
-                  return setArea(Number(e.target.value))
-                }}
-              />
-              <Form.Label>Área aplicada: {area}</Form.Label>
-            </>
-          ) : (
-            <></>
-          )}
-        </Col>
-      </Row>
-      <Row>
-        {' '}
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
-            <Typeahead
-              id="applier"
-              onChange={(selected: any) => {
-                setSelectedApplier(selected[0])
-              }}
-              selected={plot?.appliers?.filter(
-                (applier: any) => applier?.id === selectedApplier?.id,
-              )}
-              labelKey={(selected: any) => {
-                return `${selected?.name}`
-              }}
-              isInvalid={!selectedApplier?.id}
-              options={plot?.appliers?.map((applier: Applier) => {
-                return { id: applier.id, label: applier.name, ...applier }
-              })}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
-            <DatePicker
-              locale={pt}
-              dateFormat="dd/MM/yyyy"
-              selected={dateTime}
-              onChange={(date: Date) => setDateTime(date)}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Possui adubação?</Form.Label>
-            <Form.Select
-              aria-label=""
-              placeholder="selecione"
-              onChange={(e) => {
-                return setFertilizing(e.target.value)
-              }}
-            >
-              <option value={''}></option>
-              <option value={'Sim'}>Sim</option>
-              <option value={'Não'}>Não</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        {fertilizing == 'Sim' ? (
-          <>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Produtos</Form.Label>
-                <Typeahead
-                  id="product_input"
-                  onChange={(selected: any) => {
-                    if (selected.length > 0) {
-                      setProduct({ id: selected[0].id })
-                    }
-                  }}
-                  options={input.inputs
-                    .filter((i) => i.product?.class !== 'SEMENTE')
-                    .map((input) => {
-                      return { id: input.id, label: `${input?.product?.name}` }
-                    })}
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Dose/ha (Kg)</Form.Label>
-                <Form.Control
-                  type="number"
-                  onChange={(e) => {
-                    return setProductQuantity(Number(e.target.value))
-                  }}
-                />
-              </Form.Group>
-            </Col>
-          </>
-        ) : (
-          <div></div>
-        )}
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Semente/Cultivar</Form.Label>
-            <Typeahead
-              id="seed"
-              onChange={(selected: any) => {
-                if (selected.length > 0) {
-                  setSeed({ id: selected[0].id })
-                }
-              }}
-              options={input.inputs
-                .filter((product: Product) => {
-                  return (
-                    product.product?.class === 'SEMENTE' &&
-                    product.treatment !== 'EXTERNO'
-                  )
-                })
-                .map((input) => {
-                  return {
-                    id: input.id,
-                    label: `${input?.product?.name} - ${input.treatment}`,
-                  }
-                })}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              População (sementes/ha)
-            </Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setSeedQuantity(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Espaçamento entre linhas
-            </Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setLineSpacing(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Possui jato dirigido?
-            </Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setJet(e.target.value)
-              }}
-            >
-              <option value={''}></option>
-              <option value={'Sim'}>Sim</option>
-              <option value={'Não'}>Não</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        {jet == 'Sim' ? (
-          <Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>Vazão (L/ha)</Form.Label>
-              <Form.Control
-                type="number"
-                onChange={(e) => {
-                  return setFlowRate(Number(e.target.value))
-                }}
-              />
-            </Form.Group>
-          </Col>
-        ) : (
-          <div></div>
-        )}
-      </Row>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: '2%',
+      <Toast ref={toast} />
+      <Formik
+        initialValues={{
+          accountable: '',
+          dateTime: null,
+          productQuantity: null,
+          seedQuantity: null,
+          lineSpacing: null,
+          flowRate: null,
+          jet: '',
+          fertilizing: '',
+          plot: null,
+          applier: null,
+        }}
+        validationSchema={Yup.object({
+          accountable: Yup.string().required('Necessário preencher'),
+          dateTime: Yup.string().required('Necessário preencher'),
+          productQuantity: Yup.string().required('Necessário preencher'),
+          seedQuantity: Yup.string().required('Necessário preencher'),
+          lineSpacing: Yup.string().required('Necessário preencher'),
+          flowRate: Yup.string().required('Necessário preencher'),
+          jet: Yup.string().required('Necessário preencher'),
+          fertilizing: Yup.string().required('Necessário preencher'),
+          plot: Yup.object().required('Necessário preencher'),
+          applier: Yup.object().required('Necessário preencher'),
+        })}
+        onSubmit={() => {
+          handleClose()
+          setShowNewPrescriptionModal(true)
         }}
       >
-        <Button
-          style={{ backgroundColor: '#A5CD33', color: '#000' }}
-          variant="success"
-          onClick={() => {
-            setShowNewPrescriptionModal(true)
-          }}
-        >
-          Avançar
-        </Button>
-      </div>
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit}>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputText
+                    id="accountable"
+                    name="accountable"
+                    value={formik.values.accountable}
+                    onChange={(e) => {
+                      formik.setFieldValue('accountable', e.target.value)
+                      setAccountable(e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.accountable && formik.errors.accountable,
+                    })}
+                  />
+                  {formik.touched.accountable && formik.errors.accountable ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.accountable}
+                    </div>
+                  ) : null}
+                  <label htmlFor="accountable">Responsável</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.plot}
+                    suggestions={plotList}
+                    completeMethod={autoCompletePlots}
+                    onChange={(e: any) => {
+                      formik.setFieldValue('plot', e.target.value)
+                      setSelectedPlot(e.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.plot && formik.errors.plot,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.plot && formik.errors.plot ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.plot}
+                    </div>
+                  ) : null}
+                  <label htmlFor="plot">Talhões</label>
+                </span>
+                {selectedPlot?.total_area > 0 ? (
+                  <>
+                    <span  style={{marginTop: '5%'}}>
+                      <Slider
+                       style={{marginTop: '7%'}}
+                        value={area}
+                        max={selectedPlot?.total_area}
+                        min={0}
+                        onChange={(e: SliderChangeEvent) => {
+                          return setArea(Number(e.value))
+                        }}
+                        className="w-full"
+                      />
+                      <label  style={{marginTop: '5%', color: 'white'}} htmlFor="area">Área aplicada: {area}</label>
+                    </span>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.applier}
+                    suggestions={applierList}
+                    completeMethod={autoCompleteApplier}
+                    onChange={(e: any) => {
+                      setSelectedApplier(e.value)
+                      formik.setFieldValue('applier', e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.applier && formik.errors.applier,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.applier && formik.errors.applier ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.applier}
+                    </div>
+                  ) : null}
+                  <label htmlFor="applier">Aplicador</label>
+                </span>
+              </Col>
+            </Row>{' '}
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <Calendar
+                    onChange={(e: any) => {
+                      formik.setFieldValue('dateTime', e.target.value)
+                      setDateTime(e.value!)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.dateTime && formik.errors.dateTime,
+                    })}
+                    locale="en"
+                    value={dateTime}
+                    dateFormat="dd/mm/yy"
+                  />
+                  {formik.touched.dateTime && formik.errors.dateTime ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.dateTime}
+                    </div>
+                  ) : null}
+                  <label htmlFor="date">Data de plantio</label>
+                </span>
+              </Col>
+              <Col>
+                <Dropdown
+                  value={formik.values.fertilizing}
+                  onChange={(e) => {
+                    formik.setFieldValue('fertilizing', e.target.value)
+                    setFertilizing(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Possui adubação?"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.fertilizing && formik.errors.fertilizing ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
+                    }}
+                  >
+                    {formik.errors.fertilizing}
+                  </div>
+                ) : null}
+              </Col>
+              {fertilizing == 'Sim' ? (
+                <>
+                  <Col>
+                    <span className="p-float-label">
+                      <AutoComplete
+                        field="label"
+                        value={selectedProduct}
+                        suggestions={productList}
+                        completeMethod={autoComplete}
+                        onChange={(e: any) => {
+                          setSelectedProduct(e.value)
+                        }}
+                        forceSelection
+                        dropdown
+                        style={{ width: '100%' }}
+                      />
+                      <label htmlFor="endDate">Produto</label>
+                    </span>
+                  </Col>
+                  <Col>
+                    <span className="p-float-label">
+                      <InputNumber
+                        id="productQuantity"
+                        value={formik.values.productQuantity}
+                        onValueChange={(e) => {
+                          formik.setFieldValue(
+                            'productQuantity',
+                            e.target.value,
+                          )
+                          setProductQuantity(Number(e.value))
+                        }}
+                        className={classNames({
+                          'p-invalid':
+                            formik.touched.productQuantity &&
+                            formik.errors.productQuantity,
+                        })}
+                      />
+                      {formik.touched.productQuantity &&
+                      formik.errors.productQuantity ? (
+                        <div
+                          style={{
+                            color: 'red',
+                            fontSize: '12px',
+                            fontFamily: 'Roboto',
+                          }}
+                        >
+                          {formik.errors.productQuantity}
+                        </div>
+                      ) : null}
+                      <label htmlFor="productQuantity">Dose/ha (Kg)</label>
+                    </span>
+                  </Col>
+                </>
+              ) : (
+                <div></div>
+              )}
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={seed}
+                    suggestions={seedList}
+                    completeMethod={autoCompleteSeeds}
+                    onChange={(e: any) => {
+                      setSeed(e.value)
+                    }}
+                    forceSelection
+                    dropdown
+                    style={{ width: '100%' }}
+                  />
+                  <label htmlFor="endDate">Semente/Cultivar</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="seedQuantity"
+                    value={formik.values.seedQuantity}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('seedQuantity', e.target.value)
+                      setSeedQuantity(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.seedQuantity &&
+                        formik.errors.seedQuantity,
+                    })}
+                  />
+                  {formik.touched.seedQuantity && formik.errors.seedQuantity ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.seedQuantity}
+                    </div>
+                  ) : null}
+                  <label htmlFor="seedQuantity">População (sementes/ha)</label>
+                </span>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="lineSpacing"
+                    value={formik.values.lineSpacing}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('lineSpacing', e.target.value)
+                      setLineSpacing(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.lineSpacing && formik.errors.lineSpacing,
+                    })}
+                  />
+                  {formik.touched.lineSpacing && formik.errors.lineSpacing ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.lineSpacing}
+                    </div>
+                  ) : null}
+                  <label htmlFor="lineSpacing">Espaçamento entre linhas</label>
+                </span>
+              </Col>
+              <Col>
+                <Dropdown
+                  value={formik.values.jet}
+                  onChange={(e) => {
+                    formik.setFieldValue('jet', e.target.value)
+                    setJet(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Possui jato dirigido?"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.jet && formik.errors.jet ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
+                    }}
+                  >
+                    {formik.errors.jet}
+                  </div>
+                ) : null}
+              </Col>
+              {jet == 'Sim' ? (
+                <Col>
+                  <span className="p-float-label">
+                    <InputNumber
+                      id="flowRate"
+                      value={formik.values.flowRate}
+                      onValueChange={(e) => {
+                        formik.setFieldValue('flowRate', e.target.value)
+                        setFlowRate(Number(e.value))
+                      }}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.flowRate && formik.errors.flowRate,
+                      })}
+                    />
+                    {formik.touched.flowRate && formik.errors.flowRate ? (
+                      <div
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
+                        }}
+                      >
+                        {formik.errors.flowRate}
+                      </div>
+                    ) : null}
+                    <label htmlFor="flowRate">Vazão (L/ha)</label>
+                  </span>
+                </Col>
+              ) : (
+                <div></div>
+              )}
+            </Row>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: '2%',
+              }}
+            >
+              <Button
+                style={{ backgroundColor: '#A5CD33', color: '#000' }}
+                variant="success"
+                type="submit"
+              >
+                Avançar
+              </Button>
+            </div>
+          </form>
+        )}
+      </Formik>
       <SeedingPrescriptionModal
         show={showNewPrescriptionModal}
         handleClose={handleClose}

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
@@ -11,6 +11,24 @@ import {
 } from '../../../stores/plot.store'
 import { Applier } from '../../../models/Applier'
 import { DefensivePrescriptionModal } from '../Modals/DefensivePrescriptionModal'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { Toast } from 'primereact/toast'
+import { InputText } from 'primereact/inputtext'
+import { classNames } from 'primereact/utils'
+import { Dropdown } from 'primereact/dropdown'
+import { Calendar } from 'primereact/calendar'
+import { InputNumber } from 'primereact/inputnumber'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { Slider, SliderChangeEvent } from 'primereact/slider'
+
+interface Type {
+  name: string
+  value: string
+}
 
 export function PrescriptionDefensive({
   handleClose,
@@ -24,7 +42,7 @@ export function PrescriptionDefensive({
   const [block, setBlock]: any = useState('')
   const [applicationType, setApplicationType] = useState('Terrestre')
   const [flowRate, setFlowRate] = useState(0)
-  const [pressure, setPressure] = useState(0)
+  const [preassure, setPreassure] = useState(0)
   const [fullSyrup, setFullSyrup] = useState(0)
   const [tankNumbers, setTankNumbers] = useState(0)
   const [tankSyrup, setTankSyrup] = useState(0)
@@ -36,6 +54,60 @@ export function PrescriptionDefensive({
 
   const { plot, user } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
+  const toast = useRef<Toast>(null)
+  const type: Type[] = [
+    { name: 'Terrestre', value: 'Terrestre' },
+    { name: 'Aéreo', value: 'Aéreo' },
+    { name: 'Fertirrigação', value: 'Fertirrigação' },
+  ]
+  const blockType: Type[] = [
+    { name: 'LS015', value: 'LS015' },
+    { name: 'DL015', value: 'DL015' },
+    { name: 'CN015', value: 'CN015' },
+    { name: 'XPAIR015', value: 'XPAIR015' },
+    { name: 'DL0134', value: 'DL0134' },
+    { name: 'CN01', value: 'CN01' },
+    { name: 'LS01', value: 'LS01' },
+    { name: 'LSD0134', value: 'LSD0134' },
+    { name: 'Micron', value: 'Micron' },
+  ]
+  const [plotList, setPlotList] = useState<any[]>([])
+  const [applierList, setApplierList] = useState<any[]>([])
+
+  const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
+    const resultSet = plotList.filter((p: any) =>
+      p?.label?.includes(event.query),
+    )
+    if (resultSet.length > 0) {
+      setPlotList(resultSet)
+    } else {
+      setPlotList(fetchPlot())
+    }
+  }
+
+  const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase();
+    const resultSet = applierList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setApplierList(resultSet)
+    } else {
+      setApplierList(fetchApplier())
+    }
+  }
+
+  const fetchApplier = () => {
+    return plot?.appliers?.map((applier: Applier) => {
+      return { id: applier.id, label: applier.name, ...applier }
+    })
+  }
+
+  const fetchPlot = () => {
+    return selectedFarm?.fields?.map((field: any) => {
+      return { id: field.id, label: field.name, ...field }
+    })
+  }
 
   useEffect(() => {
     dispatch(
@@ -54,229 +126,429 @@ export function PrescriptionDefensive({
     setTankSyrup(fullSyrup / tankNumbers)
   }, [fullSyrup, tankNumbers])
 
-
   return (
     <div>
-      <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Responsável</Form.Label>
-            <Form.Control
-              type="text"
-              onChange={(e) => {
-                setAccountable(e.target.value)
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        {' '}
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Talhões</Form.Label>
-            {selectedFarm?.fields?.length > 0 ? (
-              <Typeahead
-                id="field"
-                selected={selectedFarm?.fields?.filter(
-                  (field: any) => field?.id === selectedPlot?.id,
-                )}
-                labelKey={(selected: any) => selected?.name}
-                isInvalid={!selectedPlot?.id}
-                onChange={(selected: any) => {
-                  setSelectedPlot(selected[0])
-                }}
-                options={selectedFarm?.fields?.map((field: any) => {
-                  return { id: field.id, label: field.name, ...field }
-                })}
-              />
-            ) : (
-              <></>
-            )}
-          </Form.Group>
-          {selectedPlot?.total_area > 0 ? (
-            <>
-              <Form.Range
-                min={0}
-                max={selectedPlot?.total_area*100}
-                value={area}
-                onChange={(e) => {
-                  return setArea(Number(e.target.value))
-                }}
-              />
-              <Form.Label>Área aplicada: {area}</Form.Label>
-            </>
-          ) : (
-            <></>
-          )}
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Aplicador</Form.Label>
-            <Typeahead
-              id="applier"
-              onChange={(selected: any) => {
-                setSelectedApplier(selected[0])
-              }}
-              selected={plot?.appliers?.filter(
-                (applier: any) => applier?.id === selectedApplier?.id,
-              )}
-              labelKey={(selected: any) => {
-                return `${selected?.name}`
-              }}
-              isInvalid={!selectedApplier?.id}
-              options={plot?.appliers?.map((applier: Applier) => {
-                return { id: applier.id, label: applier.name, ...applier }
-              })}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
-            <DatePicker
-              locale={pt}
-              dateFormat="dd/MM/yyyy"
-              selected={dateTime}
-              onChange={(date: Date) => setDateTime(date)}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Selecione um tipo</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setApplicationType(e.target.value)
-              }}
-            >
-              <option value={'Terrestre'}>Terrestre</option>
-              <option value={'Aéreo'}>Aéreo</option>
-              <option value={'Fertirrigação'}>Fertirrigação</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        {applicationType == 'Terrestre' ||
-        applicationType == 'Fertirrigação' ? (
-          <Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>
-                Selecione um tipo
-              </Form.Label>
-              <Form.Select
-                aria-label=""
-                onChange={(e) => {
-                  return setBlock(e.target.value)
-                }}
-              >
-                <option value={''}>Selecione um bico</option>
-                <option value={'DL015'}>DL015</option>
-                <option value={'LS015'}>LS015</option>
-                <option value={'CN015'}>CN015</option>
-                <option value={'XPAIR015'}>XPAIR015</option>
-                <option value={'DL0134'}>DL0134</option>
-                <option value={'CN01'}>CN01</option>
-                <option value={'LS01'}>LS01</option>
-                <option value={'LSD0134'}>LSD0134</option>
-                <option value={'Micron'}>Micron</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        ) : (
-          <div></div>
-        )}
-        {applicationType == 'Terrestre' ||
-        applicationType == 'Fertirrigação' ? (
-          <Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>Pressão (Pa)</Form.Label>
-              <Form.Control
-                type="number"
-                onChange={(e) => {
-                  return setPressure(Number(e.target.value))
-                }}
-              />
-            </Form.Group>
-          </Col>
-        ) : (
-          <div></div>
-        )}
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Vazão (L/ha)</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setFlowRate(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Calda total (L)</Form.Label>
-            <Form.Control
-              type="number"
-              disabled
-              value={fullSyrup}
-              onChange={(e) => {
-                return setFullSyrup(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Nª de tanques</Form.Label>
-            <Form.Control
-              type="number"
-              onChange={(e) => {
-                return setTankNumbers(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Calda/tanque (L)</Form.Label>
-            <Form.Control
-              type="number"
-              disabled
-              value={tankSyrup}
-              onChange={(e) => {
-                return setTankSyrup(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: '2%',
+      <Toast ref={toast} />
+      <Formik
+        initialValues={{
+          accountable: '',
+          dateTime: null,
+          block: '',
+          applicationType: 'Terrestre',
+          flowRate: null,
+          preassure: null,
+          fullSyrup: null,
+          tankNumbers: null,
+          tankSyrup: null,
+          selectedPlot: {},
+          selectedApplier: {},
+          area: null,
+          plot: null,
+          applier: null,
+        }}
+        validationSchema={Yup.object({
+          accountable: Yup.string().required('Necessário preencher'),
+          dateTime: Yup.string().required('Necessário preencher'),
+          block: Yup.string().required('Necessário preencher'),
+          applicationType: Yup.string().required('Necessário preencher'),
+          flowRate: Yup.string().required('Necessário preencher'),
+          preassure: Yup.string().required('Necessário preencher'),
+          fullSyrup: Yup.string().required('Necessário preencher'),
+          tankNumbers: Yup.string().required('Necessário preencher'),
+          tankSyrup: Yup.string().required('Necessário preencher'),
+          selectedPlot: Yup.string().required('Necessário preencher'),
+          selectedApplier: Yup.string().required('Necessário preencher'),
+          area: Yup.string().required('Necessário preencher'),
+          plot: Yup.object().required('Necessário preencher'),
+          applier: Yup.object().required('Necessário preencher'),
+        })}
+        onSubmit={() => {
+          setShowNewPrescriptionModal(true)
         }}
       >
-        <Button
-          style={{ backgroundColor: '#A5CD33', color: '#000' }}
-          variant="success"
-          onClick={() => {
-            setShowNewPrescriptionModal(true)
-          }}
-        >
-          Avançar
-        </Button>
-      </div>
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit}>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputText
+                    id="accountable"
+                    name="accountable"
+                    value={formik.values.accountable}
+                    onChange={(e) => {
+                      formik.setFieldValue('accountable', e.target.value)
+                      setAccountable(e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.accountable && formik.errors.accountable,
+                    })}
+                  />
+                  {formik.touched.accountable && formik.errors.accountable ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.accountable}
+                    </div>
+                  ) : null}
+                  <label htmlFor="accountable">Responsável</label>
+                </span>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              {' '}
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.plot}
+                    suggestions={plotList}
+                    completeMethod={autoCompletePlots}
+                    onChange={(e: any) => {
+                      formik.setFieldValue('plot', e.target.value)
+                      setSelectedPlot(e.value)
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.plot && formik.errors.plot,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.plot && formik.errors.plot ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.plot}
+                    </div>
+                  ) : null}
+                  <label htmlFor="plot">Talhões</label>
+                </span>
+                {selectedPlot?.total_area > 0 ? (
+                  <>
+                    <span style={{ marginTop: '5%' }}>
+                      <Slider
+                        style={{ marginTop: '7%' }}
+                        value={area}
+                        max={selectedPlot?.total_area}
+                        min={0}
+                        onChange={(e: SliderChangeEvent) => {
+                          return setArea(Number(e.value))
+                        }}
+                        className="w-full"
+                      />
+                      <label
+                        style={{ marginTop: '5%', color: 'white' }}
+                        htmlFor="area"
+                      >
+                        Área aplicada: {area}
+                      </label>
+                    </span>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.applier}
+                    suggestions={applierList}
+                    completeMethod={autoCompleteApplier}
+                    onChange={(e: any) => {
+                      setSelectedApplier(e.value)
+                      formik.setFieldValue('applier', e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.applier && formik.errors.applier,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.applier && formik.errors.applier ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.applier}
+                    </div>
+                  ) : null}
+                  <label htmlFor="applier">Aplicador</label>
+                </span>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <Calendar
+                    onChange={(e: any) => {
+                      formik.setFieldValue('dateTime', e.target.value)
+                      setDateTime(e.value!)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.dateTime && formik.errors.dateTime,
+                    })}
+                    locale="en"
+                    value={dateTime}
+                    dateFormat="dd/mm/yy"
+                  />
+                  {formik.touched.dateTime && formik.errors.dateTime ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.dateTime}
+                    </div>
+                  ) : null}
+                  <label htmlFor="date">Data de plantio</label>
+                </span>
+              </Col>
+              <Col>
+                <Dropdown
+                  value={formik.values.applicationType}
+                  onChange={(e) => {
+                    formik.setFieldValue('applicationType', e.target.value)
+                    setApplicationType(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Selecione um tipo de aplicação"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.applicationType &&
+                formik.errors.applicationType ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
+                    }}
+                  >
+                    {formik.errors.applicationType}
+                  </div>
+                ) : null}
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              {applicationType == 'Terrestre' ||
+              applicationType == 'Fertirrigação' ? (
+                <Col>
+                  <Dropdown
+                    value={formik.values.block}
+                    onChange={(e) => {
+                      formik.setFieldValue('block', e.target.value)
+                      setBlock(e.target.value)
+                    }}
+                    options={blockType}
+                    optionLabel="name"
+                    optionValue="value"
+                    placeholder="Selecione um bico"
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.block && formik.errors.block ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.block}
+                    </div>
+                  ) : null}
+                </Col>
+              ) : (
+                <div></div>
+              )}
+              {applicationType == 'Terrestre' ||
+              applicationType == 'Fertirrigação' ? (
+                <Col>
+                  <span className="p-float-label">
+                    <InputNumber
+                      id="preassure"
+                      value={formik.values.preassure}
+                      onValueChange={(e) => {
+                        formik.setFieldValue('preassure', e.target.value)
+                        setPreassure(Number(e.value))
+                      }}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.preassure && formik.errors.preassure,
+                      })}
+                    />
+                    {formik.touched.preassure && formik.errors.preassure ? (
+                      <div
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
+                        }}
+                      >
+                        {formik.errors.preassure}
+                      </div>
+                    ) : null}
+                    <label htmlFor="preassure">Pressão (Pa)</label>
+                  </span>
+                </Col>
+              ) : (
+                <div></div>
+              )}
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="flowRate"
+                    value={formik.values.flowRate}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('flowRate', e.target.value)
+                      setFlowRate(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.flowRate && formik.errors.flowRate,
+                    })}
+                  />
+                  {formik.touched.flowRate && formik.errors.flowRate ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.flowRate}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Vazão (L/ha)</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="fullSyrup"
+                    value={formik.values.fullSyrup}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('fullSyrup', e.target.value)
+                      setFullSyrup(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.fullSyrup && formik.errors.fullSyrup,
+                    })}
+                  />
+                  {formik.touched.fullSyrup && formik.errors.fullSyrup ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.fullSyrup}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Calda total (L)</label>
+                </span>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="tankNumbers"
+                    value={formik.values.tankNumbers}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('tankNumbers', e.target.value)
+                      setTankNumbers(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.tankNumbers && formik.errors.tankNumbers,
+                    })}
+                  />
+                  {formik.touched.tankNumbers && formik.errors.tankNumbers ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.tankNumbers}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Nª de tanques</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="tankSyrup"
+                    value={formik.values.tankSyrup}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('tankSyrup', e.target.value)
+                      setTankSyrup(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.tankSyrup && formik.errors.tankSyrup,
+                    })}
+                  />
+                  {formik.touched.tankSyrup && formik.errors.tankSyrup ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.tankSyrup}
+                    </div>
+                  ) : null}
+                  <label htmlFor="preassure">Calda/tanque (L)</label>
+                </span>
+              </Col>
+            </Row>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: '2%',
+              }}
+            >
+              <Button
+                style={{ backgroundColor: '#A5CD33', color: '#000' }}
+                variant="success"
+                type="submit"
+                // onClick={() => setShowNewPrescriptionModal(true)}
+              >
+                Avançar
+              </Button>
+            </div>
+          </form>
+        )}
+      </Formik>
       <DefensivePrescriptionModal
         show={showNewPrescriptionModal}
         handleClose={handleClose}
@@ -289,7 +561,7 @@ export function PrescriptionDefensive({
         selectedPlot={selectedPlot}
         flowRate={flowRate}
         block={block}
-        pressure={pressure}
+        preassure={preassure}
         tankNumbers={tankNumbers}
         tankSyrup={tankSyrup}
         fullSyrup={fullSyrup}

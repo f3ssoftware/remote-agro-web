@@ -18,6 +18,7 @@ import { popMessages } from "./stores/messaging.store";
 import { PlanningMain } from "./pages/Planning/PlanningMain";
 import { Maintenance } from "./pages/Maintenance/Maintenance";
 import { Report } from "./pages/Report/Report";
+import { PrimeReactProvider } from 'primereact/api';
 
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
@@ -78,56 +79,58 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
         messages.messages.length > 0 ? setShowMessages(true) : setShowMessages(false);
     }, [messages]);
 
-    return <Row>
-        <Col lg={2} md={2}>
-            <Sidebar></Sidebar>
-        </Col>
-        <Col lg={10} md={10}>
-            <Row>
-                <Col lg={12} md={12}>
-                    <TopNav></TopNav>
-                </Col>
-            </Row>
-            <Row>
-                {loading ? <Loading></Loading> : <></>}
-                <Col lg={12} md={12} style={{display: loading ? 'none' : 'block'}}>
-                    {children}
-                </Col>
-            </Row>
-            {/* <Row>
+    return <PrimeReactProvider>
+        <Row>
+            <Col lg={2} md={2}>
+                <Sidebar></Sidebar>
+            </Col>
+            <Col lg={10} md={10}>
+                <Row>
+                    <Col lg={12} md={12}>
+                        <TopNav></TopNav>
+                    </Col>
+                </Row>
+                <Row>
+                    {loading ? <Loading></Loading> : <></>}
+                    <Col lg={12} md={12} style={{ display: loading ? 'none' : 'block' }}>
+                        {children}
+                    </Col>
+                </Row>
+                {/* <Row>
                 {!loading ? <Col lg={12} md={12}>
                     {children}
                 </Col> : <Loading></Loading>}
 
             </Row> */}
-        </Col>
-        {messages.messages.map((m, index) => {
-            return <Modal show={showMessages} onHide={() => { setShowMessages(false); dispatch(popMessages('')) }} key={index}>
-                <Modal.Header closeButton style={{ backgroundColor: '#ECE4B4' }}>
-                    <Modal.Title>{m.type === 'success' ? 'Sucesso' : 'Erro'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body style={{ backgroundColor: '#ECE4B4' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                        <FontAwesomeIcon icon={m.type === 'success' ? faCircleCheck : faCircleXmark} style={{
-                            fontSize: 100,
-                            color: (m.type === 'success' ? '#A5CD33' : '#bb5252')
-                        }}></FontAwesomeIcon>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ color: (m.type === 'success' ? '#A5CD33' : '#bb5252'), fontSize: 20, marginBottom: '50%' }}>{m.message}</span>
-                            <Button variant="primary" style={{ backgroundColor: (m.type === 'success' ? '#A5CD33' : '#bb5252'), border: 'none' }} onClick={() => { setShowMessages(false); dispatch(popMessages('')) }}>
-                                Ok
-                            </Button>
+            </Col>
+            {messages.messages.map((m, index) => {
+                return <Modal show={showMessages} onHide={() => { setShowMessages(false); dispatch(popMessages('')) }} key={index}>
+                    <Modal.Header closeButton style={{ backgroundColor: '#ECE4B4' }}>
+                        <Modal.Title>{m.type === 'success' ? 'Sucesso' : 'Erro'}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ backgroundColor: '#ECE4B4' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                            <FontAwesomeIcon icon={m.type === 'success' ? faCircleCheck : faCircleXmark} style={{
+                                fontSize: 100,
+                                color: (m.type === 'success' ? '#A5CD33' : '#bb5252')
+                            }}></FontAwesomeIcon>
                         </div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer style={{ backgroundColor: '#ECE4B4' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <span style={{ color: (m.type === 'success' ? '#A5CD33' : '#bb5252'), fontSize: 20, marginBottom: '50%' }}>{m.message}</span>
+                                <Button variant="primary" style={{ backgroundColor: (m.type === 'success' ? '#A5CD33' : '#bb5252'), border: 'none' }} onClick={() => { setShowMessages(false); dispatch(popMessages('')) }}>
+                                    Ok
+                                </Button>
+                            </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer style={{ backgroundColor: '#ECE4B4' }}>
 
-                </Modal.Footer>
-            </Modal>
-        })}
-    </Row >
+                    </Modal.Footer>
+                </Modal>
+            })}
+        </Row >
+    </PrimeReactProvider>
 }
 
 function Loading() {

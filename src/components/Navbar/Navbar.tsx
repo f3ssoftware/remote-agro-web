@@ -48,7 +48,7 @@ export function TopNav() {
                     <Row>
                         {NavbarActions.filter((b) => b.pathname === location?.pathname?.split("/")[1]).map((button, index) => {
                             return (<Col md={3} key={index}>
-                                <Button onClick={() => navigator(button.navigation)} style={{ backgroundColor: '#243C74', color: '#fff', textTransform: 'uppercase', fontWeight: 'bold', border: 'none' }}>{button.title}</Button>
+                                <Button onClick={() => navigator(button.navigation)} style={{ backgroundColor: '#4f9d24', color: '#fff', textTransform: 'uppercase', fontWeight: 'bold', border: 'none' }}>{button.title}</Button>
                             </Col>)
                         })}
                     </Row>

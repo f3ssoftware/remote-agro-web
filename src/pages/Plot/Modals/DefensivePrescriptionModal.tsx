@@ -9,6 +9,7 @@ import {
 } from '../../../stores/plot.store'
 import { useDispatch } from 'react-redux'
 import { NewDefensivePrescription } from '../components/NewDefensivePrescription'
+import { Dialog } from 'primereact/dialog'
 
 export function DefensivePrescriptionModal({
   show,
@@ -22,7 +23,7 @@ export function DefensivePrescriptionModal({
   selectedPlot,
   flowRate,
   block,
-  pressure,
+  preassure,
   tankNumbers,
   tankSyrup,
   fullSyrup,
@@ -38,7 +39,7 @@ export function DefensivePrescriptionModal({
   selectedPlot: any
   flowRate: number
   block: string
-  pressure: number
+  preassure: number
   tankNumbers: number
   tankSyrup: number
   fullSyrup: number
@@ -78,7 +79,7 @@ export function DefensivePrescriptionModal({
       application_type: applicationType,
       block: block,
       flow_rate: flowRate*1000,
-      pressure: pressure*1000,
+      pressure: preassure*1000,
       number_of_tanks: tankNumbers,
       correct_decimals: true,
       farm_id: selectedFarm.id,
@@ -92,18 +93,17 @@ export function DefensivePrescriptionModal({
     }
     dispatch(asyncPrescriptionTable(request))
   }
-  return (
-    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: '#7C5529', border: 'none' }}
-      >
-        <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>Receituário</span>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+  return   <Dialog
+      header="Receituário"
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={{ backgroundColor: '#7C5529' }}
+      contentStyle={{ backgroundColor: '#7C5529' }}
+    >
+
+
         <Row>
           <Col>
             <Row>
@@ -142,7 +142,7 @@ export function DefensivePrescriptionModal({
           <Col>
             <Row>
               <span style={{ color: '#fff' }}>
-                Pressão: {pressure}
+                Pressão: {preassure}
               </span>
             </Row>
             <Row>
@@ -198,7 +198,6 @@ export function DefensivePrescriptionModal({
             </Col>
           </Row>
         </div>
-      </Modal.Body>
-    </Modal>
-  )
+    </Dialog>
+
 }
