@@ -38,11 +38,13 @@ export function NewManualInputWeighing({
   manualInputWeigh: InputWeighingRow
 }) {
   const dispatch = useDispatch<any>()
-  const { farm, commerce, seasons } = useSelector((state: RootState) => state)
+  const { farm, commerce, seasons, financial } = useSelector(
+    (state: RootState) => state,
+  )
   const [selectedFarm, setSelectedFarm]: any = useState<any>({})
   const [selectedPlot, setSelectedPlot]: any = useState<any>({})
   const [selectedSilo, setSelectedSilo]: any = useState<any>({})
-  const [selectedCultivar, setSelectedCultivar]: any = useState({})
+  const [selectedCultivar, setSelectedCultivar]: any = useState<any>({})
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
@@ -127,9 +129,10 @@ export function NewManualInputWeighing({
   }
 
   const fetchCultivar = () => {
-    return selectedPlot?.cultivar?.map((cultivar: any) => {
+    return selectedPlot?.cultivares?.map((cultivar: any) => {
       return { id: cultivar.id, label: cultivar.name, ...cultivar }
     })
+
   }
 
   const fetchSilo = () => {
@@ -151,14 +154,10 @@ export function NewManualInputWeighing({
 
   const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
     const query = event.query.toLowerCase()
-    const resultSet = plotList.filter((p: any) =>
+    const resultSet = fetchPlot().filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
-    if (resultSet.length > 0) {
       setPlotList(resultSet)
-    } else {
-      setPlotList(fetchPlot())
-    }
   }
 
   const autoCompleteFarms = (event: AutoCompleteCompleteEvent) => {
@@ -174,16 +173,12 @@ export function NewManualInputWeighing({
   }
 
   const autoCompleteCultivar = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase()
-    const resultSet = cultivarList.filter((p: any) =>
-      p?.label?.toLowerCase().includes(query),
-    )
-    if (resultSet.length > 0) {
-      setCultivarList(resultSet)
-    } else {
-      setCultivarList(fetchCultivar())
-    }
-  }
+    const query = event.query.toLowerCase();
+    const resultSet = fetchCultivar().filter((p: any) =>
+      p?.label?.toLowerCase().includes(query)
+    );
+    setCultivarList(resultSet);
+  };
 
   const fillFormEdit = () => {
     const f: any = farm?.farms?.filter(
@@ -222,12 +217,10 @@ export function NewManualInputWeighing({
     fillFormEdit()
   }, [farm])
 
-  // useEffect(() => {
-  //   const silum = commerce?.silo?.filter((silo: Silo) => silo?.id === manualInputWeigh?.silo_id)[0];
-  //   if (silum) {
-  //     setSilo(silum);
-  //   }
-  // }, [commerce]);
+  useEffect(() => {
+    console.log(cultivarList)
+  }, [cultivarList])
+
   const Save = () => {
     const manualInput = {
       weighings: {
@@ -285,6 +278,8 @@ export function NewManualInputWeighing({
               completeMethod={autoCompleteFarms}
               onChange={(e: any) => {
                 setSelectedFarm(e.value)
+                setSelectedPlot({})
+                setSelectedCultivar()
               }}
               dropdown
               forceSelection
@@ -770,7 +765,7 @@ export function NewManualInputWeighing({
         {manualInputWeigh?.id ? (
           <GeneratePdf
             weighing={manualInputWeigh}
-            cultivationsList={selectedPlot?.cultivares}
+            cultivationsList={financial.cultivations}
             silosList={commerce?.silo}
             farmsList={farm.farms}
             profile={JSON.parse(sessionStorage.getItem('user')!)}

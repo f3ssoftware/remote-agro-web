@@ -40,7 +40,7 @@ export function NewAutoInputWeighing({
   autoInputWeighing: InputWeighingRow
 }) {
   const dispatch = useDispatch<any>()
-  const { farm, commerce, seasons } = useSelector((state: RootState) => state)
+  const { farm, commerce, seasons, financial} = useSelector((state: RootState) => state)
   const [selectedFarm, setSelectedFarm]: any = useState({})
   const [selectedPlot, setSelectedPlot]: any = useState({})
   const [selectedSilo, setSelectedSilo]: any = useState({})
@@ -779,7 +779,7 @@ export function NewAutoInputWeighing({
         {autoInputWeighing.id ? (
           <GeneratePdf
             weighing={autoInputWeighing}
-            cultivationsList={selectedPlot?.cultivares}
+            cultivationsList={financial.cultivations}
             silosList={commerce?.silo}
             farmsList={farm.farms}
             profile={JSON.parse(sessionStorage.getItem('user')!)}
