@@ -41,9 +41,9 @@ export function NewManualInputWeighing({
   const { farm, commerce, seasons, financial } = useSelector(
     (state: RootState) => state,
   )
-  const [selectedFarm, setSelectedFarm]: any = useState<any>({})
-  const [selectedPlot, setSelectedPlot]: any = useState<any>({})
-  const [selectedSilo, setSelectedSilo]: any = useState<any>({})
+  const [selectedFarm, setSelectedFarm]: any = useState<any>(null)
+  const [selectedPlot, setSelectedPlot]: any = useState<any>(null)
+  const [selectedSilo, setSelectedSilo]: any = useState<any>(null)
   const [selectedCultivar, setSelectedCultivar]: any = useState<any>({})
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')

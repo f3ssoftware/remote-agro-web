@@ -41,9 +41,9 @@ export function NewAutoInputWeighing({
 }) {
   const dispatch = useDispatch<any>()
   const { farm, commerce, seasons, financial} = useSelector((state: RootState) => state)
-  const [selectedFarm, setSelectedFarm]: any = useState({})
-  const [selectedPlot, setSelectedPlot]: any = useState({})
-  const [selectedSilo, setSelectedSilo]: any = useState({})
+  const [selectedFarm, setSelectedFarm]: any = useState(null)
+  const [selectedPlot, setSelectedPlot]: any = useState(null)
+  const [selectedSilo, setSelectedSilo]: any = useState(null)
   const [selectedCultivar, setSelectedCultivar]: any = useState({})
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
@@ -165,14 +165,10 @@ export function NewAutoInputWeighing({
 
   const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
     const query = event.query.toLowerCase()
-    const resultSet = plotList.filter((p: any) =>
+    const resultSet = fetchPlot().filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
-    if (resultSet.length > 0) {
       setPlotList(resultSet)
-    } else {
-      setPlotList(fetchPlot())
-    }
   }
 
   const autoCompleteFarms = (event: AutoCompleteCompleteEvent) => {
@@ -188,16 +184,12 @@ export function NewAutoInputWeighing({
   }
 
   const autoCompleteCultivar = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase()
-    const resultSet = cultivarList.filter((p: any) =>
-      p?.label?.toLowerCase().includes(query),
-    )
-    if (resultSet.length > 0) {
-      setCultivarList(resultSet)
-    } else {
-      setCultivarList(fetchCultivar())
-    }
-  }
+    const query = event.query.toLowerCase();
+    const resultSet = fetchCultivar().filter((p: any) =>
+      p?.label?.toLowerCase().includes(query)
+    );
+    setCultivarList(resultSet);
+  };
 
   const fillFormEdit = () => {
     const f: any = farm?.farms.filter(
