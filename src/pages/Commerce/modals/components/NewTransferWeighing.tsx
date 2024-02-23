@@ -194,7 +194,11 @@ export function NewTransferWeighing({
               onChange={(e) => {
                 setQuantity(e.value!)
               }}
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
 
             <label htmlFor="company">Quantidade</label>

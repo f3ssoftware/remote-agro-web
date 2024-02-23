@@ -360,7 +360,11 @@ export function NewManualSeparateWeighing({
               onChange={(e) => {
                 setGrossWeighing(e.value!)
               }}
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
 
             <label htmlFor="company">Peso Bruto</label>
@@ -383,7 +387,11 @@ export function NewManualSeparateWeighing({
               onChange={(e) => {
                 setTare(e.value!)
               }}
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
 
             <label htmlFor="company">Tara</label>
@@ -407,7 +415,11 @@ export function NewManualSeparateWeighing({
                 setNetWeighing(Number(e.value))
               }}
               disabled
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="netWeigh">Peso líquido</label>
           </span>
@@ -432,8 +444,12 @@ export function NewManualSeparateWeighing({
               onValueChange={(e) => {
                 setHumidity(Number(e.value))
               }}
-              prefix="%"
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">UMID (%)</label>
           </span>
@@ -455,9 +471,13 @@ export function NewManualSeparateWeighing({
               onValueChange={(e) => {
                 setHumidityDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Desconto UMID (%)</label>
           </span>
@@ -480,8 +500,12 @@ export function NewManualSeparateWeighing({
               onValueChange={(e) => {
                 setImpurity(Number(e.value))
               }}
-              prefix="%"
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Impureza (%)</label>
           </span>
@@ -503,9 +527,13 @@ export function NewManualSeparateWeighing({
               onValueChange={(e) => {
                 setDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Desconto (%)</label>
           </span>
@@ -528,9 +556,13 @@ export function NewManualSeparateWeighing({
               onValueChange={(e) => {
                 setTotalDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Desconto total (%)</label>
           </span>
@@ -556,7 +588,11 @@ export function NewManualSeparateWeighing({
                 setTotalWeighning(Number(e.value))
               }}
               disabled
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="netWeigh">Peso Final</label>
           </span>

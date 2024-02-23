@@ -40,7 +40,9 @@ export function NewAutoInputWeighing({
   autoInputWeighing: InputWeighingRow
 }) {
   const dispatch = useDispatch<any>()
-  const { farm, commerce, seasons, financial} = useSelector((state: RootState) => state)
+  const { farm, commerce, seasons, financial } = useSelector(
+    (state: RootState) => state,
+  )
   const [selectedFarm, setSelectedFarm]: any = useState(null)
   const [selectedPlot, setSelectedPlot]: any = useState(null)
   const [selectedSilo, setSelectedSilo]: any = useState(null)
@@ -168,7 +170,7 @@ export function NewAutoInputWeighing({
     const resultSet = fetchPlot().filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
-      setPlotList(resultSet)
+    setPlotList(resultSet)
   }
 
   const autoCompleteFarms = (event: AutoCompleteCompleteEvent) => {
@@ -184,12 +186,13 @@ export function NewAutoInputWeighing({
   }
 
   const autoCompleteCultivar = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = fetchCultivar().filter((p: any) =>
-      p?.label?.toLowerCase().includes(query)
-    );
-    setCultivarList(resultSet);
-  };
+      p?.label?.toLowerCase().includes(query),
+    )
+    setCultivarList(resultSet)
+  }
+
 
   const fillFormEdit = () => {
     const f: any = farm?.farms.filter(
@@ -344,7 +347,7 @@ export function NewAutoInputWeighing({
           </Form.Group> */}
         </Col>
         <Col md={2}>
-        {selectedPlot?.cultivares?.length > 0 ? (
+          {selectedPlot?.cultivares?.length > 0 ? (
             <span className="p-float-label">
               <AutoComplete
                 field="label"
@@ -532,7 +535,11 @@ export function NewAutoInputWeighing({
                 setNetWeighing(Number(e.value))
               }}
               disabled
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="netWeigh">Peso líquido</label>
           </span>
@@ -555,8 +562,12 @@ export function NewAutoInputWeighing({
               onValueChange={(e) => {
                 setHumidity(Number(e.value))
               }}
-              prefix="%"
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">UMID (%)</label>
           </span>
@@ -580,9 +591,13 @@ export function NewAutoInputWeighing({
               onValueChange={(e) => {
                 setHumidityDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Desconto UMID (%)</label>
           </span>
@@ -605,8 +620,12 @@ export function NewAutoInputWeighing({
               onValueChange={(e) => {
                 setImpurity(Number(e.value))
               }}
-              prefix="%"
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Impureza (%)</label>
           </span>
@@ -629,9 +648,13 @@ export function NewAutoInputWeighing({
               onValueChange={(e) => {
                 setDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Desconto (%)</label>
           </span>
@@ -654,9 +677,13 @@ export function NewAutoInputWeighing({
               onValueChange={(e) => {
                 setTotalDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="humidity">Desconto total (%)</label>
           </span>
@@ -682,7 +709,11 @@ export function NewAutoInputWeighing({
                 setTotalWeighning(Number(e.value))
               }}
               disabled
+              mode="decimal"
+              locale="pt-BR"
               style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
             />
             <label htmlFor="netWeigh">Peso Final</label>
           </span>
