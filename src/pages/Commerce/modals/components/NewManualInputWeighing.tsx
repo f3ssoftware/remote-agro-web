@@ -469,7 +469,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputText
               value={company}
@@ -492,7 +492,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={grossWeighing}
@@ -519,7 +519,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={tare}
@@ -546,7 +546,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={netWeighing}
@@ -575,7 +575,7 @@ export function NewManualInputWeighing({
           </Form.Group> */}
         </Col>
       </Row>
-      <Row>
+      <Row style={{ marginTop: '2%' }}>
         <Col>
           <span className="p-float-label">
             <InputNumber
@@ -610,7 +610,6 @@ export function NewManualInputWeighing({
               onValueChange={(e) => {
                 setHumidityDiscount(Number(e.value))
               }}
-              prefix="%"
               disabled
               suffix="%"
               mode="decimal"
@@ -690,7 +689,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalDiscount}
@@ -721,7 +720,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalWeighning}
@@ -749,7 +748,7 @@ export function NewManualInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputText
               value={observation}

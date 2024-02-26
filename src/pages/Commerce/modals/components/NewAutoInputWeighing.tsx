@@ -46,7 +46,7 @@ export function NewAutoInputWeighing({
   const [selectedFarm, setSelectedFarm]: any = useState(null)
   const [selectedPlot, setSelectedPlot]: any = useState(null)
   const [selectedSilo, setSelectedSilo]: any = useState(null)
-  const [selectedCultivar, setSelectedCultivar]: any = useState({})
+  const [selectedCultivar, setSelectedCultivar]: any = useState(null)
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
@@ -142,7 +142,7 @@ export function NewAutoInputWeighing({
   }
 
   const fetchCultivar = () => {
-    return selectedPlot?.cultivar?.map((cultivar: any) => {
+    return selectedPlot?.cultivares?.map((cultivar: any) => {
       return { id: cultivar.id, label: cultivar.name, ...cultivar }
     })
   }
@@ -469,7 +469,7 @@ export function NewAutoInputWeighing({
           </Form.Group> */}
         </Col>
       </Row>
-      <Row style={{ marginTop: '2%' }}>
+      <Row style={{ marginTop: '3%' }}>
         <Col md={2}>
           <span className="p-float-label">
             <InputText
@@ -701,7 +701,7 @@ export function NewAutoInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col md={3}>
+        <Col md={3} style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalWeighning}
@@ -729,7 +729,7 @@ export function NewAutoInputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col md={2}>
+        <Col md={2} style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputText
               value={observation}

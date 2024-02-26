@@ -46,9 +46,9 @@ export function NewManualOutputWeighing({
     (state: RootState) => state,
   )
   const [id, setId] = useState<number>()
-  const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [selectedContract, setSelectedContract]: any = useState({})
-  const [selectedSilo, setSelectedSilo]: any = useState({})
+  const [selectedCultivation, setSelectedCultivation]: any = useState(null)
+  const [selectedContract, setSelectedContract]: any = useState(null)
+  const [selectedSilo, setSelectedSilo]: any = useState(null)
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
@@ -408,7 +408,7 @@ export function NewManualOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={grossWeighing}
@@ -435,7 +435,7 @@ export function NewManualOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={tare}
@@ -462,7 +462,7 @@ export function NewManualOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={netWeighing}
@@ -491,7 +491,7 @@ export function NewManualOutputWeighing({
           </Form.Group> */}
         </Col>
       </Row>
-      <Row>
+      <Row style={{ marginTop: '2%' }}>
         <Col>
           <span className="p-float-label">
             <InputNumber
@@ -605,7 +605,7 @@ export function NewManualOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalDiscount}
@@ -636,7 +636,7 @@ export function NewManualOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalWeighning}
@@ -664,7 +664,7 @@ export function NewManualOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputText
               value={observation}

@@ -28,9 +28,9 @@ export function NewTransferWeighing({
 }) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
-  const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [selectedSiloInput, setSelectedSiloInput]: any = useState({})
-  const [selectedSiloOutput, setSelectedSiloOutput]: any = useState({})
+  const [selectedCultivation, setSelectedCultivation]: any = useState(null)
+  const [selectedSiloInput, setSelectedSiloInput]: any = useState(null)
+  const [selectedSiloOutput, setSelectedSiloOutput]: any = useState(null)
   const [quantity, setQuantity] = useState(0)
   const [siloList, setSiloList] = useState<any[]>([])
   const [cultivationList, setCultivationList] = useState<any[]>([])

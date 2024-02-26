@@ -46,10 +46,10 @@ export function NewAutoOutputWeighing({
   const { financial, commerce, seasons } = useSelector(
     (state: RootState) => state,
   )
-  const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [selectedContract, setSelectedContract]: any = useState({})
+  const [selectedCultivation, setSelectedCultivation]: any = useState(null)
+  const [selectedContract, setSelectedContract]: any = useState(null)
   const [id, setId] = useState<number>()
-  const [selectedSilo, setSelectedSilo]: any = useState({})
+  const [selectedSilo, setSelectedSilo]: any = useState(null)
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
@@ -450,7 +450,7 @@ export function NewAutoOutputWeighing({
             )}
           </Form.Group>
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={netWeighing}
@@ -592,7 +592,7 @@ export function NewAutoOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalDiscount}
@@ -623,7 +623,7 @@ export function NewAutoOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputNumber
               value={totalWeighning}
@@ -651,7 +651,7 @@ export function NewAutoOutputWeighing({
             />
           </Form.Group> */}
         </Col>
-        <Col>
+        <Col style={{ marginTop: '2%' }}>
           <span className="p-float-label">
             <InputText
               value={observation}
