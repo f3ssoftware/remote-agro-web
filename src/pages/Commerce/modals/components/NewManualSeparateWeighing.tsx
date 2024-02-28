@@ -78,9 +78,9 @@ export function NewManualSeparateWeighing({
     )
   }, [humidity])
 
-  // useEffect(() => {
-  //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
-  // }, [seasons])
+  useEffect(() => {
+    fillFormEdit()
+  }, [financial])
 
   useEffect(() => {
     setTotalDiscount(discount + humidityDiscount)
@@ -126,7 +126,7 @@ export function NewManualSeparateWeighing({
     }
   }
 
-  useEffect(() => {
+  const fillFormEdit = () => {
     if (manualSeparateWeigh?.id) {
       setSelectedCultivation(
         financial?.cultivations?.filter(
@@ -154,7 +154,7 @@ export function NewManualSeparateWeighing({
       setTare(manualSeparateWeigh?.tare_weight!)
       setObservation(manualSeparateWeigh?.observations!)
     }
-  }, [manualSeparateWeigh])
+  }
 
   const Save = () => {
     const manualSeparate = {

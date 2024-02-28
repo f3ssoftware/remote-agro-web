@@ -85,9 +85,9 @@ export function NewAutoSeparateWeighing({
     )
   }, [humidity])
 
-  // useEffect(() => {
-  //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
-  // }, [seasons])
+  useEffect(() => {
+    fillFormEdit()
+  }, [financial])
 
   useEffect(() => {
     setTotalDiscount(discount + humidityDiscount)
@@ -133,7 +133,7 @@ export function NewAutoSeparateWeighing({
     }
   }
 
-  useEffect(() => {
+  const fillFormEdit = () => {
     if (autoSeparateWeighing?.id) {
       setSelectedCultivation(
         financial?.cultivations?.filter(
@@ -161,7 +161,7 @@ export function NewAutoSeparateWeighing({
       setTare(autoSeparateWeighing?.tare_weight!)
       setObservation(autoSeparateWeighing?.observations!)
     }
-  }, [autoSeparateWeighing])
+  }
 
   const Save = () => {
     const autoSeparate = {
