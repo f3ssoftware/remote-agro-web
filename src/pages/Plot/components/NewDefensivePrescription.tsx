@@ -112,6 +112,10 @@ export function NewDefensivePrescription({
               onChange={(e) => {
                 return setQuantity(Number(e.value))
               }}
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={2}
             />
             <label htmlFor="quantity">Qtd/ha (L)</label>
           </span>

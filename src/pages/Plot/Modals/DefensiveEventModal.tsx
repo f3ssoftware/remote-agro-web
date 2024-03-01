@@ -14,9 +14,11 @@ export function DefensiveEventModal({
 }) {
   const { plot } = useSelector((state: RootState) => state)
   const [index, setIndex] = useState(0)
-  // useEffect(() => {
 
-  // }, [application]);
+
+  useEffect(() => {
+    console.log(application)
+  }, [application]);
   useEffect(() => {
     setIndex(
       plot?.applications?.findIndex((app) => application?.id === app?.id),
@@ -99,11 +101,11 @@ export function DefensiveEventModal({
             {plot?.applications[index]?.application_tables?.map(
               (applicationTable: any) => {
                 return <tr>
-                  <td>{applicationTable.product_name}</td>
-                  <td>{applicationTable.test}</td>
-                  <td>{applicationTable.quantity}</td>
-                  <td>{applicationTable.tank}</td>
-                  <td>{applicationTable.total_quantity/1000}</td>
+                  <td>{applicationTable?.product_name}</td>
+                  <td>{applicationTable?.test}</td>
+                  <td>{applicationTable?.quantity}</td>
+                  <td>{applicationTable?.tank}</td>
+                  <td>{applicationTable?.total_quantity/1000}</td>
                 </tr>
               },
             )}

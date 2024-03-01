@@ -97,6 +97,9 @@ export function NewFertilizerPrescription({
               onChange={(e) => {
                 return setQuantity(Number(e.value))
               }}
+              locale="pt-BR"
+              minFractionDigits={0}
+              maxFractionDigits={2}
             />
             <label htmlFor="quantity">Qtd/ha (L)</label>
           </span>
