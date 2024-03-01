@@ -446,27 +446,13 @@ export function PrescriptionDefensive({
                 <span className="p-float-label">
                   <InputNumber
                     id="fullSyrup"
-                    value={formik.values.fullSyrup}
+                    value={fullSyrup}
                     onValueChange={(e) => {
-                      formik.setFieldValue('fullSyrup', e.target.value)
                       setFullSyrup(Number(e.value))
                     }}
-                    className={classNames({
-                      'p-invalid':
-                        formik.touched.fullSyrup && formik.errors.fullSyrup,
-                    })}
+                    disabled
                   />
-                  {formik.touched.fullSyrup && formik.errors.fullSyrup ? (
-                    <div
-                      style={{
-                        color: 'red',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto',
-                      }}
-                    >
-                      {formik.errors.fullSyrup}
-                    </div>
-                  ) : null}
+
                   <label htmlFor="preassure">Calda total (L)</label>
                 </span>
               </Col>
@@ -504,27 +490,12 @@ export function PrescriptionDefensive({
                 <span className="p-float-label">
                   <InputNumber
                     id="tankSyrup"
-                    value={formik.values.tankSyrup}
+                    value={tankNumbers >0 ? tankSyrup : null}
                     onValueChange={(e) => {
-                      formik.setFieldValue('tankSyrup', e.target.value)
                       setTankSyrup(Number(e.value))
                     }}
-                    className={classNames({
-                      'p-invalid':
-                        formik.touched.tankSyrup && formik.errors.tankSyrup,
-                    })}
+                    disabled
                   />
-                  {formik.touched.tankSyrup && formik.errors.tankSyrup ? (
-                    <div
-                      style={{
-                        color: 'red',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto',
-                      }}
-                    >
-                      {formik.errors.tankSyrup}
-                    </div>
-                  ) : null}
                   <label htmlFor="preassure">Calda/tanque (L)</label>
                 </span>
               </Col>
