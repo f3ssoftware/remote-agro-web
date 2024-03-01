@@ -23,7 +23,7 @@ export function NewSeedingPrescription({
   onHandleRemove: any
   onHandleUpdate: any
 }) {
-  const [product, setProduct] = useState({ id: 0 })
+  const [product, setProduct] = useState<any>({ id: 0 })
   const [quantity, setQuantity] = useState(0)
   const { input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
@@ -63,6 +63,10 @@ export function NewSeedingPrescription({
       })
   }
 
+  useEffect(() => {
+    setProductList(fetchProducts());
+  }, []);
+
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
@@ -74,6 +78,7 @@ export function NewSeedingPrescription({
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
+                setProduct(e.value)
                 setSelectedProduct(e.value)
               }}
               forceSelection

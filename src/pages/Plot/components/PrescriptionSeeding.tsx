@@ -569,6 +569,7 @@ export function PrescriptionSeeding({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 type="submit"
+                onClick={() => setShowNewPrescriptionModal(true)}
               >
                 Avançar
               </Button>
