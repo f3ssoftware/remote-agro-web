@@ -247,7 +247,7 @@ export function NewAutoOutputWeighing({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedCultivation}
+              value={selectedCultivation ? selectedCultivation?.name : ''}
               suggestions={cultivationList}
               completeMethod={autoCompleteCultivations}
               onChange={(e: any) => {
@@ -281,7 +281,7 @@ export function NewAutoOutputWeighing({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedContract}
+              value={selectedContract ? selectedContract?.name : ''}
               suggestions={contractList}
               completeMethod={autoCompleteContracts}
               onChange={(e: any) => {
@@ -315,7 +315,7 @@ export function NewAutoOutputWeighing({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedSilo}
+              value={selectedSilo ? selectedSilo?.name : ''}
               suggestions={siloList}
               completeMethod={autoCompleteSilo}
               onChange={(e: any) => {

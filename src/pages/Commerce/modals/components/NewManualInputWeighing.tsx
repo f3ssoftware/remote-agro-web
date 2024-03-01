@@ -71,6 +71,10 @@ export function NewManualInputWeighing({
   }, [])
 
   useEffect(() => {
+    console.log(selectedFarm)
+  }, [selectedFarm])
+
+  useEffect(() => {
     setNetWeighing(grossWeighing - tare)
   }, [grossWeighing, tare])
 
@@ -273,7 +277,7 @@ export function NewManualInputWeighing({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedFarm}
+              value={selectedFarm ? selectedFarm.name : ''}
               suggestions={farmList}
               completeMethod={autoCompleteFarms}
               onChange={(e: any) => {
@@ -309,8 +313,8 @@ export function NewManualInputWeighing({
           {selectedFarm?.fields?.length > 0 ? (
             <span className="p-float-label">
               <AutoComplete
-                field="label"
-                value={selectedPlot}
+                field="name"
+                value={selectedPlot ? selectedPlot.name : ''}
                 suggestions={plotList}
                 completeMethod={autoCompletePlots}
                 onChange={(e: any) => {
@@ -351,8 +355,8 @@ export function NewManualInputWeighing({
           {selectedPlot?.cultivares?.length > 0 ? (
             <span className="p-float-label">
               <AutoComplete
-                field="label"
-                value={selectedCultivar}
+                field="name"
+                value={selectedCultivar ? selectedCultivar.name : ''}
                 suggestions={cultivarList}
                 completeMethod={autoCompleteCultivar}
                 onChange={(e: any) => {
@@ -393,7 +397,7 @@ export function NewManualInputWeighing({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedSilo}
+              value={selectedSilo ? selectedSilo.name : ''}
               suggestions={siloList}
               completeMethod={autoCompleteSilo}
               onChange={(e: any) => {

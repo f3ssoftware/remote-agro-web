@@ -82,6 +82,7 @@ export function NewManualSeparateWeighing({
     fillFormEdit()
   }, [financial])
 
+
   useEffect(() => {
     setTotalDiscount(discount + humidityDiscount)
   }, [discount, humidityDiscount])
@@ -223,8 +224,8 @@ export function NewManualSeparateWeighing({
         <Col md={2}>
           <span className="p-float-label">
             <AutoComplete
-              field="label"
-              value={selectedCultivation}
+              field="name"
+              value={selectedCultivation ? selectedCultivation?.name : ''}
               suggestions={cultivationList}
               completeMethod={autoCompleteCultivations}
               onChange={(e: any) => {
@@ -259,7 +260,7 @@ export function NewManualSeparateWeighing({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedContract}
+              value={selectedContract ? selectedContract?.name : ''}
               suggestions={contractList}
               completeMethod={autoCompleteContracts}
               onChange={(e: any) => {

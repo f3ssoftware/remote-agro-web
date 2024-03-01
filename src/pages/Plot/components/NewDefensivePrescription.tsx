@@ -29,7 +29,7 @@ export function NewDefensivePrescription({
   area: number
   tankNumbers: number
 }) {
-  const [product, setProduct] = useState({ id: 0 })
+  const [product, setProduct] = useState<any>({ id: 0 })
   const [quantity, setQuantity] = useState(0)
   const [test, setTest] = useState(0)
   const [tank, setTank] = useState(0)
@@ -39,7 +39,7 @@ export function NewDefensivePrescription({
   const [productList, setProductList] = useState<any[]>([])
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity })
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity })
   }, [product, quantity])
 
   useEffect(() => {
@@ -79,6 +79,10 @@ export function NewDefensivePrescription({
       })
   }
 
+  useEffect(() => {
+    setProductList(fetchProducts());
+  }, []);
+
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
@@ -90,6 +94,7 @@ export function NewDefensivePrescription({
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
+                setProduct(e.value)
                 setSelectedProduct(e.value)
               }}
               forceSelection
