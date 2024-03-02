@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { ApplicationTable } from '../../../models/ApplicationTable'
 import { Product } from '../../../models/Product'
@@ -27,6 +27,7 @@ export function DefensivePrescriptionModal({
   tankNumbers,
   tankSyrup,
   fullSyrup,
+
 }: {
   show: boolean
   handleClose: any
@@ -43,6 +44,7 @@ export function DefensivePrescriptionModal({
   tankNumbers: number
   tankSyrup: number
   fullSyrup: number
+
 }) {
   const [applicationTables, setApplicationTables]: any[] = useState([])
   const dispatch = useDispatch<any>()
@@ -61,7 +63,6 @@ export function DefensivePrescriptionModal({
     newApplicationTables.splice(index, 1)
     newApplicationTables.push(applicationTable)
     setApplicationTables(newApplicationTables)
-    console.log(applicationTables)
   }
 
   const addLine = () => {
@@ -93,10 +94,15 @@ export function DefensivePrescriptionModal({
     }
     dispatch(asyncPrescriptionTable(request))
   }
+
+  useEffect(() => {
+    console.log(applicationTables)
+  }, [applicationTables]);
+  
   return   <Dialog
       header="Receituário"
       visible={show}
-      style={{ width: '50vw' }}
+      style={{ width: '70vw' }}
       className="custom-dialog"
       onHide={handleClose}
       headerStyle={{ backgroundColor: '#7C5529' }}

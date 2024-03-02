@@ -58,6 +58,7 @@ export function Plot() {
     filter()
   }, [])
 
+
   const filter = (field?: string) => {
     dispatch(
       asyncFetchApplications({

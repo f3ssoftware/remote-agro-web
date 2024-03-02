@@ -14,6 +14,7 @@ export function PrescriptionModal({
   show,
   handleClose,
   selectedFarm,
+
 }: {
   show: boolean
   handleClose: any

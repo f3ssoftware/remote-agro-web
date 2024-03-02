@@ -16,9 +16,7 @@ export function DefensiveEventModal({
   const [index, setIndex] = useState(0)
 
 
-  useEffect(() => {
-    console.log(application)
-  }, [application]);
+
   useEffect(() => {
     setIndex(
       plot?.applications?.findIndex((app) => application?.id === app?.id),

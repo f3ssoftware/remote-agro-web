@@ -118,6 +118,7 @@ export function PrescriptionDefensive({
     dispatch(asyncFetchApplicationData())
   }, [])
 
+
   useEffect(() => {
     setFullSyrup(flowRate * area)
   }, [flowRate, area])
