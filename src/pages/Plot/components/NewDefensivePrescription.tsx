@@ -42,7 +42,7 @@ export function NewDefensivePrescription({
 
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test, tank: tank})
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test, tank: tank*1000})
   }, [product, quantity])
 
   useEffect(() => {
@@ -51,11 +51,11 @@ export function NewDefensivePrescription({
 
 
   useEffect(() => {
-    setTest((quantity / flowRate) * 1000)
+    setTest(quantity / flowRate)
   }, [quantity, flowRate])
 
   useEffect(() => {
-    setTank((quantity * (area*100)) / tankNumbers)
+    setTank((quantity * area) / tankNumbers)
   }, [quantity, area, tank])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
