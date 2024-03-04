@@ -88,7 +88,7 @@ export function DefensivePrescriptionModal({
       number_of_tanks: tankNumbers,
       correct_decimals: true,
       farm_id: selectedFarm.id,
-      fields: [{ id: selectedPlot.id, area: area*100 }],
+      fields: [{ id: selectedPlot.id, area: (area*100) }],
     }
     dispatch(asyncPrescription(defensive))
   }

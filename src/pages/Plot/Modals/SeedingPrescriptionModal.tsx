@@ -89,7 +89,7 @@ export function SeedingPrescriptionModal({
       flow_rate: flowRate,
       farm_id: selectedFarm.id,
       correct_decimals: true,
-      fields: [{ id: selectedPlot.id, area: area*100 }],
+      fields: [{ id: selectedPlot.id, area: (area*100) }],
     }
     dispatch(asyncPrescription(seeding))
   }
