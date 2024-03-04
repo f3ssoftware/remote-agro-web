@@ -42,7 +42,7 @@ export function NewDefensivePrescription({
 
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test, tank: tank})
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity, test: test, tank: tank})
   }, [product, quantity])
 
   useEffect(() => {

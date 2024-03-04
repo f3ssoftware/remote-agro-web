@@ -70,7 +70,7 @@ export function FertilizerPrescriptionModal({
       application_type: applicationType,
       correct_decimals: true,
       farm_id: selectedFarm.id,
-      fields: [{ id: selectedPlot.id, area: area }],
+      fields: [{ id: selectedPlot.id, area: area*100 }],
     }
     dispatch(asyncPrescription(fertilizer))
   }
