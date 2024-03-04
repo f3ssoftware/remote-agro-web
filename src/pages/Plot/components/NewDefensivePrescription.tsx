@@ -42,7 +42,7 @@ export function NewDefensivePrescription({
 
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test, tank: tank*1000})
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test, tank: tank})
   }, [product, quantity])
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function NewDefensivePrescription({
 
 
   useEffect(() => {
-    setTest(quantity / flowRate)
+    setTest((quantity / flowRate)*1000)
   }, [quantity, flowRate])
 
   useEffect(() => {
@@ -118,6 +118,7 @@ export function NewDefensivePrescription({
               }}
               disabled
               locale="pt-BR"
+              mode="decimal"
               style={{ width: '100%' }}
               minFractionDigits={0}
               maxFractionDigits={2}
@@ -134,6 +135,7 @@ export function NewDefensivePrescription({
                 return setQuantity(Number(e.value))
               }}
               locale="pt-BR"
+              mode="decimal"
               style={{ width: '100%' }}
               minFractionDigits={0}
               maxFractionDigits={2}
@@ -151,6 +153,7 @@ export function NewDefensivePrescription({
               }}
               disabled
               locale="pt-BR"
+              mode="decimal"
               style={{ width: '100%' }}
               minFractionDigits={0}
               maxFractionDigits={2}

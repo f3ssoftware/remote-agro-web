@@ -64,7 +64,7 @@ export function FertilizerPrescriptionModal({
     const fertilizer: Application = {
       type: 'Fertilizantes',
       accountable: accountable,
-      area: area,
+      area: area*100,
       applier_id: applier.id,
       date: date,
       application_type: applicationType,

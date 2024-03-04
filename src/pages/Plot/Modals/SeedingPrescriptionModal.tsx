@@ -78,7 +78,7 @@ export function SeedingPrescriptionModal({
     const seeding: Application = {
       type: 'Semeadura',
       accountable: accountable,
-      area: area,
+      area: area*100,
       applier_id: applier.id,
       date: date,
       fertilizer_id: product.id,
