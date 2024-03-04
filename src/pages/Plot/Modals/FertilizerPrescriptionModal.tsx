@@ -85,6 +85,7 @@ export function FertilizerPrescriptionModal({
   useEffect(() => {
     if (plot.prescription.id) {
       confirm();
+      handleClose()
     }
   }, [plot])
 

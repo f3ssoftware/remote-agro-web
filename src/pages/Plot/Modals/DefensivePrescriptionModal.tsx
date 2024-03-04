@@ -109,6 +109,7 @@ export function DefensivePrescriptionModal({
   useEffect(() => {
     if (plot.prescription.id) {
       confirm();
+      handleClose()
     }
   }, [plot])
 

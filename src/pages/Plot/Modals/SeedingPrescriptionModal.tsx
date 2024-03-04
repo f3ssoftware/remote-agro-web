@@ -105,6 +105,7 @@ export function SeedingPrescriptionModal({
   useEffect(() => {
     if (plot.prescription.id) {
       confirm();
+      handleClose()
     }
   }, [plot])
 
