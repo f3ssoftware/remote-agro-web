@@ -118,6 +118,7 @@ export function PrescriptionDefensive({
     dispatch(asyncFetchApplicationData())
   }, [])
 
+
   useEffect(() => {
     setFullSyrup(flowRate * area)
   }, [flowRate, area])
@@ -195,7 +196,7 @@ export function PrescriptionDefensive({
                       {formik.errors.accountable}
                     </div>
                   ) : null}
-                  <label htmlFor="accountable">Responsável</label>
+                  <label htmlFor="accountable" style={{ color: 'black' }}>Responsável</label>
                 </span>
               </Col>
             </Row>
@@ -230,7 +231,7 @@ export function PrescriptionDefensive({
                       {formik.errors.plot}
                     </div>
                   ) : null}
-                  <label htmlFor="plot">Talhões</label>
+                  <label htmlFor="plot" style={{ color: 'black' }}>Talhões</label>
                 </span>
                 {selectedPlot?.total_area > 0 ? (
                   <>
@@ -287,7 +288,7 @@ export function PrescriptionDefensive({
                       {formik.errors.applier}
                     </div>
                   ) : null}
-                  <label htmlFor="applier">Aplicador</label>
+                  <label htmlFor="applier" style={{ color: 'black' }}>Aplicador</label>
                 </span>
               </Col>
             </Row>
@@ -318,7 +319,7 @@ export function PrescriptionDefensive({
                       {formik.errors.dateTime}
                     </div>
                   ) : null}
-                  <label htmlFor="date">Data de plantio</label>
+                  <label htmlFor="date" style={{ color: 'black' }}>Data de plantio</label>
                 </span>
               </Col>
               <Col>
@@ -406,7 +407,7 @@ export function PrescriptionDefensive({
                         {formik.errors.preassure}
                       </div>
                     ) : null}
-                    <label htmlFor="preassure">Pressão (Pa)</label>
+                    <label htmlFor="preassure" style={{ color: 'black' }}>Pressão (Pa)</label>
                   </span>
                 </Col>
               ) : (
@@ -439,35 +440,21 @@ export function PrescriptionDefensive({
                       {formik.errors.flowRate}
                     </div>
                   ) : null}
-                  <label htmlFor="preassure">Vazão (L/ha)</label>
+                  <label htmlFor="preassure" style={{ color: 'black' }}>Vazão (L/ha)</label>
                 </span>
               </Col>
               <Col>
                 <span className="p-float-label">
                   <InputNumber
                     id="fullSyrup"
-                    value={formik.values.fullSyrup}
+                    value={fullSyrup}
                     onValueChange={(e) => {
-                      formik.setFieldValue('fullSyrup', e.target.value)
                       setFullSyrup(Number(e.value))
                     }}
-                    className={classNames({
-                      'p-invalid':
-                        formik.touched.fullSyrup && formik.errors.fullSyrup,
-                    })}
+                    disabled
                   />
-                  {formik.touched.fullSyrup && formik.errors.fullSyrup ? (
-                    <div
-                      style={{
-                        color: 'red',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto',
-                      }}
-                    >
-                      {formik.errors.fullSyrup}
-                    </div>
-                  ) : null}
-                  <label htmlFor="preassure">Calda total (L)</label>
+
+                  <label htmlFor="preassure" style={{ color: 'black' }}>Calda total (L)</label>
                 </span>
               </Col>
             </Row>
@@ -497,35 +484,20 @@ export function PrescriptionDefensive({
                       {formik.errors.tankNumbers}
                     </div>
                   ) : null}
-                  <label htmlFor="preassure">Nª de tanques</label>
+                  <label htmlFor="preassure" style={{ color: 'black' }}>Nª de tanques</label>
                 </span>
               </Col>
               <Col>
                 <span className="p-float-label">
                   <InputNumber
                     id="tankSyrup"
-                    value={formik.values.tankSyrup}
+                    value={tankNumbers >0 ? tankSyrup : null}
                     onValueChange={(e) => {
-                      formik.setFieldValue('tankSyrup', e.target.value)
                       setTankSyrup(Number(e.value))
                     }}
-                    className={classNames({
-                      'p-invalid':
-                        formik.touched.tankSyrup && formik.errors.tankSyrup,
-                    })}
+                    disabled
                   />
-                  {formik.touched.tankSyrup && formik.errors.tankSyrup ? (
-                    <div
-                      style={{
-                        color: 'red',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto',
-                      }}
-                    >
-                      {formik.errors.tankSyrup}
-                    </div>
-                  ) : null}
-                  <label htmlFor="preassure">Calda/tanque (L)</label>
+                  <label htmlFor="preassure" style={{ color: 'black' }}>Calda/tanque (L)</label>
                 </span>
               </Col>
             </Row>
@@ -541,7 +513,7 @@ export function PrescriptionDefensive({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 type="submit"
-                // onClick={() => setShowNewPrescriptionModal(true)}
+                onClick={() => setShowNewPrescriptionModal(true)}
               >
                 Avançar
               </Button>

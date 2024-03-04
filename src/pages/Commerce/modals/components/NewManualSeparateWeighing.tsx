@@ -3,10 +3,16 @@ import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { asyncFetchContractsData, asyncFetchCultivations } from '../../../../stores/financial.store'
+import {
+  asyncFetchContractsData,
+  asyncFetchCultivations,
+} from '../../../../stores/financial.store'
 import { Cultivation } from '../../../../models/Cultivation'
 import { calculateHumidityDiscount } from './weighingsHelpers'
-import { asyncSeparateWeighing, asyncUpdateSeparateWeighing } from '../../../../stores/commerce.store'
+import {
+  asyncSeparateWeighing,
+  asyncUpdateSeparateWeighing,
+} from '../../../../stores/commerce.store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { SeparateWeighingRow } from '../../../../models/SepareteWeighingRow'
@@ -14,14 +20,24 @@ import { Contract } from '../../../../models/Contract'
 import { WeighingRowType } from '../../../../utils/WeighingRowType.enum'
 import { DeleteConfirmationModal } from '../CommerceWeighingModal/DeleteConfirmationModal'
 import { GeneratePdf } from './GeneratePdf/GeneratePdf'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+import { InputText } from 'primereact/inputtext'
+import { InputNumber } from 'primereact/inputnumber'
 
-
-
-export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: number, manualSeparateWeigh: SeparateWeighingRow}) {
+export function NewManualSeparateWeighing({
+  index,
+  manualSeparateWeigh,
+}: {
+  index: number
+  manualSeparateWeigh: SeparateWeighingRow
+}) {
   const dispatch = useDispatch<any>()
   const { financial, commerce } = useSelector((state: RootState) => state)
-  const [selectedCultivation, setSelectedCultivation]: any = useState({})
-  const [selectedContract, setSelectedContract]: any = useState({})
+  const [selectedCultivation, setSelectedCultivation]: any = useState(null)
+  const [selectedContract, setSelectedContract]: any = useState(null)
   const [carPlate, setCarPlate] = useState('')
   const [driver, setDriver] = useState('')
   const [netWeighing, setNetWeighing] = useState(0)
@@ -36,8 +52,11 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
   const [reference, setReference] = useState('')
   const [grossWeighing, setGrossWeighing] = useState(0)
   const [tare, setTare] = useState(0)
-  const [id, setId] = useState<number>();
-  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] = useState(false)
+  const [id, setId] = useState<number>()
+  const [showAutoInputDeleteModal, setShowAutoInputDeleteModal] =
+    useState(false)
+  const [cultivationList, setCultivationList] = useState<any[]>([])
+  const [contractList, setContractList] = useState<any[]>([])
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -46,50 +65,99 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
   }, [])
 
   useEffect(() => {
-    setNetWeighing(grossWeighing-tare)
+    setNetWeighing(grossWeighing - tare)
   }, [grossWeighing, tare])
 
   useEffect(() => {
-    setDiscount(impurity < 1 ? 0: impurity-1)
+    setDiscount(impurity < 1 ? 0 : impurity - 1)
   }, [impurity])
 
   useEffect(() => {
-    setHumidityDiscount(calculateHumidityDiscount(humidity, selectedCultivation?.id))
+    setHumidityDiscount(
+      calculateHumidityDiscount(humidity, selectedCultivation?.id),
+    )
   }, [humidity])
 
-  // useEffect(() => {
-  //   dispatch(asyncFetchFarms({ season_id: seasons.selectedSeason.id, include: 'cultivation' }));
-  // }, [seasons])
+  useEffect(() => {
+    fillFormEdit()
+  }, [financial])
 
-  useEffect(()=>{
-    setTotalDiscount(discount+humidityDiscount)
-  }, [discount,humidityDiscount])
-
-  useEffect(()=>{
-    setTotalWeighning(netWeighing*((100-totalDiscount)/100))
-  }, [netWeighing, totalDiscount])
 
   useEffect(() => {
-    if (manualSeparateWeigh?.id) {
-      setSelectedCultivation(financial?.cultivations?.filter((cultivation: Cultivation) => cultivation?.id === manualSeparateWeigh?.cultivation_id))
-      setSelectedContract(financial?.contracts.filter((contract: Contract) => contract?.id === manualSeparateWeigh?.contract_id))
-      setReference(manualSeparateWeigh?.reference!);
-      setCarPlate(manualSeparateWeigh?.car_plate!);
-      setDriver(manualSeparateWeigh?.car_driver!);
-      setCompany(manualSeparateWeigh?.shipping_company!);
-      setGrossWeighing(manualSeparateWeigh?.gross_weight!);
-      setNetWeighing(manualSeparateWeigh?.net_weight!);
-      setHumidity(manualSeparateWeigh?.humidity! / 100);
-      setImpurity(manualSeparateWeigh?.impurity! / 100);
-      setDiscount(manualSeparateWeigh?.discount! / 100);
-      setTotalWeighning(manualSeparateWeigh?.final_weight!);
-      setHumidityDiscount(Number(manualSeparateWeigh?.humidity_discount!));
-      setTare(manualSeparateWeigh?.tare_weight!);
-      setObservation(manualSeparateWeigh?.observations!);
-    }
-  }, [manualSeparateWeigh]);
+    setTotalDiscount(discount + humidityDiscount)
+  }, [discount, humidityDiscount])
 
-  const Save = () =>{
+  useEffect(() => {
+    setTotalWeighning(netWeighing * ((100 - totalDiscount) / 100))
+  }, [netWeighing, totalDiscount])
+
+  const fetchCultivation = () => {
+    return financial?.cultivations?.map((cultivation: Cultivation) => {
+      return { id: cultivation.id, label: cultivation.name, ...cultivation }
+    })
+  }
+
+  const fetchContract = () => {
+    return financial?.contracts?.map((contract: any) => {
+      return { id: contract.id, label: contract.name, ...contract }
+    })
+  }
+
+  const autoCompleteCultivations = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = cultivationList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setCultivationList(resultSet)
+    } else {
+      setCultivationList(fetchCultivation())
+    }
+  }
+
+  const autoCompleteContracts = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = contractList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setContractList(resultSet)
+    } else {
+      setContractList(fetchContract())
+    }
+  }
+
+  const fillFormEdit = () => {
+    if (manualSeparateWeigh?.id) {
+      setSelectedCultivation(
+        financial?.cultivations?.filter(
+          (cultivation: Cultivation) =>
+            cultivation?.id === manualSeparateWeigh?.cultivation_id,
+        ),
+      )
+      setSelectedContract(
+        financial?.contracts.filter(
+          (contract: Contract) =>
+            contract?.id === manualSeparateWeigh?.contract_id,
+        ),
+      )
+      setReference(manualSeparateWeigh?.reference!)
+      setCarPlate(manualSeparateWeigh?.car_plate!)
+      setDriver(manualSeparateWeigh?.car_driver!)
+      setCompany(manualSeparateWeigh?.shipping_company!)
+      setGrossWeighing(manualSeparateWeigh?.gross_weight!)
+      setNetWeighing(manualSeparateWeigh?.net_weight!)
+      setHumidity(manualSeparateWeigh?.humidity! / 100)
+      setImpurity(manualSeparateWeigh?.impurity! / 100)
+      setDiscount(manualSeparateWeigh?.discount! / 100)
+      setTotalWeighning(manualSeparateWeigh?.final_weight!)
+      setHumidityDiscount(Number(manualSeparateWeigh?.humidity_discount!))
+      setTare(manualSeparateWeigh?.tare_weight!)
+      setObservation(manualSeparateWeigh?.observations!)
+    }
+  }
+
+  const Save = () => {
     const manualSeparate = {
       weighings: {
         contract_id: selectedContract.id,
@@ -97,47 +165,52 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         reference: reference,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity*100,
-        impurity: impurity*100,
-        discount: discount*100,
-        final_weight: totalWeighning*1000,
-        type: "Única",
+        humidity: humidity * 100,
+        impurity: impurity * 100,
+        discount: discount * 100,
+        final_weight: totalWeighning * 1000,
+        type: 'Única',
         shipping_company: company,
         humidity_discount: humidityDiscount.toString(),
         total_discount: totalDiscount.toString(),
         observations: observation,
         tare_weight: tare,
-        mode: "Manual",
+        mode: 'Manual',
         car_plate: carPlate,
         car_driver: driver,
-        weighing_date: new Date().toISOString()
-      }
+        weighing_date: new Date().toISOString(),
+      },
     }
-    if(!manualSeparateWeigh.id){
+    if (!manualSeparateWeigh.id) {
       dispatch(asyncSeparateWeighing(manualSeparate))
-    }else{
-      dispatch(asyncUpdateSeparateWeighing(manualSeparateWeigh?.id!, manualSeparate, index, WeighingRowType.MANUAL))
+    } else {
+      dispatch(
+        asyncUpdateSeparateWeighing(
+          manualSeparateWeigh?.id!,
+          manualSeparate,
+          index,
+          WeighingRowType.MANUAL,
+        ),
+      )
     }
   }
-
 
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-          <Col md={1}>
-            <Button
-              variant="danger"
-              onClick={() => {
-                setId(manualSeparateWeigh?.id!)
-                setShowAutoInputDeleteModal(true)
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={reference}
+              onChange={(e) => {
+                setReference(e.target.value)
               }}
-              style={{ marginTop: '45%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
-          </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="reference">Referência</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{color:'#000'}}>Referência</Form.Label>
             <Form.Control
               type="text"
@@ -146,38 +219,85 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setReference(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-          <Form.Label style={{color:'#000'}}>Cultura</Form.Label>
+        <Col md={2}>
+          <span className="p-float-label">
+            <AutoComplete
+              field="name"
+              value={selectedCultivation ? selectedCultivation?.name : ''}
+              suggestions={cultivationList}
+              completeMethod={autoCompleteCultivations}
+              onChange={(e: any) => {
+                setSelectedCultivation(e.value)
+              }}
+              dropdown
+              forceSelection
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="farm">Cultivo</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
               onChange={(selected: any) => {
-                setSelectedCultivation(selected[0]);
+                setSelectedCultivation(selected[0])
               }}
-              options={financial?.cultivations.map((cultivation: Cultivation) => {
-                return { id: cultivation.id, label: cultivation.name, ...cultivation }
-              })}
+              options={financial?.cultivations.map(
+                (cultivation: Cultivation) => {
+                  return {
+                    id: cultivation.id,
+                    label: cultivation.name,
+                    ...cultivation,
+                  }
+                },
+              )}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-        <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{color: '#000'}}>Contratos</Form.Label>
+        <Col md={2}>
+          <span className="p-float-label">
+            <AutoComplete
+              field="label"
+              value={selectedContract ? selectedContract?.name : ''}
+              suggestions={contractList}
+              completeMethod={autoCompleteContracts}
+              onChange={(e: any) => {
+                setSelectedContract(e.value)
+              }}
+              dropdown
+              forceSelection
+              style={{ width: '100%' }}
+            />
+            <label htmlFor="farm">Contratos</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>Contratos</Form.Label>
             <Typeahead
               id="contract"
               onChange={(selected: any) => {
-                setSelectedContract(selected[0]);
+                setSelectedContract(selected[0])
               }}
               options={financial?.contracts?.map((contract: any) => {
                 return { id: contract.id, label: contract.name, ...contract }
               })}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={carPlate}
+              onChange={(e) => {
+                setCarPlate(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="carPlate">Placa</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
@@ -186,10 +306,21 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setCarPlate(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={driver}
+              onChange={(e) => {
+                setDriver(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="driver">Motorista</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
@@ -198,10 +329,21 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setDriver(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <InputText
+              value={company}
+              onChange={(e) => {
+                setCompany(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="company">Transportadora</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
@@ -210,10 +352,25 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setCompany(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col style={{ marginTop: '2%' }}>
+          <span className="p-float-label">
+            <InputNumber
+              value={grossWeighing}
+              onChange={(e) => {
+                setGrossWeighing(e.value!)
+              }}
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+
+            <label htmlFor="company">Peso Bruto</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
             <Form.Control
               type="number"
@@ -222,10 +379,25 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setGrossWeighing(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col style={{ marginTop: '2%' }}>
+          <span className="p-float-label">
+            <InputNumber
+              value={tare}
+              onChange={(e) => {
+                setTare(e.value!)
+              }}
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+
+            <label htmlFor="company">Tara</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
             <Form.Control
               type="number"
@@ -234,10 +406,25 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setTare(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col style={{ marginTop: '2%' }}>
+          <span className="p-float-label">
+            <InputNumber
+              value={netWeighing}
+              onValueChange={(e) => {
+                setNetWeighing(Number(e.value))
+              }}
+              disabled
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="netWeigh">Peso líquido</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
@@ -247,12 +434,27 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setNetWeighing(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
       </Row>
-      <Row>
+      <Row style={{ marginTop: '2%' }}>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={humidity}
+              onValueChange={(e) => {
+                setHumidity(Number(e.value))
+              }}
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="humidity">UMID (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -261,10 +463,26 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setHumidity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={humidityDiscount}
+              onValueChange={(e) => {
+                setHumidityDiscount(Number(e.value))
+              }}
+              disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="humidity">Desconto UMID (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -274,10 +492,25 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setHumidityDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={impurity}
+              onValueChange={(e) => {
+                setImpurity(Number(e.value))
+              }}
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="humidity">Impureza (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
@@ -286,10 +519,26 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setImpurity(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
         <Col>
-          <Form.Group className="mb-3" controlId="">
+          <span className="p-float-label">
+            <InputNumber
+              value={discount}
+              onValueChange={(e) => {
+                setDiscount(Number(e.value))
+              }}
+              disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="humidity">Desconto (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
@@ -299,11 +548,29 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#000' }}>Desconto total (%)</Form.Label>
+        <Col style={{ marginTop: '2%' }}>
+          <span className="p-float-label">
+            <InputNumber
+              value={totalDiscount}
+              onValueChange={(e) => {
+                setTotalDiscount(Number(e.value))
+              }}
+              disabled
+              suffix="%"
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="humidity">Desconto total (%)</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
+            <Form.Label style={{ color: '#000' }}>
+              Desconto total (%)
+            </Form.Label>
             <Form.Control
               type="number"
               disabled
@@ -312,10 +579,25 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setTotalDiscount(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col style={{ marginTop: '2%' }}>
+          <span className="p-float-label">
+            <InputNumber
+              value={totalWeighning}
+              onValueChange={(e) => {
+                setTotalWeighning(Number(e.value))
+              }}
+              disabled
+              mode="decimal"
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={3}
+            />
+            <label htmlFor="netWeigh">Peso Final</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
@@ -325,10 +607,21 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setTotalWeighning(Number(e.target.value))
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
+        <Col style={{ marginTop: '2%' }}>
+          <span className="p-float-label">
+            <InputText
+              value={observation}
+              onChange={(e) => {
+                setObservation(e.target.value)
+              }}
+              style={{ width: '100%' }}
+            />
+
+            <label htmlFor="observation">Observações</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
             <Form.Control
               type="text"
@@ -337,7 +630,7 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
                 setObservation(e.target.value)
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Col>
       </Row>
 
@@ -350,6 +643,15 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         }}
       >
         <Button
+          variant="danger"
+          onClick={() => {
+            setId(manualSeparateWeigh?.id!)
+            setShowAutoInputDeleteModal(true)
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+        </Button>
+        <Button
           variant="success"
           onClick={() => {
             Save()
@@ -357,8 +659,23 @@ export function NewManualSeparateWeighing({index, manualSeparateWeigh}:{ index: 
         >
           {manualSeparateWeigh?.id ? 'Atualizar' : 'Salvar'}
         </Button>
-        {manualSeparateWeigh?.id ? <GeneratePdf weighing={manualSeparateWeigh} contractsList={financial?.contracts} cultivationsList={financial?.cultivations} profile={JSON.parse(sessionStorage.getItem('user')!)}></GeneratePdf> : <></>}
-        <DeleteConfirmationModal show={showAutoInputDeleteModal} handleClose={() => setShowAutoInputDeleteModal(false)} id={id!} index={index} weighingType={manualSeparateWeigh.type!}></DeleteConfirmationModal>
+        {manualSeparateWeigh?.id ? (
+          <GeneratePdf
+            weighing={manualSeparateWeigh}
+            contractsList={financial?.contracts}
+            cultivationsList={financial?.cultivations}
+            profile={JSON.parse(sessionStorage.getItem('user')!)}
+          ></GeneratePdf>
+        ) : (
+          <></>
+        )}
+        <DeleteConfirmationModal
+          show={showAutoInputDeleteModal}
+          handleClose={() => setShowAutoInputDeleteModal(false)}
+          id={id!}
+          index={index}
+          weighingType={manualSeparateWeigh.type!}
+        ></DeleteConfirmationModal>
       </div>
     </div>
   )

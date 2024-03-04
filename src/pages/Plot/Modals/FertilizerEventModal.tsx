@@ -61,11 +61,11 @@ export function FertilizerEventModal({ show, handleClose, application }: { show:
                     <tbody>
                         {plot?.applications[index]?.application_tables?.map((applicationTable: any) => {
                             return <tr>
-                            <td>{applicationTable.product_name}</td>
-                            <td>{applicationTable.test}</td>
-                            <td>{applicationTable.quantity}</td>
-                            <td>{applicationTable.tank}</td>
-                            <td>{applicationTable.totalAppliedLabel/1000}</td> 
+                            <td>{applicationTable?.product_name}</td>
+                            <td>{applicationTable?.test}</td>
+                            <td>{applicationTable?.quantity}</td>
+                            <td>{applicationTable?.tank}</td>
+                            <td>{applicationTable?.totalAppliedLabel/1000}</td> 
                         </tr>
                         })}
                     </tbody>

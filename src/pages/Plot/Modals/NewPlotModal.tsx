@@ -20,7 +20,7 @@ export function NewPlotModal({
       headerStyle={{ backgroundColor: '#7C5529' }}
       contentStyle={{ backgroundColor: '#7C5529' }}
     >
-      <NewPlot></NewPlot>
+      <NewPlot handleClose={handleClose}></NewPlot>
     </Dialog>
   )
 }
