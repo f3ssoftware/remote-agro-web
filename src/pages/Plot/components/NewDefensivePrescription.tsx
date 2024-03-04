@@ -50,14 +50,12 @@ export function NewDefensivePrescription({
   }, [])
 
 
-
-  
   useEffect(() => {
     setTest((quantity / flowRate) * 1000)
   }, [quantity, flowRate])
 
   useEffect(() => {
-    setTank((quantity * area) / tankNumbers)
+    setTank((quantity * (area*100)) / tankNumbers)
   }, [quantity, area, tank])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {

@@ -80,10 +80,11 @@ export function FertilizerPrescriptionModal({
       application_tables: applicationTables.map((appTable: any) => { return { ...appTable, application_id: plot.prescription.id } })
     }
     dispatch(asyncPrescriptionTable(request))
+    dispatch(setPrescription({}));
   }
 
   useEffect(() => {
-    if (plot.prescription.id) {
+    if (plot?.prescription.id) {
       confirm();
       handleClose()
     }
