@@ -7,7 +7,7 @@ import { Dialog } from "primereact/dialog";
 
 export function EntranceModal({ show, handleClose }: { show: boolean, handleClose: any }) {
     return (
-        <Dialog header="Entrada" visible={show} style={{ width: '80vw' }} onHide={() => handleClose()}>
+        <Dialog header="Entrada" headerStyle={{backgroundColor: '#7C5529', color: '#FFF'}} contentStyle={{backgroundColor: '#7C5529'}} visible={show} style={{ width: '80vw' }} onHide={() => handleClose()}>
             <NewProduct modal={'ENTRANCE'} handleClose={() => handleClose()}></NewProduct>
         </Dialog>
         // <Modal backdrop = {'static'} show={show} onHide={handleClose} size={'xl'}>

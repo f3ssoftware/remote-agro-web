@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { ApplicationTable } from '../../../models/ApplicationTable'
 import { Product } from '../../../models/Product'
@@ -7,9 +7,11 @@ import { Application } from '../../../models/Application'
 import {
   asyncPrescription,
   asyncPrescriptionTable,
+  setPrescription,
 } from '../../../stores/plot.store'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Dialog } from 'primereact/dialog'
+import { RootState } from '../../..'
 
 export function FertilizerPrescriptionModal({
   show,
@@ -34,6 +36,7 @@ export function FertilizerPrescriptionModal({
 }) {
   const [applicationTables, setApplicationTables]: any[] = useState([])
   const dispatch = useDispatch<any>()
+  const { plot } = useSelector((state: RootState) => state);
 
   const onHandleRemove = (index: number) => {
     const newApplicationTable = [...applicationTables]
@@ -72,11 +75,23 @@ export function FertilizerPrescriptionModal({
     dispatch(asyncPrescription(fertilizer))
   }
   const confirm = () => {
+
     const request: ApplicationTable = {
-      application_tables: applicationTables,
+      application_tables: applicationTables.map((appTable: any) => { return { ...appTable, application_id: plot.prescription.id } })
     }
     dispatch(asyncPrescriptionTable(request))
   }
+
+  useEffect(() => {
+    if (plot.prescription.id) {
+      confirm();
+    }
+  }, [plot])
+
+  useEffect(() => {
+    dispatch(setPrescription({}));
+  }, [])
+  
   return (
     <Dialog
       header="Receituário"
@@ -143,9 +158,7 @@ export function FertilizerPrescriptionModal({
               style={{ backgroundColor: '#A5CD33', color: '#000' }}
               variant="success"
               onClick={() => {
-                handleClose()
                 next()
-                confirm()
               }}
             >
               Confirmar

@@ -31,7 +31,7 @@ export function NewSeedingPrescription({
   const [productList, setProductList] = useState<any[]>([])
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity })
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000 })
   }, [product, quantity])
 
   useEffect(() => {

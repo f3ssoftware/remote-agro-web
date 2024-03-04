@@ -221,7 +221,7 @@ export function PrescriptionSeeding({
                       {formik.errors.accountable}
                     </div>
                   ) : null}
-                  <label htmlFor="accountable">Responsável</label>
+                  <label htmlFor="accountable" style={{ color: 'black' }}>Responsável</label>
                 </span>
               </Col>
               <Col>
@@ -254,7 +254,7 @@ export function PrescriptionSeeding({
                       {formik.errors.plot}
                     </div>
                   ) : null}
-                  <label htmlFor="plot">Talhões</label>
+                  <label htmlFor="plot" style={{ color: 'black' }}>Talhões</label>
                 </span>
                 {selectedPlot?.total_area > 0 ? (
                   <>
@@ -306,7 +306,7 @@ export function PrescriptionSeeding({
                       {formik.errors.applier}
                     </div>
                   ) : null}
-                  <label htmlFor="applier">Aplicador</label>
+                  <label htmlFor="applier" style={{ color: 'black' }}>Aplicador</label>
                 </span>
               </Col>
             </Row>{' '}
@@ -337,7 +337,7 @@ export function PrescriptionSeeding({
                       {formik.errors.dateTime}
                     </div>
                   ) : null}
-                  <label htmlFor="date">Data de plantio</label>
+                  <label htmlFor="date" style={{ color: 'black' }}>Data de plantio</label>
                 </span>
               </Col>
               <Col>
@@ -381,7 +381,7 @@ export function PrescriptionSeeding({
                         dropdown
                         style={{ width: '100%' }}
                       />
-                      <label htmlFor="endDate">Produto</label>
+                      <label htmlFor="endDate" style={{ color: 'black' }}>Produto</label>
                     </span>
                   </Col>
                   <Col>
@@ -414,7 +414,7 @@ export function PrescriptionSeeding({
                           {formik.errors.productQuantity}
                         </div>
                       ) : null}
-                      <label htmlFor="productQuantity">Dose/ha (Kg)</label>
+                      <label htmlFor="productQuantity" style={{ color: 'black' }}>Dose/ha (Kg)</label>
                     </span>
                   </Col>
                 </>
@@ -437,7 +437,7 @@ export function PrescriptionSeeding({
                     dropdown
                     style={{ width: '100%' }}
                   />
-                  <label htmlFor="endDate">Semente/Cultivar</label>
+                  <label htmlFor="endDate" style={{ color: 'black' }}>Semente/Cultivar</label>
                 </span>
               </Col>
               <Col>
@@ -466,7 +466,7 @@ export function PrescriptionSeeding({
                       {formik.errors.seedQuantity}
                     </div>
                   ) : null}
-                  <label htmlFor="seedQuantity">População (sementes/ha)</label>
+                  <label htmlFor="seedQuantity" style={{ color: 'black' }}>População (sementes/ha)</label>
                 </span>
               </Col>
             </Row>
@@ -496,7 +496,7 @@ export function PrescriptionSeeding({
                       {formik.errors.lineSpacing}
                     </div>
                   ) : null}
-                  <label htmlFor="lineSpacing">Espaçamento entre linhas</label>
+                  <label htmlFor="lineSpacing" style={{ color: 'black' }}>Espaçamento entre linhas</label>
                 </span>
               </Col>
               <Col>
@@ -550,7 +550,7 @@ export function PrescriptionSeeding({
                         {formik.errors.flowRate}
                       </div>
                     ) : null}
-                    <label htmlFor="flowRate">Vazão (L/ha)</label>
+                    <label htmlFor="flowRate" style={{ color: 'black' }}>Vazão (L/ha)</label>
                   </span>
                 </Col>
               ) : (
@@ -569,6 +569,7 @@ export function PrescriptionSeeding({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 type="submit"
+                onClick={() => setShowNewPrescriptionModal(true)}
               >
                 Avançar
               </Button>

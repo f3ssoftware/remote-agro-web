@@ -23,7 +23,7 @@ export function NewFertilizerPrescription({
   onHandleRemove: any
   onHandleUpdate: any
 }) {
-  const [product, setProduct] = useState({ id: 0 })
+  const [product, setProduct] = useState<any>({ id: 0 })
   const [quantity, setQuantity] = useState(0)
   const { input } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
@@ -31,7 +31,7 @@ export function NewFertilizerPrescription({
   const [productList, setProductList] = useState<any[]>([])
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity })
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000 })
   }, [product, quantity])
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function NewFertilizerPrescription({
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
     const query = event.query.toLowerCase();
     const resultSet = productList.filter((p: any) =>
-      p?.label?.toLowerCas().includes(query),
+      p?.label?.toLowerCase().includes(query),
     )
     if (resultSet.length > 0) {
       setProductList(resultSet)
@@ -49,6 +49,10 @@ export function NewFertilizerPrescription({
       setProductList(fetchProducts())
     }
   }
+
+  useEffect(() => {
+    setProductList(fetchProducts());
+  }, []);
 
   const fetchProducts = () => {
     return input.inputs
@@ -75,6 +79,7 @@ export function NewFertilizerPrescription({
               completeMethod={autoComplete}
               onChange={(e: any) => {
                 setProduct(e.value)
+                setSelectedProduct(e.value)
               }}
               forceSelection
               dropdown
@@ -92,6 +97,9 @@ export function NewFertilizerPrescription({
               onChange={(e) => {
                 return setQuantity(Number(e.value))
               }}
+              locale="pt-BR"
+              minFractionDigits={0}
+              maxFractionDigits={2}
             />
             <label htmlFor="quantity">Qtd/ha (L)</label>
           </span>

@@ -155,7 +155,7 @@ export function PrescriptionFertilizers({
                       {formik.errors.plot}
                     </div>
                   ) : null}
-                  <label htmlFor="plot">Talhões</label>
+                  <label htmlFor="plot" style={{ color: 'black' }}>Talhões</label>
                 </span>
                 {selectedPlot?.total_area > 0 ? (
                   <>
@@ -207,11 +207,11 @@ export function PrescriptionFertilizers({
                       {formik.errors.applier}
                     </div>
                   ) : null}
-                  <label htmlFor="applier">Aplicador</label>
+                  <label htmlFor="applier" style={{ color: 'black' }}>Aplicador</label>
                 </span>
               </Col>
             </Row>
-            <Row>
+            <Row style={{marginTop: '2%'}}>
               {' '}
               <Col>
                 <span className="p-float-label">
@@ -239,7 +239,7 @@ export function PrescriptionFertilizers({
                       {formik.errors.accountable}
                     </div>
                   ) : null}
-                  <label htmlFor="accountable">Responsável</label>
+                  <label htmlFor="accountable" style={{ color: 'black' }}>Responsável</label>
                 </span>
               </Col>
               <Col>
@@ -268,7 +268,7 @@ export function PrescriptionFertilizers({
                       {formik.errors.dateTime}
                     </div>
                   ) : null}
-                  <label htmlFor="date">Data de plantio</label>
+                  <label htmlFor="date" style={{ color: 'black' }}>Data de plantio</label>
                 </span>
               </Col>
               <Col>

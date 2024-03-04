@@ -1123,6 +1123,7 @@ export function _generatePDF(weighing: any, cultivationsList: any[], profile: an
     );
     cultivationName = cultivation ? cultivation.name : 'SEM INFORMACAO';
 
+
     const contract = contractsList?.find(
       item => parseInt(contract_id) === item.id
     );
@@ -1134,21 +1135,22 @@ export function _generatePDF(weighing: any, cultivationsList: any[], profile: an
     let cultivationId: string;
     let selectedCultivar: any;
 
-    cultivationsList.forEach((cultivationItem: any) => {
-      const tempSelectedCultivar = cultivationItem?.cultivares?.find(
-        (cultivarItem: any) => cultivarItem.id === parseInt(cultivar_id)
-      );
-      if (tempSelectedCultivar) {
-        selectedCultivar = tempSelectedCultivar;
-      }
-    });
+    // cultivationsList.forEach((cultivationItem: any) => {
+    //   const tempSelectedCultivar = cultivationItem?.cultivares?.find(
+    //     (cultivarItem: any) => cultivarItem.id === parseInt(cultivar_id)
+    //   );
+    //   if (tempSelectedCultivar) {
+    //     selectedCultivar = tempSelectedCultivar;
+    //   }
+    // });
 
-    if (selectedCultivar) {
-      cultivationId = selectedCultivar.cultivation_id;
-    }
+    // if (selectedCultivar) {
+    //   cultivationId = selectedCultivar.cultivation_id;
+    // }
+
 
     const cultivation = cultivationsList?.find(
-      (item: any) => parseInt(cultivationId) === item.id
+      (item: any) => parseInt(cultivation_id) === item.id
     );
     cultivationName = cultivation ? cultivation?.name : 'SEM INFORMACAO';
 

@@ -13,6 +13,7 @@ import { Product } from '../../../models/Product'
 import { Button } from 'primereact/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { asyncFetchApplicationData } from '../../../stores/plot.store'
 
 export function NewDefensivePrescription({
   index,
@@ -21,6 +22,7 @@ export function NewDefensivePrescription({
   flowRate,
   area,
   tankNumbers,
+
 }: {
   index: number
   onHandleRemove: any
@@ -29,23 +31,27 @@ export function NewDefensivePrescription({
   area: number
   tankNumbers: number
 }) {
-  const [product, setProduct] = useState({ id: 0 })
+  const [product, setProduct] = useState<any>({ id: 0 })
   const [quantity, setQuantity] = useState(0)
   const [test, setTest] = useState(0)
   const [tank, setTank] = useState(0)
-  const { input } = useSelector((state: RootState) => state)
+  const { input, plot } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
   const [selectedProduct, setSelectedProduct] = useState<any>()
   const [productList, setProductList] = useState<any[]>([])
 
+
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product.id, quantity: quantity })
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test, tank: tank})
   }, [product, quantity])
 
   useEffect(() => {
     dispatch(asyncFetchInput())
   }, [])
 
+
+
+  
   useEffect(() => {
     setTest((quantity / flowRate) * 1000)
   }, [quantity, flowRate])
@@ -79,6 +85,10 @@ export function NewDefensivePrescription({
       })
   }
 
+  useEffect(() => {
+    setProductList(fetchProducts());
+  }, []);
+
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
@@ -90,6 +100,7 @@ export function NewDefensivePrescription({
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
+                setProduct(e.value)
                 setSelectedProduct(e.value)
               }}
               forceSelection
@@ -102,13 +113,51 @@ export function NewDefensivePrescription({
         <Col>
           <span className="p-float-label">
             <InputNumber
+              id="test"
+              value={test}
+              onChange={(e) => {
+                return setTest(Number(e.value))
+              }}
+              disabled
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={2}
+            />
+            <label htmlFor="quantity">Teste (mL)</label>
+          </span>
+        </Col>
+        <Col>
+          <span className="p-float-label">
+            <InputNumber
               id="quantity"
               value={quantity}
               onChange={(e) => {
                 return setQuantity(Number(e.value))
               }}
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={2}
             />
             <label htmlFor="quantity">Qtd/ha (L)</label>
+          </span>
+        </Col>
+        <Col>
+          <span className="p-float-label">
+            <InputNumber
+              id="tank"
+              value={tank}
+              onChange={(e) => {
+                return setTank(Number(e.value))
+              }}
+              disabled
+              locale="pt-BR"
+              style={{ width: '100%' }}
+              minFractionDigits={0}
+              maxFractionDigits={2}
+            />
+            <label htmlFor="quantity">Tanque (L)</label>
           </span>
         </Col>
         {index !== 0 ? (

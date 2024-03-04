@@ -550,6 +550,7 @@ export function asyncSeparateWeighing(separate: any) {
           },
         },
       )
+      dispatch(setSeparateWeighingRows(result.data));
       dispatch(
         getMessages({
           message: 'Pesagem avulsa salva com sucesso',

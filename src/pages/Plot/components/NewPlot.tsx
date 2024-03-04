@@ -20,7 +20,10 @@ import { classNames } from 'primereact/utils'
 import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
 
 interface Type {
   name: string
@@ -29,12 +32,12 @@ interface Type {
 
 const initialCultivars: Cultivar[] = []
 const initialSendCultivars: SendCultivarsDTO[] = []
-export function NewPlot() {
+export function NewPlot({handleClose}:{handleClose: any}) {
   const { financial, farm, seasons } = useSelector((state: RootState) => state)
   const [propName, setPropName] = useState('')
   const [totalArea, setTotalArea] = useState(0)
   const [productivity, setProductivity] = useState(0)
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<number>()
   const [cultivation, setCultivation]: any = useState({})
   const [cultivars, setCultivars]: any[] = useState(initialCultivars)
   const [sendCultivars, setSendCultivars] = useState(initialSendCultivars)
@@ -51,7 +54,7 @@ export function NewPlot() {
   const [cultivationList, setCultivationList] = useState<any[]>([])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = cultivationList.filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
@@ -63,15 +66,13 @@ export function NewPlot() {
   }
 
   const fetchProducts = () => {
-    return financial.cultivations.map(
-      (cultivation: Cultivation) => {
-        return {
-          id: cultivation.id,
-          label: cultivation.name,
-          ...cultivation,
-        }
-      },
-    )
+    return financial.cultivations.map((cultivation: Cultivation) => {
+      return {
+        id: cultivation.id,
+        label: cultivation.name,
+        ...cultivation,
+      }
+    })
   }
 
   const onRemove = (id: number) => {
@@ -135,7 +136,7 @@ export function NewPlot() {
           cultivation: '',
           weigh: null,
           plantingDate: null,
-          active: null
+          active: null,
         }}
         validationSchema={Yup.object({
           propName: Yup.string().required('Necessário preencher'),
@@ -149,6 +150,7 @@ export function NewPlot() {
         })}
         onSubmit={() => {
           register()
+          handleClose()
         }}
       >
         {(formik) => (
@@ -247,7 +249,7 @@ export function NewPlot() {
                     inputId="currency-br"
                     value={formik.values.value}
                     onValueChange={(e) => {
-                      formik.setFieldValue('amount', e.target.value)
+                      formik.setFieldValue('value', e.target.value)
                       setValue(Number(e.value))
                     }}
                     className={classNames({
@@ -272,13 +274,22 @@ export function NewPlot() {
                 </span>
               </Col>
             </Row>
-            <Row style={{marginTop:'2%'}}>
+            <Row style={{ marginTop: '2%' }}>
               <Col>
-              <span className="p-float-label">
-                    <AutoComplete field="label" value={cultivation} suggestions={cultivationList} completeMethod={autoComplete} onChange={(e: any) => {
-                        setCultivation(e.value);
-                    }} dropdown style={{ width: '100%' }} forceSelection />
-                    <label htmlFor="endDate">Cultivo</label>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={cultivation}
+                    suggestions={cultivationList}
+                    completeMethod={autoComplete}
+                    onChange={(e: any) => {
+                      setCultivation(e.value)
+                    }}
+                    dropdown
+                    style={{ width: '100%' }}
+                    forceSelection
+                  />
+                  <label htmlFor="endDate">Cultivo</label>
                 </span>
               </Col>
               <Col>
@@ -362,7 +373,7 @@ export function NewPlot() {
             </Row>
             <Row>
               <Col>
-              <Dropdown
+                <Dropdown
                   value={formik.values.active}
                   onChange={(e) => {
                     formik.setFieldValue('active', e.target.value)
@@ -374,8 +385,7 @@ export function NewPlot() {
                   placeholder="Talhão ativo?"
                   style={{ width: '100%' }}
                 />
-                {formik.touched.active &&
-                formik.errors.active ? (
+                {formik.touched.active && formik.errors.active ? (
                   <div
                     style={{
                       color: 'red',
