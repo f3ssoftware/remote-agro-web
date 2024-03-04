@@ -43,7 +43,7 @@ export function NewDefensivePrescription({
 
   useEffect(() => {
     onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity, test: test, tank: tank})
-  }, [product, quantity])
+  }, [product, quantity, test, tank])
 
   useEffect(() => {
     dispatch(asyncFetchInput())
@@ -56,7 +56,7 @@ export function NewDefensivePrescription({
 
   useEffect(() => {
     setTank((quantity * area) / tankNumbers)
-  }, [quantity, area, tank])
+  }, [quantity, area])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
     const query = event.query.toLowerCase();
