@@ -325,6 +325,9 @@ export function PrescriptionSeeding({
                     locale="en"
                     value={dateTime}
                     dateFormat="dd/mm/yy"
+                    showTime
+                    timeOnly={false}
+                    hourFormat="24"
                   />
                   {formik.touched.dateTime && formik.errors.dateTime ? (
                     <div
