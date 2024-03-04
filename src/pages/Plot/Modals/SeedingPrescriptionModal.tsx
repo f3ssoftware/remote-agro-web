@@ -78,7 +78,7 @@ export function SeedingPrescriptionModal({
     const seeding: Application = {
       type: 'Semeadura',
       accountable: accountable,
-      area: area,
+      area: area*100,
       applier_id: applier.id,
       date: date,
       fertilizer_id: product.id,
@@ -89,7 +89,7 @@ export function SeedingPrescriptionModal({
       flow_rate: flowRate,
       farm_id: selectedFarm.id,
       correct_decimals: true,
-      fields: [{ id: selectedPlot.id, area: area }],
+      fields: [{ id: selectedPlot.id, area: area*100 }],
     }
     dispatch(asyncPrescription(seeding))
   }

@@ -64,13 +64,13 @@ export function FertilizerPrescriptionModal({
     const fertilizer: Application = {
       type: 'Fertilizantes',
       accountable: accountable,
-      area: area,
+      area: area*100,
       applier_id: applier.id,
       date: date,
       application_type: applicationType,
       correct_decimals: true,
       farm_id: selectedFarm.id,
-      fields: [{ id: selectedPlot.id, area: area }],
+      fields: [{ id: selectedPlot.id, area: area*100 }],
     }
     dispatch(asyncPrescription(fertilizer))
   }
