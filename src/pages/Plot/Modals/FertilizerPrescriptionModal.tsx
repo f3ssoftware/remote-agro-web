@@ -63,6 +63,12 @@ export function FertilizerPrescriptionModal({
   const next = () => {
     const fertilizer: Application = {
       type: 'Fertilizantes',
+      fertilizer_quantity: 0,
+      fertilizer_total_quantity: 0,
+      seed_quantity: 0,
+      seed_total_quantity: 0,
+      is_pms: false,
+      lines_spacing: 0,
       accountable: accountable,
       area: area*100,
       applier_id: applier.id,
