@@ -56,7 +56,7 @@ const SidebarItems = [
         icon: faFileAlt,
         title: 'Dashboards',
         url: "report",
-        roles: [Roles.OWNER, Roles.ADMINISTRATIVE]
+        roles: [Roles.OWNER]
     },
     {
         icon: faMapLocationDot,
