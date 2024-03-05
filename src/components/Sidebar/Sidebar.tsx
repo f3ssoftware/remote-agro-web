@@ -53,9 +53,9 @@ export function Sidebar() {
 
 const SidebarItems = [
     {
-        icon: faHome,
-        title: 'Início',
-        url: "home",
+        icon: faFileAlt,
+        title: 'Dashboards',
+        url: "report",
         roles: [Roles.OWNER, Roles.ADMINISTRATIVE]
     },
     {
@@ -101,11 +101,11 @@ const SidebarItems = [
         roles: [Roles.OWNER]
     },
 
-    {
-        icon: faFileAlt,
-        title: 'Relatórios',
-        url: "report",
-        roles: [Roles.OWNER]
-    }
+    // {
+    //     icon: faFileAlt,
+    //     title: 'Relatórios',
+    //     url: "report",
+    //     roles: [Roles.OWNER]
+    // }
 
 ]
