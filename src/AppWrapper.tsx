@@ -89,7 +89,11 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
         // messages.messages.length > 0 ? setShowMessages(true) : setShowMessages(false);
         messages.messages.forEach((m) => {
             toast.current?.show({ severity: m.type, detail: m.message })
-        })
+            setTimeout(() => {
+                dispatch(popMessages(''));
+            }, 5000);
+        });
+
     }, [messages]);
 
     return <PrimeReactProvider>
