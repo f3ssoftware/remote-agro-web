@@ -850,7 +850,7 @@ export function asyncDeleteSilo(id: number) {
       dispatch(asyncFetchSiloData())
       dispatch(
         getMessages({
-          message: 'Contrato excluído com sucesso',
+          message: 'Silo excluído com sucesso',
           type: 'success',
         }),
       )
