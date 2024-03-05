@@ -31,7 +31,7 @@ export function NewFertilizerPrescription({
   const [productList, setProductList] = useState<any[]>([])
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000 })
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, tank: 0, test: 0, total_quantity: quantity*10000 })
   }, [product, quantity])
 
   useEffect(() => {
