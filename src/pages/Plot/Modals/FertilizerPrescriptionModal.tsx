@@ -64,6 +64,8 @@ export function FertilizerPrescriptionModal({
     const fertilizer: Application = {
       type: 'Fertilizantes',
       fertilizer_quantity: 0,
+      flow_rate:0,
+      pressure:0,
       fertilizer_total_quantity: 0,
       seed_quantity: 0,
       seed_total_quantity: 0,
