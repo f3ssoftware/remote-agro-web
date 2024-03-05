@@ -123,6 +123,7 @@ export function NewDefensivePrescription({
               }}
               disabled
               locale="pt-BR"
+              mode="decimal"
               style={{ width: '100%' }}
               minFractionDigits={0}
               maxFractionDigits={2}
@@ -139,6 +140,7 @@ export function NewDefensivePrescription({
                 return setQuantity(Number(e.value))
               }}
               locale="pt-BR"
+              mode="decimal"
               style={{ width: '100%' }}
               minFractionDigits={0}
               maxFractionDigits={2}
@@ -156,6 +158,7 @@ export function NewDefensivePrescription({
               }}
               disabled
               locale="pt-BR"
+              mode="decimal"
               style={{ width: '100%' }}
               minFractionDigits={0}
               maxFractionDigits={2}
