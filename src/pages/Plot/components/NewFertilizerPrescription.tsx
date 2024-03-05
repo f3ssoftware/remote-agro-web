@@ -85,7 +85,7 @@ export function NewFertilizerPrescription({
               dropdown
               style={{ width: '100%' }}
             />
-            <label htmlFor="endDate">Produto</label>
+            <label htmlFor="endDate" style={{ color: 'black' }}>Produto</label>
           </span>
         </Col>
         <Col>
@@ -101,7 +101,7 @@ export function NewFertilizerPrescription({
               minFractionDigits={0}
               maxFractionDigits={2}
             />
-            <label htmlFor="quantity">Qtd/ha (L)</label>
+            <label htmlFor="quantity" style={{ color: 'black' }}>Qtd/ha (L)</label>
           </span>
         </Col>
         {index !== 0 ? (

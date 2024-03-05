@@ -3,7 +3,11 @@ import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from '../..'
-import { asyncFetchEditPlots, asyncFetchFarms, selectAFarm } from '../../stores/farm.store'
+import {
+  asyncFetchEditPlots,
+  asyncFetchFarms,
+  selectAFarm,
+} from '../../stores/farm.store'
 import { NewFarmModal } from './Modals/NewFarmModal'
 import { NewPlotModal } from './Modals/NewPlotModal'
 import { PrescriptionModal } from './Modals/PrescriptionModal'
@@ -40,8 +44,8 @@ export function Plot() {
   const [application, setApplication] = useState<any>()
   const [startDate, setStartDate] = useState<Date>()
   const [untilDate, setUntilDate] = useState<Date>()
-  const [showFieldModal,setShowFieldModal ] = useState(false)
-  const [editPlotId, setEditPlotId] =  useState(0)
+  const [showFieldModal, setShowFieldModal] = useState(false)
+  const [editPlotId, setEditPlotId] = useState(0)
   const selectFarm = (farm: any) => {
     setSelectedFarm(farm)
     dispatch(selectAFarm(farm))
@@ -58,7 +62,6 @@ export function Plot() {
     filter()
   }, [])
 
-
   const filter = (field?: string) => {
     dispatch(
       asyncFetchApplications({
@@ -70,7 +73,7 @@ export function Plot() {
       }),
     )
   }
-  const editPlot = (id?: number) =>{
+  const editPlot = (id?: number) => {
     dispatch(asyncFetchEditPlots(id!))
   }
 
@@ -224,12 +227,16 @@ export function Plot() {
             <Card.Body>
               <Card.Title className="second-col-text-plot">
                 Aplicações
-                <Button
-                  className="inputs-btn-plot"
-                  onClick={() => setShowPrescriptionModal(true)}
-                >
-                  Gerar Receituário
-                </Button>
+                {selectedFarm ? (
+                  <Button
+                    className="inputs-btn-plot"
+                    onClick={() => setShowPrescriptionModal(true)}
+                  >
+                    Gerar Receituário
+                  </Button>
+                ) : (
+                  <></>
+                )}
               </Card.Title>
               <Card.Text>
                 <Dropdown>
@@ -359,7 +366,11 @@ export function Plot() {
         application={application}
         handleClose={() => setShowSeeding(false)}
       ></SeedingEventModal>
-      <EditPlotModal show={showFieldModal} handleClose={() => setShowFieldModal(false)} id={editPlotId}></EditPlotModal>
+      <EditPlotModal
+        show={showFieldModal}
+        handleClose={() => setShowFieldModal(false)}
+        id={editPlotId}
+      ></EditPlotModal>
     </Container>
   )
 }
