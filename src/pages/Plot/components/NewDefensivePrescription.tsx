@@ -22,7 +22,6 @@ export function NewDefensivePrescription({
   flowRate,
   area,
   tankNumbers,
-
 }: {
   index: number
   onHandleRemove: any
@@ -41,18 +40,22 @@ export function NewDefensivePrescription({
   const [selectedProduct, setSelectedProduct] = useState<any>()
   const [productList, setProductList] = useState<any[]>([])
 
-
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test*100, tank: tank*100, total_quantity: totalQuantity*1000})
+    onHandleUpdate(index, {
+      user_product_id: product?.id,
+      quantity: quantity * 1000,
+      test: Math.round(test * 100),
+      tank: Math.round(tank * 100),
+      total_quantity: Math.round(totalQuantity * 1000),
+    })
   }, [product, quantity, test, tank, totalQuantity])
 
   useEffect(() => {
     dispatch(asyncFetchInput())
   }, [])
 
-
   useEffect(() => {
-    setTest((quantity / flowRate)*1000)
+    setTest((quantity / flowRate) * 1000)
   }, [quantity, flowRate])
 
   useEffect(() => {
@@ -60,11 +63,11 @@ export function NewDefensivePrescription({
   }, [quantity, area])
 
   useEffect(() => {
-    setTotalQuantity(tank*tankNumbers)
+    setTotalQuantity(tank * tankNumbers)
   }, [tank, tankNumbers])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = productList.filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
@@ -89,8 +92,8 @@ export function NewDefensivePrescription({
   }
 
   useEffect(() => {
-    setProductList(fetchProducts());
-  }, []);
+    setProductList(fetchProducts())
+  }, [])
 
   return (
     <div>
