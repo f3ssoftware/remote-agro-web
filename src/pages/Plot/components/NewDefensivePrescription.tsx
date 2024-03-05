@@ -35,6 +35,7 @@ export function NewDefensivePrescription({
   const [quantity, setQuantity] = useState(0)
   const [test, setTest] = useState(0)
   const [tank, setTank] = useState(0)
+  const [totalQuantity, setTotalQuantity] = useState(0)
   const { input, plot } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
   const [selectedProduct, setSelectedProduct] = useState<any>()
@@ -42,8 +43,8 @@ export function NewDefensivePrescription({
 
 
   useEffect(() => {
-    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity, test: test, tank: tank})
-  }, [product, quantity, test, tank])
+    onHandleUpdate(index, { user_product_id: product?.id, quantity: quantity*1000, test: test*100, tank: tank*100, total_quantity: totalQuantity*1000})
+  }, [product, quantity, test, tank, totalQuantity])
 
   useEffect(() => {
     dispatch(asyncFetchInput())
@@ -57,6 +58,10 @@ export function NewDefensivePrescription({
   useEffect(() => {
     setTank((quantity * area) / tankNumbers)
   }, [quantity, area])
+
+  useEffect(() => {
+    setTotalQuantity(tank*tankNumbers)
+  }, [tank, tankNumbers])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
     const query = event.query.toLowerCase();
