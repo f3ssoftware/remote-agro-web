@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { RootState } from "../../../..";
 import { Contract } from "../../../../models/Contract";
 import { Cultivation } from "../../../../models/Cultivation";
-import { asyncRegisterContract } from "../../../../stores/financial.store";
+import { asyncFetchCultivations, asyncRegisterContract } from "../../../../stores/financial.store";
 import { useNavigate } from "react-router-dom";
 
 interface Type {
@@ -58,8 +58,8 @@ export function PrimeReactIncomeOthers() {
   }
 
   useEffect(() => {
-    console.log(cultivation)
-  }, [cultivation]);
+    dispatch(asyncFetchCultivations())
+  }, [])
 
   return (
     <div>
