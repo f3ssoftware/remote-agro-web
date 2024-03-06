@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import { Col, Form, Row, Button } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
@@ -38,7 +38,7 @@ export function NewPlot({handleClose}:{handleClose: any}) {
   const [totalArea, setTotalArea] = useState(0)
   const [productivity, setProductivity] = useState(0)
   const [value, setValue] = useState<number>()
-  const [cultivation, setCultivation]: any = useState({})
+  const [cultivation, setCultivation]: any = useState(null)
   const [cultivars, setCultivars]: any[] = useState(initialCultivars)
   const [sendCultivars, setSendCultivars] = useState(initialSendCultivars)
   const [weigh, setWeigh] = useState(0)
@@ -113,10 +113,9 @@ export function NewPlot({handleClose}:{handleClose: any}) {
       season_id: seasons.selectedSeason.id,
       is_active: active,
       name: propName,
-      expected_unit_price: value,
+      expected_unit_price: value!*100,
       cultivation_id: cultivation.id,
-      expenses_weight: weigh,
-      cultivation_name: cultivation.name,
+      expenses_weight: weigh
     }
     dispatch(asyncRegisterField(requestBody))
   }
@@ -133,20 +132,22 @@ export function NewPlot({handleClose}:{handleClose: any}) {
           totalArea: null,
           productivity: null,
           value: null,
-          cultivation: '',
           weigh: null,
           plantingDate: null,
+          plantingType: '',
           active: null,
+          cultivation: null
         }}
         validationSchema={Yup.object({
           propName: Yup.string().required('Necessário preencher'),
           totalArea: Yup.string().required('Necessário preencher'),
           productivity: Yup.string().required('Necessário preencher'),
           value: Yup.string().required('Necessário preencher'),
-          cultivation: Yup.string().required('Necessário preencher'),
           weigh: Yup.string().required('Necessário preencher'),
-          plantingDate: Yup.string().required('Necessário preencher'),
+          plantingDate: Yup.date().required('Necessário preencher'),
+          plantingType: Yup.string().required('Necessário preencher'),
           active: Yup.string().required('Necessário preencher'),
+          cultivation: Yup.object().required('Necessário preencher'),
         })}
         onSubmit={() => {
           register()
@@ -188,17 +189,17 @@ export function NewPlot({handleClose}:{handleClose: any}) {
               <Col>
                 <span className="p-float-label">
                   <InputNumber
-                    id="weigh"
-                    value={formik.values.weigh}
+                    id="totalArea"
+                    value={formik.values.totalArea}
                     onValueChange={(e) => {
-                      formik.setFieldValue('weigh', e.target.value)
+                      formik.setFieldValue('totalArea', e.target.value)
                       setTotalArea(Number(e.value))
                     }}
                     className={classNames({
-                      'p-invalid': formik.touched.weigh && formik.errors.weigh,
+                      'p-invalid': formik.touched.totalArea && formik.errors.totalArea,
                     })}
                   />
-                  {formik.touched.weigh && formik.errors.weigh ? (
+                  {formik.touched.totalArea && formik.errors.totalArea ? (
                     <div
                       style={{
                         color: 'red',
@@ -206,7 +207,7 @@ export function NewPlot({handleClose}:{handleClose: any}) {
                         fontFamily: 'Roboto',
                       }}
                     >
-                      {formik.errors.weigh}
+                      {formik.errors.totalArea}
                     </div>
                   ) : null}
                   <label htmlFor="weigh">Area total (ha)</label>
@@ -279,16 +280,31 @@ export function NewPlot({handleClose}:{handleClose: any}) {
                 <span className="p-float-label">
                   <AutoComplete
                     field="label"
-                    value={cultivation}
+                    value={formik.values.cultivation}
                     suggestions={cultivationList}
                     completeMethod={autoComplete}
                     onChange={(e: any) => {
+                      formik.setFieldValue('cultivation', e.target.value)
                       setCultivation(e.value)
                     }}
+                    className={classNames({
+                      'p-invalid': formik.touched.cultivation && formik.errors.cultivation,
+                    })}
                     dropdown
                     style={{ width: '100%' }}
                     forceSelection
                   />
+                  {formik.touched.cultivation && formik.errors.cultivation ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.cultivation}
+                    </div>
+                  ) : null}
                   <label htmlFor="endDate">Cultivo</label>
                 </span>
               </Col>
@@ -320,7 +336,7 @@ export function NewPlot({handleClose}:{handleClose: any}) {
                     value={formik.values.weigh}
                     onValueChange={(e) => {
                       formik.setFieldValue('weigh', e.target.value)
-                      setTotalArea(Number(e.value))
+                      setWeigh(Number(e.value))
                     }}
                     className={classNames({
                       'p-invalid': formik.touched.weigh && formik.errors.weigh,
@@ -372,6 +388,35 @@ export function NewPlot({handleClose}:{handleClose: any}) {
               </Col>
             </Row>
             <Row>
+            <Col>
+                <span className="p-float-label">
+                  <InputText
+                    id="plantingType"
+                    name="plantingType"
+                    value={formik.values.plantingType}
+                    onChange={(e) => {
+                      formik.setFieldValue('plantingType', e.target.value)
+                      setPlantingType(e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.plantingType && formik.errors.plantingType,
+                    })}
+                  />
+                  {formik.touched.plantingType && formik.errors.plantingType ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.plantingType}
+                    </div>
+                  ) : null}
+                  <label htmlFor="propName">Tipo de plantio</label>
+                </span>
+              </Col>
               <Col>
                 <Dropdown
                   value={formik.values.active}
@@ -398,11 +443,18 @@ export function NewPlot({handleClose}:{handleClose: any}) {
                 ) : null}
               </Col>
             </Row>
-            <div className="flex-right">
-              <Button variant="success" type="submit">
-                Registrar
-              </Button>
-            </div>
+            <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  marginTop: '2%',
+                }}
+              >
+                <Button variant="success" type="submit">
+                  Cadastrar
+                </Button>
+              </div>
           </form>
         )}
       </Formik>

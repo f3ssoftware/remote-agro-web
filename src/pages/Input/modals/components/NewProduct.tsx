@@ -26,7 +26,7 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
     const [endDate, setEndDate] = useState(emptyDate);
     const dispatch = useDispatch<any>();
     const [invoices, setInvoices] = useState(input.invoices);
-    const [selectedInvoice, setSelectedInvoice] = useState(new Invoice());
+    const [selectedInvoice, setSelectedInvoice]: any = useState(null)
     const [products, setProducts] = useState<any[]>([]);
     const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
     const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
@@ -217,10 +217,9 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                     </span>
                 </Col>
             </Row>
-            <Row>
+            <Row style={{marginTop: "2%"}}>
                 <Col md={3}>
-                    <Form.Group className="mb-3" controlId="">
-                        <Form.Label>Vinculação de Nota</Form.Label>
+                <span className="p-float-label">
                         <AutoComplete value={selectedInvoice} suggestions={invoices.map(invoice => `${invoice.number} - ${invoice.reference}`)} completeMethod={autoComplete} onChange={(e) => {
                             setSelectedInvoice(e.value);
                             setInvoices(input.invoices);
@@ -237,7 +236,8 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
                             }}
                             options={invoices.map(invoice => { return { ...invoice, label: `${invoice.number} - ${invoice.reference}` }; })}
                         /> */}
-                    </Form.Group>
+                    <label htmlFor="endDate">Vinculação de nota</label>
+                    </span>
                 </Col>
             </Row>
             <hr />
