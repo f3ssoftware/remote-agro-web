@@ -6,6 +6,7 @@ import { Application } from '../../../models/Application'
 import {
   asyncPrescription,
   asyncPrescriptionTable,
+  setApplicationTablesCreated,
   setPrescription,
 } from '../../../stores/plot.store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -110,7 +111,11 @@ export function DefensivePrescriptionModal({
   useEffect(() => {
     if (plot?.prescription.id) {
       confirm();
-      handleClose();
+    }
+    
+    if(plot.applicationTablesCreated == true) {
+      handleClose()
+      dispatch(setApplicationTablesCreated(false))
     }
   }, [plot])
 

@@ -7,6 +7,7 @@ import { Application } from '../../../models/Application'
 import {
   asyncPrescription,
   asyncPrescriptionTable,
+  setApplicationTablesCreated,
   setPrescription,
 } from '../../../stores/plot.store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -94,10 +95,13 @@ export function FertilizerPrescriptionModal({
   useEffect(() => {
     if (plot?.prescription.id) {
       confirm();
+    }
+    
+    if(plot.applicationTablesCreated == true) {
       handleClose()
+      dispatch(setApplicationTablesCreated(false))
     }
   }, [plot])
-
   useEffect(() => {
     dispatch(setPrescription({}));
   }, [])

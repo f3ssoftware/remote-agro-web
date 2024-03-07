@@ -20,6 +20,7 @@ const plotStore = createSlice({
     applicationData: initialApplicationData,
     applicationTables: initialApplicationTables,
     prescription: initialPrescription,
+    applicationTablesCreated: false,
   },
   reducers: {
     setApplications(state, action) {
@@ -36,13 +37,16 @@ const plotStore = createSlice({
     },
     setPrescription(state, action) {
       state.prescription = action.payload;
+    },
+    setApplicationTablesCreated(state, action) {
+      state.applicationTablesCreated = action.payload;
     }
 
   }
 });
 
 
-export const { setApplications, setAppliers, setApplicationData, setApplicationTables, setPrescription } = plotStore.actions;
+export const { setApplications, setAppliers, setApplicationData, setApplicationTables, setPrescription, setApplicationTablesCreated } = plotStore.actions;
 export default plotStore.reducer;
 
 
@@ -117,7 +121,6 @@ export function asyncPrescription(prescription: any) {
           },
         },
       )
-
       dispatch(setPrescription(result.data));
       dispatch(
         getMessages({
@@ -147,6 +150,7 @@ export function asyncPrescriptionTable(prescription: any) {
           },
         },
       )
+        dispatch(setApplicationTablesCreated(true));
       // dispatch(
       //   getMessages({
       //     message: 'Receituário  salvo com sucesso',
@@ -160,6 +164,7 @@ export function asyncPrescriptionTable(prescription: any) {
           type: 'error',
         }),
       )
+      dispatch(setApplicationTablesCreated(false));
     }
   }
 }
