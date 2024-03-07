@@ -80,14 +80,18 @@ export function SeedingPrescriptionModal({
       pressure: 0,
       accountable: accountable,
       area: area*100,
+      is_pms: false,
+      block: "Não selecionado",
       applier_id: applier.id,
       date: date,
-      fertilizer_id: product.id,
-      fertilizer_quantity: productQuantity,
-      seed_id: seed.id,
-      seed_quantity: seedQuantity,
+      user_fertilizer_id: product.id,
+      fertilizer_quantity: productQuantity*1000,
+      fertilizer_total_quantity: (productQuantity*1000*area), 
+      user_seed_id: seed.id,
+      seed_quantity: seedQuantity*1000,
+      seed_total_quantity: (seedQuantity*1000*area),
       lines_spacing: lineSpacing,
-      flow_rate: flowRate,
+      flow_rate: flowRate*100,
       farm_id: selectedFarm.id,
       correct_decimals: true,
       fields: [{ id: selectedPlot.id, area: (area*100) }],
@@ -158,7 +162,7 @@ export function SeedingPrescriptionModal({
             {fertilizing == 'Sim' ? (
           <>
             <Row>
-              <span style={{ color: '#fff' }}>Produtos: {product.name}</span>
+              <span style={{ color: '#fff' }}>Produtos: {product?.name}</span>
             </Row>
             <Row>
               <span style={{ color: '#fff' }}>Dose/ha(kg): {productQuantity}</span>

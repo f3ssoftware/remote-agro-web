@@ -53,7 +53,6 @@ export function PrescriptionSeeding({
   const dispatch = useDispatch<any>()
   const [seed, setSeed] = useState<any>({})
   const [flowRate, setFlowRate] = useState(0)
-  const [product, setProduct] = useState<any>({})
   const [area, setArea] = useState(0)
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
@@ -188,7 +187,6 @@ export function PrescriptionSeeding({
           applier: Yup.object().required('Necessário preencher'),
         })}
         onSubmit={() => {
-          handleClose()
           setShowNewPrescriptionModal(true)
         }}
       >
@@ -595,7 +593,7 @@ export function PrescriptionSeeding({
         jet={jet}
         seed={seed}
         flowRate={flowRate}
-        product={product}
+        product={selectedProduct}
         productQuantity={productQuantity}
       ></SeedingPrescriptionModal>
     </div>
