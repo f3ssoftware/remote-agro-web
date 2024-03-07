@@ -15,11 +15,12 @@ import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
 import { AutoComplete, AutoCompleteCompleteEvent } from "primereact/autocomplete";
 import { results } from "../../../../utils/results";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 let emptyDate: Date;
 const emptyProductList: UserProduct[] = [];
 export function NewProduct({ modal, handleClose }: { modal: string, handleClose: any }) {
-    const { input } = useSelector((state: RootState) => state);
+    const { input, loading } = useSelector((state: RootState) => state);
     const [linkInvoice, setLinkInvoice] = useState(false);
     const [showFormLinkInvoice, setShowFormLinkInvoice] = useState(false);
     const [startDate, setStartDate] = useState(emptyDate);
@@ -30,7 +31,15 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
     const [products, setProducts] = useState<any[]>([]);
     const [productsToUpdate, setProductsToUpdate] = useState(emptyProductList);
     const [productsToAdd, setProductsToAdd] = useState(emptyProductList);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    useEffect(() => {
+        if(loading.requests.filter(loading => loading === 'user-products-array').length > 0) {
+            setIsLoading(true)
+        } else {
+            setIsLoading(false);
+        }
+    }, [loading])
 
     const validateUserProduct = (userProduct: UserProduct, method: string) => {
         let isValid = true;
@@ -122,13 +131,14 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
 
     const register = () => {
         if (productsToAdd.length > 0) {
-            dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice.id!));
+            dispatch(asyncAddUserProductToStorage(productsToAdd, selectedInvoice?.id!));
         }
 
         if (productsToUpdate.length > 0) {
-            dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice.id!));
+            dispatch(asyncUpdateUserProductOnStorage(productsToUpdate, selectedInvoice?.id!));
         }
 
+        setIsLoading(false);
         handleClose();
 
     }
@@ -246,12 +256,21 @@ export function NewProduct({ modal, handleClose }: { modal: string, handleClose:
             return <ProductItem index={index} key={index} onHandleRemove={onRemoveItem} onHandleUpdate={onUpdateItem}></ProductItem>
         })}
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', marginTop: '2%' }}>
-            <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
-            <Button variant="success" onClick={() => {
-                setLoading(true);
-                register()
-            }} disabled={loading}>Registrar</Button>
-        </div>
+    <Button variant="primary" onClick={() => setProducts([...products, new UserProduct()])}>Adicionar Linha</Button>
+    <div style={{ position: 'relative' }}>
+        <Button
+            variant="success"
+            onClick={() => {
+                setIsLoading(true);
+                register();
+            }}
+            disabled={isLoading}
+        >
+            {isLoading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="2" /> : 'Registrar'}
+        </Button>
+       
+    </div>
+</div>
 
     </div>
 }
