@@ -175,6 +175,10 @@ export function ProductItem({
                 setInitialQuantity(e.value!)
               }}
               inputStyle={{ width: '100%' }}
+              mode="decimal"
+              locale="pt-BR"
+              minFractionDigits={0}
+              maxFractionDigits={3}
             ></InputNumber>
             <label htmlFor="initialQuantity">Qtd</label>
           </span>
