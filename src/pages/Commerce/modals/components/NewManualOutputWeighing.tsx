@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
@@ -29,6 +29,10 @@ import {
 } from 'primereact/autocomplete'
 import { InputText } from 'primereact/inputtext'
 import { InputNumber } from 'primereact/inputnumber'
+import { Toast } from 'primereact/toast'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { classNames } from 'primereact/utils'
 
 export function NewManualOutputWeighing({
   onHandleRemove,
@@ -67,6 +71,7 @@ export function NewManualOutputWeighing({
   const [cultivationList, setCultivationList] = useState<any[]>([])
   const [contractList, setContractList] = useState<any[]>([])
   const [siloList, setSiloList] = useState<any[]>([])
+  const toast = useRef<Toast>(null)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -232,24 +237,59 @@ export function NewManualOutputWeighing({
 
   return (
     <div>
-      <Row style={{ marginTop: '2%' }}>
-        <Col md={2}>
-          <span className="p-float-label">
-            <AutoComplete
-              field="label"
-              value={selectedCultivation ? selectedCultivation?.name : ''}
-              suggestions={cultivationList}
-              completeMethod={autoCompleteCultivations}
-              onChange={(e: any) => {
-                setSelectedCultivation(e.value)
-              }}
-              dropdown
-              forceSelection
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="farm">Cultivo</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+      <Toast ref={toast} />
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          cultivation: selectedCultivation ? selectedCultivation?.name : '',
+          contract: selectedContract ? selectedContract?.name : '',
+          silo: selectedSilo ? selectedSilo?.name : '',
+        }}
+        validationSchema={Yup.object({
+          cultivation: Yup.string().required('Necessário preencher'),
+          contract: Yup.string().required('Necessário preencher'),
+          silo: Yup.string().required('Necessário preencher'),
+        })}
+        onSubmit={() => {
+          Save()
+        }}
+      >
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit}>
+            <Row style={{ marginTop: '2%' }}>
+              <Col md={2}>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="name"
+                    value={formik.values.cultivation}
+                    suggestions={cultivationList}
+                    completeMethod={autoCompleteCultivations}
+                    onChange={(e: any) => {
+                      formik.setFieldValue('cultivation', e.target.value)
+                      setSelectedCultivation(e.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.cultivation && formik.errors.cultivation,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.cultivation && formik.errors.cultivation ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.cultivation as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="farm">Cultivo</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
@@ -266,24 +306,40 @@ export function NewManualOutputWeighing({
               })}
             />
           </Form.Group> */}
-        </Col>
-        <Col md={2}>
-          <span className="p-float-label">
-            <AutoComplete
-              field="label"
-              value={selectedContract ? selectedContract?.name : ''}
-              suggestions={contractList}
-              completeMethod={autoCompleteContracts}
-              onChange={(e: any) => {
-                setSelectedContract(e.value)
-              }}
-              dropdown
-              forceSelection
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="farm">Contratos</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col md={2}>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.contract}
+                    suggestions={contractList}
+                    completeMethod={autoCompleteContracts}
+                    onChange={(e: any) => {
+                      setSelectedContract(e.value)
+                      formik.setFieldValue('contract', e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.contract && formik.errors.contract,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.contract && formik.errors.contract ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.contract as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="farm">Contratos</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Contratos</Form.Label>
             <Typeahead
               id="contract"
@@ -302,24 +358,39 @@ export function NewManualOutputWeighing({
               })}
             />
           </Form.Group> */}
-        </Col>
-        <Col md={2}>
-          <span className="p-float-label">
-            <AutoComplete
-              field="label"
-              value={selectedSilo ? selectedSilo?.name : ''}
-              suggestions={siloList}
-              completeMethod={autoCompleteSilo}
-              onChange={(e: any) => {
-                setSelectedSilo(e.value)
-              }}
-              dropdown
-              forceSelection
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="silo">Silo</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col md={2}>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.silo}
+                    suggestions={siloList}
+                    completeMethod={autoCompleteSilo}
+                    onChange={(e: any) => {
+                      setSelectedSilo(e.value)
+                      formik.setFieldValue('silo', e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.silo && formik.errors.silo,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.silo && formik.errors.silo ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.silo as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="silo">Silo</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Silo</Form.Label>
             <Typeahead
               id="silo"
@@ -338,20 +409,20 @@ export function NewManualOutputWeighing({
               })}
             />
           </Form.Group> */}
-        </Col>
-        <Col md={2}>
-          <span className="p-float-label">
-            <InputText
-              value={carPlate}
-              onChange={(e) => {
-                setCarPlate(e.target.value)
-              }}
-              style={{ width: '100%' }}
-            />
+              </Col>
+              <Col md={2}>
+                <span className="p-float-label">
+                  <InputText
+                    value={carPlate}
+                    onChange={(e) => {
+                      setCarPlate(e.target.value)
+                    }}
+                    style={{ width: '100%' }}
+                  />
 
-            <label htmlFor="carPlate">Placa</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+                  <label htmlFor="carPlate">Placa</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Placa</Form.Label>
             <Form.Control
               type="text"
@@ -361,20 +432,20 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col md={2}>
-          <span className="p-float-label">
-            <InputText
-              value={driver}
-              onChange={(e) => {
-                setDriver(e.target.value)
-              }}
-              style={{ width: '100%' }}
-            />
+              </Col>
+              <Col md={2}>
+                <span className="p-float-label">
+                  <InputText
+                    value={driver}
+                    onChange={(e) => {
+                      setDriver(e.target.value)
+                    }}
+                    style={{ width: '100%' }}
+                  />
 
-            <label htmlFor="driver">Motorista</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+                  <label htmlFor="driver">Motorista</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Motorista</Form.Label>
             <Form.Control
               type="text"
@@ -384,20 +455,20 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col md={2}>
-          <span className="p-float-label">
-            <InputText
-              value={company}
-              onChange={(e) => {
-                setCompany(e.target.value)
-              }}
-              style={{ width: '100%' }}
-            />
+              </Col>
+              <Col md={2}>
+                <span className="p-float-label">
+                  <InputText
+                    value={company}
+                    onChange={(e) => {
+                      setCompany(e.target.value)
+                    }}
+                    style={{ width: '100%' }}
+                  />
 
-            <label htmlFor="company">Transportadora</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+                  <label htmlFor="company">Transportadora</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Transportadora</Form.Label>
             <Form.Control
               type="text"
@@ -407,24 +478,24 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col style={{ marginTop: '2%' }}>
-          <span className="p-float-label">
-            <InputNumber
-              value={grossWeighing}
-              onChange={(e) => {
-                setGrossWeighing(e.value!)
-              }}
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
+              </Col>
+              <Col style={{ marginTop: '2%' }}>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={grossWeighing}
+                    onChange={(e) => {
+                      setGrossWeighing(e.value!)
+                    }}
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
 
-            <label htmlFor="company">Peso Bruto</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+                  <label htmlFor="company">Peso Bruto</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso Bruto</Form.Label>
             <Form.Control
               type="number"
@@ -434,24 +505,24 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col style={{ marginTop: '2%' }}>
-          <span className="p-float-label">
-            <InputNumber
-              value={tare}
-              onChange={(e) => {
-                setTare(e.value!)
-              }}
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
+              </Col>
+              <Col style={{ marginTop: '2%' }}>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={tare}
+                    onChange={(e) => {
+                      setTare(e.value!)
+                    }}
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
 
-            <label htmlFor="company">Tara</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+                  <label htmlFor="company">Tara</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Tara</Form.Label>
             <Form.Control
               type="number"
@@ -461,24 +532,24 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col style={{ marginTop: '2%' }}>
-          <span className="p-float-label">
-            <InputNumber
-              value={netWeighing}
-              onValueChange={(e) => {
-                setNetWeighing(Number(e.value))
-              }}
-              disabled
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="netWeigh">Peso líquido</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col style={{ marginTop: '2%' }}>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={netWeighing}
+                    onValueChange={(e) => {
+                      setNetWeighing(Number(e.value))
+                    }}
+                    disabled
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="netWeigh">Peso líquido</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso líquido</Form.Label>
             <Form.Control
               type="number"
@@ -489,26 +560,26 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-      </Row>
-      <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <span className="p-float-label">
-            <InputNumber
-              value={humidity}
-              onValueChange={(e) => {
-                setHumidity(Number(e.value))
-              }}
-              suffix="%"
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="humidity">UMID (%)</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={humidity}
+                    onValueChange={(e) => {
+                      setHumidity(Number(e.value))
+                    }}
+                    suffix="%"
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="humidity">UMID (%)</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -518,25 +589,25 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col>
-          <span className="p-float-label">
-            <InputNumber
-              value={humidityDiscount}
-              onValueChange={(e) => {
-                setHumidityDiscount(Number(e.value))
-              }}
-              disabled
-              suffix="%"
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="humidity">Desconto UMID (%)</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={humidityDiscount}
+                    onValueChange={(e) => {
+                      setHumidityDiscount(Number(e.value))
+                    }}
+                    disabled
+                    suffix="%"
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="humidity">Desconto UMID (%)</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Desconto UMID (%)</Form.Label>
             <Form.Control
               type="number"
@@ -547,24 +618,24 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col>
-          <span className="p-float-label">
-            <InputNumber
-              value={impurity}
-              onValueChange={(e) => {
-                setImpurity(Number(e.value))
-              }}
-              suffix="%"
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="humidity">Impureza (%)</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={impurity}
+                    onValueChange={(e) => {
+                      setImpurity(Number(e.value))
+                    }}
+                    suffix="%"
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="humidity">Impureza (%)</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Impureza (%)</Form.Label>
             <Form.Control
               type="number"
@@ -575,25 +646,25 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col>
-          <span className="p-float-label">
-            <InputNumber
-              value={discount}
-              onValueChange={(e) => {
-                setDiscount(Number(e.value))
-              }}
-              disabled
-              suffix="%"
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="humidity">Desconto (%)</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={discount}
+                    onValueChange={(e) => {
+                      setDiscount(Number(e.value))
+                    }}
+                    disabled
+                    suffix="%"
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="humidity">Desconto (%)</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '##000' }}>Desconto (%)</Form.Label>
             <Form.Control
               type="number"
@@ -604,25 +675,25 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col style={{ marginTop: '2%' }}>
-          <span className="p-float-label">
-            <InputNumber
-              value={totalDiscount}
-              onValueChange={(e) => {
-                setTotalDiscount(Number(e.value))
-              }}
-              disabled
-              suffix="%"
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="humidity">Desconto total (%)</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col style={{ marginTop: '2%' }}>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={totalDiscount}
+                    onValueChange={(e) => {
+                      setTotalDiscount(Number(e.value))
+                    }}
+                    disabled
+                    suffix="%"
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="humidity">Desconto total (%)</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>
               Desconto total (%)
             </Form.Label>
@@ -635,24 +706,24 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col style={{ marginTop: '2%' }}>
-          <span className="p-float-label">
-            <InputNumber
-              value={totalWeighning}
-              onValueChange={(e) => {
-                setTotalWeighning(Number(e.value))
-              }}
-              disabled
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-            <label htmlFor="netWeigh">Peso Final</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col style={{ marginTop: '2%' }}>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={totalWeighning}
+                    onValueChange={(e) => {
+                      setTotalWeighning(Number(e.value))
+                    }}
+                    disabled
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  <label htmlFor="netWeigh">Peso Final</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Peso final</Form.Label>
             <Form.Control
               type="number"
@@ -663,20 +734,20 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-        <Col style={{ marginTop: '2%' }}>
-          <span className="p-float-label">
-            <InputText
-              value={observation}
-              onChange={(e) => {
-                setObservation(e.target.value)
-              }}
-              style={{ width: '100%' }}
-            />
+              </Col>
+              <Col style={{ marginTop: '2%' }}>
+                <span className="p-float-label">
+                  <InputText
+                    value={observation}
+                    onChange={(e) => {
+                      setObservation(e.target.value)
+                    }}
+                    style={{ width: '100%' }}
+                  />
 
-            <label htmlFor="observation">Observações</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+                  <label htmlFor="observation">Observações</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#000' }}>Observações</Form.Label>
             <Form.Control
               type="text"
@@ -686,53 +757,57 @@ export function NewManualOutputWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-      </Row>
+              </Col>
+            </Row>
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: '2%',
-        }}
-      >
-        <Button
-          variant="danger"
-          onClick={() => {
-            setId(manualOutputWeigh?.id!)
-            setShowAutoInputDeleteModal(true)
-          }}
-        >
-          <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-        </Button>
-        <Button
-          variant="success"
-          onClick={() => {
-            Save()
-          }}
-        >
-          {manualOutputWeigh?.id ? 'Atualizar' : 'Salvar'}
-        </Button>
-        {manualOutputWeigh?.id ? (
-          <GeneratePdf
-            weighing={manualOutputWeigh}
-            contractsList={financial?.contracts}
-            cultivationsList={financial?.cultivations}
-            silosList={commerce?.silo}
-            profile={JSON.parse(sessionStorage.getItem('user')!)}
-          ></GeneratePdf>
-        ) : (
-          <></>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: '2%',
+              }}
+            >
+              <Button
+                variant="danger"
+                onClick={() => {
+                  setId(manualOutputWeigh?.id!)
+                  setShowAutoInputDeleteModal(true)
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+              </Button>
+              <Button
+                variant="success"
+                type="submit"
+                // onClick={() => {
+                //   Save()
+                // }}
+              >
+                {manualOutputWeigh?.id ? 'Atualizar' : 'Salvar'}
+              </Button>
+              {manualOutputWeigh?.id ? (
+                <GeneratePdf
+                  weighing={manualOutputWeigh}
+                  contractsList={financial?.contracts}
+                  cultivationsList={financial?.cultivations}
+                  silosList={commerce?.silo}
+                  profile={JSON.parse(sessionStorage.getItem('user')!)}
+                ></GeneratePdf>
+              ) : (
+                <></>
+              )}
+              <DeleteConfirmationModal
+                show={showAutoInputDeleteModal}
+                handleClose={() => setShowAutoInputDeleteModal(false)}
+                id={id!}
+                index={index}
+                weighingType={manualOutputWeigh.type!}
+              ></DeleteConfirmationModal>
+            </div>
+          </form>
         )}
-        <DeleteConfirmationModal
-          show={showAutoInputDeleteModal}
-          handleClose={() => setShowAutoInputDeleteModal(false)}
-          id={id!}
-          index={index}
-          weighingType={manualOutputWeigh.type!}
-        ></DeleteConfirmationModal>
-      </div>
+      </Formik>
     </div>
   )
 }

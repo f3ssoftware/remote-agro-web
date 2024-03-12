@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../..'
@@ -18,6 +18,10 @@ import {
   AutoCompleteCompleteEvent,
 } from 'primereact/autocomplete'
 import { InputNumber } from 'primereact/inputnumber'
+import { Toast } from 'primereact/toast'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { classNames } from 'primereact/utils'
 
 export function NewTransferWeighing({
   show,
@@ -34,6 +38,7 @@ export function NewTransferWeighing({
   const [quantity, setQuantity] = useState(0)
   const [siloList, setSiloList] = useState<any[]>([])
   const [cultivationList, setCultivationList] = useState<any[]>([])
+  const toast = useRef<Toast>(null)
 
   useEffect(() => {
     dispatch(asyncFetchContractsData())
@@ -93,24 +98,61 @@ export function NewTransferWeighing({
 
   return (
     <div>
-      <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <span className="p-float-label">
-            <AutoComplete
-              field="label"
-              suggestions={siloList}
-              value={selectedSiloOutput}
-              completeMethod={autoCompleteSilo}
-              onChange={(e: any) => {
-                setSelectedSiloOutput(e.value)
-              }}
-              dropdown
-              forceSelection
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="silo">Silo de saída</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+      <Toast ref={toast} />
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          cultivation: selectedCultivation,
+          siloOutput: selectedSiloOutput,
+          siloInput: selectedSiloInput,
+          quantity: null,
+        }}
+        validationSchema={Yup.object({
+          cultivation: Yup.object().required('Necessário preencher'),
+          siloOutput: Yup.object().required('Necessário preencher'),
+          siloInput: Yup.object().required('Necessário preencher'),
+          quantity: Yup.number().required('Necessário preencher'),
+        })}
+        onSubmit={() => {
+          save()
+        }}
+      >
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit}>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    suggestions={siloList}
+                    value={formik.values.siloOutput}
+                    completeMethod={autoCompleteSilo}
+                    onChange={(e: any) => {
+                      setSelectedSiloOutput(e.value)
+                      formik.setFieldValue('siloOutput', e.target.value)
+                    }}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.siloOutput && formik.errors.siloOutput,
+                    })}
+                  />
+                  {formik.touched.siloOutput && formik.errors.siloOutput ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.siloOutput as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="silo">Silo de saída</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{color: '#fff'}}>Silo de Saída</Form.Label>
             <Typeahead
               id="siloOutput"
@@ -122,24 +164,40 @@ export function NewTransferWeighing({
               })}
             />
           </Form.Group> */}
-        </Col>
-        <Col>
-          <span className="p-float-label">
-            <AutoComplete
-              field="label"
-              suggestions={cultivationList}
-              value={selectedCultivation}
-              completeMethod={autoCompleteCultivations}
-              onChange={(e: any) => {
-                setSelectedCultivation(e.value)
-              }}
-              dropdown
-              forceSelection
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="farm">Cultivo</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    suggestions={cultivationList}
+                    value={formik.values.cultivation}
+                    completeMethod={autoCompleteCultivations}
+                    onChange={(e: any) => {
+                      setSelectedCultivation(e.value)
+                      formik.setFieldValue('cultivation', e.target.value)
+                    }}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.cultivation && formik.errors.cultivation,
+                    })}
+                  />
+                  {formik.touched.cultivation && formik.errors.cultivation ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.cultivation as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="farm">Cultivo</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Cultura</Form.Label>
             <Typeahead
               id="cultivation"
@@ -157,24 +215,40 @@ export function NewTransferWeighing({
               )}
             />
           </Form.Group> */}
-        </Col>
-        <Col>
-        <span className="p-float-label">
-            <AutoComplete
-              field="label"
-              suggestions={siloList}
-              value={selectedSiloInput}
-              completeMethod={autoCompleteSilo}
-              onChange={(e: any) => {
-                setSelectedSiloInput(e.value)
-              }}
-              dropdown
-              forceSelection
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="silo">Silo de Entrada</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    suggestions={siloList}
+                    value={formik.values.siloInput}
+                    completeMethod={autoCompleteSilo}
+                    onChange={(e: any) => {
+                      setSelectedSiloInput(e.value)
+                      formik.setFieldValue('siloInput', e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.siloInput && formik.errors.siloInput,
+                    })}
+                    dropdown
+                    forceSelection
+                    style={{ width: '100%' }}
+                  />
+                  {formik.touched.siloInput && formik.errors.siloInput ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.siloInput as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="silo">Silo de Entrada</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Silo de Entrada</Form.Label>
             <Typeahead
               id="siloInput"
@@ -186,24 +260,39 @@ export function NewTransferWeighing({
               })}
             />
           </Form.Group> */}
-        </Col>
-        <Col>
-        <span className="p-float-label">
-            <InputNumber
-              value={quantity}
-              onChange={(e) => {
-                setQuantity(e.value!)
-              }}
-              mode="decimal"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-              minFractionDigits={0}
-              maxFractionDigits={3}
-            />
-
-            <label htmlFor="company">Quantidade</label>
-          </span>
-          {/* <Form.Group className="mb-3" controlId="">
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    value={formik.values.quantity}
+                    onChange={(e) => {
+                      setQuantity(e.value!)
+                      formik.setFieldValue('quantity', e.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.quantity && formik.errors.quantity,
+                    })}
+                    mode="decimal"
+                    locale="pt-BR"
+                    style={{ width: '100%' }}
+                    minFractionDigits={0}
+                    maxFractionDigits={3}
+                  />
+                  {formik.touched.quantity && formik.errors.quantity ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.quantity as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="company">Quantidade</label>
+                </span>
+                {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Quantidade</Form.Label>
             <Form.Control
               type="number"
@@ -213,26 +302,30 @@ export function NewTransferWeighing({
               }}
             />
           </Form.Group> */}
-        </Col>
-      </Row>
+              </Col>
+            </Row>
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: '2%',
-        }}
-      >
-        <Button
-          variant="success"
-          onClick={() => {
-            save()
-          }}
-        >
-          Salvar
-        </Button>
-      </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: '2%',
+              }}
+            >
+              <Button
+                variant="success"
+                type="submit"
+                // onClick={() => {
+                //   save()
+                // }}
+              >
+                Salvar
+              </Button>
+            </div>
+          </form>
+        )}
+      </Formik>
     </div>
   )
 }
