@@ -10,7 +10,7 @@ export function EditPlotModal({show, handleClose,id}: {id: number, show: boolean
             <Modal.Title> <span style={{ color: '#fff' }}>Edição de talhão</span></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "#7C5529" }}>
-            <EditPlot id={id}></EditPlot>
+            <EditPlot id={id} handleClose={handleClose}></EditPlot>
         </Modal.Body>
     </Modal >
 }
