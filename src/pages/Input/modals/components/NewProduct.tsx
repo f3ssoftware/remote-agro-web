@@ -239,12 +239,10 @@ export function NewProduct({
       falseValidationOfinputAddLineCompsValidation.length === 0
     ) {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2))
         setSubmitting(false)
       }, 400)
     } else if (newInvoiceValidation && falseValidationNewProduct.length === 0) {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2))
         setSubmitting(false)
       }, 400)
     }
