@@ -224,9 +224,6 @@ export function NewProduct({
     const falseValidationsInput = inputAddLineValidation.filter(
       (validation: { response: boolean }) => validation.response === false,
     )
-    const falseValidationNewProduct = newProductValidation.filter(
-      (validation: { response: boolean }) => validation.response === false,
-    )
     const falseValidationOfinputAddLineCompsValidation =
       inputAddLineCompsValidation.filter(
         (validation: { response: boolean }) => validation.response === false,
@@ -241,7 +238,7 @@ export function NewProduct({
       setTimeout(() => {
         setSubmitting(false)
       }, 400)
-    } else if (newInvoiceValidation && falseValidationNewProduct.length === 0) {
+    } else if (newInvoiceValidation ) {
       setTimeout(() => {
         setSubmitting(false)
       }, 400)

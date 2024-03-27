@@ -14,6 +14,7 @@ const initialHistory: History[] = [];
 const initialInputs: Product[] = [];
 const initialInvoices: Invoice[] = [];
 const initialGeneralProducts: ProductListItem[] = [];
+
 const inputStore = createSlice({
     name: "input",
     initialState: {
@@ -21,6 +22,7 @@ const inputStore = createSlice({
         productHistory: initialHistory,
         invoices: initialInvoices,
         generalProductsList: initialGeneralProducts,
+        userProduct: false
     },
     reducers: {
         getInputs(state, action) {
@@ -34,11 +36,14 @@ const inputStore = createSlice({
         },
         getProductsList(state, action) {
             state.generalProductsList = action.payload;
+        },
+        setUserProduct(state, action) {
+            state.userProduct = action.payload;
         }
     },
 });
 
-export const { getInputs, getProductHistory, getInvoices, getProductsList } =
+export const { getInputs, getProductHistory, getInvoices, getProductsList, setUserProduct } =
     inputStore.actions;
 export default inputStore.reducer;
 
@@ -135,8 +140,7 @@ export function asyncWithdrawUserProductToStorage(
     invoiceId: number
 ) {
     return async function (dispatch: AppDispatch) {
-        try {
-            dispatch(pushLoading('user-products-array'));
+        try {   
             const result = await axios.put(
                 `https://remoteapi.murilobotelho.com.br/user-products-array`,
                 {
@@ -150,15 +154,14 @@ export function asyncWithdrawUserProductToStorage(
                     },
                 }
             );
-            if (result.status === 200) {
-                dispatch(popLoading('user-products-array'));
+                dispatch(setUserProduct(true))
                 dispatch(
                     getMessages({
                         message: "Produto Registrado com sucesso!",
                         type: "success",
                     })
                 );
-            }
+
         } catch (err: any) {
             dispatch(
                 getMessages({
@@ -166,6 +169,7 @@ export function asyncWithdrawUserProductToStorage(
                     type: "error",
                 })
             );
+            dispatch(setUserProduct(false))
         }
     };
 }

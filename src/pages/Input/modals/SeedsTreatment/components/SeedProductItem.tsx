@@ -13,15 +13,28 @@ import {
 import { asyncFetchInput } from '../../../../../stores/input.store'
 import { InputText } from 'primereact/inputtext'
 import { InputNumber } from 'primereact/inputnumber'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { classNames } from 'primereact/utils'
 
 export function SeedProductItem({
   index,
   onHandleRemove,
   onHandleUpdate,
+  isRegisterClicked,
+  inputAddLineCompsValidation,
+  setInputAddLineCompsValidation,
+  inputAddLineValidation,
+  setInputAddLineValidation,
 }: {
   index: number
   onHandleRemove: any
   onHandleUpdate: any
+  isRegisterClicked: boolean
+  inputAddLineCompsValidation: any
+  setInputAddLineCompsValidation: Function
+  inputAddLineValidation: any
+  setInputAddLineValidation: Function
 }) {
   const [selectedProduct, setSelectedProduct] = useState<any>()
   const [quantity, setQuantity] = useState(0)
@@ -43,6 +56,67 @@ export function SeedProductItem({
   }
 
   useEffect(() => {
+    if (selectedProduct !== null) {
+      const copyProductValidation = inputAddLineValidation
+      copyProductValidation[index] = { index: index, response: true } // Aqui foi setado o novo valor na posição q vc quer
+      setInputAddLineValidation(copyProductValidation)
+    } else {
+      const copyProductValidation = inputAddLineValidation
+      copyProductValidation[index] = { index: index, response: false } // Aqui foi setado o novo valor na posição q vc quer
+      setInputAddLineValidation(copyProductValidation)
+    }
+  }, [selectedProduct, index])
+
+  useEffect(() => {
+    const handleSubmitForm = () => {
+      if (isRegisterClicked) {
+        formik.handleSubmit()
+      }
+    }
+    handleSubmitForm()
+  }, [isRegisterClicked])
+
+  const initialValues = {
+    selectedProduct: null,
+  }
+
+  const validationSchema = Yup.object({
+    selectedProduct: Yup.mixed().required('Necessário preencher'),
+  })
+
+  const onSubmit = (values: any, { setSubmitting }: any) => {
+    const falseValidations = inputAddLineValidation.filter(
+      (validation: { response: boolean }) => validation.response === false,
+    )
+    const falseValidationOfinputAddLineCompsValidation =
+      inputAddLineCompsValidation.filter(
+        (validation: { response: boolean }) => validation.response === false,
+      )
+
+    if (
+      falseValidations.length === 0 &&
+      falseValidationOfinputAddLineCompsValidation.length === 0
+    ) {
+      setTimeout(() => {
+        setSubmitting(false)
+      }, 400)
+    } else if (
+      selectedProduct !== null &&
+      falseValidationOfinputAddLineCompsValidation.length === 0
+    ) {
+      setTimeout(() => {
+        setSubmitting(false)
+      }, 400)
+    }
+  }
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  })
+
+  useEffect(() => {
     setProductList(input.inputs)
   }, [input])
 
@@ -57,10 +131,11 @@ export function SeedProductItem({
           <span className="p-float-label">
             <AutoComplete
               field="product.name"
-              value={selectedProduct}
+              value={formik.values.selectedProduct}
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
+                formik.setFieldValue('selectedProduct', e.target.value)
                 const userProducts = input.inputs.filter(
                   (i) => i.product?.name === e.value.label,
                 )
@@ -72,9 +147,25 @@ export function SeedProductItem({
                 }
               }}
               dropdown
+              className={classNames({
+                'p-invalid':
+                  formik.touched.selectedProduct &&
+                  formik.errors.selectedProduct,
+              })}
               style={{ width: '100%' }}
               forceSelection
             />
+            {formik.touched.selectedProduct && formik.errors.selectedProduct ? (
+              <div
+                style={{
+                  color: 'orange',
+                  fontSize: '12px',
+                  fontFamily: 'Roboto',
+                }}
+              >
+                {formik.errors.selectedProduct}
+              </div>
+            ) : null}
             <label htmlFor="endDate">Produto</label>
           </span>
           {/* <Form.Group className="mb-3" controlId="">
