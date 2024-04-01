@@ -8,6 +8,7 @@ import inputStore, {
   asyncAddUserProductToStorage,
   asyncFetchInvoices,
   asyncUpdateUserProductOnStorage,
+  setUserProduct,
 } from '../../../../stores/input.store'
 import { RootState } from '../../../..'
 import { Invoice } from '../../../../models/Invoice'
@@ -75,56 +76,7 @@ export function NewProduct({
     }
   }, [loading])
 
-  const validateUserProduct = (userProduct: UserProduct, method: string) => {
-    let isValid = true
-    let invalidFields = []
-    switch (method) {
-      case 'PUT': {
-        if (!userProduct?.user_product_id) {
-          isValid = false
-          invalidFields.push('user_product_id')
-        }
-
-        if (!userProduct.quantity === null) {
-          isValid = false
-          invalidFields.push('quantity')
-        }
-
-        if (userProduct.total_price === null) {
-          isValid = false
-          invalidFields.push('total_price')
-        }
-
-        if (!userProduct.measure_unit) {
-          isValid = false
-          invalidFields.push('measure_unit')
-        }
-        return isValid
-      }
-      case 'POST': {
-        if (!userProduct.product_id) {
-          isValid = false
-          invalidFields.push('product_id')
-        }
-
-        if (!userProduct.quantity) {
-          isValid = false
-          invalidFields.push('quantity')
-        }
-
-        if (!userProduct.total_price) {
-          isValid = false
-          invalidFields.push('total_price')
-        }
-
-        if (!userProduct.measure_unit) {
-          isValid = false
-          invalidFields.push('measure_unit')
-        }
-        return isValid
-      }
-    }
-  }
+ 
   const onUpdateItem = (
     product: UserProduct,
     index: number,
@@ -135,11 +87,11 @@ export function NewProduct({
     productsArr.push(product)
     setProducts(productsArr)
 
-    if (userHasProduct && validateUserProduct(product, 'PUT')) {
+    if (userHasProduct ) {
       const toUpdtArr = [...productsToUpdate]
       toUpdtArr.splice(index, 1)
       setProductsToUpdate(toUpdtArr.concat(product))
-    } else if (!userHasProduct && validateUserProduct(product, 'POST')) {
+    } else if (!userHasProduct ) {
       const toAddArr = [...productsToAdd]
       toAddArr.splice(index, 1)
       setProductsToAdd(toAddArr.concat(product))
@@ -186,7 +138,6 @@ export function NewProduct({
     }
 
     setIsLoading(false)
-    handleClose()
   }
 
   useEffect(() => {
@@ -207,6 +158,13 @@ export function NewProduct({
   }, [selectedInvoiceVinculation])
 
   useEffect(() => {
+    if(input.userProduct == true) {
+      handleClose()
+      dispatch(setUserProduct(false))
+    }
+  }, [input])
+
+  useEffect(() => {
     if (isRegisterClicked) {
       formik.handleSubmit()
     }
@@ -216,9 +174,13 @@ export function NewProduct({
     invoiceVinculation: null,
   }
 
-  const validationSchema = Yup.object({
+  const validationSchemaWithInvoice = Yup.object({
     invoiceVinculation: Yup.mixed().required('Necessário preencher'),
-  })
+  });
+  
+  const validationSchemaWithoutInvoice = Yup.object({});
+  
+  const validationSchema = showFormLinkInvoice ? validationSchemaWithInvoice : validationSchemaWithoutInvoice;
 
   const onSubmit = (values: any, { setSubmitting }: any) => {
     const falseValidationsInput = inputAddLineValidation.filter(
@@ -235,6 +197,7 @@ export function NewProduct({
       falseValidationsInput.length === 0 &&
       falseValidationOfinputAddLineCompsValidation.length === 0
     ) {
+      
       setTimeout(() => {
         setSubmitting(false)
       }, 400)
@@ -425,9 +388,6 @@ export function NewProduct({
               type="submit"
               onClick={() => {
                 setIsRegisterClicked(true)
-                setTimeout(() => {
-                  setIsRegisterClicked(false)
-                }, 1000)
               }}
               disabled={isLoading}
             >
