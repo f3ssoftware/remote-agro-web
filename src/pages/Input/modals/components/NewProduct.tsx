@@ -224,7 +224,7 @@ export function NewProduct({
       >
         <div className="flex align-items-center">
           <Checkbox
-            inputId="ingredient1"
+            inputId="invoice"
             name="linkInvoice"
             value={linkInvoice}
             onChange={() => {
@@ -234,7 +234,7 @@ export function NewProduct({
             }}
             checked={linkInvoice}
           />
-          <label htmlFor="ingredient1" className="ml-2">
+          <label htmlFor="invoice" className="ml-2">
             Vincular Nota
           </label>
         </div>
