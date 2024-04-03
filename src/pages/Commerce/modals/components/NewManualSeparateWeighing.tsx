@@ -154,7 +154,7 @@ export function NewManualSeparateWeighing({
       setHumidity(manualSeparateWeigh?.humidity! / 100)
       setImpurity(manualSeparateWeigh?.impurity! / 100)
       setDiscount(manualSeparateWeigh?.discount! / 100)
-      setTotalWeighning(manualSeparateWeigh?.final_weight!)
+      setTotalWeighning(manualSeparateWeigh?.final_weight! / 1000)
       setHumidityDiscount(Number(manualSeparateWeigh?.humidity_discount!))
       setTare(manualSeparateWeigh?.tare_weight!)
       setObservation(manualSeparateWeigh?.observations!)
