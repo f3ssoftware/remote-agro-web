@@ -81,6 +81,7 @@ export function NewManualSeparateWeighing({
     setHumidityDiscount(
       calculateHumidityDiscount(humidity, selectedCultivation?.id),
     )
+    console.log(humidityDiscount)
   }, [humidity])
 
   useEffect(() => {
@@ -154,7 +155,7 @@ export function NewManualSeparateWeighing({
       setHumidity(manualSeparateWeigh?.humidity! / 100)
       setImpurity(manualSeparateWeigh?.impurity! / 100)
       setDiscount(manualSeparateWeigh?.discount! / 100)
-      setTotalWeighning(manualSeparateWeigh?.final_weight!)
+      setTotalWeighning(manualSeparateWeigh?.final_weight! / 1000)
       setHumidityDiscount(Number(manualSeparateWeigh?.humidity_discount!))
       setTare(manualSeparateWeigh?.tare_weight!)
       setObservation(manualSeparateWeigh?.observations!)
@@ -169,7 +170,7 @@ export function NewManualSeparateWeighing({
         reference: reference,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity * 100,
+        humidity: Math.round(humidity * 100),
         impurity: impurity * 100,
         discount: discount * 100,
         final_weight: totalWeighning * 1000,

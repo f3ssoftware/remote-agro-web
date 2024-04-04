@@ -161,7 +161,7 @@ export function NewAutoSeparateWeighing({
       setHumidity(autoSeparateWeighing?.humidity! / 100)
       setImpurity(autoSeparateWeighing?.impurity! / 100)
       setDiscount(autoSeparateWeighing?.discount! / 100)
-      setTotalWeighning(autoSeparateWeighing?.final_weight!)
+      setTotalWeighning(autoSeparateWeighing?.final_weight! / 1000)
       setHumidityDiscount(Number(autoSeparateWeighing?.humidity_discount!))
       setTare(autoSeparateWeighing?.tare_weight!)
       setObservation(autoSeparateWeighing?.observations!)
