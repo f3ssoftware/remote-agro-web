@@ -313,7 +313,7 @@ export function InputPartsModal({
                     formik.errors.invoiceVinculation ? (
                       <div
                         style={{
-                          color: 'orange',
+                          color: 'red',
                           fontSize: '12px',
                           fontFamily: 'Roboto',
                         }}

@@ -62,7 +62,7 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
     const exp: ExpenseInvoice = {
       amount: Number(amount),
       number: number.toString(),
-      reference,
+      reference: reference,
       cost_type: costType,
       due_date: expirationDate.toISOString(),
       cost_action: costAction,
