@@ -61,7 +61,7 @@ export function TopNav() {
                         <Col md={9}>
                             <Row>
                                 <Col>
-                                    <span style={{ color: '#fff', fontWeight: 'bold' }}>{user?.name}</span>
+                                    <span style={{ color: '#968E8E', fontWeight: 'bold' }}>{user?.name}</span>
                                 </Col>
                             </Row>
                             <Row>

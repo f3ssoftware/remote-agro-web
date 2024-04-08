@@ -111,7 +111,7 @@ export function Plot() {
                 }}
               >
                 <Dropdown className="frist-card-dropdown-plot">
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <Dropdown.Toggle variant="success" id="dropdown-basic-plot">
                     {selectedFarm
                       ? `${selectedFarm?.name}`
                       : 'Selecione uma fazenda'}
@@ -243,7 +243,7 @@ export function Plot() {
                   <Dropdown.Toggle
                     className="second-col-dropdown-plot"
                     variant="success"
-                    id="dropdown-basic"
+                    id="dropdown-basic-plot"
                   >
                     {selectedPlot?.name || 'Todos os talhões'}
                   </Dropdown.Toggle>
