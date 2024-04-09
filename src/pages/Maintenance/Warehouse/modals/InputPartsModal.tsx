@@ -27,6 +27,7 @@ import { classNames } from 'primereact/utils'
 import { Dialog } from 'primereact/dialog'
 import { Checkbox } from 'primereact/checkbox'
 import { Calendar } from 'primereact/calendar'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
 
 let emptyDate: Date
 export function InputPartsModal({
@@ -182,8 +183,8 @@ export function InputPartsModal({
   return (
     <Dialog
       header="Entrada de peça"
-      headerStyle={{ backgroundColor: '#7C5529', color: '#FFF' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+      headerStyle={dialogHeaderStyle}
+    contentStyle={dialogContentSyle}
       visible={show}
       style={{ width: '80vw' }}
       onHide={() => {
@@ -227,7 +228,7 @@ export function InputPartsModal({
           /> */}
           {showFormLinkInvoice ? (
             <div>
-              <Row>
+              <Row style={{marginTop: "2%"}}>
                 <Col>
                   <span className="p-float-label">
                     <Calendar
@@ -285,7 +286,7 @@ export function InputPartsModal({
                   </Form.Group> */}
                 </Col>
               </Row>
-              <Row>
+              <Row style={{marginTop: "2%"}}>
                 <Col md={3}>
                   <span className="p-float-label">
                     <AutoComplete
@@ -350,6 +351,7 @@ export function InputPartsModal({
             activeKey={key}
             onSelect={(k: any) => setKey(k)}
             className="mb-3"
+            style={{marginTop: "2%"}}
           >
             <Tab eventKey="input" title={'Entrada de peça'}>
               {products.map((p, index) => {
@@ -407,6 +409,14 @@ export function InputPartsModal({
                     key={index}
                     onHandleRemove={onRemoveItem}
                     onHandleUpdate={onUpdateItem}
+                    isRegisterClicked={isRegisterClicked}
+                    inputAddLineCompsValidation={inputAddLineCompsValidation}
+                    setInputAddLineCompsValidation={
+                      setInputAddLineCompsValidation
+                    }
+                    newInvoiceValidation={newInvoiceValidation}
+                    inputAddLineValidation={inputAddLineValidation}
+                    setInputAddLineValidation={setInputAddLineCompsValidation}
                   ></NewParts>
                 )
               })}

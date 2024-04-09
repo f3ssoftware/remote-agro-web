@@ -14,6 +14,7 @@ import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
 
 interface Type {
   name: string
@@ -61,8 +62,8 @@ export function NewRichesModal({
     <Container>
       <Dialog
         header="Cadastrar Bem"
-        headerStyle={{ backgroundColor: '#7C5529', color: '#FFF' }}
-        contentStyle={{ backgroundColor: '#7C5529' }}
+        headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
         visible={show}
         style={{ width: '80vw' }}
         onHide={() => {

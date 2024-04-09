@@ -16,6 +16,7 @@ import { Toast } from 'primereact/toast'
 import * as Yup from 'yup'
 import { Formik, useFormik, Form } from 'formik'
 import { classNames } from 'primereact/utils'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
 
 const emptyProductList: UserProduct[] = []
 export function WithdrawalModal({
@@ -106,8 +107,8 @@ export function WithdrawalModal({
 
   return (
     <Dialog
-      headerStyle={{ backgroundColor: '#7C5529', color: '#FFF' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+    headerStyle={dialogHeaderStyle}
+    contentStyle={dialogContentSyle}
       header="Retirada de estoque"
       visible={show}
       style={{ width: '50vw' }}

@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { Dialog } from 'primereact/dialog'
 import { RootState } from '../../..'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
 
 export function FertilizerPrescriptionModal({
   show,
@@ -113,8 +114,8 @@ export function FertilizerPrescriptionModal({
       style={{ width: '50vw' }}
       className="custom-dialog"
       onHide={handleClose}
-      headerStyle={{ backgroundColor: '#7C5529' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
     >
       <Row>
         <Col>

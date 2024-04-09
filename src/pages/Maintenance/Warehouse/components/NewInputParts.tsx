@@ -205,7 +205,7 @@ export function NewInputParts({
               locale="pt-BR"
               style={{ width: '100%' }}
             />
-            <label htmlFor="months">Custo</label>
+            <label htmlFor="cost">Custo</label>
           </span>
           {/* <Form.Group className="mb-3" controlId="">
             <Form.Label style={{ color: '#fff' }}>Custo</Form.Label>

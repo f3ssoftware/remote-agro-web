@@ -6,11 +6,13 @@ import pt from 'date-fns/locale/pt-BR'
 import { asyncFuel } from '../../../../stores/maintenance.store'
 import { useDispatch } from 'react-redux'
 import { Fuel } from '../../../../models/Fuel'
+import { Dialog } from 'primereact/dialog'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
 
 export function InputTankModal({
   show,
   handleClose,
-  id
+  id,
 }: {
   show: boolean
   handleClose: any
@@ -20,34 +22,34 @@ export function InputTankModal({
   const [date, setDate] = useState(new Date())
   const dispatch = useDispatch<any>()
 
-  const register = () =>{
+  const register = () => {
     const fuel: Fuel = {
       quantity: quantity,
       date: date.toISOString(),
       tank_id: id,
-      type: 'Entrada'
-
+      type: 'Entrada',
     }
     dispatch(asyncFuel(fuel))
   }
   return (
     <Container>
-      <Modal backdrop={'static'} show={show} onHide={handleClose} size={'lg'}>
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: '#7C5529', border: 'none' }}
-        >
-          <Modal.Title>
-            {' '}
-            <span style={{ color: '#fff' }}>Tanques</span>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+      <Dialog
+      header="Tanques - Entrada"
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
+    >
+      
           <div>
             <Row style={{ marginTop: '2%' }}>
               <Col>
                 <Form.Group className="mb-2" controlId="">
-                  <Form.Label style={{ color: '#fff' }}>Abastecimento</Form.Label>
+                  <Form.Label style={{ color: '#fff' }}>
+                    Abastecimento
+                  </Form.Label>
                   <Form.Control
                     type="number"
                     onChange={(e) => {
@@ -57,16 +59,16 @@ export function InputTankModal({
                 </Form.Group>
               </Col>
               <Col>
-            <Form.Group className="mb-3" controlId="">
-              <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
-              <DatePicker
-                locale={pt}
-                dateFormat="dd/MM/yyyy"
-                selected={date}
-                onChange={(date: Date) => setDate(date)}
-              />
-            </Form.Group>
-          </Col>
+                <Form.Group className="mb-3" controlId="">
+                  <Form.Label style={{ color: '#fff' }}>Data</Form.Label>
+                  <DatePicker
+                    locale={pt}
+                    dateFormat="dd/MM/yyyy"
+                    selected={date}
+                    onChange={(date: Date) => setDate(date)}
+                  />
+                </Form.Group>
+              </Col>
             </Row>
           </div>
           <div
@@ -87,10 +89,20 @@ export function InputTankModal({
               Registrar
             </Button>
           </div>
+    </Dialog>
+      {/* <Modal backdrop={'static'} show={show} onHide={handleClose} size={'lg'}>
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: '#7C5529', border: 'none' }}
+        >
+          <Modal.Title>
+            {' '}
+            <span style={{ color: '#fff' }}>Tanques</span>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: '#7C5529' }}>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </Container>
   )
 }
-
-

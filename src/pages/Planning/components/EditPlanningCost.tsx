@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Row,
-  Col,
-  Button,
-  Form,
-  Modal,
-} from 'react-bootstrap'
+import { Row, Col, Button, Form, Modal } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
@@ -17,6 +11,8 @@ import {
 } from '../../../stores/planning.store'
 import { PlanningCost } from '../../../models/PlanningCost'
 import { EditPlanningTab } from './EditPlanningTab'
+import { Dialog } from 'primereact/dialog'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
 
 export function EditPlanningCost({
   show,
@@ -42,7 +38,7 @@ export function EditPlanningCost({
       type: 'Custos Indiretos',
       plannings,
     }
-    dispatch(asyncEditPlannings(id,planning))
+    dispatch(asyncEditPlannings(id, planning))
 
     handleClose()
   }
@@ -66,19 +62,18 @@ export function EditPlanningCost({
   }
 
   return (
-    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: '#7C5529', border: 'none' }}
-      >
-        <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>
-            Planejamento - {planning.editPlannings.name}
-          </span>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+    <Dialog
+      header={<span>
+      Planejamento - {planning.editPlannings.name}
+    </span>}
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
+    >
+      
         <div>
           <Row style={{ marginTop: '2%' }}>
             <Col>
@@ -150,7 +145,21 @@ export function EditPlanningCost({
             </Button>
           </div>
         </div>
-      </Modal.Body>
-    </Modal>
+    </Dialog>
+    // <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
+    //   <Modal.Header
+    //     closeButton
+    //     style={{ backgroundColor: '#7C5529', border: 'none' }}
+    //   >
+    //     <Modal.Title>
+    //       {' '}
+    //       <span style={{ color: '#fff' }}>
+    //         Planejamento - {planning.editPlannings.name}
+    //       </span>
+    //     </Modal.Title>
+    //   </Modal.Header>
+    //   <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+    //   </Modal.Body>
+    // </Modal>
   )
 }

@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NewDefensivePrescription } from '../components/NewDefensivePrescription'
 import { Dialog } from 'primereact/dialog'
 import { RootState } from '../../..'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
 
 export function DefensivePrescriptionModal({
   show,
@@ -129,8 +130,8 @@ export function DefensivePrescriptionModal({
     style={{ width: '70vw' }}
     className="custom-dialog"
     onHide={handleClose}
-    headerStyle={{ backgroundColor: '#7C5529' }}
-    contentStyle={{ backgroundColor: '#7C5529' }}
+    headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
   >
 
 

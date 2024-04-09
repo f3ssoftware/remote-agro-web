@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { Dialog } from 'primereact/dialog'
 import { RootState } from '../../..'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
 
 export function SeedingPrescriptionModal({
   show,
@@ -51,7 +52,7 @@ export function SeedingPrescriptionModal({
 }) {
   const [applicationTables, setApplicationTables]: any[] = useState([])
   const dispatch = useDispatch<any>()
-  const { plot } = useSelector((state: RootState) => state);
+  const { plot } = useSelector((state: RootState) => state)
 
   const onHandleRemove = (index: number) => {
     const newApplicationTable = [...applicationTables]
@@ -80,163 +81,166 @@ export function SeedingPrescriptionModal({
       type: 'Semeadura',
       pressure: 0,
       accountable: accountable,
-      area: area*100,
+      area: area * 100,
       is_pms: false,
-      block: "Não selecionado",
+      block: 'Não selecionado',
       applier_id: applier.id,
       date: date,
       user_fertilizer_id: product.id,
-      fertilizer_quantity: productQuantity*1000,
-      fertilizer_total_quantity: (productQuantity*1000*area), 
+      fertilizer_quantity: productQuantity * 1000,
+      fertilizer_total_quantity: productQuantity * 1000 * area,
       user_seed_id: seed.id,
-      seed_quantity: seedQuantity*1000,
-      seed_total_quantity: (seedQuantity*1000*area),
+      seed_quantity: seedQuantity * 1000,
+      seed_total_quantity: seedQuantity * 1000 * area,
       lines_spacing: lineSpacing,
-      flow_rate: flowRate*100,
+      flow_rate: flowRate * 100,
       farm_id: selectedFarm.id,
       correct_decimals: true,
-      fields: [{ id: selectedPlot.id, area: (area*100) }],
+      fields: [{ id: selectedPlot.id, area: area * 100 }],
     }
     dispatch(asyncPrescription(seeding))
   }
 
   const confirm = () => {
-
     const request: ApplicationTable = {
-      application_tables: applicationTables.map((appTable: any) => { return { ...appTable, application_id: plot.prescription.id } })
+      application_tables: applicationTables.map((appTable: any) => {
+        return { ...appTable, application_id: plot.prescription.id }
+      }),
     }
     dispatch(asyncPrescriptionTable(request))
-    dispatch(setPrescription({}));
+    dispatch(setPrescription({}))
   }
 
   useEffect(() => {
     if (plot?.prescription.id) {
-      confirm();
+      confirm()
     }
-    
-    if(plot.applicationTablesCreated == true) {
+
+    if (plot.applicationTablesCreated == true) {
       handleClose()
       dispatch(setApplicationTablesCreated(false))
     }
   }, [plot])
 
   useEffect(() => {
-    dispatch(setPrescription({}));
+    dispatch(setPrescription({}))
   }, [])
 
-  return <Dialog
+  return (
+    <Dialog
       header="Receituário"
       visible={show}
       style={{ width: '50vw' }}
       className="custom-dialog"
       onHide={handleClose}
-      headerStyle={{ backgroundColor: '#7C5529' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
     >
-
-
+      <Row>
+        <Col>
+          <Row>
+            <span style={{ color: '#fff' }}>Fazenda: {selectedFarm?.name}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>Talhões: {selectedPlot?.name}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>Data: {date}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>Aplicador: {applier?.name}</span>
+          </Row>
+        </Col>
+        <Col>
+          <Row>
+            <span style={{ color: '#fff' }}>Área aplicada: {area}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>Responsável: {accountable}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>
+              Possui adubação: {fertilizing}
+            </span>
+          </Row>
+          {fertilizing == 'Sim' ? (
+            <>
+              <Row>
+                <span style={{ color: '#fff' }}>Produtos: {product?.name}</span>
+              </Row>
+              <Row>
+                <span style={{ color: '#fff' }}>
+                  Dose/ha(kg): {productQuantity}
+                </span>
+              </Row>
+            </>
+          ) : (
+            <div></div>
+          )}
+        </Col>
+        <Col>
+          <Row>
+            <span style={{ color: '#fff' }}>Semente/Cultivar: {seed.name}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>População: {seedQuantity}</span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>
+              Espaçamento entre linhas: {lineSpacing}
+            </span>
+          </Row>
+          <Row>
+            <span style={{ color: '#fff' }}>Possui jato dirigido: {jet}</span>
+          </Row>
+          {jet == 'Sim' ? (
+            <>
+              <Row>
+                <span style={{ color: '#fff' }}>Vazão(L/ha): {flowRate}</span>
+              </Row>
+            </>
+          ) : (
+            <div></div>
+          )}
+        </Col>
+      </Row>
+      {applicationTables?.map((p: Product, index: number) => {
+        return (
+          <NewFertilizerPrescription
+            index={index}
+            key={index}
+            onHandleRemove={onHandleRemove}
+            onHandleUpdate={onHandleUpdate}
+          ></NewFertilizerPrescription>
+        )
+      })}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginTop: '2%',
+        }}
+      >
         <Row>
           <Col>
-            <Row>
-              <span style={{ color: '#fff' }}>
-                Fazenda: {selectedFarm?.name}
-              </span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>
-                Talhões: {selectedPlot?.name}
-              </span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Data: {date}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Aplicador: {applier?.name}</span>
-            </Row>
+            <Button variant="success" onClick={() => addLine()}>
+              Adicionar linha
+            </Button>
           </Col>
           <Col>
-            <Row>
-              <span style={{ color: '#fff' }}>Área aplicada: {area}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Responsável: {accountable}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Possui adubação: {fertilizing}</span>
-            </Row>
-            {fertilizing == 'Sim' ? (
-          <>
-            <Row>
-              <span style={{ color: '#fff' }}>Produtos: {product?.name}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Dose/ha(kg): {productQuantity}</span>
-            </Row>
-          </>
-        ) : (
-          <div></div>
-        )}
-          </Col>
-          <Col>
-            <Row>
-              <span style={{ color: '#fff' }}>Semente/Cultivar: {seed.name}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>População: {seedQuantity}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Espaçamento entre linhas: {lineSpacing}</span>
-            </Row>
-            <Row>
-              <span style={{ color: '#fff' }}>Possui jato dirigido: {jet}</span>
-            </Row>
-            {jet == 'Sim' ? (
-          <>
-            <Row>
-              <span style={{ color: '#fff' }}>Vazão(L/ha): {flowRate}</span>
-            </Row>
-          </>
-        ) : (
-          <div></div>
-        )}
+            <Button
+              style={{ backgroundColor: '#A5CD33', color: '#000' }}
+              variant="success"
+              onClick={() => {
+                next()
+              }}
+            >
+              Confirmar
+            </Button>
           </Col>
         </Row>
-        {applicationTables?.map((p: Product, index: number) => {
-          return (
-            <NewFertilizerPrescription
-              index={index}
-              key={index}
-              onHandleRemove={onHandleRemove}
-              onHandleUpdate={onHandleUpdate}
-            ></NewFertilizerPrescription>
-          )
-        })}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            marginTop: '2%',
-          }}
-        >
-          <Row>
-            <Col>
-              <Button variant="success" onClick={() => addLine()}>
-                Adicionar linha
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                style={{ backgroundColor: '#A5CD33', color: '#000' }}
-                variant="success"
-                onClick={() => {
-                  next()
-                }}
-              >
-                Confirmar
-              </Button>
-            </Col>
-          </Row>
-        </div>
+      </div>
     </Dialog>
+  )
 }

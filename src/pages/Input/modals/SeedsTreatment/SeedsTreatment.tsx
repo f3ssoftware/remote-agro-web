@@ -19,6 +19,10 @@ import { Toast } from 'primereact/toast'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { classNames } from 'primereact/utils'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../../utils/modal-style.util'
 
 export function SeedsTreatment({
   show,
@@ -161,8 +165,8 @@ export function SeedsTreatment({
 
   return (
     <Dialog
-      headerStyle={{ backgroundColor: '#7C5529', color: '#FFF' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
       header="Tratamento de Sementes"
       visible={show}
       style={{ width: '50vw' }}
