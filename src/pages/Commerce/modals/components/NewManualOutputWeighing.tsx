@@ -236,7 +236,11 @@ export function NewManualOutputWeighing({
   }
 
   return (
-    <div>
+    <div style={{
+      backgroundColor: index % 2 > 0 ? '#cecece' : '#a5a5a5',
+      paddingTop: '1%',
+      paddingBottom: '1%',
+    }}>
       <Toast ref={toast} />
       <Formik
         enableReinitialize={true}

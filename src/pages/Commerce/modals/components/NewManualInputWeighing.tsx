@@ -271,7 +271,7 @@ export function NewManualInputWeighing({
   return (
     <div
       style={{
-        backgroundColor: index % 2 > 0 ? '#f6eec1' : '#ebde90',
+        backgroundColor: index % 2 > 0 ? '#cecece' : '#a5a5a5',
         paddingTop: '1%',
         paddingBottom: '1%',
       }}
