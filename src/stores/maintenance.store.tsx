@@ -24,7 +24,8 @@ const maintenanceStore = createSlice({
     goodHistory: [],
     partHistory: initialPartHistory,
     fuellings: initialFuel,
-    movelGood: initialGoods
+    movelGood: initialGoods,
+    showDialog: false
   },
   reducers: {
     setGoods(state, action) {
@@ -47,11 +48,14 @@ const maintenanceStore = createSlice({
     },
     setMovelGood(state,action){
       state.movelGood = action.payload;
+    },
+    setShowDialog(state, action) {
+      state.showDialog = action.payload
     }
   },
 });
 
-export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory, setFuellings, setMovelGood } = maintenanceStore.actions;
+export const { setGoods, setParts, setTanks, setPartHistory, setGoodHistory, setFuellings, setMovelGood, setShowDialog } = maintenanceStore.actions;
 export default maintenanceStore.reducer;
 
 export function asyncFetchGoods() {
@@ -91,6 +95,7 @@ export function asyncNewGoods(good: Good) {
           },
         },
       )
+      dispatch(setShowDialog(true))
       dispatch(
         getMessages({
           message: 'Bem criado com sucesso',
@@ -104,6 +109,7 @@ export function asyncNewGoods(good: Good) {
           type: 'error',
         }),
       )
+      dispatch(setShowDialog(false))
     }
   }
 }
@@ -209,6 +215,7 @@ export function asyncInputParts(invoiceId: number, input: Part[]) {
           },
         },
       )
+      dispatch(setShowDialog(true))
       dispatch(
         getMessages({
           message: 'Entrada de peça salva com sucesso',
@@ -222,6 +229,7 @@ export function asyncInputParts(invoiceId: number, input: Part[]) {
           type: 'error',
         }),
       )
+      dispatch(setShowDialog(false))
     }
   }
 }
@@ -240,6 +248,7 @@ export function asyncOutputParts(output: Part[]) {
           },
         },
       )
+      dispatch(setShowDialog(true))
       dispatch(
         getMessages({
           message: 'Saída de peça salva com sucesso',
@@ -253,6 +262,7 @@ export function asyncOutputParts(output: Part[]) {
           type: 'error',
         }),
       )
+      dispatch(setShowDialog(false))
     }
   }
 }
@@ -292,6 +302,7 @@ export function asyncNewTank(tank: Tank) {
           },
         },
       )
+      dispatch(setShowDialog(true))
       dispatch(
         getMessages({
           message: 'Tanque criado com sucesso',
@@ -305,6 +316,7 @@ export function asyncNewTank(tank: Tank) {
           type: 'error',
         }),
       )
+      dispatch(setShowDialog(false))
     }
   }
 }
@@ -350,6 +362,7 @@ export function asyncFuel(fuel: Fuel) {
           },
         },
       )
+      dispatch(setShowDialog(true))
       dispatch(
         getMessages({
           message: 'Combustível adicionado com sucesso',
@@ -363,6 +376,7 @@ export function asyncFuel(fuel: Fuel) {
           type: 'error',
         }),
       )
+      dispatch(setShowDialog(false))
     }
   }
 }

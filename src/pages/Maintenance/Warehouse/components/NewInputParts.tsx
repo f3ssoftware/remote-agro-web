@@ -152,7 +152,7 @@ export function NewInputParts({
               suggestions={productList}
               completeMethod={autoCompleteParts}
               onChange={(e: any) => {
-                formik.setFieldValue('plot', e.target.value)
+                formik.setFieldValue('product', e.target.value)
                 setProduct(e.value)
               }}
               className={classNames({

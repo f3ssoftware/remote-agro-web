@@ -14,6 +14,7 @@ import { Part } from '../../../../models/Part'
 import {
   asyncInputParts,
   asyncNewParts,
+  setShowDialog,
 } from '../../../../stores/maintenance.store'
 import { NewParts } from '../components/NewParts'
 import {
@@ -37,7 +38,7 @@ export function InputPartsModal({
   show: boolean
   handleClose: any
 }) {
-  const { input } = useSelector((state: RootState) => state)
+  const { input, maintenance } = useSelector((state: RootState) => state)
   const [linkInvoice, setLinkInvoice] = useState(false)
   const [showFormLinkInvoice, setShowFormLinkInvoice] = useState(false)
   const [startDate, setStartDate] = useState(emptyDate)
@@ -77,6 +78,13 @@ export function InputPartsModal({
     setProducts(productsArr)
   }
 
+  useEffect(() => {
+    if(maintenance.showDialog == true) {
+      handleClose()
+      dispatch(setShowDialog(false))
+    }
+  }, [maintenance])
+
   const search = (start: Date, end: Date) => {
     const invoices = input.invoices.filter((invoice: Invoice) => {
       return (
@@ -97,12 +105,10 @@ export function InputPartsModal({
 
   const register = () => {
     dispatch(asyncInputParts(selectedInvoice.id!, products))
-
-    handleClose()
   }
   const registerNew = () => {
     dispatch(asyncNewParts(selectedInvoice.id!, products))
-    handleClose()
+
   }
 
   useEffect(() => {

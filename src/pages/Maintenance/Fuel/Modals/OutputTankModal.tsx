@@ -5,7 +5,6 @@ import { OutputTank } from '../components/OutputTank'
 import { Fuel } from '../../../../models/Fuel'
 import {
   asyncFetchGoods,
-  setFuellings,
 } from '../../../../stores/maintenance.store'
 import { Dialog } from 'primereact/dialog'
 import {
@@ -46,7 +45,7 @@ export function OutputTankModal({
       <Dialog
         header="Tanques - Saída"
         visible={show}
-        style={{ width: '50vw' }}
+        style={{ width: '95vw' }}
         className="custom-dialog"
         onHide={handleClose}
         headerStyle={dialogHeaderStyle}
