@@ -190,7 +190,9 @@ export function NewProduct({
       inputAddLineCompsValidation.filter(
         (validation: { response: boolean }) => validation.response === false,
       )
-      register()
+
+        register()
+
 
     if (
       newInvoiceValidation &&

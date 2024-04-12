@@ -174,7 +174,7 @@ export function WithdrawalProduct({
           {formik.touched.selectedProduct && formik.errors.selectedProduct ? (
               <div
                 style={{
-                  color: "orange",
+                  color: "red",
                   fontSize: "12px",
                   fontFamily: "Roboto",
                 }}
