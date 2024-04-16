@@ -77,26 +77,74 @@ export function NewProduct({
   }, [loading])
 
  
-  const onUpdateItem = (
-    product: UserProduct,
-    index: number,
-    userHasProduct: boolean,
-  ) => {
-    const productsArr = [...products]
-    productsArr.splice(index, 1)
-    productsArr.push(product)
-    setProducts(productsArr)
+  const validateUserProduct = (userProduct: UserProduct, method: string) => {
+    let isValid = true;
+    let invalidFields = [];
+    switch (method) {
+        case 'PUT': {
+            if (!userProduct?.user_product_id) {
+                isValid = false;
+                invalidFields.push('user_product_id');
+            }
 
-    if (userHasProduct ) {
-      const toUpdtArr = [...productsToUpdate]
-      toUpdtArr.splice(index, 1)
-      setProductsToUpdate(toUpdtArr.concat(product))
-    } else if (!userHasProduct ) {
-      const toAddArr = [...productsToAdd]
-      toAddArr.splice(index, 1)
-      setProductsToAdd(toAddArr.concat(product))
+            if (!userProduct.quantity === null) {
+                isValid = false;
+                invalidFields.push('quantity');
+            }
+
+            if (userProduct.total_price === null) {
+                isValid = false;
+                invalidFields.push('total_price');
+            }
+
+            if (!userProduct.measure_unit) {
+                isValid = false;
+                invalidFields.push('measure_unit');
+            }
+            return isValid;
+        } case 'POST': {
+            if (!userProduct.product_id) {
+                isValid = false;
+                invalidFields.push('product_id');
+            }
+
+            if (!userProduct.quantity) {
+                isValid = false;
+                invalidFields.push('quantity');
+            }
+
+            if (!userProduct.total_price) {
+                isValid = false;
+                invalidFields.push('total_price');
+            }
+
+            if (!userProduct.measure_unit) {
+                isValid = false;
+                invalidFields.push('measure_unit');
+            }
+            return isValid;
+        }
     }
-  }
+}
+const onUpdateItem = (product: UserProduct, index: number, userHasProduct: boolean) => {
+    const productsArr = [...products];
+    productsArr.splice(index, 1);
+    productsArr.push(product);
+    setProducts(productsArr);
+
+    if (userHasProduct && validateUserProduct(product, 'PUT')) {
+        const toUpdtArr = [...productsToUpdate];
+        toUpdtArr.splice(index, 1);
+        setProductsToUpdate(toUpdtArr.concat(product))
+    } else if (!userHasProduct && validateUserProduct(product, 'POST')) {
+        const toAddArr = [...productsToAdd];
+        toAddArr.splice(index, 1);
+        setProductsToAdd(toAddArr.concat(product));
+    }
+    console.log('add', productsToAdd);
+    console.log('update', productsToUpdate);
+
+}
 
   const onRemoveItem = (index: number) => {
     const productsArr = [...products]
