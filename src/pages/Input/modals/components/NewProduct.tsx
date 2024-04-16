@@ -388,6 +388,7 @@ export function NewProduct({
               type="submit"
               onClick={() => {
                 setIsRegisterClicked(true)
+                setIsLoading(true)
               }}
               disabled={isLoading}
             >
