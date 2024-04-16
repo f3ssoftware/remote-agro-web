@@ -96,8 +96,6 @@ export function NewProduct({
       toAddArr.splice(index, 1)
       setProductsToAdd(toAddArr.concat(product))
     }
-    console.log('add', productsToAdd)
-    console.log('update', productsToUpdate)
   }
 
   const onRemoveItem = (index: number) => {
