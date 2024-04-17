@@ -63,7 +63,7 @@ export function PrescriptionSeeding({
     { name: 'Não', value: 'Não' },
   ]
   const [productList, setProductList] = useState<any[]>([])
-  const [selectedProduct, setSelectedProduct] = useState<any>()
+  const [selectedProduct, setSelectedProduct] = useState<any>({})
   const [seedList, setSeedList] = useState<any[]>([])
   const [plotList, setPlotList] = useState<any[]>([])
   const [applierList, setApplierList] = useState<any[]>([])
@@ -79,7 +79,7 @@ export function PrescriptionSeeding({
   }, [])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = productList.filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
@@ -90,7 +90,7 @@ export function PrescriptionSeeding({
     }
   }
   const autoCompleteSeeds = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = seedList.filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
@@ -101,7 +101,7 @@ export function PrescriptionSeeding({
     }
   }
   const autoCompletePlots = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = plotList.filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
@@ -112,7 +112,7 @@ export function PrescriptionSeeding({
     }
   }
   const autoCompleteApplier = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
+    const query = event.query.toLowerCase()
     const resultSet = applierList.filter((p: any) =>
       p?.label?.toLowerCase().includes(query),
     )
@@ -165,10 +165,10 @@ export function PrescriptionSeeding({
         initialValues={{
           accountable: '',
           dateTime: null,
-          productQuantity: null,
+          productQuantity: 0,
           seedQuantity: null,
           lineSpacing: null,
-          flowRate: null,
+          flowRate: 0,
           jet: '',
           fertilizing: '',
           plot: null,
@@ -177,10 +177,16 @@ export function PrescriptionSeeding({
         validationSchema={Yup.object({
           accountable: Yup.string().required('Necessário preencher'),
           dateTime: Yup.string().required('Necessário preencher'),
-          productQuantity: Yup.string().required('Necessário preencher'),
+          productQuantity:
+            fertilizing == 'Sim'
+              ? Yup.number().required('Necessário preencher')
+              : Yup.number(),
           seedQuantity: Yup.string().required('Necessário preencher'),
           lineSpacing: Yup.string().required('Necessário preencher'),
-          flowRate: Yup.string().required('Necessário preencher'),
+          flowRate:
+            jet == 'Sim'
+              ? Yup.number().required('Necessário preencher')
+              : Yup.number(),
           jet: Yup.string().required('Necessário preencher'),
           fertilizing: Yup.string().required('Necessário preencher'),
           plot: Yup.object().required('Necessário preencher'),
@@ -219,7 +225,9 @@ export function PrescriptionSeeding({
                       {formik.errors.accountable}
                     </div>
                   ) : null}
-                  <label htmlFor="accountable" style={{ color: 'black' }}>Responsável</label>
+                  <label htmlFor="accountable" style={{ color: 'black' }}>
+                    Responsável
+                  </label>
                 </span>
               </Col>
               <Col>
@@ -234,8 +242,7 @@ export function PrescriptionSeeding({
                       setSelectedPlot(e.value)
                     }}
                     className={classNames({
-                      'p-invalid':
-                        formik.touched.plot && formik.errors.plot,
+                      'p-invalid': formik.touched.plot && formik.errors.plot,
                     })}
                     dropdown
                     forceSelection
@@ -252,13 +259,15 @@ export function PrescriptionSeeding({
                       {formik.errors.plot}
                     </div>
                   ) : null}
-                  <label htmlFor="plot" style={{ color: 'black' }}>Talhões</label>
+                  <label htmlFor="plot" style={{ color: 'black' }}>
+                    Talhões
+                  </label>
                 </span>
                 {selectedPlot?.total_area > 0 ? (
                   <>
-                    <span  style={{marginTop: '5%'}}>
+                    <span style={{ marginTop: '5%' }}>
                       <Slider
-                       style={{marginTop: '7%'}}
+                        style={{ marginTop: '7%' }}
                         value={area}
                         max={selectedPlot?.total_area}
                         min={0}
@@ -267,7 +276,12 @@ export function PrescriptionSeeding({
                         }}
                         className="w-full"
                       />
-                      <label  style={{marginTop: '5%', color: 'white'}} htmlFor="area">Área aplicada: {area}</label>
+                      <label
+                        style={{ marginTop: '5%', color: 'white' }}
+                        htmlFor="area"
+                      >
+                        Área aplicada: {area}
+                      </label>
                     </span>
                   </>
                 ) : (
@@ -304,7 +318,9 @@ export function PrescriptionSeeding({
                       {formik.errors.applier}
                     </div>
                   ) : null}
-                  <label htmlFor="applier" style={{ color: 'black' }}>Aplicador</label>
+                  <label htmlFor="applier" style={{ color: 'black' }}>
+                    Aplicador
+                  </label>
                 </span>
               </Col>
             </Row>{' '}
@@ -338,7 +354,9 @@ export function PrescriptionSeeding({
                       {formik.errors.dateTime}
                     </div>
                   ) : null}
-                  <label htmlFor="date" style={{ color: 'black' }}>Data de plantio</label>
+                  <label htmlFor="date" style={{ color: 'black' }}>
+                    Data de plantio
+                  </label>
                 </span>
               </Col>
               <Col>
@@ -382,7 +400,9 @@ export function PrescriptionSeeding({
                         dropdown
                         style={{ width: '100%' }}
                       />
-                      <label htmlFor="endDate" style={{ color: 'black' }}>Produto</label>
+                      <label htmlFor="endDate" style={{ color: 'black' }}>
+                        Produto
+                      </label>
                     </span>
                   </Col>
                   <Col>
@@ -415,7 +435,12 @@ export function PrescriptionSeeding({
                           {formik.errors.productQuantity}
                         </div>
                       ) : null}
-                      <label htmlFor="productQuantity" style={{ color: 'black' }}>Dose/ha (Kg)</label>
+                      <label
+                        htmlFor="productQuantity"
+                        style={{ color: 'black' }}
+                      >
+                        Dose/ha (Kg)
+                      </label>
                     </span>
                   </Col>
                 </>
@@ -438,7 +463,9 @@ export function PrescriptionSeeding({
                     dropdown
                     style={{ width: '100%' }}
                   />
-                  <label htmlFor="endDate" style={{ color: 'black' }}>Semente/Cultivar</label>
+                  <label htmlFor="endDate" style={{ color: 'black' }}>
+                    Semente/Cultivar
+                  </label>
                 </span>
               </Col>
               <Col>
@@ -467,7 +494,9 @@ export function PrescriptionSeeding({
                       {formik.errors.seedQuantity}
                     </div>
                   ) : null}
-                  <label htmlFor="seedQuantity" style={{ color: 'black' }}>População (sementes/ha)</label>
+                  <label htmlFor="seedQuantity" style={{ color: 'black' }}>
+                    População (sementes/ha)
+                  </label>
                 </span>
               </Col>
             </Row>
@@ -497,7 +526,9 @@ export function PrescriptionSeeding({
                       {formik.errors.lineSpacing}
                     </div>
                   ) : null}
-                  <label htmlFor="lineSpacing" style={{ color: 'black' }}>Espaçamento entre linhas</label>
+                  <label htmlFor="lineSpacing" style={{ color: 'black' }}>
+                    Espaçamento entre linhas
+                  </label>
                 </span>
               </Col>
               <Col>
@@ -551,7 +582,9 @@ export function PrescriptionSeeding({
                         {formik.errors.flowRate}
                       </div>
                     ) : null}
-                    <label htmlFor="flowRate" style={{ color: 'black' }}>Vazão (L/ha)</label>
+                    <label htmlFor="flowRate" style={{ color: 'black' }}>
+                      Vazão (L/ha)
+                    </label>
                   </span>
                 </Col>
               ) : (
@@ -570,7 +603,6 @@ export function PrescriptionSeeding({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 type="submit"
-                onClick={() => setShowNewPrescriptionModal(true)}
               >
                 Avançar
               </Button>

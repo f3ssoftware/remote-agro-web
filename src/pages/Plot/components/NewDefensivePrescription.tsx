@@ -13,7 +13,9 @@ import { Product } from '../../../models/Product'
 import { Button } from 'primereact/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { asyncFetchApplicationData } from '../../../stores/plot.store'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { classNames } from 'primereact/utils'
 
 export function NewDefensivePrescription({
   index,
@@ -22,6 +24,11 @@ export function NewDefensivePrescription({
   flowRate,
   area,
   tankNumbers,
+  isRegisterClicked,
+  inputAddLineCompsValidation,
+  setInputAddLineCompsValidation,
+  inputAddLineValidation,
+  setInputAddLineValidation
 }: {
   index: number
   onHandleRemove: any
@@ -29,6 +36,11 @@ export function NewDefensivePrescription({
   flowRate: number
   area: number
   tankNumbers: number
+  isRegisterClicked: boolean
+  inputAddLineCompsValidation: any
+  setInputAddLineCompsValidation: Function
+  inputAddLineValidation: any
+  setInputAddLineValidation: Function
 }) {
   const [product, setProduct] = useState<any>({ id: 0 })
   const [quantity, setQuantity] = useState(0)
@@ -95,6 +107,67 @@ export function NewDefensivePrescription({
     setProductList(fetchProducts())
   }, [])
 
+  useEffect(() => {
+    if (selectedProduct !== null) {
+      const copyProductValidation = inputAddLineValidation;
+      copyProductValidation[index] = { index: index, response: true }; // Aqui foi setado o novo valor na posição q vc quer
+      setInputAddLineValidation(copyProductValidation);
+    } else {
+      const copyProductValidation = inputAddLineValidation;
+      copyProductValidation[index] = { index: index, response: false }; // Aqui foi setado o novo valor na posição q vc quer
+      setInputAddLineValidation(copyProductValidation);
+    }
+  }, [selectedProduct, index]);
+
+  useEffect(() => {
+    const handleSubmitForm = () => {
+      if (isRegisterClicked) {
+        formik.handleSubmit();
+      }
+    };
+    handleSubmitForm();
+  }, [isRegisterClicked]);
+
+  const initialValues = {
+    selectedProduct: null,
+  };
+
+  const validationSchema = Yup.object({
+    selectedProduct: Yup.mixed().required("Necessário preencher"),
+  });
+
+  const onSubmit = (values: any, { setSubmitting }: any) => {
+    const falseValidations = inputAddLineValidation.filter(
+      (validation: { response: boolean }) => validation.response === false
+    );
+    const falseValidationOfinputAddLineCompsValidation =
+      inputAddLineCompsValidation.filter(
+        (validation: { response: boolean }) => validation.response === false
+      );
+
+    if (
+      falseValidations.length === 0 &&
+      falseValidationOfinputAddLineCompsValidation.length === 0
+    ) {
+      setTimeout(() => {
+        setSubmitting(false);
+      }, 400);
+    } else if (
+      selectedProduct !== null &&
+      falseValidationOfinputAddLineCompsValidation.length === 0
+    ) {
+      setTimeout(() => {
+        setSubmitting(false);
+      }, 400);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
+
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
@@ -102,17 +175,32 @@ export function NewDefensivePrescription({
           <span className="p-float-label">
             <AutoComplete
               field="label"
-              value={selectedProduct}
+              value={formik.values.selectedProduct}
               suggestions={productList}
               completeMethod={autoComplete}
               onChange={(e: any) => {
                 setProduct(e.value)
                 setSelectedProduct(e.value)
+                formik.setFieldValue("selectedProduct", e.target.value);
               }}
               forceSelection
               dropdown
+              className={classNames({
+                "p-invalid": formik.touched.selectedProduct && formik.errors.selectedProduct,
+              })}
               style={{ width: '100%' }}
             />
+            {formik.touched.selectedProduct && formik.errors.selectedProduct ? (
+              <div
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  fontFamily: "Roboto",
+                }}
+              >
+                {formik.errors.selectedProduct}
+              </div>
+            ) : null}
             <label htmlFor="endDate">Produto</label>
           </span>
         </Col>
