@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../..'
 import { asyncFetchSoil } from '../../stores/soil.store'
 import { TransactionDates } from '../Financial/Balance/modals/TransactionDates'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export function Soil() {
   const [showModalDates, setShowModalDates] = useState(false)
@@ -99,7 +101,44 @@ export function Soil() {
               maxHeight: '300px',
             }}
           >
-            <Table striped bordered hover>
+            <DataTable
+              value={soilAnalysis}
+              className="p-datatable-striped p-datatable-hover"
+              style={{ backgroundColor: '#fff', color: '#000', fontSize: '12px' }}
+            >
+              <Column
+                field="date"
+                header="Data"
+                body={(rowData) => new Date(rowData?.date!).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
+              ></Column>
+              <Column
+                header="Fazenda"
+                body={(rowData) => rowData?.service_order_farms.map((sf: any) => sf.farm_name).join(', ')}
+              ></Column>
+              <Column
+                header="Talhões"
+                body={(rowData) => rowData?.service_order_fields.map((field: any) => field.manual_field_name).join(', ')}
+              ></Column>
+              <Column
+                field="operator"
+                header="Operador"
+                body={(rowData) => rowData?.operator?.name}
+              ></Column>
+              <Column
+                header="Armostragem"
+                body={(rowData) =>
+                  rowData?.service_order_sampling_methods.map((method: any) => method.sampling_method).join(', ')
+                }
+              ></Column>
+              <Column
+                field="laboratory"
+                header="Laboratório"
+                body={(rowData) => rowData?.laboratory?.name}
+              ></Column>
+              <Column header="Mapa de fertilidade"></Column>
+              <Column header="Mapa de aplicação"></Column>
+            </DataTable>
+            {/* <Table striped bordered hover>
               <thead
                 style={{
                   backgroundColor: '#243C74',
@@ -151,7 +190,7 @@ export function Soil() {
                   )
                 })}
               </tbody>
-            </Table>
+            </Table> */}
           </div>
         </Card.Body>
       </Card>

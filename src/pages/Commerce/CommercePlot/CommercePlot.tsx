@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react'
-import {
-  Container,
-  Button,
-  Row,
-  Col,
-  Table,
-} from 'react-bootstrap'
+import { Container, Button, Row, Col, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Silo } from '../../../models/Silo'
-import {
-  asyncFetchSiloData,
-} from '../../../stores/commerce.store'
+import { asyncFetchSiloData } from '../../../stores/commerce.store'
 import '../CommercePlot/Commerceplot.scss'
 import { NewCommercePlotModal } from '../modals/NewCommercePlotModal/NewCommercePlotModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { PlotDeleteConfirmation } from './PlotDeleteConfirmation'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 const initialSiloList: Silo[] = []
 export function CommercePlot() {
@@ -37,10 +31,6 @@ export function CommercePlot() {
     setSilos(commerce.silo)
   }, [commerce])
 
-
-
-
-
   return (
     <Container>
       <div className="main-box">
@@ -59,7 +49,53 @@ export function CommercePlot() {
           </div>
         </Row>
         <div className="plot-table">
-          <Table striped bordered hover>
+          <DataTable
+            value={silos}
+            className="p-datatable-striped p-datatable-hover"
+            style={{ backgroundColor: '#fff', color: '#000' }}
+          >
+            <Column field="name" header="Silo"></Column>
+            <Column
+              field="cultivations"
+              header="Cultivar"
+              body={(rowData) => {
+                return (
+                  <ul>
+                    {rowData.cultivations.map((c: any, index: number) => (
+                      <li key={index}>{c.name}</li>
+                    ))}
+                  </ul>
+                )
+              }}
+            ></Column>
+            <Column
+              field="cultivations"
+              header="Quantidade"
+              body={(rowData) => {
+                return (
+                  <ul>
+                    {rowData.cultivations.map((c: any, index: number) => (
+                      <li key={index}>{c.SiloCultivar.quantity} Sacas</li>
+                    ))}
+                  </ul>
+                )
+              }}
+            ></Column>
+            <Column
+              header="Ações"
+              body={(rowData) => (
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setSiloId(rowData.id)
+                    setDeleteModal(true)
+                  }}
+                />
+              )}
+            ></Column>
+          </DataTable>
+          {/* <Table striped bordered hover>
             <thead style={{ backgroundColor: '#243C74', color: '#fff' }}>
               <tr>
                 <th>Silo</th>
@@ -105,14 +141,18 @@ export function CommercePlot() {
                 )
               })}
             </tbody>
-          </Table>
+          </Table> */}
         </div>
       </div>
       <NewCommercePlotModal
         show={showNewCommercePlotModal}
         handleClose={() => setShowNewCommercePlotModal(false)}
       ></NewCommercePlotModal>
-      <PlotDeleteConfirmation show={deleteModal} handleClose={setDeleteModal} id={siloId}></PlotDeleteConfirmation>
+      <PlotDeleteConfirmation
+        show={deleteModal}
+        handleClose={setDeleteModal}
+        id={siloId}
+      ></PlotDeleteConfirmation>
     </Container>
   )
 }

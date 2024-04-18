@@ -85,16 +85,16 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
     const [showMessages, setShowMessages] = useState(false);
     const toast = useRef<Toast>(null);
 
-    useEffect(() => {
-        // messages.messages.length > 0 ? setShowMessages(true) : setShowMessages(false);
-        messages.messages.forEach((m) => {
-            toast.current?.show({ severity: m.type, detail: m.message })
-            setTimeout(() => {
-                dispatch(popMessages(''));
-            }, 5000);
-        });
+    // useEffect(() => {
+    //     // messages.messages.length > 0 ? setShowMessages(true) : setShowMessages(false);
+    //     messages.messages.forEach((m) => {
+    //         toast.current?.show({ severity: m.type, detail: m.message })
+    //         setTimeout(() => {
+    //             dispatch(popMessages(''));
+    //         }, 5000);
+    //     });
 
-    }, [messages]);
+    // }, [messages]);
 
     return <PrimeReactProvider>
         <Toast ref={toast}></Toast>

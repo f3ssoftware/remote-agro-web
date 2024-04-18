@@ -9,6 +9,8 @@ import { RootState } from '../../../..'
 import { asyncFetchOutputWeighingData } from '../../../../stores/commerce.store'
 import { WeighingRow } from '../../../../models/WeighingRow'
 import { tr } from 'date-fns/locale'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export function ContractLoad() {
   const dispatch = useDispatch<any>()
@@ -77,7 +79,62 @@ export function ContractLoad() {
             </Dropdown>
           </Card.Text>
           <div style={{ width: '100%', overflowX: 'auto' }}>
-            <Table striped hover>
+            <DataTable
+              value={selectedContract ? [selectedContract] : []}
+              className="p-datatable-striped p-datatable-hover"
+              style={{ backgroundColor: '#fff', color: '#000' }}
+            >
+              <Column field="code" header="Código"></Column>
+              <Column field="name" header="Nome"></Column>
+              <Column field="cultivation_name" header="Cultura"></Column>
+              <Column
+                field="start_date"
+                header="Início"
+                body={(rowData) =>
+                  new Date(rowData.start_date).toLocaleDateString('pt-BR', {
+                    timeZone: 'UTC',
+                  })
+                }
+              ></Column>
+              <Column
+                field="end_date"
+                header="Final"
+                body={(rowData) =>
+                  new Date(rowData.end_date).toLocaleDateString('pt-BR', {
+                    timeZone: 'UTC',
+                  })
+                }
+              ></Column>
+              <Column
+                field="payment_date"
+                header="Pagamento"
+                body={(rowData) =>
+                  new Date(rowData.payment_date).toLocaleDateString('pt-BR', {
+                    timeZone: 'UTC',
+                  })
+                }
+              ></Column>
+              <Column
+                field="amount"
+                header="Valor do contrato"
+                body={(rowData) =>
+                  (rowData.amount / 100).toLocaleString('pt-BR', {
+                    maximumFractionDigits: 2,
+                    style: 'currency',
+                    currency: 'BRL',
+                    useGrouping: true,
+                  })
+                }
+              ></Column>
+              <Column field="sacks" header="Sacas negociadas"></Column>
+              <Column
+                field="sacks_delivered"
+                header="Sacas entregues"
+                body={(rowData) => rowData.sacks_delivered / 1000}
+              ></Column>
+              <Column field="missing_sacks" header="Sacas faltantes"></Column>
+            </DataTable>
+            {/* <Table striped hover>
               <thead
                 style={{
                   backgroundColor: '#243C74',
@@ -139,7 +196,7 @@ export function ContractLoad() {
                   <></>
                 )}
               </tbody>
-            </Table>
+            </Table> */}
           </div>
         </Card.Body>
         {/* <Card.Footer className="card-footer">
