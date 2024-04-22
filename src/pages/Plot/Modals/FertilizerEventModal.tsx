@@ -3,7 +3,12 @@ import { Col, Modal, Row, Table } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Dialog } from 'primereact/dialog'
-import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../utils/modal-style.util'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export function FertilizerEventModal({
   show,
@@ -27,10 +32,12 @@ export function FertilizerEventModal({
 
   return (
     <Dialog
-      header={<span>
-      #{plot?.applications[index]?.number} -{' '}
-      {plot?.applications[index]?.type}
-    </span>}
+      header={
+        <span>
+          #{plot?.applications[index]?.number} -{' '}
+          {plot?.applications[index]?.type}
+        </span>
+      }
       visible={show}
       style={{ width: '50vw' }}
       className="custom-dialog"
@@ -38,34 +45,41 @@ export function FertilizerEventModal({
       headerStyle={dialogHeaderStyle}
       contentStyle={dialogContentSyle}
     >
-      
-        <h5>
-          {plot?.applications[index]?.was_applied
-            ? 'Aplicação realizada'
-            : 'Aplicação não realizada'}
-        </h5>
-        <Row>
-          <Col>Aplicação: {plot?.applications[index]?.number}</Col>
-        </Row>
-        <Row>
-          <Col>
-            Talhão:{' '}
-            {plot?.applications[index]?.fields.map((f: any) => {
-              f.name
-            })}
-          </Col>
-        </Row>
-        <Row>
-          <Col>Aplicador: {plot?.applications[index]?.applier.name}</Col>
-        </Row>
-        <Row>
-          <Col>Área Aplicada: {plot?.applications[index]?.seed_area}</Col>
-        </Row>
-        <Row>
-          <Col>Tipo: {plot?.applications[index]?.application_type}</Col>
-        </Row>
+      <h5>
+        {plot?.applications[index]?.was_applied
+          ? 'Aplicação realizada'
+          : 'Aplicação não realizada'}
+      </h5>
+      <Row>
+        <Col>Aplicação: {plot?.applications[index]?.number}</Col>
+      </Row>
+      <Row>
+        <Col>
+          Talhão:{' '}
+          {plot?.applications[index]?.fields.map((f: any) => {
+            f.name
+          })}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Aplicador: {plot?.applications[index]?.applier.name}</Col>
+      </Row>
+      <Row>
+        <Col>Área Aplicada: {plot?.applications[index]?.seed_area}</Col>
+      </Row>
+      <Row>
+        <Col>Tipo: {plot?.applications[index]?.application_type}</Col>
+      </Row>
 
-        <Table>
+      <DataTable value={plot?.applications[index]?.application_tables}>
+        <Column field="product_name" header="Produto" />
+        <Column field="quantity" header="Teste (mL)" />
+        <Column
+          header="Qtd/ha (L)"
+          body={(rowData) => rowData.totalAppliedLabel / 1000}
+        />
+      </DataTable>
+      {/* <Table>
           <thead>
             <tr>
               <th>Produto</th>
@@ -88,7 +102,7 @@ export function FertilizerEventModal({
               },
             )}
           </tbody>
-        </Table>
+        </Table> */}
     </Dialog>
     // // <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
     // //   <Modal.Header

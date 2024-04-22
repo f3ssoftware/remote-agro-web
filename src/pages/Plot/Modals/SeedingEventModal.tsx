@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react'
 import { Col, Modal, Row, Table } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../..'
-import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../utils/modal-style.util'
 import { Dialog } from 'primereact/dialog'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export function SeedingEventModal({
   show,
@@ -27,10 +32,12 @@ export function SeedingEventModal({
 
   return (
     <Dialog
-      header={ <span>
-      #{plot?.applications[index]?.number} -{' '}
-      {plot?.applications[index]?.type}
-    </span>}
+      header={
+        <span>
+          #{plot?.applications[index]?.number} -{' '}
+          {plot?.applications[index]?.type}
+        </span>
+      }
       visible={show}
       style={{ width: '50vw' }}
       className="custom-dialog"
@@ -38,48 +45,59 @@ export function SeedingEventModal({
       headerStyle={dialogHeaderStyle}
       contentStyle={dialogContentSyle}
     >
-        <h5>
-          {plot?.applications[index]?.was_applied
-            ? 'Aplicação realizada'
-            : 'Aplicação não realizada'}
-        </h5>
-        <Row>
-          <Col>Aplicação: {plot?.applications[index]?.number}</Col>
-        </Row>
-        <Row>
-          <Col>
-            Talhão:{' '}
-            {plot?.applications[index]?.fields.map((f: any) => {
-              f.name
-            })}
-          </Col>
-        </Row>
-        <Row>
-          <Col>Área Aplicada: {plot?.applications[index]?.seed_area}</Col>
-        </Row>
-        <Row>
-          <Col>Aplicador: {plot?.applications[index]?.applier.name}</Col>
-        </Row>
-        <Row>
-          <Col>
-            Dose/ha(kg): {plot?.applications[index]?.fertilizer_quantity}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            População(sementes/ha): {plot?.applications[index]?.seed_quantity}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            Espaçamento entre linhas: {plot?.applications[index]?.lines_spacing}
-          </Col>
-        </Row>
-        <Row>
-          <Col>Vazão(L/ha): {plot?.applications[index]?.flow_rate}</Col>
-        </Row>
+      <h5>
+        {plot?.applications[index]?.was_applied
+          ? 'Aplicação realizada'
+          : 'Aplicação não realizada'}
+      </h5>
+      <Row>
+        <Col>Aplicação: {plot?.applications[index]?.number}</Col>
+      </Row>
+      <Row>
+        <Col>
+          Talhão:{' '}
+          {plot?.applications[index]?.fields.map((f: any) => {
+            f.name
+          })}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Área Aplicada: {plot?.applications[index]?.seed_area}</Col>
+      </Row>
+      <Row>
+        <Col>Aplicador: {plot?.applications[index]?.applier.name}</Col>
+      </Row>
+      <Row>
+        <Col>Dose/ha(kg): {plot?.applications[index]?.fertilizer_quantity}</Col>
+      </Row>
+      <Row>
+        <Col>
+          População(sementes/ha): {plot?.applications[index]?.seed_quantity}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          Espaçamento entre linhas: {plot?.applications[index]?.lines_spacing}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Vazão(L/ha): {plot?.applications[index]?.flow_rate}</Col>
+      </Row>
 
-        <Table>
+      <DataTable
+        value={plot?.applications[index]?.application_tables}
+        className="p-datatable-striped p-datatable-hover"
+        style={{ backgroundColor: '#fff', color: '#000' }}
+      >
+        <Column field="product_name" header="Produto" />
+        <Column field="quantity" header="Qtd/ha (L)" />
+        <Column
+          header="Aplicados Totais (L)"
+          body={(rowData) => rowData.totalAppliedLabel / 1000}
+        />
+      </DataTable>
+
+      {/* <Table>
           <thead>
             <tr>
               <th>Produto</th>
@@ -102,7 +120,7 @@ export function SeedingEventModal({
               },
             )}
           </tbody>
-        </Table>
+        </Table> */}
     </Dialog>
     // <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
     //   <Modal.Header

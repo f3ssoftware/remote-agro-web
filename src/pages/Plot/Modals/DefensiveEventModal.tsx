@@ -3,7 +3,12 @@ import { Col, Modal, Row, Table } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../..'
 import { Dialog } from 'primereact/dialog'
-import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../utils/modal-style.util'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export function DefensiveEventModal({
   show,
@@ -25,10 +30,12 @@ export function DefensiveEventModal({
 
   return (
     <Dialog
-      header={<span >
-      #{plot?.applications[index]?.number} -{' '}
-      {plot?.applications[index]?.type}
-    </span>}
+      header={
+        <span>
+          #{plot?.applications[index]?.number} -{' '}
+          {plot?.applications[index]?.type}
+        </span>
+      }
       visible={show}
       style={{ width: '50vw' }}
       className="custom-dialog"
@@ -36,55 +43,68 @@ export function DefensiveEventModal({
       headerStyle={dialogHeaderStyle}
       contentStyle={dialogContentSyle}
     >
-      
-        <h5>
-          {plot?.applications[index]?.was_applied
-            ? 'Aplicação realizada'
-            : 'Aplicação não realizada'}
-        </h5>
-        <Row>
-          <Col>Aplicação: {plot?.applications[index]?.number}</Col>
-        </Row>
-        <Row>
-          <Col>Área Aplicada: {plot?.applications[index]?.seed_area}</Col>
-        </Row>
-        <Row>
-          <Col>Tipo: {plot?.applications[index]?.application_type}</Col>
-        </Row>
-        <Row>
-          <Col>Bico: {plot?.applications[index]?.block}</Col>
-        </Row>
-        <Row>
-          <Col>Vazão: {plot?.applications[index]?.flow_rate} L/ha</Col>
-        </Row>
-        <Row>
-          <Col>Área por tanque: {plot?.applications[index]?.area} ha</Col>
-        </Row>
-        <Row>
-          <Col>
-            Número de tanques: {plot?.applications[index]?.number_of_tanks}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            Calda total:{' '}
-            {plot?.applications[index]?.flow_rate *
-              plot?.applications[index]?.area *
-              plot?.applications[index]?.number_of_tanks!}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            Calda/tanque:{' '}
-            {plot?.applications[index]?.flow_rate *
-              plot?.applications[index]?.area *
-              plot?.applications[index]?.number_of_tanks!}
-          </Col>
-        </Row>
-        <Row>
-          <Col>Pressão: {plot?.applications[index]?.pressure}</Col>
-        </Row>
-        <Table striped hover>
+      <h5>
+        {plot?.applications[index]?.was_applied
+          ? 'Aplicação realizada'
+          : 'Aplicação não realizada'}
+      </h5>
+      <Row>
+        <Col>Aplicação: {plot?.applications[index]?.number}</Col>
+      </Row>
+      <Row>
+        <Col>Área Aplicada: {plot?.applications[index]?.seed_area}</Col>
+      </Row>
+      <Row>
+        <Col>Tipo: {plot?.applications[index]?.application_type}</Col>
+      </Row>
+      <Row>
+        <Col>Bico: {plot?.applications[index]?.block}</Col>
+      </Row>
+      <Row>
+        <Col>Vazão: {plot?.applications[index]?.flow_rate} L/ha</Col>
+      </Row>
+      <Row>
+        <Col>Área por tanque: {plot?.applications[index]?.area} ha</Col>
+      </Row>
+      <Row>
+        <Col>
+          Número de tanques: {plot?.applications[index]?.number_of_tanks}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          Calda total:{' '}
+          {plot?.applications[index]?.flow_rate *
+            plot?.applications[index]?.area *
+            plot?.applications[index]?.number_of_tanks!}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          Calda/tanque:{' '}
+          {plot?.applications[index]?.flow_rate *
+            plot?.applications[index]?.area *
+            plot?.applications[index]?.number_of_tanks!}
+        </Col>
+      </Row>
+      <Row>
+        <Col>Pressão: {plot?.applications[index]?.pressure}</Col>
+      </Row>
+      <DataTable
+        value={plot?.applications[index]?.application_tables}
+        className="p-datatable-striped p-datatable-hover"
+        style={{ backgroundColor: '#fff', color: '#000' }}
+      >
+        <Column field="product_name" header="Produto" />
+        <Column field="test" header="Teste (mL)" />
+        <Column field="quantity" header="Qtd/ha (L)" />
+        <Column field="tank" header="Tanque (L)" />
+        <Column
+          header="Aplicados Totais (L)"
+          body={(rowData) => rowData.total_quantity / 1000}
+        />
+      </DataTable>
+      {/* <Table striped hover>
           <thead
             style={{
               backgroundColor: '#243C74',
@@ -115,7 +135,7 @@ export function DefensiveEventModal({
               },
             )}
           </tbody>
-        </Table>
+        </Table> */}
     </Dialog>
     // <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
     //   <Modal.Header
