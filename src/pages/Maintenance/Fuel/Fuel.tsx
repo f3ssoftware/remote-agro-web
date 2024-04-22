@@ -22,6 +22,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGasPump } from '@fortawesome/free-solid-svg-icons'
 import { InputTankModal } from './Modals/InputTankModal'
 import { OutputTankModal } from './Modals/OutputTankModal'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 const PAGE_SIZE = 3
 export function Fuel() {
@@ -80,16 +82,24 @@ export function Fuel() {
                     <Col md={8}>
                       <FontAwesomeIcon
                         icon={faGasPump}
-                        style={{ color: '#71f207', marginLeft: '2%', cursor: 'pointer'}}
-                        onClick={()=>{
+                        style={{
+                          color: '#71f207',
+                          marginLeft: '2%',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
                           setShowInputTankModal(true)
                           setTankId(tank.id!)
                         }}
                       />
                       <FontAwesomeIcon
                         icon={faGasPump}
-                        style={{ color: '#ed0707', marginLeft: '6%', cursor:'pointer' }}
-                        onClick={()=>{
+                        style={{
+                          color: '#ed0707',
+                          marginLeft: '6%',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
                           setShowOutputTankModal(true)
                           setTankId(tank.id!)
                         }}
@@ -156,7 +166,39 @@ export function Fuel() {
                   })}
                 </Dropdown.Menu>
               </Dropdown>
-              <Table striped hover>
+              <DataTable
+                value={maintenance.fuellings}
+                className="p-datatable-striped p-datatable-hover"
+                style={{ backgroundColor: '#fff', color: '#000' }}
+                showGridlines
+              >
+                <Column
+                  field="updatedAt"
+                  header="Data"
+                  body={(rowData) => (
+                    <div>
+                      {new Date(rowData.updatedAt).toLocaleDateString('pt-BR')}{' '}
+                      {new Date(rowData.updatedAt).toLocaleTimeString('pt-BR')}
+                    </div>
+                  )}
+                ></Column>
+                <Column field="good.name" header="Bem"></Column>
+                <Column
+                  field="quantity"
+                  header="Quantidade"
+                  body={(rowData) => (
+                    <span
+                      style={{
+                        color: rowData.type === 'Saida' ? '#ff0000' : '#008000',
+                      }}
+                    >
+                      {rowData.quantity}
+                    </span>
+                  )}
+                ></Column>
+                <Column field="tank.name" header="Tanque"></Column>
+              </DataTable>
+              {/* <Table striped hover>
                 <thead
                   style={{
                     backgroundColor: '#243C74',
@@ -186,7 +228,7 @@ export function Fuel() {
                     )
                   })}
                 </tbody>
-              </Table>
+              </Table> */}
             </Card.Body>
           </Card>
         </Col>
@@ -195,8 +237,16 @@ export function Fuel() {
         show={showNewTankModal}
         handleClose={() => setShowNewTankModal(false)}
       ></NewTankModal>
-      <InputTankModal show={showInputTankModal} handleClose={() => setShowInputTankModal(false)} id={tankId}></InputTankModal>
-      <OutputTankModal show={showOutputTankModal} handleClose={() => setShowOutputTankModal(false)} id={tankId}></OutputTankModal>
+      <InputTankModal
+        show={showInputTankModal}
+        handleClose={() => setShowInputTankModal(false)}
+        id={tankId}
+      ></InputTankModal>
+      <OutputTankModal
+        show={showOutputTankModal}
+        handleClose={() => setShowOutputTankModal(false)}
+        id={tankId}
+      ></OutputTankModal>
     </div>
   )
 }

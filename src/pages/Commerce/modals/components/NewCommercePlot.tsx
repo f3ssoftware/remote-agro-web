@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Row, Col, Form } from 'react-bootstrap'
+import { Row, Col, Form, Button } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { Silo } from '../../../../models/Silo'
 import {
@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
-import { Button } from 'primereact/button'
+// import { Button } from 'primereact/button'
 
 export function NewCommercePlot({ handleClose }: { handleClose: any }) {
   const [siloName, setSiloName] = useState('')
@@ -118,7 +118,9 @@ export function NewCommercePlot({ handleClose }: { handleClose: any }) {
                   marginTop: '2%',
                 }}
               >
-                <Button label="Enviar" severity="success" type='submit' />
+                <Button variant="success" type="submit">
+                Enviar
+              </Button>
               </div>
             </Row>
           </form>

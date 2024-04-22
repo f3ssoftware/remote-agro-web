@@ -41,7 +41,7 @@ export function Login() {
                         <Form.Control type="text" onChange={e => setUsername(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} /> */}
                     </Form.Group>
 
-                    <Form.Group className="mb-2 password-box" controlId="formBasicPassword">
+                    <Form.Group className="mb-2 password-box" controlId="formBasicPassword" style={{ marginTop: '7%' }}>
                         <span className="p-float-label">
                             <Password feedback={false} style={{ width: '100%' }} inputStyle={{ width: '100%' }} value={password} onChange={(e) => setPassword(e.target.value)} toggleMask disabled={loading.requests.filter(r => r === 'sessions').length > 0} />
                             {/* <InputText value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading.requests.filter(r => r === 'sessions').length > 0} /> */}

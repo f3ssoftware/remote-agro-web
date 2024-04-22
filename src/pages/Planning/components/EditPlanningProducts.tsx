@@ -7,8 +7,16 @@ import { RootState } from '../../..'
 import { PlanningInput } from '../../../models/PlanningInput'
 import { NewPlanningItem } from './NewPlanningItem'
 import { Planning } from '../../../models/Planning'
-import { asyncEditPlannings, asyncNewPlannings } from '../../../stores/planning.store'
+import {
+  asyncEditPlannings,
+  asyncNewPlannings,
+} from '../../../stores/planning.store'
 import { EditPlanningItem } from './EditPlanningItem'
+import { Dialog } from 'primereact/dialog'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../utils/modal-style.util'
 
 export function EditPlanningProducts({
   show,
@@ -28,12 +36,11 @@ export function EditPlanningProducts({
   const register = () => {
     const p: Planning = {
       name: referenceName,
-      season_year:selectedSeason,
+      season_year: selectedSeason,
       type: 'Insumos',
-      plannings: plannings
-
+      plannings: plannings,
     }
-    dispatch(asyncEditPlannings(id,p))
+    dispatch(asyncEditPlannings(id, p))
     handleClose()
   }
 
@@ -57,94 +64,104 @@ export function EditPlanningProducts({
   }, [planning])
 
   return (
-    <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: '#7C5529', border: 'none' }}
-      >
-        <Modal.Title>
-          {' '}
-          <span style={{ color: '#fff' }}>
-            Planejamento - {planning.editPlannings.name}
-          </span>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ backgroundColor: '#7C5529' }}>
-        <div>
-          <Row style={{ marginTop: '2%' }}>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={referenceName}
-                  onChange={(e) => {
-                    setReferenceName(e.target.value)
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label>Ano agrícola</Form.Label>
-                <Form.Select
-                  value={selectedSeason}
-                  aria-label=""
-                  onChange={(e) => {
-                    return setSelectedSeason(e.target.value)
-                  }}
-                >
-                  {' '}
-                  <option value={0} key={0}>
-                        "Selecione um ano agrícola"
-                      </option>
-                  {seasons.seasons.map((season, index) => {
-                    return (
-                      <option value={season.year} key={index}>
-                        {season.type} - {season.year}
-                      </option>
-                    )
-                  })}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-          {plannings?.map((newPlanning, index) => {
-            return (
-              <EditPlanningItem
-                onHandleRemove={onRemoveItem}
-                index={index}
-                key={index}
-                onHandleUpdate={onUpdateItem}
-              ></EditPlanningItem>
-            )
-          })}
+    <Dialog
+      header={<span>Planejamento - {planning.editPlannings.name}</span>}
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
+    >
+      <div>
+        <Row style={{ marginTop: '2%' }}>
+          <Col>
+            <Form.Group className="mb-3" controlId="">
+              <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
+              <Form.Control
+                type="text"
+                value={referenceName}
+                onChange={(e) => {
+                  setReferenceName(e.target.value)
+                }}
+              />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group className="mb-3" controlId="">
+              <Form.Label>Ano agrícola</Form.Label>
+              <Form.Select
+                value={selectedSeason}
+                aria-label=""
+                onChange={(e) => {
+                  return setSelectedSeason(e.target.value)
+                }}
+              >
+                {' '}
+                <option value={0} key={0}>
+                  "Selecione um ano agrícola"
+                </option>
+                {seasons.seasons.map((season, index) => {
+                  return (
+                    <option value={season.year} key={index}>
+                      {season.type} - {season.year}
+                    </option>
+                  )
+                })}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+        {plannings?.map((newPlanning, index) => {
+          return (
+            <EditPlanningItem
+              onHandleRemove={onRemoveItem}
+              index={index}
+              key={index}
+              onHandleUpdate={onUpdateItem}
+            ></EditPlanningItem>
+          )
+        })}
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: '2%',
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: '2%',
+          }}
+        >
+          <Button
+            variant="primary"
+            onClick={() => setPlannings([...plannings, new PlanningInput()])}
+          >
+            Adicionar Linha
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              register()
             }}
           >
-            <Button
-              variant="primary"
-              onClick={() => setPlannings([...plannings, new PlanningInput()])}
-            >
-              Adicionar Linha
-            </Button>
-            <Button
-              variant="success"
-              onClick={() => {
-                register()
-              }}
-            >
-              Registrar
-            </Button>
-          </div>
+            Registrar
+          </Button>
         </div>
-      </Modal.Body>
-    </Modal>
+      </div>
+    </Dialog>
+    // <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
+    //   <Modal.Header
+    //     closeButton
+    //     style={{ backgroundColor: '#7C5529', border: 'none' }}
+    //   >
+    //     <Modal.Title>
+    //       {' '}
+    //       <span style={{ color: '#fff' }}>
+    //         Planejamento - {planning.editPlannings.name}
+    //       </span>
+    //     </Modal.Title>
+    //   </Modal.Header>
+    //   <Modal.Body style={{ backgroundColor: '#7C5529' }}>
+    //   </Modal.Body>
+    // </Modal>
   )
 }

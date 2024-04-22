@@ -5,6 +5,8 @@ import { RootState } from '../..'
 import { selectSeason } from '../../stores/seasons.store'
 import { SeasonsSelectionModal } from './Modals/SeasonsSelectionModal'
 import { asyncFetchInputWeighingData, asyncFetchOutputWeighingData, asyncFetchWeighingData } from '../../stores/commerce.store'
+import { Dialog } from 'primereact/dialog'
+import { dialogContentSyle, dialogHeaderStyle } from '../../utils/modal-style.util'
 
 export function SeasonSelection({ show, handleClose }: any) {
   const { seasons } = useSelector((state: RootState) => state)
@@ -28,14 +30,16 @@ export function SeasonSelection({ show, handleClose }: any) {
   }, [seasons])
   return (
     <Container>
-      <Modal backdrop={'static'} show={show} onHide={handleClose}>
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: '#7C5529', border: 'none' }}
-        >
-          <Modal.Title>Temporada</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: '#7C5529', border: 'none' }}>
+      <Dialog
+      header="Temporada"
+      visible={show}
+      style={{ width: '50vw' }}
+      className="custom-dialog"
+      onHide={handleClose}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
+    >
+      
           <Row>
             <Col>
               <Form.Group className="mb-3" controlId="">
@@ -64,8 +68,6 @@ export function SeasonSelection({ show, handleClose }: any) {
               </Form.Group>
             </Col>
           </Row>
-        </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: '#7C5529', border: 'none' }}>
           <Row>
             <Col>
               <Button
@@ -88,8 +90,7 @@ export function SeasonSelection({ show, handleClose }: any) {
               </Button>
             </Col>
           </Row>
-        </Modal.Footer>
-      </Modal>
+    </Dialog>
       <SeasonsSelectionModal show={showSeasonsSelectionModal} handleClose={() => setShowSeasonsSelectionModal(false)}></SeasonsSelectionModal>
     </Container>
   )

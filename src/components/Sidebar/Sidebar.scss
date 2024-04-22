@@ -1,5 +1,5 @@
-$sidebar-beige: #7c542b;
-$sidebar-selected-item: #44433f;
+$sidebar-beige: #1D321C;
+$sidebar-selected-item: #fff;
 
 @media screen and (min-width: 800px) {
   .ra-sidebar {
@@ -28,7 +28,7 @@ $sidebar-selected-item: #44433f;
   
     .sidebar-row:hover {
       height: 50px;
-      background-color: $sidebar-selected-item;
+      background-color:  #cecece;
     }
   
     .sidebar-nav-item {
@@ -38,8 +38,8 @@ $sidebar-selected-item: #44433f;
   
     .sidebar-nav-item:hover {
       height: 50px;
-      color: #fff;
-      background-color: $sidebar-selected-item;
+      color: #0b0b0b;
+      background-color:  #cecece;
       border-top-left-radius: 100px;
       border-bottom-left-radius: 100px;
       border-top-right-radius: -100px;
@@ -47,7 +47,7 @@ $sidebar-selected-item: #44433f;
   
     .active {
       height: 50px;
-      color: #fff;
+      color: #0b0b0b;
       background-color: $sidebar-selected-item;
       border-top-left-radius: 100px;
       border-bottom-left-radius: 100px;
@@ -90,7 +90,7 @@ $sidebar-selected-item: #44433f;
 
   .sidebar-nav-item:hover {
     height: 50px;
-    color: #fff;
+    color: #0b0b0b;
     background-color: $sidebar-selected-item;
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;
@@ -99,7 +99,7 @@ $sidebar-selected-item: #44433f;
 
   .active {
     height: 50px;
-    color: #fff;
+    color: #0b0b0b;
     background-color: $sidebar-selected-item;
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;

@@ -7622,9 +7622,9 @@
   "version" "6.0.1"
 
 "primereact@^10.0.3":
-  "integrity" "sha512-5hjCY0gVJkAhmxRkME8GCZPl0TpUMsjtrwYwxkRJlchu5oH8XaRQKbKmnehmNmiP59cmphaXVkL8vei19O9+PQ=="
-  "resolved" "https://registry.npmjs.org/primereact/-/primereact-10.0.9.tgz"
-  "version" "10.0.9"
+  "integrity" "sha512-1jCg81ebdmTGS5+1mbqNOLxTBD1Bcg9YqInrlghz9l2/akRIoSB9krnXEi14h8h/X4CH4EdAEHs0FF3Lj+IO8w=="
+  "resolved" "https://registry.npmjs.org/primereact/-/primereact-10.6.3.tgz"
+  "version" "10.6.3"
   dependencies:
     "@types/react-transition-group" "^4.4.1"
     "react-transition-group" "^4.4.1"

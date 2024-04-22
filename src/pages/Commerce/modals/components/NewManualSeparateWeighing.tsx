@@ -81,6 +81,7 @@ export function NewManualSeparateWeighing({
     setHumidityDiscount(
       calculateHumidityDiscount(humidity, selectedCultivation?.id),
     )
+    console.log(humidityDiscount)
   }, [humidity])
 
   useEffect(() => {
@@ -169,7 +170,7 @@ export function NewManualSeparateWeighing({
         reference: reference,
         gross_weight: grossWeighing,
         net_weight: netWeighing,
-        humidity: humidity * 100,
+        humidity: Math.round(humidity * 100),
         impurity: impurity * 100,
         discount: discount * 100,
         final_weight: totalWeighning * 1000,
@@ -200,7 +201,11 @@ export function NewManualSeparateWeighing({
   }
 
   return (
-    <div>
+    <div style={{
+      backgroundColor: index % 2 > 0 ? '#cecece' : '#a5a5a5',
+      paddingTop: '1%',
+      paddingBottom: '1%',
+    }}>
       <Toast ref={toast} />
       <Formik
         enableReinitialize={true}

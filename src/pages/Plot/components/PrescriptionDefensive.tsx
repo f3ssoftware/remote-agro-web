@@ -51,7 +51,9 @@ export function PrescriptionDefensive({
   const [area, setArea] = useState(0)
   const [showNewPrescriptionModal, setShowNewPrescriptionModal] =
     useState(false)
-
+  const [validationSchema, setValidationSchema] = useState(
+    createValidationSchema('Terrestre'),
+  )
   const { plot, user } = useSelector((state: RootState) => state)
   const dispatch = useDispatch<any>()
   const toast = useRef<Toast>(null)
@@ -126,6 +128,29 @@ export function PrescriptionDefensive({
     setTankSyrup(fullSyrup / tankNumbers)
   }, [fullSyrup, tankNumbers])
 
+  function createValidationSchema(applicationType: string) {
+    return Yup.object().shape({
+      accountable: Yup.string().required('Necessário preencher'),
+      dateTime: Yup.string().required('Necessário preencher'),
+      block:
+        applicationType === 'Terrestre' || applicationType === 'Fertirrigação'
+          ? Yup.string().required('Necessário preencher')
+          : Yup.string(),
+      applicationType: Yup.string().required('Necessário preencher'),
+      flowRate: Yup.string().required('Necessário preencher'),
+      preassure:
+        applicationType === 'Terrestre' || applicationType === 'Fertirrigação'
+          ? Yup.string().required('Necessário preencher')
+          : Yup.string(),
+      tankNumbers: Yup.string().required('Necessário preencher'),
+      plot: Yup.object().required('Necessário preencher'),
+      applier: Yup.object().required('Necessário preencher'),
+    })
+  }
+  useEffect(() => {
+    setValidationSchema(createValidationSchema(applicationType))
+  }, [applicationType])
+
   return (
     <div>
       <Toast ref={toast} />
@@ -134,34 +159,14 @@ export function PrescriptionDefensive({
           accountable: '',
           dateTime: null,
           block: '',
-          applicationType: 'Terrestre',
+          applicationType: '',
           flowRate: null,
-          preassure: null,
-          fullSyrup: null,
+          preassure: 0,
           tankNumbers: null,
-          tankSyrup: null,
-          selectedPlot: {},
-          selectedApplier: {},
-          area: null,
           plot: null,
           applier: null,
         }}
-        validationSchema={Yup.object({
-          accountable: Yup.string().required('Necessário preencher'),
-          dateTime: Yup.string().required('Necessário preencher'),
-          block: Yup.string().required('Necessário preencher'),
-          applicationType: Yup.string().required('Necessário preencher'),
-          flowRate: Yup.string().required('Necessário preencher'),
-          preassure: Yup.string().required('Necessário preencher'),
-          fullSyrup: Yup.string().required('Necessário preencher'),
-          tankNumbers: Yup.string().required('Necessário preencher'),
-          tankSyrup: Yup.string().required('Necessário preencher'),
-          selectedPlot: Yup.string().required('Necessário preencher'),
-          selectedApplier: Yup.string().required('Necessário preencher'),
-          area: Yup.string().required('Necessário preencher'),
-          plot: Yup.object().required('Necessário preencher'),
-          applier: Yup.object().required('Necessário preencher'),
-        })}
+        validationSchema={validationSchema}
         onSubmit={() => {
           setShowNewPrescriptionModal(true)
         }}
@@ -533,7 +538,6 @@ export function PrescriptionDefensive({
                 style={{ backgroundColor: '#A5CD33', color: '#000' }}
                 variant="success"
                 type="submit"
-                onClick={() => setShowNewPrescriptionModal(true)}
               >
                 Avançar
               </Button>

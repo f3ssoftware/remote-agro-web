@@ -5,6 +5,7 @@ import { PrescriptionFertilizers } from '../components/PrescriptionFertilizers'
 import { PrescriptionSeeding } from '../components/PrescriptionSeeding'
 import { Dialog } from 'primereact/dialog'
 import { Dropdown } from 'primereact/dropdown'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
 interface Type {
   name: string
   value: string
@@ -36,8 +37,8 @@ export function PrescriptionModal({
       <Dialog
         header="Receituário"
         visible={show}
-        headerStyle={{backgroundColor: '#7C5529'}} 
-        contentStyle={{backgroundColor: '#7C5529'}} 
+        headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle} 
         style={{ width: '50vw' }}
         className="custom-dialog"
         onHide={handleClose}

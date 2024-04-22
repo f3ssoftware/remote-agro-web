@@ -4,6 +4,7 @@ import { NewPlanning } from '../components/NewPlanning'
 import { NewPlanningCost } from '../components/NewPlanningCost'
 import { Dropdown } from 'primereact/dropdown'
 import { Dialog } from 'primereact/dialog'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
 
 interface Type {
   name: string
@@ -30,8 +31,8 @@ export function NewPlanningModal({
       style={{ width: '80vw' }}
       className="custom-dialog"
       onHide={handleClose}
-      headerStyle={{ backgroundColor: '#7C5529' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+      headerStyle={dialogHeaderStyle}
+      contentStyle={dialogContentSyle}
     >
       <Row style={{ marginTop: '2%' }}>
         <Col>

@@ -1,6 +1,7 @@
 import { Button, Modal } from 'react-bootstrap'
 import { NewCommercePlot } from '../components/NewCommercePlot'
 import { Dialog } from 'primereact/dialog'
+import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
 
 export function NewCommercePlotModal({
   show,
@@ -11,8 +12,8 @@ export function NewCommercePlotModal({
 }) {
   return (
     <Dialog
-      headerStyle={{ backgroundColor: '#7C5529', color: '#FFF' }}
-      contentStyle={{ backgroundColor: '#7C5529' }}
+    headerStyle={dialogHeaderStyle}
+    contentStyle={dialogContentSyle}
       header="Novo silo"
       visible={show}
       style={{ width: '50vw' }}

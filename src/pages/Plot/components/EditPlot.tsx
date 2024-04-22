@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import { Col, Form, Row, Button } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../..'
@@ -10,24 +10,71 @@ import { asyncFetchCultivations } from '../../../stores/financial.store'
 import { CultivarItem } from './CultivarItem'
 import DatePicker from 'react-datepicker'
 import pt from 'date-fns/locale/pt-BR'
-import { asyncEditPlot, asyncFetchEditPlots } from '../../../stores/farm.store'
+import { asyncEditPlot, asyncFetchEditPlots, asyncRegisterField } from '../../../stores/farm.store'
 import { RegisterPlotDTO } from '../../../models/dtos/RegisterPlotDTO'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { Toast } from 'primereact/toast'
+import { InputText } from 'primereact/inputtext'
+import { classNames } from 'primereact/utils'
+import { InputNumber } from 'primereact/inputnumber'
+import { Dropdown } from 'primereact/dropdown'
+import { Calendar } from 'primereact/calendar'
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete'
+
+interface Type {
+  name: string
+  value: boolean
+}
 
 const initialCultivars: Cultivar[] = []
 const initialSendCultivars: SendCultivarsDTO[] = []
-export function EditPlot({ id }: { id: number }) {
+export function EditPlot({id, handleClose}:{id: number, handleClose: any}) {
   const { financial, farm, seasons } = useSelector((state: RootState) => state)
   const [propName, setPropName] = useState('')
   const [totalArea, setTotalArea] = useState(0)
   const [productivity, setProductivity] = useState(0)
-  const [value, setValue] = useState(0)
-  const [selectedCultivation, setSelectedCultivation]: any = useState({})
+  const [value, setValue] = useState<number>()
+  const [cultivation, setCultivation]: any = useState(null)
+  const [cultivars, setCultivars]: any[] = useState(initialCultivars)
   const [sendCultivars, setSendCultivars] = useState(initialSendCultivars)
+  const [selectedCultivation, setSelectedCultivation]: any = useState({})
   const [weigh, setWeigh] = useState(0)
   const [plantingType, setPlantingType] = useState('')
   const [plantingDate, setPlantingDate] = useState(new Date())
   const dispatch = useDispatch<any>()
   const [active, setActive] = useState(false)
+  const toast = useRef<Toast>(null)
+  const type: Type[] = [
+    { name: 'Ativo', value: true },
+    { name: 'Inativo', value: false },
+  ]
+  const [cultivationList, setCultivationList] = useState<any[]>([])
+
+  const autoComplete = (event: AutoCompleteCompleteEvent) => {
+    const query = event.query.toLowerCase()
+    const resultSet = cultivationList.filter((p: any) =>
+      p?.label?.toLowerCase().includes(query),
+    )
+    if (resultSet.length > 0) {
+      setCultivationList(resultSet)
+    } else {
+      setCultivationList(fetchProducts())
+    }
+  }
+
+  const fetchProducts = () => {
+    return financial.cultivations.map((cultivation: Cultivation) => {
+      return {
+        id: cultivation.id,
+        label: cultivation.name,
+        ...cultivation,
+      }
+    })
+  }
 
   const onRemove = (id: number) => {
     const newSendCultivar = [...sendCultivars]
@@ -83,206 +130,364 @@ export function EditPlot({ id }: { id: number }) {
     dispatch(asyncFetchCultivations())
     dispatch(asyncFetchEditPlots(id!))
   }, [])
+
+  const register = () => {
+    const editRequestBody: RegisterPlotDTO = {
+      farm_id: farm.selectedFarm.id,
+      planting_type: plantingType,
+      planting_date: plantingDate.toISOString(),
+      total_area: totalArea,
+      cultivares: sendCultivars,
+      productivity: productivity,
+      season_id: seasons.selectedSeason.id,
+      is_active: active,
+      name: propName,
+      expected_unit_price: value!*100,
+      cultivation_id: cultivation.id,
+      expenses_weight: weigh
+    }
+    dispatch(asyncEditPlot(id, editRequestBody))
+  }
+
+  useEffect(() => {
+    dispatch(asyncFetchCultivations())
+  }, [])
   return (
     <div>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Nome para o talhão
-            </Form.Label>
-            <Form.Control
-              type="text"
-              value={propName}
-              onChange={(e) => {
-                setPropName(e.target.value)
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Área total (ha)</Form.Label>
-            <Form.Control
-              type="number"
-              value={totalArea}
-              onChange={(e) => {
-                setTotalArea(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Produtividade esperada (saca/ha)
-            </Form.Label>
-            <Form.Control
-              type="number"
-              value={productivity}
-              onChange={(e) => {
-                setProductivity(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>
-              Preço de venda esperada da saca (R$/saca)
-            </Form.Label>
-            <Form.Control
-              type="text"
-              value={value}
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setValue(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Cultivo</Form.Label>
-            <Typeahead
-              id="cultivation"
-              selected={financial?.cultivations.filter((cultivation: any) => cultivation?.id === selectedCultivation?.id)}
-              labelKey={(selected: any) => {
-                return `${selected?.name}`
-              }}
-              onChange={(selected: any) => {
-                setSelectedCultivation(selected[0])
-              }}
-              options={financial.cultivations.map(
-                (cultivation: Cultivation) => {
-                  return {
-                    id: cultivation.id,
-                    label: cultivation.name,
-                    ...cultivation,
-                  }
-                },
-              )}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Cultivares</Form.Label>
-            {selectedCultivation?.cultivares?.map(
-              (cultivar: Cultivar, index: number) => {
-                return (
-                  <CultivarItem
-                    cultivar={cultivar}
-                    index={index}
-                    maxArea={totalArea}
-                    key={cultivar.id}
-                    onHandleUpdate={onUpdate}
-                    onHandleRemove={onRemove}
-                  ></CultivarItem>
-                )
-              },
-            )}
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Peso do Talhão</Form.Label>
-            <Form.Control
-              type="number"
-              value={weigh}
-              onChange={(e) => {
-                setWeigh(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Tipo de plantio</Form.Label>
-            <Form.Control
-              type="text"
-              value={plantingType}
-              onChange={(e) => {
-                setPlantingType(e.target.value)
-              }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Data de Plantio</Form.Label>
-            <DatePicker
-              locale={pt}
-              dateFormat="dd/MM/yyyy"
-              selected={plantingDate}
-              onChange={(date: Date) => setPlantingDate(date)}
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Talhão ativo?</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setActive(Boolean(e.target.value))
-              }}
-            >
-              <option data-value={true}>Ativo</option>
-              <option data-value={false}>Inativo</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
-      <div className="flex-right">
-        <Button
-          variant="success"
-          onClick={() => {
-            const editRequestBody: RegisterPlotDTO = {
-              farm_id: farm.selectedFarm.id,
-              planting_type: plantingType,
-              planting_date: plantingDate.toISOString(),
-              total_area: totalArea,
-              cultivares: sendCultivars,
-              productivity: productivity,
-              season_id: seasons.selectedSeason.id,
-              is_active: active,
-              name: propName,
-              expected_unit_price: value,
-              cultivation_id: selectedCultivation.id,
-              expenses_weight: weigh,
-              cultivation_name: selectedCultivation.name,
-            }
-            dispatch(asyncEditPlot(id, editRequestBody))
-          }}
-        >
-          Registrar
-        </Button>
-      </div>
+      <Toast ref={toast} />
+      <Formik
+      enableReinitialize={true}
+        initialValues={{
+          propName: propName,
+          totalArea: totalArea,
+          productivity: productivity,
+          value: value,
+          weigh: weigh,
+          plantingDate: plantingDate,
+          plantingType: plantingType,
+          active: active,
+          cultivation: selectedCultivation ? selectedCultivation?.name : ''
+        }}
+        validationSchema={Yup.object({
+          propName: Yup.string().required('Necessário preencher'),
+          totalArea: Yup.string().required('Necessário preencher'),
+          productivity: Yup.string().required('Necessário preencher'),
+          value: Yup.string().required('Necessário preencher'),
+          weigh: Yup.string().required('Necessário preencher'),
+          plantingDate: Yup.date().required('Necessário preencher'),
+          plantingType: Yup.string().required('Necessário preencher'),
+          active: Yup.string().required('Necessário preencher'),
+          cultivation: Yup.string().required('Necessário preencher'),
+        })}
+        onSubmit={() => {
+          register()
+          handleClose()
+        }}
+      >
+        {(formik) => (
+          <form onSubmit={formik.handleSubmit}>
+            <Row style={{ marginTop: '4%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputText
+                    id="propName"
+                    name="propName"
+                    value={formik.values.propName}
+                    onChange={(e) => {
+                      formik.setFieldValue('propName', e.target.value)
+                      setPropName(e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.propName && formik.errors.propName,
+                    })}
+                  />
+                  {formik.touched.propName && formik.errors.propName ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.propName}
+                    </div>
+                  ) : null}
+                  <label htmlFor="propName">Nome da propriedade</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="totalArea"
+                    value={formik.values.totalArea}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('totalArea', e.target.value)
+                      setTotalArea(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.totalArea && formik.errors.totalArea,
+                    })}
+                  />
+                  {formik.touched.totalArea && formik.errors.totalArea ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.totalArea}
+                    </div>
+                  ) : null}
+                  <label htmlFor="weigh">Area total (ha)</label>
+                </span>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '4%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="productivity"
+                    value={formik.values.productivity}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('productivity', e.target.value)
+                      setProductivity(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.productivity &&
+                        formik.errors.productivity,
+                    })}
+                  />
+                  {formik.touched.productivity && formik.errors.productivity ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.productivity}
+                    </div>
+                  ) : null}
+                  <label htmlFor="productivity">Produtividade (saca/ha)</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    inputId="currency-br"
+                    value={formik.values.value}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('value', e.target.value)
+                      setValue(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.value && formik.errors.value,
+                    })}
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                  />
+                  {formik.touched.value && formik.errors.value ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.value}
+                    </div>
+                  ) : null}
+                  <label htmlFor="totalValue">Preço esperado (R$/saca)</label>
+                </span>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '2%' }}>
+              <Col>
+                <span className="p-float-label">
+                  <AutoComplete
+                    field="label"
+                    value={formik.values.cultivation}
+                    suggestions={cultivationList}
+                    completeMethod={autoComplete}
+                    onChange={(e: any) => {
+                      formik.setFieldValue('cultivation', e.target.value)
+                      setCultivation(e.value)
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.cultivation && formik.errors.cultivation,
+                    })}
+                    dropdown
+                    style={{ width: '100%' }}
+                    forceSelection
+                  />
+                  {formik.touched.cultivation && formik.errors.cultivation ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.cultivation as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="endDate">Cultivo</label>
+                </span>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3" controlId="">
+                  <Form.Label style={{ color: '#fff' }}>Cultivares</Form.Label>
+                  {cultivation?.cultivares?.map(
+                    (cultivar: Cultivar, index: number) => {
+                      return (
+                        <CultivarItem
+                          cultivar={cultivar}
+                          index={index}
+                          maxArea={totalArea}
+                          key={cultivar.id}
+                          onHandleUpdate={onUpdate}
+                          onHandleRemove={onRemove}
+                        ></CultivarItem>
+                      )
+                    },
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="weigh"
+                    value={formik.values.weigh}
+                    onValueChange={(e) => {
+                      formik.setFieldValue('weigh', e.target.value)
+                      setWeigh(Number(e.value))
+                    }}
+                    className={classNames({
+                      'p-invalid': formik.touched.weigh && formik.errors.weigh,
+                    })}
+                  />
+                  {formik.touched.weigh && formik.errors.weigh ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.weigh}
+                    </div>
+                  ) : null}
+                  <label htmlFor="weigh">Peso do talhão</label>
+                </span>
+              </Col>
+              <Col>
+                <span className="p-float-label">
+                  <Calendar
+                    onChange={(e: any) => {
+                      formik.setFieldValue('plantingDate', e.target.value)
+                      setPlantingDate(e.value!)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.plantingDate &&
+                        formik.errors.plantingDate,
+                    })}
+                    locale="en"
+                    value={plantingDate}
+                    dateFormat="dd/mm/yy"
+                  />
+                  {formik.touched.plantingDate && formik.errors.plantingDate ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.plantingDate as ReactNode}
+                    </div>
+                  ) : null}
+                  <label htmlFor="date">Data de plantio</label>
+                </span>
+              </Col>
+            </Row>
+            <Row>
+            <Col>
+                <span className="p-float-label">
+                  <InputText
+                    id="plantingType"
+                    name="plantingType"
+                    value={formik.values.plantingType}
+                    onChange={(e) => {
+                      formik.setFieldValue('plantingType', e.target.value)
+                      setPlantingType(e.target.value)
+                    }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.plantingType && formik.errors.plantingType,
+                    })}
+                  />
+                  {formik.touched.plantingType && formik.errors.plantingType ? (
+                    <div
+                      style={{
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
+                      }}
+                    >
+                      {formik.errors.plantingType}
+                    </div>
+                  ) : null}
+                  <label htmlFor="propName">Tipo de plantio</label>
+                </span>
+              </Col>
+              <Col>
+                <Dropdown
+                  value={formik.values.active}
+                  onChange={(e) => {
+                    formik.setFieldValue('active', e.target.value)
+                    setActive(e.target.value)
+                  }}
+                  options={type}
+                  optionLabel="name"
+                  optionValue="value"
+                  placeholder="Talhão ativo?"
+                  style={{ width: '100%' }}
+                />
+                {formik.touched.active && formik.errors.active ? (
+                  <div
+                    style={{
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
+                    }}
+                  >
+                    {formik.errors.active}
+                  </div>
+                ) : null}
+              </Col>
+            </Row>
+            <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  marginTop: '2%',
+                }}
+              >
+                <Button variant="success" type="submit">
+                  Cadastrar
+                </Button>
+              </div>
+          </form>
+        )}
+      </Formik>
     </div>
   )
 }

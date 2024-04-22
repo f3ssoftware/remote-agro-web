@@ -1,80 +1,100 @@
-import { useEffect, useRef, useState } from "react";
-import { Row, Col, Button, Form } from "react-bootstrap";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import pt from "date-fns/locale/pt-BR";
-import { asyncFetchCultivations, asyncRegisterContract } from '../../../../stores/financial.store'
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import { Row, Col, Button, Form } from 'react-bootstrap'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import pt from 'date-fns/locale/pt-BR'
+import {
+  asyncFetchCultivations,
+  asyncRegisterContract,
+} from '../../../../stores/financial.store'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../../index'
-import { Contract } from "../../../../models/Contract";
-import { Cultivation } from "../../../../models/Cultivation"
-import { Typeahead } from "react-bootstrap-typeahead";
-import { asyncEditContract, asyncFetchEditContracts } from "../../../../stores/commerce.store";
-import { Toast } from "primereact/toast";
+import { Contract } from '../../../../models/Contract'
+import { Cultivation } from '../../../../models/Cultivation'
+import { Typeahead } from 'react-bootstrap-typeahead'
+import {
+  asyncEditContract,
+  asyncFetchEditContracts,
+} from '../../../../stores/commerce.store'
+import { Toast } from 'primereact/toast'
 import * as Yup from 'yup'
-import { Formik } from "formik";
-import { InputText } from "primereact/inputtext";
-import { InputNumber } from "primereact/inputnumber";
-import { classNames } from "primereact/utils";
-import { Calendar } from "primereact/calendar";
+import { Formik } from 'formik'
+import { InputText } from 'primereact/inputtext'
+import { InputNumber } from 'primereact/inputnumber'
+import { classNames } from 'primereact/utils'
+import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
 
-export function EditContract({show, handleClose, id}: {show: boolean, handleClose: any, id: number}){
-    const [contractName,setContractName] = useState('');
-    const [contractId,setContractId] = useState(0);
-    const [description,setDescription] = useState('');
-    const [bags,setBags] = useState(0);
-    const [contractPrice,setContractPrice] = useState(0);
-    const [startDate, setStartDate] = useState<Date | null>(null)
-    const [endDate, setEndDate] = useState<Date | null>(null)
-    const [payDate, setPayDate] = useState<Date | null>(null)
-    const [selectedCultivations, setSelectedCultivations] = useState<any>()
-    const { financial,seasons, commerce } = useSelector((state: RootState) => state)
-    const dispatch = useDispatch<any>()
-    const toast = useRef<Toast>(null)
+export function EditContract({
+  show,
+  handleClose,
+  id,
+}: {
+  show: boolean
+  handleClose: any
+  id: number
+}) {
+  const [contractName, setContractName] = useState('')
+  const [contractId, setContractId] = useState(0)
+  const [description, setDescription] = useState('')
+  const [bags, setBags] = useState(0)
+  const [contractPrice, setContractPrice] = useState(0)
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
+  const [payDate, setPayDate] = useState<Date | null>(null)
+  const [selectedCultivations, setSelectedCultivations] = useState<any>()
+  const { financial, seasons, commerce } = useSelector(
+    (state: RootState) => state,
+  )
+  const dispatch = useDispatch<any>()
+  const toast = useRef<Toast>(null)
 
-    const edit = () => {
-        const contract: Contract = {
-            name: contractName,
-            code: contractId.toString(),
-            description: description,
-            sacks: bags.toString(),
-            amount: contractPrice*100,
-            cultivation_id: selectedCultivations,
-            payment_date: payDate?.toISOString(),
-            start_date: startDate?.toISOString(),
-            end_date: endDate?.toISOString(),
-            type: "CONTRACT",
-            season_id: seasons.selectedSeason.id
-            
-        }
-        dispatch(asyncEditContract(id, contract));
+  const edit = () => {
+    const contract: Contract = {
+      name: contractName,
+      code: contractId.toString(),
+      description: description,
+      sacks: bags.toString(),
+      amount: contractPrice * 100,
+      cultivation_id: selectedCultivations,
+      payment_date: payDate?.toISOString(),
+      start_date: startDate?.toISOString(),
+      end_date: endDate?.toISOString(),
+      type: 'CONTRACT',
+      season_id: seasons.selectedSeason.id,
     }
-    useEffect(() => {
-        setContractName(commerce.editContracts.name!);
-        console.log(selectedCultivations)
-        setContractId(Number(commerce.editContracts.code!))
-        setDescription(commerce.editContracts.description!)
-        setBags(Number(commerce.editContracts.sacks!))
-        setContractPrice(Number(commerce.editContracts.amount!))
-        setSelectedCultivations(commerce.editContracts.cultivation_id!)
-        if(commerce.editContracts.payment_date && commerce.editContracts.start_date && commerce.editContracts.end_date != null ){
-            setPayDate(new Date(commerce.editContracts.payment_date!))
-            setStartDate(new Date(commerce.editContracts.start_date!))
-            setEndDate(new Date(commerce.editContracts.end_date!))
-        }
-      }, [commerce])
+    dispatch(asyncEditContract(id, contract))
+  }
+  useEffect(() => {
+    setContractName(commerce.editContracts.name!)
+    console.log(selectedCultivations)
+    setContractId(Number(commerce.editContracts.code!))
+    setDescription(commerce.editContracts.description!)
+    setBags(Number(commerce.editContracts.sacks!))
+    setContractPrice(Number(commerce.editContracts.amount!))
+    setSelectedCultivations(commerce.editContracts.cultivation_id!)
+    if (
+      commerce.editContracts.payment_date &&
+      commerce.editContracts.start_date &&
+      commerce.editContracts.end_date != null
+    ) {
+      setPayDate(new Date(commerce.editContracts.payment_date!))
+      setStartDate(new Date(commerce.editContracts.start_date!))
+      setEndDate(new Date(commerce.editContracts.end_date!))
+    }
+  }, [commerce])
 
-    useEffect(() => {
-        dispatch(asyncFetchCultivations())
-        dispatch(asyncFetchEditContracts(id))
-        setSelectedCultivations(financial?.cultivations[0])
-      }, [])
+  useEffect(() => {
+    dispatch(asyncFetchCultivations())
+    dispatch(asyncFetchEditContracts(id))
+    setSelectedCultivations(financial?.cultivations[0])
+  }, [])
 
-      
-    return <div>
-        <Toast ref={toast} />
+  return (
+    <div>
+      <Toast ref={toast} />
       <Formik
+        enableReinitialize={true}
         initialValues={{
           contractName: contractName,
           contractId: contractId,
@@ -108,17 +128,17 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                   <InputText
                     value={contractName}
                     onChange={(e) => {
-                      // formik.setFieldValue('contractName', e.target.value)
+                      formik.setFieldValue('contractName', e.target.value)
                       setContractName(e.target.value)
                     }}
-                    // className={classNames({
-                    //   'p-invalid':
-                    //     formik.touched.contractName &&
-                    //     formik.errors.contractName,
-                    // })}
-                    // style={{ width: '100%' }}
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.contractName &&
+                        formik.errors.contractName,
+                    })}
+                    style={{ width: '100%' }}
                   />
-                  {/* {formik.touched.contractName && formik.errors.contractName ? (
+                  {formik.touched.contractName && formik.errors.contractName ? (
                     <div
                       style={{
                         color: 'red',
@@ -128,7 +148,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     >
                       {formik.errors.contractName}
                     </div>
-                  ) : null} */}
+                  ) : null}
                   <label htmlFor="product">Nome para o contrato</label>
                 </span>
                 {/* <Form.Group className="mb-3" controlId="">
@@ -148,16 +168,17 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                   <InputNumber
                     value={contractId}
                     onChange={(e) => {
-                      // formik.setFieldValue('contractId', e.value)
+                      formik.setFieldValue('contractId', e.value)
                       setContractId(e.value!)
                     }}
                     style={{ width: '100%' }}
-                    // className={classNames({
-                    //   'p-invalid':
-                    //     formik.touched.contractId && formik.errors.contractId,
-                    // })}
+                    locale="pt-BR"
+                    className={classNames({
+                      'p-invalid':
+                        formik.touched.contractId && formik.errors.contractId,
+                    })}
                   />
-                  {/* {formik.touched.contractId && formik.errors.contractId ? (
+                  {formik.touched.contractId && formik.errors.contractId ? (
                     <div
                       style={{
                         color: 'red',
@@ -167,7 +188,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     >
                       {formik.errors.contractId}
                     </div>
-                  ) : null} */}
+                  ) : null}
                   <label htmlFor="product">Código do contrato</label>
                 </span>
                 {/* <Form.Group className="mb-3" controlId="">
@@ -188,21 +209,21 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     <Dropdown
                       value={selectedCultivations}
                       onChange={(e) => {
-                        setSelectedCultivations(e.target.value);
-                        // formik.setFieldValue('cultivation', e.target.value)
+                        setSelectedCultivations(e.target.value)
+                        formik.setFieldValue('cultivation', e.target.value)
                       }}
                       optionLabel="name"
                       optionValue="id"
                       placeholder="Cultivo"
                       options={financial.cultivations}
                       style={{ width: '100%' }}
-                      // className={classNames({
-                      //   'p-invalid':
-                      //     formik.touched.cultivation &&
-                      //     formik.errors.cultivation,
-                      // })}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.cultivation &&
+                          formik.errors.cultivation,
+                      })}
                     />
-                    {/* {formik.touched.cultivation && formik.errors.cultivation ? (
+                    {formik.touched.cultivation && formik.errors.cultivation ? (
                       <div
                         style={{
                           color: 'red',
@@ -210,9 +231,9 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                           fontFamily: 'Roboto',
                         }}
                       >
-                        {formik.errors.cultivation}
+                        {formik.errors.cultivation as ReactNode}
                       </div>
-                    ) : null} */}
+                    ) : null}
                     <label htmlFor="product">Cultivo</label>
                   </span>
                   {/* <Form.Group as={Col} controlId="formGridState">
@@ -239,6 +260,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                         formik.setFieldValue('bags', e.value)
                       }}
                       style={{ width: '100%' }}
+                      locale="pt-BR"
                       className={classNames({
                         'p-invalid': formik.touched.bags && formik.errors.bags,
                       })}
@@ -272,7 +294,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                       value={contractPrice}
                       onChange={(e) => {
                         setContractPrice(e.value!)
-                        // formik.setFieldValue('contractPrice', e.value)
+                        formik.setFieldValue('contractPrice', e.value)
                       }}
                       style={{ width: '100%' }}
                       mode="currency"
@@ -284,7 +306,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                           formik.errors.contractPrice,
                       })}
                     />
-                    {/* {formik.touched.contractPrice &&
+                    {formik.touched.contractPrice &&
                     formik.errors.contractPrice ? (
                       <div
                         style={{
@@ -295,7 +317,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                       >
                         {formik.errors.contractPrice}
                       </div>
-                    ) : null} */}
+                    ) : null}
                     <label htmlFor="product">Valor total do contrato</label>
                   </span>
                   {/* <Form.Group className="mb-3" controlId="">
@@ -317,18 +339,18 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     <Calendar
                       onChange={(e: any) => {
                         setStartDate(e.value!)
-                        // formik.setFieldValue('startDate', e.target.value)
+                        formik.setFieldValue('startDate', e.target.value)
                       }}
                       value={startDate}
                       locale="en"
                       dateFormat="dd/mm/yy"
                       style={{ width: '100%' }}
-                      // className={classNames({
-                      //   'p-invalid':
-                      //     formik.touched.startDate && formik.errors.startDate,
-                      // })}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.startDate && formik.errors.startDate,
+                      })}
                     />
-                    {/* {formik.touched.startDate && formik.errors.startDate ? (
+                    {formik.touched.startDate && formik.errors.startDate ? (
                       <div
                         style={{
                           color: 'red',
@@ -338,7 +360,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                       >
                         {formik.errors.startDate}
                       </div>
-                    ) : null} */}
+                    ) : null}
                     <label htmlFor="product">Início do contrato</label>
                   </span>
                   {/* <Form.Group className="mb-3" controlId="">
@@ -358,18 +380,18 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     <Calendar
                       onChange={(e: any) => {
                         setEndDate(e.value!)
-                        // formik.setFieldValue('endDate', e.target.value)
+                        formik.setFieldValue('endDate', e.target.value)
                       }}
                       value={endDate}
                       locale="en"
                       dateFormat="dd/mm/yy"
                       style={{ width: '100%' }}
-                      // className={classNames({
-                      //   'p-invalid':
-                      //     formik.touched.endDate && formik.errors.endDate,
-                      // })}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.endDate && formik.errors.endDate,
+                      })}
                     />
-                    {/* {formik.touched.endDate && formik.errors.endDate ? (
+                    {formik.touched.endDate && formik.errors.endDate ? (
                       <div
                         style={{
                           color: 'red',
@@ -379,7 +401,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                       >
                         {formik.errors.endDate}
                       </div>
-                    ) : null} */}
+                    ) : null}
                     <label htmlFor="product">Fim do contrato</label>
                   </span>
                   {/* <Form.Group className="mb-3" controlId="">
@@ -397,18 +419,18 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                     <Calendar
                       onChange={(e: any) => {
                         setPayDate(e.value!)
-                        // formik.setFieldValue('payDate', e.target.value)
+                        formik.setFieldValue('payDate', e.target.value)
                       }}
                       locale="en"
                       value={payDate}
                       dateFormat="dd/mm/yy"
                       style={{ width: '100%' }}
-                      // className={classNames({
-                      //   'p-invalid':
-                      //     formik.touched.payDate && formik.errors.payDate,
-                      // })}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.payDate && formik.errors.payDate,
+                      })}
                     />
-                    {/* {formik.touched.payDate && formik.errors.payDate ? (
+                    {formik.touched.payDate && formik.errors.payDate ? (
                       <div
                         style={{
                           color: 'red',
@@ -418,7 +440,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
                       >
                         {formik.errors.payDate}
                       </div>
-                    ) : null} */}
+                    ) : null}
                     <label htmlFor="product">Data de pagamento</label>
                   </span>
                   {/* <Form.Group className="mb-3" controlId="">
@@ -434,7 +456,7 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
             </Form.Group> */}
                 </Col>
               </Row>
-              <Row style={{marginTop: '2%'}}>
+              <Row style={{ marginTop: '2%' }}>
                 <Col>
                   <span className="p-float-label">
                     <InputText
@@ -477,4 +499,5 @@ export function EditContract({show, handleClose, id}: {show: boolean, handleClos
         )}
       </Formik>
     </div>
+  )
 }

@@ -38,7 +38,7 @@ export function Sidebar() {
                         </Row>
                     ))}
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '50%' }}>
-                        <Button variant="warning" onClick={() => {
+                        <Button variant="light" onClick={() => {
                             sessionStorage.removeItem('token');
                             navigation('/');
                         }}>Logout</Button>
