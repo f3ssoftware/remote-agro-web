@@ -8,7 +8,12 @@ import { Part } from '../../../../models/Part'
 import { PartHistory } from '../../../../models/PartHistory'
 import { asyncFetchPartHistory } from '../../../../stores/maintenance.store'
 import { Dialog } from 'primereact/dialog'
-import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../../utils/modal-style.util'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export function PartHistoryModal({
   show,
@@ -61,39 +66,56 @@ export function PartHistoryModal({
     >
       <div style={{ maxHeight: '60vh', overflowY: 'scroll' }}>
         {loading.requests.filter((r) => r === 'parts').length === 0 ? (
-          <Table striped hover>
-            <thead
-              style={{
-                backgroundColor: '#243C74',
-                color: '#fff',
-                border: 'none',
-              }}
-            >
-              <tr>
-                <th>Tipo</th>
-                <th>Data</th>
-                <th>Responsável</th>
-                <th>Quantidade</th>
-                <th>Bem</th>
-              </tr>
-            </thead>
-            <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
-              {partHistory?.map((h: PartHistory, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{h?.type}</td>
-                    <td>
-                      {new Date(h?.createdAt!).toLocaleDateString('pt-BR')}
-                    </td>
-                    <td>{h?.accountable}</td>
-                    <td>{h?.quantity!}</td>
-                    <td>{h?.good_name}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </Table>
+          <DataTable
+            value={partHistory}
+            className="p-datatable-striped p-datatable-hover"
+            style={{ backgroundColor: '#fff', color: '#000' }}
+          >
+            <Column field="type" header="Tipo" />
+            <Column
+              field="createdAt"
+              header="Data"
+              body={(rowData) =>
+                new Date(rowData.createdAt).toLocaleDateString('pt-BR')
+              }
+            />
+            <Column field="accountable" header="Responsável" />
+            <Column field="quantity" header="Quantidade" />
+            <Column field="good_name" header="Bem" />
+          </DataTable>
         ) : (
+          // <Table striped hover>
+          //   <thead
+          //     style={{
+          //       backgroundColor: '#243C74',
+          //       color: '#fff',
+          //       border: 'none',
+          //     }}
+          //   >
+          //     <tr>
+          //       <th>Tipo</th>
+          //       <th>Data</th>
+          //       <th>Responsável</th>
+          //       <th>Quantidade</th>
+          //       <th>Bem</th>
+          //     </tr>
+          //   </thead>
+          //   <tbody style={{ backgroundColor: '#fff', color: '#000' }}>
+          //     {partHistory?.map((h: PartHistory, index) => {
+          //       return (
+          //         <tr key={index}>
+          //           <td>{h?.type}</td>
+          //           <td>
+          //             {new Date(h?.createdAt!).toLocaleDateString('pt-BR')}
+          //           </td>
+          //           <td>{h?.accountable}</td>
+          //           <td>{h?.quantity!}</td>
+          //           <td>{h?.good_name}</td>
+          //         </tr>
+          //       )
+          //     })}
+          //   </tbody>
+          // </Table>
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
