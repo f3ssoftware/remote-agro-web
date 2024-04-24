@@ -47,7 +47,7 @@ export function DeleteConfirmationModal({
       >
         Confirmar
       </Button>
-      <Button variant="danger" onClick={handleClose}>
+      <Button variant="danger"  style={{marginLeft: '2%'}} onClick={handleClose}>
         Cancelar
       </Button>
     </Dialog>
