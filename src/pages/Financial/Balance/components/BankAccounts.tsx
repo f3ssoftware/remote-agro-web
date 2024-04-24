@@ -40,12 +40,12 @@ export function BankAccounts() {
                 <Button className="bankBtn" variant="success" onClick={() => setShowBalanceModal(true)}>+</Button>
                 <div className="bank-accounts-content">
                     {bankAccounts.map((account, index) => <div className="bank-account-card" key={index}>
-                        <Row>
+                        <Row style={{marginLeft: '2%'}}>
                             <Col>
                                 <b>{account.nickname}</b>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row style={{marginLeft: '2%'}}>
                             <Col>
                                 Prorietário: {account.owner_name}
                             </Col>

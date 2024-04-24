@@ -15,7 +15,13 @@ import {
   asyncEditExpenseInvoiceById,
 } from '../../../../stores/financial.store'
 import { Dialog } from 'primereact/dialog'
-import { dialogContentSyle, dialogHeaderStyle } from '../../../../utils/modal-style.util'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../../utils/modal-style.util'
+import { InputText } from 'primereact/inputtext'
+import { InputNumber } from 'primereact/inputnumber'
+import { Dropdown } from 'primereact/dropdown'
 
 export function EditExpenseModal({
   show,
@@ -29,7 +35,7 @@ export function EditExpenseModal({
   const navigate = useNavigate()
   const [outcomeYear, setOutcomeYear] = useState('')
   const [reference, setReference] = useState('')
-  const [amount, setAmount] = useState('')
+  const [amount, setAmount] = useState(0)
   const [observation, setObservation] = useState('')
   const [number, setNumber] = useState(0)
   const [plan, setPlan] = useState(0)
@@ -134,7 +140,7 @@ export function EditExpenseModal({
     const expenseInvoice = financial.expenseInvoiceEdit
     console.log('expense invoice: ', expenseInvoice)
     setOutcomeYear(expenseInvoice?.year!)
-    setAmount(expenseInvoice?.amount?.toString()!)
+    setAmount(expenseInvoice?.amount!)
     setNumber(Number(expenseInvoice?.number!))
     // setExpirationDate(new Date(expenseInvoice?.due_date!));
     setExternalInvoiceId(expenseInvoice.external_expenses_invoice_id!)
@@ -159,7 +165,19 @@ export function EditExpenseModal({
         <div>
           <Row style={{ marginTop: '2%' }}>
             <Col>
-              <Form.Group className="mb-3" controlId="">
+              <span className="p-float-label">
+                <Dropdown
+                  value={outcomeYear}
+                  options={seasons.seasons.map((season, index) => ({
+                    label: season.year,
+                    value: season.year,
+                  }))}
+                  onChange={(e) => setOutcomeYear(e.value)}
+                  placeholder="Selecione"
+                />
+                <label htmlFor="outcomeYear">Ano agrícola</label>
+              </span>
+              {/* <Form.Group className="mb-3" controlId="">
                 <Form.Label>Ano agrícola</Form.Label>
                 <Form.Select
                   value={outcomeYear}
@@ -177,12 +195,19 @@ export function EditExpenseModal({
                     )
                   })}
                 </Form.Select>
-              </Form.Group>
+              </Form.Group> */}
             </Col>
           </Row>
-          <Row>
+          <Row style={{ marginTop: '2%' }}>
             <Col>
-              <Form.Group className="mb-3" controlId="">
+              <span className="p-float-label">
+                <InputText
+                  value={reference}
+                  onChange={(e) => setReference(e.target.value)}
+                />
+                <label htmlFor="reference">Referência</label>
+              </span>
+              {/* <Form.Group className="mb-3" controlId="">
                 <Form.Label>Referência</Form.Label>
                 <Form.Control
                   type="text"
@@ -191,10 +216,21 @@ export function EditExpenseModal({
                     return setReference(e.target.value)
                   }}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </Col>
             <Col>
-              <Form.Group className="mb-3" controlId="">
+              <span className="p-float-label">
+                <InputNumber
+                  value={amount}
+                  onValueChange={(e) => setAmount(e.value!)}
+                  mode="currency"
+                  currency="BRL"
+                  locale="pt-BR"
+                />
+
+                <label htmlFor="amount">Valor</label>
+              </span>
+              {/* <Form.Group className="mb-3" controlId="">
                 <Form.Label>Valor</Form.Label>
                 <Form.Control
                   value={amount}
@@ -223,12 +259,19 @@ export function EditExpenseModal({
                     }
                   }}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </Col>
           </Row>
-          <Row>
+          <Row style={{ marginTop: '2%' }}>
             <Col>
-              <Form.Group className="mb-3" controlId="">
+              <span className="p-float-label">
+                <InputText
+                  value={observation}
+                  onChange={(e) => setObservation(e.target.value)}
+                />
+                <label htmlFor="observation">Observações</label>
+              </span>
+              {/* <Form.Group className="mb-3" controlId="">
                 <Form.Label>Observações</Form.Label>
                 <Form.Control
                   type="text"
@@ -238,12 +281,19 @@ export function EditExpenseModal({
                     setObservation(e.target.value)
                   }}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </Col>
           </Row>
-          <Row>
+          <Row style={{ marginTop: '2%' }}>
             <Col>
-              <Form.Group className="mb-3" controlId="">
+              <span className="p-float-label">
+                <InputNumber
+                  value={number}
+                  onChange={(e) => setNumber(e.value!)}
+                />
+                <label htmlFor="number">Número</label>
+              </span>
+              {/* <Form.Group className="mb-3" controlId="">
                 <Form.Label>Número</Form.Label>
                 <Form.Control
                   type="number"
@@ -252,10 +302,22 @@ export function EditExpenseModal({
                     return setNumber(Number(e.target.value))
                   }}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </Col>
             <Col>
-              <Form.Group className="mb-3" controlId="">
+              <span className="p-float-label">
+                <Dropdown
+                  value={plan}
+                  options={financial.plannings.map((p) => ({
+                    label: p.name,
+                    value: p.id,
+                  }))}
+                  onChange={(e) => setPlan(e.value)}
+                  placeholder="Selecione"
+                />
+                <label htmlFor="plan">Vincular planejamento</label>
+              </span>
+              {/* <Form.Group className="mb-3" controlId="">
                 <Form.Label>Vincular Planejamento</Form.Label>
                 <Form.Select
                   aria-label=""
@@ -268,7 +330,7 @@ export function EditExpenseModal({
                     return <option value={p.id}>{p.name}</option>
                   })}
                 </Form.Select>
-              </Form.Group>
+              </Form.Group> */}
             </Col>
           </Row>
           {/* <Row>
