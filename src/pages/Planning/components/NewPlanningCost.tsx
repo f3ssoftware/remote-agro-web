@@ -86,7 +86,7 @@ const onRemoveItem = (index: number) => {
           </Form.Group>
         </Col>
       </Row>
-      <div style={{backgroundColor: '#7C5529'}}>
+      <div >
       
           {plannings.map((month, index) => {
             return (

@@ -21,13 +21,6 @@ import { Report } from "./pages/Report/Report";
 import { MessageSeverity, PrimeReactProvider } from 'primereact/api';
 import { Toast } from "primereact/toast";
 
-enum SeverityTypesEnum {
-    error = "error",
-    info = 'info',
-    warn = "warn",
-    success = "success"
-}
-
 export function AppWrapper() {
     // const [loading, setLoading] = useState([]);
     const navigate = useNavigate();
@@ -86,9 +79,13 @@ function AppStructure({ children, loading }: { children: JSX.Element, loading: b
     const toast = useRef<Toast>(null);
 
     useEffect(() => {
-        // messages.messages.length > 0 ? setShowMessages(true) : setShowMessages(false);
         messages.messages.forEach((m) => {
-            toast.current?.show({ severity: m.type, detail: m.message })
+            if (m.type === 'success' || m.type === 'info' || m.type === 'error' || m.type === 'warn') {
+                toast.current?.show({ severity: m.type, detail: m.message })
+            } else {
+                console.error('Severidade de mensagem inválida:', m.type);
+            }
+        
             setTimeout(() => {
                 dispatch(popMessages(''));
             }, 5000);
