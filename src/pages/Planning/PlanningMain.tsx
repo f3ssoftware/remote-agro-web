@@ -96,21 +96,18 @@ export function PlanningMain() {
                     <div className="contracts-card" key={index}>
                       <Row style={{ marginLeft: '1%' }}>
                         <Col>Nome: {planning.name}</Col>
-                      </Row>
-                      <Row style={{ marginLeft: '1%' }}>
-                        <Col>Temporada: {planning.season_year}</Col>
-                        <Col>
+                        {/* <Col>
                           {' '}
                           <FontAwesomeIcon
                             icon={faTrash}
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               console.log(planning.id)
-                              // deletePlanning(planning.id!)
+                              deletePlanning(planning.id!)
                             }}
                           ></FontAwesomeIcon>
-                        </Col>
-                        <Col>
+                        </Col> */}
+                        <Col sm={3}>
                           {' '}
                           <FontAwesomeIcon
                             icon={faPen}
@@ -133,6 +130,7 @@ export function PlanningMain() {
                           ></FontAwesomeIcon>
                         </Col>
                       </Row>
+                        <Col>Temporada: {planning.season_year}</Col>
                       <Row style={{ marginLeft: '1%', marginRight: '1%' }}>
                         <Col>
                           Criado em:{' '}

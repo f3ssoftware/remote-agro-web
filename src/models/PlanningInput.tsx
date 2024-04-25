@@ -9,6 +9,7 @@ export class PlanningInput {
         public seed_quantity_type?: string,
         public total_price?: number,
         public treatment?: any,
-        public id?: number
+        public id?: number,
+        public user_product_id?: number
     ) { }
 }

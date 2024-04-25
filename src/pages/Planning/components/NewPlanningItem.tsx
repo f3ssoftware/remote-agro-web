@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Button, Form, Dropdown } from 'react-bootstrap'
+import { Row, Col, Button, Form } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import pt from 'date-fns/locale/pt-BR'
@@ -18,6 +18,7 @@ import {
 import { InputText } from 'primereact/inputtext'
 import { Calendar } from 'primereact/calendar'
 import { InputNumber } from 'primereact/inputnumber'
+import { Dropdown } from 'primereact/dropdown'
 
 export function NewPlanningItem({
   onHandleRemove,
@@ -57,6 +58,10 @@ export function NewPlanningItem({
       p.treatment = treatment
       p.pms = pms
       p.seed_quantity_type = seedQuantityType
+    }
+
+    if (userHasProduct) {
+      p.user_product_id = userProductId
     } else {
       p.product_id = productId
     }
@@ -78,24 +83,11 @@ export function NewPlanningItem({
   }, [])
 
   const autoComplete = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
-    const resultSet = productList.filter((p: any) =>
-      p?.label?.toLowerCase().includes(query),
+    const query = event.query.toLowerCase()
+    const resultSet = input.generalProductsList.filter((product) =>
+      product.name.toLowerCase().includes(query),
     )
-    if (resultSet.length > 0) {
-      setProductList(resultSet)
-    } else {
-      setProductList(fetchProducts())
-    }
-  }
-
-  const fetchProducts = () => {
-    return input.inputs.map((input) => {
-      return {
-        id: input.id,
-        label: `${input?.product?.name}`,
-      }
-    })
+    setProductList(resultSet)
   }
 
   return (
@@ -104,7 +96,7 @@ export function NewPlanningItem({
         <Col md={2}>
           <span className="p-float-label">
             <AutoComplete
-              field="label"
+              field="name"
               value={selectedProduct}
               suggestions={productList}
               completeMethod={autoComplete}
@@ -114,20 +106,19 @@ export function NewPlanningItem({
                 const userProducts = input.inputs.filter(
                   (i) => i.product?.name === e.value.name,
                 )
-                
+                if (userProducts.length > 0) {
+                  setUserHasProduct(true)
                   setUserProductId(userProducts[0].id!)
                   setMeasureUnit(userProducts[0].measure_unit!)
-                
+                } else if (e.value instanceof Object) {
                   if (e.value?.class === 'SEMENTE') {
                     setIsSeed(true)
                   }
                   setUserHasProduct(false)
                   setProductId(e.value?.id!)
-
+                }
               }}
-              forceSelection
               dropdown
-              style={{ width: '100%' }}
             />
             <label htmlFor="endDate">Produto</label>
           </span>
@@ -178,18 +169,18 @@ export function NewPlanningItem({
         ) : (
           <></>
         )}
-          <Col md={2}>
-            <span className="p-float-label">
-              <Calendar
-                onChange={(e: any) => {
-                  setPayDate(e.value!)
-                }}
-                locale="en"
-                dateFormat="dd/mm/yyyy"
-              />
-              <label htmlFor="date">Data de pagamento</label>
-            </span>
-            {/* <Form.Group className="mb-3" controlId="">
+        <Col md={2}>
+          <span className="p-float-label">
+            <Calendar
+              onChange={(e: any) => {
+                setPayDate(e.value!)
+              }}
+              locale="en"
+              dateFormat="dd/mm/yyyy"
+            />
+            <label htmlFor="date">Data de pagamento</label>
+          </span>
+          {/* <Form.Group className="mb-3" controlId="">
               <Form.Label style={{ color: '#fff' }}>Data de pagamento</Form.Label>
               <DatePicker
                 locale={pt}
@@ -198,7 +189,7 @@ export function NewPlanningItem({
                 onChange={(date: Date) => setPayDate(date)}
               />
             </Form.Group> */}
-          </Col>
+        </Col>
         <Col md={2}>
           <span className="p-float-label">
             <InputNumber
@@ -291,53 +282,95 @@ export function NewPlanningItem({
         )}
       </Row>
       <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
-        {isSeed ? (
-          <Row>
+        {!userHasProduct && isSeed ? (
+          <Row style={{ marginTop: '2%' }}>
             <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>
-                  Kgs, sacos ou unidade
-                </Form.Label>
-                <Form.Select
-                  aria-label=""
-                  onChange={(e) => {
-                    return setSeedQuantityType(e.target.value)
-                  }}
-                >
-                  <option value="KG">KG</option>
-                  <option value="SACOS">SACOS</option>
-                  <option value="UNIDADE">UNIDADE</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Tratamento</Form.Label>
-                <Form.Select
-                  aria-label=""
-                  onChange={(e) => {
-                    return setTreatment(e.target.value)
-                  }}
-                >
-                  <option value="NÃO TRATADA">Não Tratada</option>
-                  <option value="EXTERNO">Externo</option>
-                  <option value="INTERNO">Interno</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>PMS (g)</Form.Label>
-                <Form.Control
-                  type="text"
-                  onChange={(e) => {
-                    setPms(e.target.value)
-                  }}
+              <span className="p-float-label">
+                <Dropdown
+                  value={seedQuantityType}
+                  options={[
+                    { label: 'KG', value: 'KG' },
+                    { label: 'SACOS', value: 'SACOS' },
+                    { label: 'UNIDADE', value: 'UNIDADE' },
+                  ]}
+                  onChange={(e) => setSeedQuantityType(e.value)}
+                  placeholder="Selecione"
                 />
-              </Form.Group>
+                <label>Kgs, sacos ou unidade</label>
+              </span>
+            </Col>
+            <Col>
+              <span className="p-float-label">
+                <Dropdown
+                  value={treatment}
+                  options={[
+                    { label: 'Não Tratada', value: 'NÃO TRATADA' },
+                    { label: 'Externo', value: 'EXTERNO' },
+                    { label: 'Interno', value: 'INTERNO' },
+                  ]}
+                  onChange={(e) => setTreatment(e.value)}
+                  placeholder="Selecione"
+                />
+                <label>Tratamento</label>
+              </span>
+            </Col>
+            <Col>
+              <span className="p-float-label">
+                <InputText
+                  type="text"
+                  value={pms}
+                  onChange={(e) => setPms(e.target.value)}
+                />
+                <label>PMS (g)</label>
+              </span>
             </Col>
           </Row>
         ) : (
+          // <Row>
+          //   <Col>
+          //     <Form.Group className="mb-3" controlId="">
+          //       <Form.Label style={{ color: '#fff' }}>
+          //         Kgs, sacos ou unidade
+          //       </Form.Label>
+          //       <Form.Select
+          //         aria-label=""
+          //         onChange={(e) => {
+          //           return setSeedQuantityType(e.target.value)
+          //         }}
+          //       >
+          //         <option value="KG">KG</option>
+          //         <option value="SACOS">SACOS</option>
+          //         <option value="UNIDADE">UNIDADE</option>
+          //       </Form.Select>
+          //     </Form.Group>
+          //   </Col>
+          //   <Col>
+          //     <Form.Group className="mb-3" controlId="">
+          //       <Form.Label style={{ color: '#fff' }}>Tratamento</Form.Label>
+          //       <Form.Select
+          //         aria-label=""
+          //         onChange={(e) => {
+          //           return setTreatment(e.target.value)
+          //         }}
+          //       >
+          //         <option value="NÃO TRATADA">Não Tratada</option>
+          //         <option value="EXTERNO">Externo</option>
+          //         <option value="INTERNO">Interno</option>
+          //       </Form.Select>
+          //     </Form.Group>
+          //   </Col>
+          //   <Col>
+          //     <Form.Group className="mb-3" controlId="">
+          //       <Form.Label style={{ color: '#fff' }}>PMS (g)</Form.Label>
+          //       <Form.Control
+          //         type="text"
+          //         onChange={(e) => {
+          //           setPms(e.target.value)
+          //         }}
+          //       />
+          //     </Form.Group>
+          //   </Col>
+          // </Row>
           <></>
         )}
       </div>

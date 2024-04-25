@@ -331,94 +331,48 @@ export function ProductItem({
       </Row>
       <div style={{ paddingLeft: '4%', paddingRight: '4%' }}>
         {!userHasProduct && isSeed ? (
-          <Row>
-            <Col md={12}>
-              <span className="p-float-label">
-                <Dropdown
-                  value={seedQuantityType}
-                  onChange={(e) => {
-                    return setSeedQuantityType(e.target.value)
-                  }}
-                  options={[
-                    { label: 'Selecione um tipo' },
-                    { label: 'KG', value: 'KG' },
-                    { label: 'SACOS', value: 'SACOS' },
-                    { label: 'UNIDADE', value: 'UNIDADE' },
-                  ]}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                  style={{ width: '100%' }}
-                />
-                <label htmlFor="product">Kgs, sacos ou unidade</label>
-              </span>
-              {/* <Form.Group className="mb-3" controlId="">
-                            <Form.Label style={{ color: '#fff' }}>Kgs, sacos ou unidade</Form.Label>
-                            <Form.Select
-                                aria-label=""
-                                onChange={(e) => {
-                                    return setSeedQuantityType(e.target.value)
-                                }}
-                            >
-                                <option value="">Selecione um tipo</option>
-                                <option value="KG">KG</option>
-                                <option value="SACOS">SACOS</option>
-                                <option value="UNIDADE">UNIDADE</option>
-                            </Form.Select>
-                        </Form.Group> */}
-            </Col>
-            <Col>
-              <span className="p-float-label">
-                <Dropdown
-                  value={seedQuantityType}
-                  onChange={(e) => {
-                    setTreatment(e.target.value)
-                  }}
-                  options={[
-                    { label: 'Selecione um tipo' },
-                    { label: 'Não tratada', value: 'NÃO TRATADA' },
-                    { label: 'Externo', value: 'EXTERNO' },
-                    { label: 'Interno', value: 'INTERNO' },
-                  ]}
-                  optionLabel="label"
-                  className="w-full md:w-14rem"
-                  style={{ width: '100%' }}
-                />
-                <label htmlFor="product">Tratamento</label>
-              </span>
-              {/* <Form.Group className="mb-3" controlId="">
-                            <Form.Label style={{ color: '#fff' }}>Tratamento</Form.Label>
-                            <Form.Select
-                                aria-label=""
-                                value={treatment}
-                                onChange={(e) => {
-                                    return setTreatment(e.target.value)
-                                }}
-                            >
-                                <option value="NÃO TRATADA">Não Tratada</option>
-                                <option value="EXTERNO">Externo</option>
-                                <option value="INTERNO">Interno</option>
-                            </Form.Select>
-                        </Form.Group> */}
-            </Col>
-            <Col>
-              <span className="p-float-label">
-                <InputText
-                  value={observation}
-                  onChange={(e) => {
-                    setPms(e.target.value)
-                  }}
-                  style={{ width: '100%' }}
-                ></InputText>
-                <label htmlFor="product">PMS (g)</label>
-              </span>
-              {/* <Form.Group className="mb-3" controlId="">
-                            <Form.Label style={{ color: '#fff' }}>PMS (g)</Form.Label>
-                            <Form.Control type="text" onChange={(e) => {
-                                setPms(e.target.value);
-                            }} />
-                        </Form.Group> */}
-            </Col>
-          </Row>
+         <Row style={{ marginTop: '2%' }}>
+         <Col>
+           <span className="p-float-label">
+             <Dropdown
+               value={seedQuantityType}
+               options={[
+                 { label: 'KG', value: 'KG' },
+                 { label: 'SACOS', value: 'SACOS' },
+                 { label: 'UNIDADE', value: 'UNIDADE' },
+               ]}
+               onChange={(e) => setSeedQuantityType(e.value)}
+               placeholder="Selecione"
+             />
+             <label>Medida</label>
+           </span>
+         </Col>
+         <Col>
+           <span className="p-float-label">
+             <Dropdown
+               value={treatment}
+               options={[
+                 { label: 'Não Tratada', value: 'NÃO TRATADA' },
+                 { label: 'Externo', value: 'EXTERNO' },
+                 { label: 'Interno', value: 'INTERNO' },
+               ]}
+               onChange={(e) => setTreatment(e.value)}
+               placeholder="Selecione"
+             />
+             <label>Tratamento</label>
+           </span>
+         </Col>
+         <Col>
+           <span className="p-float-label">
+             <InputText
+               type="text"
+               value={pms}
+               onChange={(e) => setPms(e.target.value)}
+             />
+             <label>PMS (g)</label>
+           </span>
+         </Col>
+       </Row>
         ) : (
           <></>
         )}

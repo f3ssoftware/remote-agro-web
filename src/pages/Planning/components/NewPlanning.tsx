@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Row, Col, Button, Form, Dropdown } from 'react-bootstrap'
+import { Row, Col, Button, Form} from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Typeahead } from 'react-bootstrap-typeahead'
@@ -13,7 +13,7 @@ import { Formik } from 'formik'
 import { InputText } from 'primereact/inputtext'
 import * as Yup from 'yup'
 import { classNames } from 'primereact/utils'
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete'
+import { Dropdown } from 'primereact/dropdown'
 
 export function NewPlanning({
   show,
@@ -26,14 +26,13 @@ export function NewPlanning({
   const dispatch = useDispatch<any>()
   const [plannings, setPlannings] = useState([new PlanningInput()])
   const { seasons } = useSelector((state: RootState) => state)
-  const [selectedSeason, setSelectedSeason] = useState('')
+  const [selectedSeason, setSelectedSeason]: any = useState({})
   const toast = useRef<Toast>(null)
-  const [seasonList, setSeasonList] = useState<any[]>([])
 
   const register = () => {
     const p: Planning = {
       name: referenceName,
-      season_year: selectedSeason,
+      season_year: selectedSeason.year,
       type: 'Insumos',
       plannings: plannings,
     }
@@ -54,23 +53,6 @@ export function NewPlanning({
     setPlannings(planningsArr)
   }
 
-  const autoCompleteSeason = (event: AutoCompleteCompleteEvent) => {
-    const query = event.query.toLowerCase();
-    const resultSet = seasonList.filter((p: any) =>
-      p?.label?.toLowerCase().includes(query),
-    )
-    if (resultSet.length > 0) {
-      setSeasonList(resultSet)
-    } else {
-      setSeasonList(fetchSeason())
-    }
-  }
-
-  const fetchSeason = () => {
-    return seasons.seasons.map((season: any) => {
-      return { name: season.year, label: season.type - season.year, ...season }
-    })
-  }
 
   return (
     <div>
@@ -78,15 +60,9 @@ export function NewPlanning({
       <Formik
         initialValues={{
           referenceName: '',
-          totalArea: null,
-          quantity: null,
-          season: '',
         }}
         validationSchema={Yup.object({
           referenceName: Yup.string().required('Necessário preencher'),
-          totalArea: Yup.string().required('Necessário preencher'),
-          quantity: Yup.string().required('Necessário preencher'),
-          season: Yup.object().required('Necessário preencher'),
         })}
         onSubmit={() => {
           register()
@@ -131,34 +107,17 @@ export function NewPlanning({
                 </Col>
                 <Col md={3}>
                 <span className="p-float-label">
-                  <AutoComplete
-                    field="label"
-                    value={formik.values.season}
-                    suggestions={seasonList}
-                    completeMethod={autoCompleteSeason}
-                    onChange={(e: any) => {
-                      setSelectedSeason(e.target.value)
-                      formik.setFieldValue('season', e.target.value)
-                    }}
-                    className={classNames({
-                      'p-invalid':
-                        formik.touched.season && formik.errors.season,
-                    })}
-                    dropdown
-                    forceSelection
-                    style={{ width: '100%' }}
-                  />
-                  {formik.touched.season && formik.errors.season ? (
-                    <div
-                      style={{
-                        color: 'red',
-                        fontSize: '12px',
-                        fontFamily: 'Roboto',
-                      }}
-                    >
-                      {formik.errors.season}
-                    </div>
-                  ) : null}
+                <Dropdown
+                value={selectedSeason}
+                options={seasons.seasons.map((season) => ({
+                  label: `${season.type} - ${season.year}`,
+                  value: season,
+                }))}
+                onChange={(e) => {
+                  setSelectedSeason(e.value)
+                }}
+                placeholder="Selecione a temporada"
+              />
                   <label htmlFor="season">Ano agrícola</label>
                 </span>
               </Col>
@@ -182,9 +141,9 @@ export function NewPlanning({
                 <Button
                   variant="success"
                   type="submit"
-                  onClick={() => {
-                    register()
-                  }}
+                  // onClick={() => {
+                  //   register()
+                  // }}
                 >
                   Registrar
                 </Button>
