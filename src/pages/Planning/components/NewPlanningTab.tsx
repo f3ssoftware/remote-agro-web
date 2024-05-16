@@ -76,7 +76,7 @@ export function NewPlanningTab({
   return (
     <div>
       <Row style={{ marginTop: '2%' }}>
-        <Col md={2}>
+        <Col md={3}>
           <Dropdown
             value={selectedYear}
             options={years}
@@ -84,7 +84,7 @@ export function NewPlanningTab({
             placeholder="Selecione um ano"
           />
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <Dropdown
             value={selectedMonth}
             options={[
@@ -103,10 +103,26 @@ export function NewPlanningTab({
             ]}
             onChange={(e) => setSelectedMonth(e.value)}
             placeholder="Selecione um mês"
-          />
+            />
         </Col>
-
-        <Col md={2}>
+            {index !== 0 ? (
+              <Col md={3}>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    onHandleRemove(index)
+                  }}
+                  
+                >
+                  <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+                </Button>
+              </Col>
+            ) : (
+              <></>
+            )}
+      </Row>
+      <Row style={{ marginTop: '2%' }}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               inputId="maintenance"
@@ -122,7 +138,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               inputId="diesel"
@@ -138,7 +154,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="gasolina"
@@ -154,7 +170,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="arla"
@@ -172,7 +188,7 @@ export function NewPlanningTab({
         </Col>
       </Row>
       <Row style={{ marginTop: '2%' }}>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="administrative"
@@ -188,7 +204,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="conservation"
@@ -204,7 +220,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="labor"
@@ -220,7 +236,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="storage"
@@ -237,8 +253,8 @@ export function NewPlanningTab({
           </span>
         </Col>
       </Row>
-      <Row>
-        <Col md={2}>
+      <Row style={{ marginTop: '2%' }}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="restaurant"
@@ -254,7 +270,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="diverse"
@@ -270,7 +286,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="rent"
@@ -286,7 +302,7 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <span className="p-float-label">
             <InputNumber
               id="outsourced"
@@ -302,37 +318,24 @@ export function NewPlanningTab({
             </label>
           </span>
         </Col>
-        <Col md={2}>
-        <span className="p-float-label">
-            <InputNumber
-              id="others"
-              value={others}
-              onValueChange={(e) => setOthers(Number(e.value))}
-              mode="currency"
-              currency="BRL"
-              locale="pt-BR"
-              style={{ width: '100%' }}
-            />
-            <label htmlFor="others" style={{ color: '#fff' }}>
-              Outros
-            </label>
-          </span>
-        </Col>
-        {index !== 0 ? (
-          <Col md={1}>
-            <Button
-              variant="danger"
-              onClick={() => {
-                onHandleRemove(index)
-              }}
-              style={{ marginTop: '45%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
+        <Row style={{ marginTop: '2%' }}>
+          <Col md={3}>
+            <span className="p-float-label">
+              <InputNumber
+                id="others"
+                value={others}
+                onValueChange={(e) => setOthers(Number(e.value))}
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="others" style={{ color: '#fff' }}>
+                Outros
+              </label>
+            </span>
           </Col>
-        ) : (
-          <></>
-        )}
+        </Row>
       </Row>
     </div>
   )

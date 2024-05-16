@@ -67,7 +67,7 @@ export function EditPlanningCost({
       Planejamento - {planning.editPlannings.name}
     </span>}
       visible={show}
-      style={{ width: '50vw' }}
+      style={{ width: '80vw' }}
       className="custom-dialog"
       onHide={handleClose}
       headerStyle={dialogHeaderStyle}

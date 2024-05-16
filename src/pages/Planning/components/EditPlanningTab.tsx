@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Button, Form, Dropdown, Tabs, Tab } from 'react-bootstrap'
+import { Row, Col, Button, Form, Tabs, Tab } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { PlanningCost } from '../../../models/PlanningCost'
 import { RootState } from '../../..'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { InputNumber } from 'primereact/inputnumber'
+import { Dropdown } from 'primereact/dropdown'
 
 
 export function EditPlanningTab({
@@ -41,8 +43,9 @@ export function EditPlanningTab({
 
   const years = Array.from({ length: futureYearsCount }, (_, index) => {
     const year = currentYear + index
-    return year.toString()
+    return { label: year.toString(), value: year.toString() }
   })
+
 
   useEffect(() => {
     const p: PlanningCost = {
@@ -103,222 +106,273 @@ export function EditPlanningTab({
     )
   }, [planning])
 
+  useEffect(() => {
+   console.log(selectedMonth)
+  }, [selectedMonth])
+
   return (
     <div>
+     <Row style={{ marginTop: '2%' }}>
+        <Col md={3}>
+          <Dropdown
+            value={selectedYear}
+            options={years}
+            onChange={(e) => setSelectedYear(e.value)}
+            placeholder="Selecione um ano"
+          />
+        </Col>
+        <Col md={3}>
+          <Dropdown
+            value={selectedMonth}
+            options={[
+              { label: 'Janeiro', value: 1 },
+              { label: 'Fevereiro', value: 2 },
+              { label: 'Março', value: 3 },
+              { label: 'Abril', value: 4 },
+              { label: 'Maio', value: 5 },
+              { label: 'Junho', value: 6 },
+              { label: 'Julho', value: 7 },
+              { label: 'Agosto', value: 8 },
+              { label: 'Setembro', value: 9 },
+              { label: 'Outubro', value: 10 },
+              { label: 'Novembro', value: 11 },
+              { label: 'Dezembro', value: 12 },
+            ]}
+            onChange={(e) => setSelectedMonth(e.value)}
+            placeholder="Selecione um mês"
+            />
+        </Col>
+            {index !== 0 ? (
+              <Col md={3}>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    onHandleRemove(index)
+                  }}
+                  
+                >
+                  <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+                </Button>
+              </Col>
+            ) : (
+              <></>
+            )}
+      </Row>
       <Row style={{ marginTop: '2%' }}>
-      <Col>
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="year-dropdown">
-              {selectedYear || 'Select a Year'}
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              {years.map((year) => (
-                <Dropdown.Item key={year} onClick={() => setSelectedYear(year)}>
-                  {year}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-        <Col>
-        <Form.Group className="mb-3" controlId="">
-              <Form.Select
-                aria-label=""
-                onChange={(e) => {
-                  return setSelectedMonth(Number(e.target.value))
-                }}
-              >
-                <option value={1}>Janeiro</option>
-                <option value={2}>Fevereiro</option>
-                <option value={3}>Março</option>
-                <option value={4}>Abril</option>
-                <option value={5}>Maio</option>
-                <option value={6}>Junho</option>
-                <option value={7}>Julho</option>
-                <option value={8}>Agosto</option>
-                <option value={9}>Setembro</option>
-                <option value={10}>Outubro</option>
-                <option value={11}>Novembro</option>
-                <option value={12}>Dezembro</option>
-              </Form.Select>
-            </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Manutenção</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              inputId="maintenance"
               value={maintenance}
-              onChange={(e) => {
-                setMaintenance(Number(e.target.value))
-              }}
+              onValueChange={(e) => setMaintenance(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="maintenance" style={{ color: '#fff' }}>
+              Manutenção
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Diesel</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              inputId="diesel"
               value={diesel}
-              onChange={(e) => {
-                setDiesel(Number(e.target.value))
-              }}
+              onValueChange={(e) => setDiesel(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="diesel" style={{ color: '#fff' }}>
+              Diesel
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Gasolina</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="gasolina"
               value={gas}
-              onChange={(e) => {
-                setGas(Number(e.target.value))
-              }}
+              onValueChange={(e) => setGas(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="gasolina" style={{ color: '#fff' }}>
+              Gasolina
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Arla</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="arla"
               value={arla}
-              onChange={(e) => {
-                setArla(Number(e.target.value))
-              }}
+              onValueChange={(e) => setArla(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="arla" style={{ color: '#fff' }}>
+              Arla
+            </label>
+          </span>
         </Col>
       </Row>
       <Row style={{ marginTop: '2%' }}>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Administrativo</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="administrative"
               value={administrative}
-              onChange={(e) => {
-                setAdministrative(Number(e.target.value))
-              }}
+              onValueChange={(e) => setAdministrative(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="administrative" style={{ color: '#fff' }}>
+              Administrativo
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Conservação</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="conservation"
               value={conservation}
-              onChange={(e) => {
-                setConservation(Number(e.target.value))
-              }}
+              onValueChange={(e) => setConservation(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="conservation" style={{ color: '#fff' }}>
+              Conservação
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Mão-de-obra</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="labor"
               value={labor}
-              onChange={(e) => {
-                setLabor(Number(e.target.value))
-              }}
+              onValueChange={(e) => setLabor(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="labor" style={{ color: '#fff' }}>
+              Mão-de-obra
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Armazenagem</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="storage"
               value={storage}
-              onChange={(e) => {
-                setStorage(Number(e.target.value))
-              }}
+              onValueChange={(e) => setStorage(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="storage" style={{ color: '#fff' }}>
+              Armazenagem
+            </label>
+          </span>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Cantina</Form.Label>
-            <Form.Control
-              type="number"
+      <Row style={{ marginTop: '2%' }}>
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="restaurant"
               value={restaurant}
-              onChange={(e) => {
-                setRestaurant(Number(e.target.value))
-              }}
+              onValueChange={(e) => setRestaurant(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="restaurant" style={{ color: '#fff' }}>
+              Cantina
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Diversos</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="diverse"
               value={diverse}
-              onChange={(e) => {
-                setDiverse(Number(e.target.value))
-              }}
+              onValueChange={(e) => setDiverse(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="diverse" style={{ color: '#fff' }}>
+              Diversos
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Arrendo</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="rent"
               value={rent}
-              onChange={(e) => {
-                setRent(Number(e.target.value))
-              }}
+              onValueChange={(e) => setRent(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="rent" style={{ color: '#fff' }}>
+              Arrendo
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Terceirizados</Form.Label>
-            <Form.Control
-              type="number"
+        <Col md={3}>
+          <span className="p-float-label">
+            <InputNumber
+              id="outsourced"
               value={outsourced}
-              onChange={(e) => {
-                setOutsourced(Number(e.target.value))
-              }}
+              onValueChange={(e) => setOutsourced(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="outsourced" style={{ color: '#fff' }}>
+              Terceirizados
+            </label>
+          </span>
         </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Outros</Form.Label>
-            <Form.Control
-              type="number"
-              value={others}
-              onChange={(e) => {
-                setOthers(Number(e.target.value))
-              }}
-            />
-          </Form.Group>
-        </Col>
-        {index !== 0 ? (
-          <Col md={1}>
-            <Button
-              variant="danger"
-              onClick={() => {
-                onHandleRemove(index)
-              }}
-              style={{ marginTop: '45%' }}
-            >
-              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-            </Button>
+        <Row style={{ marginTop: '2%' }}>
+          <Col md={3}>
+            <span className="p-float-label">
+              <InputNumber
+                id="others"
+                value={others}
+                onValueChange={(e) => setOthers(Number(e.value))}
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                style={{ width: '100%' }}
+              />
+              <label htmlFor="others" style={{ color: '#fff' }}>
+                Outros
+              </label>
+            </span>
           </Col>
-        ) : (
-          <></>
-        )}
+        </Row>
       </Row>
     </div>
   )
