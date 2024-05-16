@@ -9,7 +9,7 @@ import { NewPlanningItem } from './NewPlanningItem'
 import { Planning } from '../../../models/Planning'
 import { asyncNewPlannings } from '../../../stores/planning.store'
 import { Toast } from 'primereact/toast'
-import { Formik } from 'formik'
+import { Formik, useFormik } from 'formik'
 import { InputText } from 'primereact/inputtext'
 import * as Yup from 'yup'
 import { classNames } from 'primereact/utils'
@@ -28,6 +28,12 @@ export function NewPlanning({
   const { seasons } = useSelector((state: RootState) => state)
   const [selectedSeason, setSelectedSeason]: any = useState({})
   const toast = useRef<Toast>(null)
+  const [isRegisterClicked, setIsRegisterClicked] = useState(false)
+  const [inputAddLineValidation, setInputAddLineValidation] = useState<any[]>([
+    false,
+  ])
+  const [inputAddLineCompsValidation, setInputAddLineCompsValidation] =
+    useState<any[]>([false])
 
   const register = () => {
     const p: Planning = {
@@ -54,22 +60,53 @@ export function NewPlanning({
   }
 
 
+  useEffect(() => {
+    if (isRegisterClicked) {
+      formik.handleSubmit()
+    }
+  }, [isRegisterClicked])
+
+  const initialValues = {
+    referenceName: '',
+  }
+
+  const validationSchema = Yup.object({
+    referenceName: Yup.string().required('Necessário preencher'),
+  })
+
+  const onSubmit = (values: any, { setSubmitting }: any) => {
+    const falseValidationsInput = inputAddLineValidation.filter(
+      (validation: { response: boolean }) => validation.response === false,
+    )
+    const falseValidationOfinputAddLineCompsValidation =
+      inputAddLineCompsValidation.filter(
+        (validation: { response: boolean }) => validation.response === false,
+      )
+      register()
+
+    if (
+      referenceName &&
+      falseValidationsInput.length === 0 &&
+      falseValidationOfinputAddLineCompsValidation.length === 0
+    ) {
+      setTimeout(() => {
+        setSubmitting(false)
+      }, 400)
+    } else if (referenceName) {
+      setTimeout(() => {
+        setSubmitting(false)
+      }, 400)
+    }
+  }
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  })  
   return (
     <div>
       <Toast ref={toast} />
-      <Formik
-        initialValues={{
-          referenceName: '',
-        }}
-        validationSchema={Yup.object({
-          referenceName: Yup.string().required('Necessário preencher'),
-        })}
-        onSubmit={() => {
-          register()
-          handleClose()
-        }}
-      >
-        {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <Row style={{ marginTop: '4%' }}>
               <Row>
@@ -141,52 +178,61 @@ export function NewPlanning({
                 <Button
                   variant="success"
                   type="submit"
-                  // onClick={() => {
-                  //   register()
-                  // }}
+                  onClick={() => {
+                    setIsRegisterClicked(true)
+                    setTimeout(() => {
+                      setIsRegisterClicked(false)
+                    }, 1000)
+                  }}
                 >
                   Registrar
                 </Button>
               </div>
             </Row>
+            <Row style={{ marginTop: '2%' }}>
+              {/* <Col>
+                <Form.Group className="mb-3" controlId="">
+                  <Form.Label>Ano agrícola</Form.Label>
+                  <Form.Select
+                    aria-label=""
+                    onChange={(e) => {
+                      return setSelectedSeason(e.target.value)
+                    }}
+                  >
+                    {' '}
+                    <option value={0} key={0}>
+                      "Selecione um ano agrícola"
+                    </option>
+                    {seasons.seasons.map((season, index) => {
+                      return (
+                        <option value={season.year} key={index}>
+                          {season.type} - {season.year}
+                        </option>
+                      )
+                    })}
+                  </Form.Select>
+                </Form.Group>
+              </Col> */}
+            </Row>
+            {plannings.map((newPlanning, index) => {
+              return (
+                <NewPlanningItem
+                  onHandleRemove={onRemoveItem}
+                  index={index}
+                  key={index}
+                  onHandleUpdate={onUpdateItem}
+                  isRegisterClicked={isRegisterClicked}
+                    inputAddLineCompsValidation={inputAddLineCompsValidation}
+                    setInputAddLineCompsValidation={
+                      setInputAddLineCompsValidation
+                    }
+                    referenceName={referenceName}
+                    inputAddLineValidation={inputAddLineValidation}
+                    setInputAddLineValidation={setInputAddLineCompsValidation}
+                ></NewPlanningItem>
+              )
+            })}
           </form>
-        )}
-      </Formik>
-      <Row style={{ marginTop: '2%' }}>
-        {/* <Col>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label>Ano agrícola</Form.Label>
-            <Form.Select
-              aria-label=""
-              onChange={(e) => {
-                return setSelectedSeason(e.target.value)
-              }}
-            >
-              {' '}
-              <option value={0} key={0}>
-                "Selecione um ano agrícola"
-              </option>
-              {seasons.seasons.map((season, index) => {
-                return (
-                  <option value={season.year} key={index}>
-                    {season.type} - {season.year}
-                  </option>
-                )
-              })}
-            </Form.Select>
-          </Form.Group>
-        </Col> */}
-      </Row>
-      {plannings.map((newPlanning, index) => {
-        return (
-          <NewPlanningItem
-            onHandleRemove={onRemoveItem}
-            index={index}
-            key={index}
-            onHandleUpdate={onUpdateItem}
-          ></NewPlanningItem>
-        )
-      })}
     </div>
   )
 }

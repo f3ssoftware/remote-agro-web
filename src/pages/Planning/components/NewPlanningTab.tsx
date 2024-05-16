@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Row, Col, Form, Dropdown, Button } from 'react-bootstrap'
+import { Row, Col, Form, Button } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { PlanningCost } from '../../../models/PlanningCost'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { Dropdown } from 'primereact/dropdown'
+import { InputNumber } from 'primereact/inputnumber'
 
 export function NewPlanningTab({
   index,
   onHandleUpdate,
-  onHandleRemove
+  onHandleRemove,
 }: {
   index: number
   onHandleUpdate: any
   onHandleRemove: any
-
 }) {
   const [maintenance, setMaintenance] = useState(0)
   const [diesel, setDiesel] = useState(0)
@@ -35,7 +36,7 @@ export function NewPlanningTab({
 
   const years = Array.from({ length: futureYearsCount }, (_, index) => {
     const year = currentYear + index
-    return year.toString()
+    return { label: year.toString(), value: year.toString() }
   })
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function NewPlanningTab({
       rent_amount: rent,
       storage_amount: storage,
       month: selectedMonth,
-      year: selectedYear
+      year: selectedYear,
     }
     onHandleUpdate(p, index)
   }, [
@@ -76,411 +77,246 @@ export function NewPlanningTab({
     <div>
       <Row style={{ marginTop: '2%' }}>
         <Col md={2}>
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="year-dropdown">
-              {selectedYear || 'Selecione um ano'}
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              {years.map((year) => (
-                <Dropdown.Item key={year} onClick={() => setSelectedYear(year)}>
-                  {year}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+          <Dropdown
+            value={selectedYear}
+            options={years}
+            onChange={(e) => setSelectedYear(e.value)}
+            placeholder="Selecione um ano"
+          />
         </Col>
         <Col md={2}>
-        <Form.Group className="mb-3" controlId="">
-              <Form.Select
-                aria-label=""
-                onChange={(e) => {
-                  return setSelectedMonth(Number(e.target.value))
-                }}
-              >
-                <option value={1}>Janeiro</option>
-                <option value={2}>Fevereiro</option>
-                <option value={3}>Março</option>
-                <option value={4}>Abril</option>
-                <option value={5}>Maio</option>
-                <option value={6}>Junho</option>
-                <option value={7}>Julho</option>
-                <option value={8}>Agosto</option>
-                <option value={9}>Setembro</option>
-                <option value={10}>Outubro</option>
-                <option value={11}>Novembro</option>
-                <option value={12}>Dezembro</option>
-              </Form.Select>
-            </Form.Group>
+          <Dropdown
+            value={selectedMonth}
+            options={[
+              { label: 'Janeiro', value: 1 },
+              { label: 'Fevereiro', value: 2 },
+              { label: 'Março', value: 3 },
+              { label: 'Abril', value: 4 },
+              { label: 'Maio', value: 5 },
+              { label: 'Junho', value: 6 },
+              { label: 'Julho', value: 7 },
+              { label: 'Agosto', value: 8 },
+              { label: 'Setembro', value: 9 },
+              { label: 'Outubro', value: 10 },
+              { label: 'Novembro', value: 11 },
+              { label: 'Dezembro', value: 12 },
+            ]}
+            onChange={(e) => setSelectedMonth(e.value)}
+            placeholder="Selecione um mês"
+          />
         </Col>
 
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Manutenção</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setMaintenance(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              inputId="maintenance"
+              value={maintenance}
+              onValueChange={(e) => setMaintenance(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="maintenance" style={{ color: '#fff' }}>
+              Manutenção
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Diesel</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setDiesel(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              inputId="diesel"
+              value={diesel}
+              onValueChange={(e) => setDiesel(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="diesel" style={{ color: '#fff' }}>
+              Diesel
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Gasolina</Form.Label>
-            <Form.Control
-              type="number"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setGas(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="gasolina"
+              value={gas}
+              onValueChange={(e) => setGas(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="gasolina" style={{ color: '#fff' }}>
+              Gasolina
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Arla</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setArla(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="arla"
+              value={arla}
+              onValueChange={(e) => setArla(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="arla" style={{ color: '#fff' }}>
+              Arla
+            </label>
+          </span>
         </Col>
       </Row>
       <Row style={{ marginTop: '2%' }}>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Administrativo</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setAdministrative(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="administrative"
+              value={administrative}
+              onValueChange={(e) => setAdministrative(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="administrative" style={{ color: '#fff' }}>
+              Administrativo
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Conservação</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setConservation(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="conservation"
+              value={conservation}
+              onValueChange={(e) => setConservation(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="conservation" style={{ color: '#fff' }}>
+              Conservação
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Mão-de-obra</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setLabor(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="labor"
+              value={labor}
+              onValueChange={(e) => setLabor(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="labor" style={{ color: '#fff' }}>
+              Mão-de-obra
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Armazenagem</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setStorage(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="storage"
+              value={storage}
+              onValueChange={(e) => setStorage(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="storage" style={{ color: '#fff' }}>
+              Armazenagem
+            </label>
+          </span>
         </Col>
       </Row>
       <Row>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Cantina</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setRestaurant(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="restaurant"
+              value={restaurant}
+              onValueChange={(e) => setRestaurant(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="restaurant" style={{ color: '#fff' }}>
+              Cantina
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Diversos</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setDiverse(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="diverse"
+              value={diverse}
+              onValueChange={(e) => setDiverse(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="diverse" style={{ color: '#fff' }}>
+              Diversos
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Arrendo</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setRent(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="rent"
+              value={rent}
+              onValueChange={(e) => setRent(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="rent" style={{ color: '#fff' }}>
+              Arrendo
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Terceirizados</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setOutsourced(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+          <span className="p-float-label">
+            <InputNumber
+              id="outsourced"
+              value={outsourced}
+              onValueChange={(e) => setOutsourced(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="outsourced" style={{ color: '#fff' }}>
+              Terceirizados
+            </label>
+          </span>
         </Col>
         <Col md={2}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label style={{ color: '#fff' }}>Outros</Form.Label>
-            <Form.Control
-              type="text"
-              onBlur={(e) => {
-                if (isNaN(Number(e.currentTarget.value))) {
-                  e.currentTarget.value = ''
-                } else {
-                  setOthers(Number(e.currentTarget.value))
-                  e.currentTarget.value = Number(
-                    e.currentTarget.value,
-                  ).toLocaleString('pt-BR', {
-                    maximumFractionDigits: 2,
-                    style: 'currency',
-                    currency: 'BRL',
-                    useGrouping: true,
-                  })
-                }
-              }}
-              onKeyUp={(e) => {
-                if (e.key === 'Backspace') {
-                  e.currentTarget.value = ''
-                }
-              }}
+        <span className="p-float-label">
+            <InputNumber
+              id="others"
+              value={others}
+              onValueChange={(e) => setOthers(Number(e.value))}
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              style={{ width: '100%' }}
             />
-          </Form.Group>
+            <label htmlFor="others" style={{ color: '#fff' }}>
+              Outros
+            </label>
+          </span>
         </Col>
         {index !== 0 ? (
           <Col md={1}>
