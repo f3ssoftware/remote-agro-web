@@ -15,10 +15,22 @@ export function EditPlanningItem({
   onHandleRemove,
   index,
   onHandleUpdate,
+  isRegisterClicked,
+  inputAddLineCompsValidation,
+  setInputAddLineCompsValidation,
+  inputAddLineValidation,
+  setInputAddLineValidation,
+  referenceName
 }: {
   onHandleRemove: any
   index: number
   onHandleUpdate: any
+  isRegisterClicked: boolean
+  inputAddLineCompsValidation: any
+  setInputAddLineCompsValidation: Function
+  inputAddLineValidation: any
+  setInputAddLineValidation: Function
+  referenceName: string
 }) {
   const [payDate, setPayDate] = useState(new Date())
   const [quantity, setQuantity] = useState(0)

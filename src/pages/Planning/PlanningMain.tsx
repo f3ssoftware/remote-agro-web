@@ -113,7 +113,6 @@ export function PlanningMain() {
                             icon={faPen}
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
-                              console.log(planning.id)
                               setEditPlanningId(planning.id!)
                               {
                                 planning.type == 'Custos Indiretos' ? (

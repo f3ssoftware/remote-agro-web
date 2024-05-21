@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Row, Col, Button, Form, Modal } from 'react-bootstrap'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,16 @@ import {
 import { PlanningCost } from '../../../models/PlanningCost'
 import { EditPlanningTab } from './EditPlanningTab'
 import { Dialog } from 'primereact/dialog'
-import { dialogContentSyle, dialogHeaderStyle } from '../../../utils/modal-style.util'
+import {
+  dialogContentSyle,
+  dialogHeaderStyle,
+} from '../../../utils/modal-style.util'
+import { Dropdown } from 'primereact/dropdown'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { InputText } from 'primereact/inputtext'
+import { classNames } from 'primereact/utils'
+import { Toast } from 'primereact/toast'
 
 export function EditPlanningCost({
   show,
@@ -29,14 +38,15 @@ export function EditPlanningCost({
   const dispatch = useDispatch<any>()
   const { seasons } = useSelector((state: RootState) => state)
   const { planning } = useSelector((state: RootState) => state)
-  const [outcomeYear, setOutcomeYear] = useState('')
+  const [outcomeYear, setOutcomeYear] = useState<string>('')
+  const toast = useRef<Toast>(null)
 
   const edit = () => {
     const planning: Planning = {
       name: referenceName,
       season_year: outcomeYear,
       type: 'Custos Indiretos',
-      plannings,
+      plannings: plannings,
     }
     dispatch(asyncEditPlannings(id, planning))
 
@@ -44,9 +54,10 @@ export function EditPlanningCost({
   }
 
   useEffect(() => {
-    setPlannings(planning.editPlannings?.plannings_indirect_costs!)
-    setOutcomeYear(planning.editPlannings?.season_year!)
-    setReferenceName(planning.editPlannings?.name!)
+      setPlannings(planning?.editPlannings?.plannings_indirect_costs!)
+      setOutcomeYear(planning?.editPlannings?.season_year!)
+      setReferenceName(planning?.editPlannings?.name!)
+
   }, [planning])
 
   const onUpdateItem = (planning: PlanningCost, index: number) => {
@@ -63,9 +74,7 @@ export function EditPlanningCost({
 
   return (
     <Dialog
-      header={<span>
-      Planejamento - {planning.editPlannings.name}
-    </span>}
+      header={<span>Planejamento - {planning.editPlannings.name}</span>}
       visible={show}
       style={{ width: '80vw' }}
       className="custom-dialog"
@@ -73,78 +82,113 @@ export function EditPlanningCost({
       headerStyle={dialogHeaderStyle}
       contentStyle={dialogContentSyle}
     >
-      
-        <div>
-          <Row style={{ marginTop: '2%' }}>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label style={{ color: '#fff' }}>Nome</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={referenceName}
-                  onChange={(e) => {
-                    setReferenceName(e.target.value)
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="">
-                <Form.Label>Ano agrícola</Form.Label>
-                <Form.Select
-                  value={outcomeYear}
-                  aria-label=""
-                  onChange={(e) => {
-                    return setOutcomeYear(e.target.value)
-                  }}
-                >
-                  {' '}
-                  {seasons.seasons.map((season, index) => {
-                    return (
-                      <option value={season.year} key={index}>
-                        {season.type} - {season.year}
-                      </option>
-                    )
-                  })}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          {plannings?.map((month, index) => {
-            return (
-              <EditPlanningTab
-                index={index}
-                onHandleUpdate={onUpdateItem}
-                onHandleRemove={onRemoveItem}
-              ></EditPlanningTab>
-            )
+      <div>
+        <Toast ref={toast} />
+        <Formik
+          initialValues={{
+            referenceName: referenceName,
+          }}
+          validationSchema={Yup.object({
+            referenceName: Yup.string().required('Necessário preencher'),
           })}
+          onSubmit={() => {
+            edit()
+            handleClose()
+          }}
+        >
+          {(formik) => (
+            <form onSubmit={formik.handleSubmit}>
+              <Row style={{ marginTop: '2%' }}>
+                <Col md={3}>
+                  <span className="p-float-label">
+                    <InputText
+                      id="referenceName"
+                      name="referenceName"
+                      value={formik.values.referenceName}
+                      onChange={(e) => {
+                        formik.setFieldValue('referenceName', e.target.value)
+                        setReferenceName(e.target.value)
+                      }}
+                      className={classNames({
+                        'p-invalid':
+                          formik.touched.referenceName &&
+                          formik.errors.referenceName,
+                      })}
+                    />
+                    {formik.touched.referenceName &&
+                    formik.errors.referenceName ? (
+                      <div
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontFamily: 'Roboto',
+                        }}
+                      >
+                        {formik.errors.referenceName}
+                      </div>
+                    ) : null}
+                    <label htmlFor="referenceName">Nome</label>
+                  </span>
+                </Col>
+                <Col md={3}>
+                  {/* <span className="p-float-label">
+                    <Dropdown
+                      value={outcomeYear}
+                      options={seasons?.seasons?.map((season) => ({
+                        label: `${season?.type} - ${season?.year}`,
+                        value: season?.year,
+                      }))}
+                      onChange={(e) => {
+                        setOutcomeYear(e.value)
+                      }}
+                      placeholder="Selecione a temporada"
+                    />
+                    <label htmlFor="season">Ano agrícola</label>
+                  </span> */}
+                </Col>
+              </Row>
+              <div>
+                {plannings.map((month, index) => {
+                  return (
+                    <EditPlanningTab
+                      index={index}
+                      onHandleUpdate={onUpdateItem}
+                      onHandleRemove={onRemoveItem}
+                    ></EditPlanningTab>
+                  )
+                })}
+              </div>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: '2%',
-            }}
-          >
-            <Button
-              variant="success"
-              onClick={() => {
-                edit()
-              }}
-            >
-              Editar
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => setPlannings([...plannings, new PlanningCost()])}
-            >
-              Adicionar Linha
-            </Button>
-          </div>
-        </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  marginTop: '2%',
+                }}
+              >
+                <Button
+                  variant="success"
+                  type="submit"
+                  // onClick={() => {
+                  //   register()
+                  // }}
+                >
+                  Registrar
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() =>
+                    setPlannings([...plannings, new PlanningCost()])
+                  }
+                >
+                  Adicionar Linha
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </div>
     </Dialog>
     // <Modal backdrop={'static'} show={show} onHide={handleClose} size={'xl'}>
     //   <Modal.Header
