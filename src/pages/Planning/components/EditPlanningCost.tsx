@@ -57,7 +57,6 @@ export function EditPlanningCost({
       setPlannings(planning?.editPlannings?.plannings_indirect_costs!)
       setOutcomeYear(planning?.editPlannings?.season_year!)
       setReferenceName(planning?.editPlannings?.name!)
-
   }, [planning])
 
   const onUpdateItem = (planning: PlanningCost, index: number) => {
@@ -85,6 +84,7 @@ export function EditPlanningCost({
       <div>
         <Toast ref={toast} />
         <Formik
+        enableReinitialize={true}
           initialValues={{
             referenceName: referenceName,
           }}
@@ -131,7 +131,7 @@ export function EditPlanningCost({
                   </span>
                 </Col>
                 <Col md={3}>
-                  {/* <span className="p-float-label">
+                  <span className="p-float-label">
                     <Dropdown
                       value={outcomeYear}
                       options={seasons?.seasons?.map((season) => ({
@@ -144,7 +144,7 @@ export function EditPlanningCost({
                       placeholder="Selecione a temporada"
                     />
                     <label htmlFor="season">Ano agrícola</label>
-                  </span> */}
+                  </span>
                 </Col>
               </Row>
               <div>
