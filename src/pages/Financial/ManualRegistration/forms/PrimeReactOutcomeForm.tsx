@@ -315,6 +315,7 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
                   <InputNumber
                     id="number"
                     locale="pt-BR"
+                    useGrouping={false}
                     value={formik.values.number}
                     onValueChange={(e) => {
                       formik.setFieldValue("number", e.target.value);
