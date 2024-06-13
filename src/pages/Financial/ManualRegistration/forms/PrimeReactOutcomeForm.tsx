@@ -314,6 +314,7 @@ export function PrimeReactOutcomeForm({ costType, costAction, sefaz }: { costTyp
                 <span className="p-float-label">
                   <InputNumber
                     id="number"
+                    locale="pt-BR"
                     value={formik.values.number}
                     onValueChange={(e) => {
                       formik.setFieldValue("number", e.target.value);
