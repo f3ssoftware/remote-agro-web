@@ -1,42 +1,45 @@
-import { Formik } from "formik";
-import { Button } from "primereact/button";
-import { Calendar } from "primereact/calendar";
-import { Dropdown } from "primereact/dropdown";
-import { InputNumber } from "primereact/inputnumber";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Toast } from "primereact/toast";
-import { classNames } from "primereact/utils";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import * as Yup from "yup";
-import { RootState } from "../../../..";
-import { Contract } from "../../../../models/Contract";
-import { Cultivation } from "../../../../models/Cultivation";
-import { asyncFetchCultivations, asyncRegisterContract } from "../../../../stores/financial.store";
-import { useNavigate } from "react-router-dom";
+import { Formik } from 'formik'
+import { Button } from 'primereact/button'
+import { Calendar } from 'primereact/calendar'
+import { Dropdown } from 'primereact/dropdown'
+import { InputNumber } from 'primereact/inputnumber'
+import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import { Toast } from 'primereact/toast'
+import { classNames } from 'primereact/utils'
+import { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import * as Yup from 'yup'
+import { RootState } from '../../../..'
+import { Contract } from '../../../../models/Contract'
+import { Cultivation } from '../../../../models/Cultivation'
+import {
+  asyncFetchCultivations,
+  asyncRegisterContract,
+} from '../../../../stores/financial.store'
+import { useNavigate } from 'react-router-dom'
 
 interface Type {
-  name: string;
-  id: number;
+  name: string
+  id: number
 }
 
 export function PrimeReactIncomeOthers() {
-  const { financial, seasons } = useSelector((state: RootState) => state);
-  const [reference, setReference] = useState("");
-  const [contractId, setContractId] = useState<number>();
-  const [sacks, setSacks] = useState<number>();
-  const [totalValue, setTotalValue] = useState<number>();
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [description, setDescription] = useState("");
-  const [cultivation, setCultivation] = useState<any>();
-  const toast = useRef<Toast>(null);
+  const { financial, seasons } = useSelector((state: RootState) => state)
+  const [reference, setReference] = useState('')
+  const [contractId, setContractId] = useState<number>()
+  const [sacks, setSacks] = useState<number>()
+  const [totalValue, setTotalValue] = useState<number>()
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [description, setDescription] = useState('')
+  const [cultivation, setCultivation] = useState<any>()
+  const toast = useRef<Toast>(null)
   const cultivationlist: Type[] = [
     // financial.cultivations.map((cultivation: Cultivation,index)=>{return{ name: cultivation.name, id: cultivation.id }})
-  ];
+  ]
 
-  const dispatch = useDispatch<any>();
-  const navigate = useNavigate();
+  const dispatch = useDispatch<any>()
+  const navigate = useNavigate()
 
   const register = async () => {
     const contract: Contract = {
@@ -50,11 +53,11 @@ export function PrimeReactIncomeOthers() {
       payment_date: startDate?.toString(),
       sacks: sacks?.toString(),
       season_id: seasons.selectedSeason.id,
-      type: "OTHER"
+      type: 'OTHER',
     }
 
-    await dispatch(asyncRegisterContract(contract));
-    navigate('/financial/balance');
+    await dispatch(asyncRegisterContract(contract))
+    navigate('/financial/balance')
   }
 
   useEffect(() => {
@@ -66,34 +69,34 @@ export function PrimeReactIncomeOthers() {
       <Toast ref={toast} />
       <Formik
         initialValues={{
-          reference: "",
+          reference: '',
           contractId: null,
-          cultivation: "",
+          cultivation: '',
           sacks: null,
           totalValue: null,
           startDate: null,
         }}
         validationSchema={Yup.object({
-          reference: Yup.string().required("Necessário preencher"),
-          contractId: Yup.string().required("Necessário preencher"),
-          cultivation: Yup.string().required("Necessário preencher"),
-          sacks: Yup.string().required("Necessário preencher"),
-          totalValue: Yup.string().required("Necessário preencher"),
-          startDate: Yup.string().required("Necessário preencher"),
+          reference: Yup.string().required('Necessário preencher'),
+          contractId: Yup.string().required('Necessário preencher'),
+          cultivation: Yup.string().required('Necessário preencher'),
+          sacks: Yup.string().required('Necessário preencher'),
+          totalValue: Yup.string().required('Necessário preencher'),
+          startDate: Yup.string().required('Necessário preencher'),
         })}
         onSubmit={(values, { setSubmitting }) => {
           // setTimeout(() => {
           //   alert(JSON.stringify(values, null, 2));
           //   setSubmitting(false);
           // }, 400);
-          register();
+          register()
         }}
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <div
               className="formgrid grid"
-            // style={{ marginTop: "2%", marginLeft: "2%" }}
+              // style={{ marginTop: "2%", marginLeft: "2%" }}
             >
               <div className="field col-4">
                 <span className="p-float-label">
@@ -102,23 +105,21 @@ export function PrimeReactIncomeOthers() {
                     name="reference"
                     value={formik.values.reference}
                     onChange={(e) => {
-                      formik.setFieldValue("reference", e.target.value);
-                      setReference(e.target.value);
+                      formik.setFieldValue('reference', e.target.value)
+                      setReference(e.target.value)
                     }}
                     className={classNames({
-                      "p-invalid":
-                        formik.touched.reference &&
-                        formik.errors.reference,
+                      'p-invalid':
+                        formik.touched.reference && formik.errors.reference,
                     })}
                     style={{ width: '100%' }}
                   />
-                  {formik.touched.reference &&
-                    formik.errors.reference ? (
+                  {formik.touched.reference && formik.errors.reference ? (
                     <div
                       style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
                       {formik.errors.reference}
@@ -131,13 +132,14 @@ export function PrimeReactIncomeOthers() {
                 <span className="p-float-label">
                   <InputNumber
                     id="contractId"
+                    useGrouping={false}
                     value={formik.values.contractId}
                     onValueChange={(e) => {
-                      formik.setFieldValue("contractId", e.target.value);
-                      setContractId(Number(e.value));
+                      formik.setFieldValue('contractId', e.target.value)
+                      setContractId(Number(e.value))
                     }}
                     className={classNames({
-                      "p-invalid":
+                      'p-invalid':
                         formik.touched.contractId && formik.errors.contractId,
                     })}
                     style={{ width: '100%' }}
@@ -145,9 +147,9 @@ export function PrimeReactIncomeOthers() {
                   {formik.touched.contractId && formik.errors.contractId ? (
                     <div
                       style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
                       {formik.errors.contractId}
@@ -161,11 +163,11 @@ export function PrimeReactIncomeOthers() {
                 <Dropdown
                   value={formik.values.cultivation}
                   onChange={(e) => {
-                    formik.setFieldValue("cultivation", e.target.value);
-                    setCultivation(e.target.value);
+                    formik.setFieldValue('cultivation', e.target.value)
+                    setCultivation(e.target.value)
                   }}
                   className={classNames({
-                    "p-invalid":
+                    'p-invalid':
                       formik.touched.cultivation && formik.errors.cultivation,
                   })}
                   optionLabel="name"
@@ -177,9 +179,9 @@ export function PrimeReactIncomeOthers() {
                 {formik.touched.cultivation && formik.errors.cultivation ? (
                   <div
                     style={{
-                      color: "red",
-                      fontSize: "12px",
-                      fontFamily: "Roboto",
+                      color: 'red',
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
                     }}
                   >
                     {formik.errors.cultivation}
@@ -188,29 +190,28 @@ export function PrimeReactIncomeOthers() {
               </div>
             </div>
 
-            <div
-              className="formgrid grid"
-            >
+            <div className="formgrid grid">
               <div className="field col-4">
                 <span className="p-float-label">
                   <InputNumber
+                    locale="pt-BR"
                     id="sacks"
                     value={formik.values.sacks}
                     onValueChange={(e) => {
-                      formik.setFieldValue("sacks", e.target.value);
-                      setSacks(Number(e.value));
+                      formik.setFieldValue('sacks', e.target.value)
+                      setSacks(Number(e.value))
                     }}
                     className={classNames({
-                      "p-invalid": formik.touched.sacks && formik.errors.sacks,
+                      'p-invalid': formik.touched.sacks && formik.errors.sacks,
                     })}
                     style={{ width: '100%' }}
                   />
                   {formik.touched.sacks && formik.errors.sacks ? (
                     <div
                       style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
                       {formik.errors.sacks}
@@ -225,11 +226,12 @@ export function PrimeReactIncomeOthers() {
                     inputId="currency-br"
                     value={formik.values.totalValue}
                     onValueChange={(e) => {
-                      formik.setFieldValue("totalValue", e.target.value);
-                      setTotalValue(Number(e.value));
+                      formik.setFieldValue('totalValue', e.target.value)
+                      setTotalValue(Number(e.value))
                     }}
                     className={classNames({
-                      "p-invalid": formik.touched.totalValue && formik.errors.totalValue,
+                      'p-invalid':
+                        formik.touched.totalValue && formik.errors.totalValue,
                     })}
                     mode="currency"
                     currency="BRL"
@@ -239,9 +241,9 @@ export function PrimeReactIncomeOthers() {
                   {formik.touched.totalValue && formik.errors.totalValue ? (
                     <div
                       style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
                       {formik.errors.totalValue}
@@ -254,11 +256,12 @@ export function PrimeReactIncomeOthers() {
                 <span className="p-float-label">
                   <Calendar
                     onChange={(e: any) => {
-                      formik.setFieldValue("startDate", e.target.value);
-                      setStartDate(e.value!);
+                      formik.setFieldValue('startDate', e.target.value)
+                      setStartDate(e.value!)
                     }}
                     className={classNames({
-                      "p-invalid": formik.touched.startDate && formik.errors.startDate,
+                      'p-invalid':
+                        formik.touched.startDate && formik.errors.startDate,
                     })}
                     locale="en"
                     value={startDate}
@@ -268,9 +271,9 @@ export function PrimeReactIncomeOthers() {
                   {formik.touched.startDate && formik.errors.startDate ? (
                     <div
                       style={{
-                        color: "red",
-                        fontSize: "12px",
-                        fontFamily: "Roboto",
+                        color: 'red',
+                        fontSize: '12px',
+                        fontFamily: 'Roboto',
                       }}
                     >
                       {formik.errors.startDate}
@@ -281,9 +284,7 @@ export function PrimeReactIncomeOthers() {
               </div>
             </div>
 
-            <div
-              className="formgrid grid"
-            >
+            <div className="formgrid grid">
               <div className="field col-12">
                 <span className="p-float-label">
                   <InputTextarea
@@ -297,14 +298,14 @@ export function PrimeReactIncomeOthers() {
             </div>
             <div
               className="formgrid grid"
-              style={{ marginTop: "2%", justifyContent: "center" }}
+              style={{ marginTop: '2%', justifyContent: 'center' }}
             >
               <div className="col-12 md:col-3">
                 <Button
                   type="submit"
                   label="Registrar"
-                  style={{ backgroundColor: "#198754" }}
-                // onClick={() => register()}
+                  style={{ backgroundColor: '#198754' }}
+                  // onClick={() => register()}
                 />
               </div>
             </div>
@@ -312,5 +313,5 @@ export function PrimeReactIncomeOthers() {
         )}
       </Formik>
     </div>
-  );
+  )
 }
