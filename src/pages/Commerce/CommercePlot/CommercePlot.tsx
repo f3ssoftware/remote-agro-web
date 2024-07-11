@@ -75,7 +75,7 @@ export function CommercePlot() {
                 return (
                   <ul>
                     {rowData.cultivations.map((c: any, index: number) => (
-                      <li key={index}>{c.SiloCultivar.quantity} Sacas</li>
+                      <li key={index}>{Number(c.SiloCultivar.quantity)/60000} Sacas</li>
                     ))}
                   </ul>
                 )
